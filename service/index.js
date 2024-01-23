@@ -1,5 +1,9 @@
 const usersService = require("./users.service")
+const itemsService = require("./items.service")
+const vendorsService = require("./vendors.service")
 
 module.exports = {
-    usersService
+    usersService,
+    itemsService,
+    vendorsService
 }

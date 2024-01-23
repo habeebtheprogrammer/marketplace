@@ -3,28 +3,49 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 const { Schema } = mongoose;
 
-const usersSchema = new Schema(
+const itemsSchema = new Schema(
   {
-    firstName: {
-        type: String,
-        required: [true, 'first name is required']
+    title: {
+      type: String,
+      required: [true, 'title is required']
     },
-    lastName: {
-        type: String, 
-        required: [true, 'last name is required']
+    slug: {
+      type: String,
+      required: [true, 'slug is required']
     },
-    email: {
-        type: String, 
-        required: [true, 'email is required']
+    creatorId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "users",
+      required: [true, 'creatorId is required']
     },
+    vendorId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "vendors",
+      required: [true, 'vendor is required']
+    },
+    categoryId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "category",
+      required: [true, 'category field is required']
+    },
+    images: [{ type: String, required: [true, 'An image is required'] }],
+    available: {
+      type: Boolean,
+      default: true,
+      enum: { values: [true, false], message: '{VALUE} is not supported' }
+    },
+    views: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );
 
-// exports.usersSchema = usersSchema;
+// exports.itemsSchema = itemsSchema;
 
-usersSchema.plugin(mongoosePaginate);
+itemsSchema.plugin(mongoosePaginate);
 
-const Users = mongoose.model("users", usersSchema);
+const Items = mongoose.model("items", itemsSchema);
 
-module.exports = Users;
+module.exports = Items;

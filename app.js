@@ -30,6 +30,6 @@ app.use(cookieParser());
 
 app.use('/api/v1/', routes);
 
-app.get('*', (req, res) =>  res.sendStatus(200))
+app.get('*', (req, res) =>  res.json({error: "path not found"}))
 
 dbServerConnect(app)

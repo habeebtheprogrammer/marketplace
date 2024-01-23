@@ -5,6 +5,21 @@ const { Schema } = mongoose;
 
 const usersSchema = new Schema(
   {
+    email: {
+        type: String, 
+        unique: true,
+        required: [true, 'email is required']
+    },
+    userName: {
+      type: String,
+      required: [true, 'username is required']
+  },
+  userType: {
+    type: String,
+    default: "user",
+    required: [true, 'usertype is required'],
+    enum: { values: ['user', 'vendor'], message: '{VALUE} is not supported for userType field.' }
+  },
     firstName: {
         type: String,
         required: [true, 'first name is required']
@@ -13,10 +28,9 @@ const usersSchema = new Schema(
         type: String, 
         required: [true, 'last name is required']
     },
-    email: {
+    password: {
         type: String, 
-        unique: true,
-        required: [true, 'email is required']
+        required: [true, 'password is required']
     },
   },
   { timestamps: true }
