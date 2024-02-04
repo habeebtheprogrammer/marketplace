@@ -19,6 +19,21 @@ exports.createVendor = async (req, res, next) => {
     }
 }
 
+exports.signin = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+        if(!email || !password) throw Error(constant.loginCredReqErr)
+        const user = await vendorsService.getVendor({ email})
+        if(!user) throw Error(constant.mismatchCredErr)
+        const verify = await bcrypt.compare(password, user.password)
+        if(!verify) throw Error(constant.mismatchCredErr)
+        var token = jwt.sign(JSON.stringify(user), process.env.secretKey)
+        successResponse(res, {user, token})
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
+
 exports.updateVendor = async (req, res, next) => {
     try {
         const { title, avatar, address } = req.body

@@ -5,13 +5,13 @@ const { successResponse, errorResponse } = require("../utils/responder")
 exports.createItem = async (req, res, next) => {
     try {
         const {creatorId, title, vendorId , categoryId, images} = req.body
-        const data = await itemsService.createItem({ title, creatorId, vendorId , categoryId, images, slug: title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5)})
+        const data = await itemsService.createItem({ title,  vendorId , categoryId, images, slug: title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5)})
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)
     }
 }
-
+ 
 exports.updateItem = async (req, res, next) => {
     try {
         const {  title , categoryId, images, _id } = req.body
@@ -31,8 +31,8 @@ exports.updateItem = async (req, res, next) => {
 
 exports.getItem = async (req, res, next) => {
     try {
-        const { _id } = req.body
-        const data = await itemsService.getItem({ _id })
+        const { slug } = req.params
+        const data = await itemsService.getItem({ slug })
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)

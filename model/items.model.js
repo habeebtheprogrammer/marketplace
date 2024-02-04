@@ -12,12 +12,7 @@ const itemsSchema = new Schema(
     slug: {
       type: String,
       required: [true, 'slug is required']
-    },
-    creatorId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "users",
-      required: [true, 'creatorId is required']
-    },
+    }, 
     vendorId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "vendors",
