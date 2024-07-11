@@ -5,17 +5,12 @@ exports.getUsers = async (filters = {}) => {
     return data
 }
 
-exports.getUser = async (filter) => {
-    const data = await Users.findOne(filter)
-    return data
-}
-
-exports.createUser = async (param) => {
+exports.createUsers = async (param) => {
     const data = await Users.create(param)
     return data
 }
 
-exports.updateUser = async (param, obj) => {
+exports.updateUsers = async (param, obj) => {
     const data = await Users.findOneAndUpdate(param, obj,{ new: true} )
     return data
 }

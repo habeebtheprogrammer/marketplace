@@ -15,7 +15,7 @@ exports.createVendor = async (param) => {
     return data
 }
 
-exports.updateVendor = async (param, obj) => {
+exports.updateVendors = async (param, obj) => {
     const data = await Vendors.findOneAndUpdate(param, obj,{ new: true} )
     return data
 }

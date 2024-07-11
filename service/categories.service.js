@@ -5,12 +5,8 @@ exports.getCategories = async (filters = {}) => {
     return data
 }
 
-exports.getCategory = async (filter) => {
-    const data = await Categories.findOne(filter)
-    return data
-}
-
-exports.createCategory = async (param) => {
+ 
+exports.createCategories = async (param) => {
     const data = await Categories.create(param)
     return data
 }

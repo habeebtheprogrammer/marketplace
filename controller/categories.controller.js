@@ -1,11 +1,11 @@
-const { categoriesService , itemsService} = require("../service")
+const { categoriesService } = require("../service")
 const { generateRandomNumber } = require("../utils/helpers")
 const { successResponse, errorResponse } = require("../utils/responder")
 
-exports.createCategory = async (req, res, next) => {
+exports.createCategories = async (req, res, next) => {
     try {
-        const {   title  } = req.body
-        const data = await categoriesService.createCategory({ title, vendorId: req.userId, slug: title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5) })
+        const {image, title  } = req.body
+        const data = await categoriesService.createCategories({ title, image, vendorId: req.userId, slug: title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5) })
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)
@@ -21,17 +21,7 @@ exports.updateCategories = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
-
-exports.getCategory = async (req, res, next) => {
-    try {
-        const { slug } = req.params
-        const data = await itemsService.getItem({ slug })
-        successResponse(res, data)
-    } catch (error) {
-        errorResponse(res, error)
-    }
-}
-
+ 
 exports.getCategories = async (req, res, next) => {
     try {
         const data = await categoriesService.getCategories({})
@@ -40,14 +30,4 @@ exports.getCategories = async (req, res, next) => {
     } catch (error) {
         errorResponse(res, error)
     }
-}
-
-exports.getItems = async (req, res, next) => {
-    try {
-        const { id } = req.params
-        const data = await itemsService.getItems({ categoryId: id })
-        successResponse(res, data)
-    } catch (error) {
-        errorResponse(res, error)
-    }
-}
+} 

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose"); 
+const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
@@ -6,12 +6,16 @@ const categorySchema = new Schema(
   {
     title: {
       type: String,
-      required: [true, 'title is required']
+      required: [true, 'Title is required']
+    },
+    image: {
+      type: String,
+      required: [true, 'An image is required']
     },
     slug: {
       type: String,
-      required: [true, 'slug is required']
-    }, 
+      required: [true, 'Slug is required']
+    },
     vendorId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "users",
@@ -20,7 +24,7 @@ const categorySchema = new Schema(
   },
   { timestamps: true }
 );
- 
+
 
 const Categories = mongoose.model("categories", categorySchema);
 

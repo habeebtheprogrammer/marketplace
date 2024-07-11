@@ -1,12 +1,16 @@
 
 const usersController = require("./users.controller")
 const vendorsController = require("./vendors.controller")
-const itemsController = require("./items.controller")
+const productsController = require("./products.controller")
 const categoriesController = require("./categories.controller")
+const cartsController = require("./carts.controller")
+const wishlistsController = require("./wishlists.controller")
 
 module.exports  = {
     usersController,
     vendorsController,
-    itemsController,
-    categoriesController
+    productsController,
+    categoriesController,
+    cartsController,
+    wishlistsController
 }

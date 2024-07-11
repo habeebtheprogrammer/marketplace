@@ -4,6 +4,11 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 const { Schema } = mongoose;
 const vendorsSchema = new Schema(
   {
+    userId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "users",
+      required: [true, 'userId is required']
+    },
     title: {
       type: String,
       required: [true, 'title is required']
@@ -16,11 +21,7 @@ const vendorsSchema = new Schema(
     slug: {
       type: String,
       required: [true, 'slug is required']
-    },
-    password: {
-      type: String,
-      required: [true, 'password is required']
-    },
+    }, 
     avatar: { type: String, required: [true, 'avatar field is required'] },
     available: {
       type: Boolean,
@@ -56,9 +57,7 @@ const vendorsSchema = new Schema(
   },
   { timestamps: true }
 );
-
-// exports.itemsSchema =vendorsSchema;
-
+ 
 vendorsSchema.plugin(mongoosePaginate);
 vendorsSchema.index( { "loc" : "2dsphere" , title: 'text'} ) 
 

@@ -3,9 +3,8 @@ const { categoriesController } = require('../controller');
 const { checkToken } = require('../utils/auth');
 var router = express.Router();
 
-router.post('/create', checkToken, categoriesController.createCategory);
-router.put('/update', checkToken, categoriesController.updateCategories);
-router.get('/fetch', checkToken, categoriesController.getCategories);
-router.get('/category/:id', checkToken,  categoriesController.getItems);
+router.post('/', checkToken, categoriesController.createCategory);
+router.patch('/', checkToken, categoriesController.updateCategories);
+router.get('/', checkToken, categoriesController.getCategories); 
 
 module.exports = router;

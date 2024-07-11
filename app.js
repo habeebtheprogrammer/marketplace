@@ -28,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/api/v1/', routes);
+app.use('/api', routes);
 
 app.get('*', (req, res) =>  res.json({error: "path not found"}))
 
