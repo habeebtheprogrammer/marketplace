@@ -1,10 +1,6 @@
-const { vendorsService, usersService } = require("../service")
+const { vendorsService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
-const constant = require('../utils/constant')
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
 const helpers = require("../utils/helpers")
-const { HttpStatusCode } = require("axios")
 
 exports.createVendors = async (req, res, next) => {
     try {

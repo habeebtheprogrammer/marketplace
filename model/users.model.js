@@ -13,8 +13,7 @@ const usersSchema = new Schema(
     userType: {
       type: String,
       default: "user",
-      required: [true, 'Usertype is required'],
-      enum: { values: ['user', 'vendor'], message: '{VALUE} is not supported for userType field.' }
+      enum: { values: ['user', 'vendor', 'superuser'], message: '{VALUE} is not supported for userType field.' }
     },
     firstName: {
       type: String,
@@ -27,6 +26,10 @@ const usersSchema = new Schema(
     password: {
       type: String,
       required: [true, 'Password is required']
+    },
+    archive: {
+      type: Boolean,
+      default: false
     },
   },
   { timestamps: true }

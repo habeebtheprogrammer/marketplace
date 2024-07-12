@@ -1,12 +1,14 @@
 var express = require('express');
 const { usersController } = require('../controller');
 const { checkToken } = require('../utils/auth');
+const { signupValidator, signinValidator } = require('../utils/validator');
 var router = express.Router();
 
-router.post('/signin', usersController.signin);
-router.post('/signup', usersController.createUser);
+router.get('/profile', checkToken,  usersController.getUser);
+router.post('/signin', signinValidator, usersController.signin);
+router.post('/signup', signupValidator, usersController.createUser);
 router.patch('/update', checkToken, usersController.updateUser);
-router.get('/all', checkToken, usersController.getUsers);
-router.get('/user/:username', checkToken,  usersController.getUser);
+router.delete('/delete/:_id', checkToken, usersController.deleteUsers);
+router.get('/', checkToken, usersController.getUsers);
 
 module.exports = router;

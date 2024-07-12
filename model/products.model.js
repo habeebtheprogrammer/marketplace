@@ -49,6 +49,10 @@ const productsSchema = new Schema(
     images: [{
       type: String, required: [true, 'An image is required']
     }],
+    views: {
+      type: Number,
+      default: 0
+    },
     vendorId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "vendors",
@@ -59,10 +63,6 @@ const productsSchema = new Schema(
       ref: "category",
       required: [true, 'category field is required']
     },
-    views: {
-      type: Number,
-      default: 0
-    }
   },
   { timestamps: true }
 );
