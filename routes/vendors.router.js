@@ -1,10 +1,12 @@
 var express = require('express');
 const { vendorsController } = require('../controller');
-const { checkToken } = require('../utils/auth');
+const { checkAuth, vendorsAccessOnly, adminAccessOnly } = require('../utils/auth');
+const { vendorsCreationValidator } = require('../utils/validator');
 var router = express.Router();
 
-router.post('/', checkToken, vendorsController.createVendors);
-router.patch('/', checkToken, vendorsController.updateVendors);
-router.get('/', checkToken, vendorsController.getVendors);
+router.get('/', checkAuth, adminAccessOnly, vendorsController.getVendors);
+router.post('/', checkAuth, vendorsAccessOnly, vendorsCreationValidator, vendorsController.createVendors);
+router.patch('/account', checkAuth, vendorsAccessOnly, vendorsController.updateVendorAccount);
+router.get('/account', checkAuth, vendorsAccessOnly, vendorsController.getVendorAccount);
 
 module.exports = router;

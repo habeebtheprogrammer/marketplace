@@ -5,10 +5,6 @@ exports.getVendors = async (filters = {}) => {
     return data
 }
 
-exports.getVendors = async (filter) => {
-    const data = await Vendors.findOne(filter)
-    return data
-}
 
 exports.createVendors = async (param) => {
     const data = await Vendors.create(param)

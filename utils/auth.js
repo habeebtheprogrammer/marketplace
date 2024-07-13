@@ -1,13 +1,10 @@
 const jwt = require("jsonwebtoken");
 const { errorResponse } = require("./responder");
 const { HttpStatusCode } = require("axios");
+const constant = require("./constant");
 
-exports.createToken = (data) => {
-  var token = jwt.sign(data, process.env.secretKey, { expiresIn: '30d' });
-  return token;
-};
 
-exports.checkToken = (req, res, next) => {
+exports.checkAuth = (req, res, next) => {
   var token = req.header("authorization");
   try {
     if(token) token = token.split(" ")[1]
@@ -20,3 +17,20 @@ exports.checkToken = (req, res, next) => {
   }
 }
  
+exports.vendorsAccessOnly = (req, res, next) => { 
+  try {
+    if (req.userType != 'vendor') throw Error(constant.vendorOnly)
+    next();
+  } catch (error) {
+    errorResponse(res, error, constant.vendorOnly, HttpStatusCode.Forbidden)
+  }
+}
+  
+exports.adminAccessOnly = (req, res, next) => { 
+  try {
+    if (req.userType != 'superuser') throw Error(constant.unathorizeAccess)
+    next();
+  } catch (error) {
+    errorResponse(res, error, constant.vendorOnly, HttpStatusCode.Forbidden)
+  }
+}

@@ -4,11 +4,8 @@ const { successResponse, errorResponse } = require("../utils/responder")
 
 exports.createProducts = async (req, res, next) => {
     try {
-        const { title, original_price, discounted_price, description, images, categoryId, vendorId} = req.body
         const data = await productsService.createProducts({ 
-            title, original_price, discounted_price, description, 
-            vendorId ,  categoryId, images, 
-            slug: title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5)})
+            ...req.body, slug: req.body.title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5)})
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)
@@ -17,12 +14,10 @@ exports.createProducts = async (req, res, next) => {
  
 exports.updateProducts = async (req, res, next) => {
     try {
-        const {title, original_price, discounted_price, description, images, categoryId, _id } = req.body
-        var params = {title, original_price, discounted_price, description, images, categoryId, }
         var updateObj = {}
-        Object.keys(params).forEach(key => {
-            if (params[key]) {
-                updateObj[key] = params[key];
+        Object.keys(req.body).forEach(key => {
+            if (req.body[key]) {
+                updateObj[key] = req.body[key];
             }
         })
         const data = await productsService.updateProducts({ _id }, updateObj)

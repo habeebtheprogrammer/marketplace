@@ -20,7 +20,11 @@ const categorySchema = new Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "users",
       required: [true, 'creatorId is required']
-    }
+    } , 
+    archive: {
+      type: Boolean,
+      default: false
+    },
   },
   { timestamps: true }
 );

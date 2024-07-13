@@ -44,7 +44,7 @@ const productsSchema = new Schema(
     },
     trending: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     images: [{
       type: String, required: [true, 'An image is required']

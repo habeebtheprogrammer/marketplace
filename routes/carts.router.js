@@ -1,10 +1,10 @@
 var express = require('express');
 const { cartsController } = require('../controller');
-const { checkToken } = require('../utils/auth');
+const { checkAuth } = require('../utils/auth');
 var router = express.Router();
 
-router.post('/', checkToken, cartsController.addToCarts);
-router.delete('/:id', checkToken, cartsController.removeFromCarts);
-router.get('/', checkToken, cartsController.getCarts);
+router.post('/', checkAuth, cartsController.addToCarts);
+router.delete('/:id', checkAuth, cartsController.removeFromCarts);
+router.get('/', checkAuth, cartsController.getCarts);
 
 module.exports = router;

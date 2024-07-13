@@ -1,10 +1,11 @@
 var express = require('express');
 const { categoriesController } = require('../controller');
-const { checkToken } = require('../utils/auth');
+const { checkAuth, vendorsAccessOnly } = require('../utils/auth');
+const { categoryCreationValidator } = require('../utils/validator');
 var router = express.Router();
 
-router.post('/', checkToken, categoriesController.createCategories);
-router.patch('/', checkToken, categoriesController.updateCategories);
-router.get('/', checkToken, categoriesController.getCategories); 
+router.post('/', checkAuth, vendorsAccessOnly, categoryCreationValidator, categoriesController.createCategories);
+router.patch('/', checkAuth, vendorsAccessOnly, categoriesController.updateCategories);
+router.get('/', checkAuth, categoriesController.getCategories); 
 
 module.exports = router;

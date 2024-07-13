@@ -1,10 +1,10 @@
 var express = require('express');
 const { wishlistsController } = require('../controller');
-const { checkToken } = require('../utils/auth');
+const { checkAuth } = require('../utils/auth');
 var router = express.Router();
 
-router.post('/', checkToken, wishlistsController.addToWishlists);
-router.delete('/:id', checkToken, wishlistsController.removeFromWishlists);
-router.get('/', checkToken, wishlistsController.getWishlists);
+router.post('/', checkAuth, wishlistsController.addToWishlists);
+router.delete('/:id', checkAuth, wishlistsController.removeFromWishlists);
+router.get('/', checkAuth, wishlistsController.getWishlists);
 
 module.exports = router;

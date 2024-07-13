@@ -4,25 +4,20 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 const { Schema } = mongoose;
 const vendorsSchema = new Schema(
   {
-    userId: {
+    creatorId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "users",
-      required: [true, 'userId is required']
+      required: [true, 'CreatorId is required']
     },
     title: {
       type: String,
-      required: [true, 'title is required']
-    },
-    email: {
-      type: String,
-      unique: true,
-      required: [true, 'email is required']
+      required: [true, 'Title is required']
     },
     slug: {
       type: String,
-      required: [true, 'slug is required']
+      required: [true, 'Slug is required']
     }, 
-    avatar: { type: String, required: [true, 'avatar field is required'] },
+    image: { type: String, required: [true, 'Image field is required'] },
     available: {
       type: Boolean,
       default: true,
@@ -32,10 +27,10 @@ const vendorsSchema = new Schema(
       type: Number,
       default: 0
     },
-    openingDays: {
-      type: Array,
-      default: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-    },
+    // openingDays: {
+    //   type: Array,
+    //   default: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+    // },
     loc: {
       type: { type: String, default: "Point" },
       coordinates: [Number],
@@ -43,16 +38,20 @@ const vendorsSchema = new Schema(
     address: {
       longitude: {
         type: Number,
-        required: [true, 'address longitude is required']
+        required: [true, 'Address longitude is required']
       },
       latitude: {
         type: Number,
-        required: [true, 'address latitude is required']
+        required: [true, 'Address latitude is required']
       },
       city: {
         type: String,
-        required: [true, 'address city is required']
+        required: [true, 'Address city is required']
       },
+    },
+    archive: {
+      type: Boolean,
+      default: false
     },
   },
   { timestamps: true }

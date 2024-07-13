@@ -10,7 +10,7 @@ const validate = async (req, res, next, validationRule) => {
     }))
 }
 
-exports.signupValidator = async (req, res, next) => {
+exports.signupInputValidator = async (req, res, next) => {
     const validationRule = {
         "firstName": "required|string",
         "lastName": "required|string",
@@ -20,10 +20,43 @@ exports.signupValidator = async (req, res, next) => {
     validate(req, res, next, validationRule)
 } 
 
-exports.signinValidator = async (req, res, next) => {
+exports.signinInputValidator = async (req, res, next) => {
     const validationRule = {
         "email": "required|string|email",
         "password": "required|string|min:6",
+    };
+    validate(req, res, next, validationRule)
+} 
+
+exports.productCreationValidator = async (req, res, next) => {
+    const validationRule = {
+        "title": "required|string",
+        "original_price": "required|numeric",
+        "discounted_price": "required|numeric",
+        "description": "required|string",
+        "images": "required|array",
+        "vendorId": "required|string",
+        "categoryId": "required|string",
+    };
+    validate(req, res, next, validationRule)
+} 
+
+exports.categoryCreationValidator = async (req, res, next) => {
+    const validationRule = {
+        "title": "required|string",
+        "image": "required|array",
+    };
+    validate(req, res, next, validationRule)
+} 
+
+exports.vendorsCreationValidator = async (req, res, next) => {
+    const validationRule = {
+        "title": "required|string",
+        "image": "required|string",
+        // "openingDays": "required|array", 
+        "address.*.longitude": "required|string",
+        "address.*.latitude": "required|string",
+        "address.*.city": "required|string",
     };
     validate(req, res, next, validationRule)
 } 

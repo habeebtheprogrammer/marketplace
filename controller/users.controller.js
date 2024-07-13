@@ -3,6 +3,7 @@ const { successResponse, errorResponse } = require("../utils/responder")
 const constant = require('../utils/constant')
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const { createToken } = require("../utils/helpers")
 
 
 exports.signin = async (req, res, next) => {
@@ -12,7 +13,7 @@ exports.signin = async (req, res, next) => {
         if (!user) throw Error(constant.mismatchCredErr)
         const verify = await bcrypt.compare(password, user.docs[0].password)
         if (!verify) throw Error(constant.mismatchCredErr)
-        var token = jwt.sign(JSON.stringify(user), process.env.secretKey)
+        var token = createToken(JSON.stringify(user))
         successResponse(res, { user: user.docs[0], token })
     } catch (error) {
         errorResponse(res, error)
@@ -48,7 +49,7 @@ exports.updateUser = async (req, res, next) => {
     }
 }
 
-exports.getUser = async (req, res, next) => {
+exports.getUserAccount = async (req, res, next) => {
     try {
         const data = await usersService.getUsers({ _id: req.userId })
         successResponse(res, data?.docs[0])
@@ -58,8 +59,7 @@ exports.getUser = async (req, res, next) => {
 }
 
 exports.getUsers = async (req, res, next) => {
-    try {
-        if (req.userType != 'superuser') throw Error(constant.unathorizeAccess)
+    try { 
         const data = await usersService.getUsers({ "archive": false, ...req.query })
         successResponse(res, data)
     } catch (error) {
@@ -69,8 +69,7 @@ exports.getUsers = async (req, res, next) => {
 
 
 exports.deleteUsers = async (req, res, next) => {
-    try {
-        if (req.userType != 'superuser') throw Error(constant.unathorizeAccess)
+    try { 
         const { _id } = req.params
         const data = await usersService.updateUsers({ _id }, { "archive": true })
         successResponse(res, data)
