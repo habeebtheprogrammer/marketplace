@@ -30,6 +30,6 @@ exports.errorResponse = (res,  error, message = errMesg, statusCode = HttpStatus
     } else if(error?.message && error?.name != 'JsonWebTokenError'){
         message = error.message
     }  
-    return ApiResponder(res, statusCode, message, errorData);
+    return ApiResponder(res, statusCode, message, {errors: errorData});
 };
   

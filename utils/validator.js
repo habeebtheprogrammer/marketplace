@@ -6,7 +6,7 @@ const validate = async (req, res, next, validationRule) => {
     .send({
         success: false,
         message: 'Validation failed',
-        data: validation.errors.errors,
+        data: validation.errors,
     }))
 }
 
