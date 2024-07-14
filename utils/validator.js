@@ -6,7 +6,7 @@ const validate = async (req, res, next, validationRule) => {
     .send({
         success: false,
         message: 'Validation failed',
-        data: validation.errors,
+        data: validation.errors.errors,
     }))
 }
 
@@ -15,7 +15,7 @@ exports.signupInputValidator = async (req, res, next) => {
         "firstName": "required|string",
         "lastName": "required|string",
         "email": "required|string|email",
-        "password": "required|string|min:6",
+        "password": "required|string|min:5",
     };
     validate(req, res, next, validationRule)
 } 
@@ -24,6 +24,13 @@ exports.signinInputValidator = async (req, res, next) => {
     const validationRule = {
         "email": "required|string|email",
         "password": "required|string|min:6",
+    };
+    validate(req, res, next, validationRule)
+} 
+
+exports.updateValidator = async (req, res, next) => {
+    const validationRule = {
+        "_id": "required|string",
     };
     validate(req, res, next, validationRule)
 } 
@@ -44,7 +51,7 @@ exports.productCreationValidator = async (req, res, next) => {
 exports.categoryCreationValidator = async (req, res, next) => {
     const validationRule = {
         "title": "required|string",
-        "image": "required|array",
+        "image": "required|url",
     };
     validate(req, res, next, validationRule)
 } 

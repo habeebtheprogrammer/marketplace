@@ -8,9 +8,9 @@ exports.checkAuth = (req, res, next) => {
   var token = req.header("authorization");
   try {
     if(token) token = token.split(" ")[1]
-    var data = jwt.verify(token, process.env.secretKey);
-    req.userId = data.docs[0]._id;
-    req.userType = data.docs[0].userType;
+    var data = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = data._id;
+    req.userType = data.userType;
     next();
   } catch (error) {
     errorResponse(res, error, "Please login to continue", HttpStatusCode.Forbidden)

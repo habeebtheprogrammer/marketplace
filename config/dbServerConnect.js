@@ -5,11 +5,11 @@ const connect = app => {
     var port = process.env.PORT || 4000
 
     mongoose.Promise = global.Promise;
-    mongoose.connect(process.env.dbURL)
+    mongoose.connect(process.env.DB_URL)
 
     // When successfully connected
     mongoose.connection.on("connected", function () {
-      console.log("Mongo DB connection open for DB");
+      console.log(`Mongo DB connection open for ${process.env.NODE_ENV} DB`);
     });
 
     app.listen(port, () => console.log(`Server running on port ${port}`));

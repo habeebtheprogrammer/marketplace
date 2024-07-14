@@ -1,7 +1,7 @@
 const Users = require("../model/users.model")
 
 exports.getUsers = async (filters = {}) => {
-    const data = await Users.paginate(filters, {})
+    const data = await Users.paginate(filters)
     return data
 }
 

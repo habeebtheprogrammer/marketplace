@@ -10,10 +10,10 @@ exports.signin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await usersService.getUsers({ email })
-        if (!user) throw Error(constant.mismatchCredErr)
+        if (!user?.totalDocs) throw Error(constant.mismatchCredErr)
         const verify = await bcrypt.compare(password, user.docs[0].password)
         if (!verify) throw Error(constant.mismatchCredErr)
-        var token = createToken(JSON.stringify(user))
+        var token = createToken(JSON.stringify(user.docs[0]))
         successResponse(res, { user: user.docs[0], token })
     } catch (error) {
         errorResponse(res, error)

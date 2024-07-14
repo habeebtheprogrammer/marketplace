@@ -6,6 +6,6 @@ exports.generateRandomNumber = (n) => {
   }
 
 exports.createToken = (data) => {
-  var token = jwt.sign(data, process.env.secretKey, { expiresIn: '30d' });
+  var token = jwt.sign(data, process.env.JWT_SECRET);
   return token;
 };

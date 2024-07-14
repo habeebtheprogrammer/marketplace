@@ -20,7 +20,7 @@ exports.updateProducts = async (req, res, next) => {
                 updateObj[key] = req.body[key];
             }
         })
-        const data = await productsService.updateProducts({ _id }, updateObj)
+        const data = await productsService.updateProducts({ _id : updateObj._id }, updateObj)
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)

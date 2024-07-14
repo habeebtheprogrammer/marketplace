@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}.local` })
 var dbServerConnect = require("./config/dbServerConnect");
 var express = require('express');
 var path = require('path');
