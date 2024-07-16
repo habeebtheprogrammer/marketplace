@@ -23,8 +23,9 @@ exports.signin = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         const hash = await bcrypt.hash(req.body.password, 10)
-        const data = await usersService.createUsers({ ...req.body, password: hash })
-        successResponse(res, data)
+        const user = await usersService.createUser({ ...req.body, password: hash })
+        var token = createToken(JSON.stringify(user))
+        successResponse(res, {user,token})
     } catch (error) {
         errorResponse(res, error)
     }

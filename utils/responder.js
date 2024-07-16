@@ -1,17 +1,16 @@
 const { errMesg, requiredErr } = require('./constant');
 const { HttpStatusCode } = require('axios');
 
-const ApiResponder = (res, statusCode, payload, extra = {}) => {
+const ApiResponder = (res, statusCode, payload, error  = false ) => {
   res.status(statusCode).send({
     status: statusCode,
-    success: statusCode === HttpStatusCode.Ok || statusCode === HttpStatusCode.Created ? true : false,
-    data: payload,
-    ...extra,
+    success: !error,
+    [error? 'errors' : 'data']: payload,
   });
 };
 
 exports.successResponse = (res, payload = {}, message = 'Success', statusCode = HttpStatusCode.Ok) => {
-  return ApiResponder(res, statusCode, message, payload);
+  return ApiResponder(res, statusCode, payload);
 };
 
 exports.errorResponse = (res,  error, message = errMesg, statusCode = HttpStatusCode.InternalServerError) => {
@@ -26,7 +25,9 @@ exports.errorResponse = (res,  error, message = errMesg, statusCode = HttpStatus
     } else if(error?.message && error?.name != 'JsonWebTokenError'){
         message = error.message
         errorData.push(error.message)
-    }  
-    return ApiResponder(res, statusCode,  {errors: errorData});
+    }  else{
+      errorData.push(message)
+    }
+    return ApiResponder(res, statusCode, errorData, true);
 };
   

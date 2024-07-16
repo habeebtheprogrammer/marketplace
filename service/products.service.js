@@ -1,7 +1,11 @@
 const Products = require("../model/products.model")
 
 exports.getProducts = async (filters = {}) => {
-    const data = await Products.paginate(filters, {})
+    const data = await Products.paginate(filters, {populate: [
+        {
+          path: "categoryId",
+          select: "title",
+        }]})
     return data
 }
 

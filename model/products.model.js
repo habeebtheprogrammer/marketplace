@@ -31,7 +31,7 @@ const productsSchema = new Schema(
       enum: { values: [true, false], message: '{VALUE} is not supported' }
     },
     rating: {
-      type: Number,
+      type: mongoose.Schema.Types.Decimal128,
       default: 0
     },
     reviews: {
@@ -60,8 +60,8 @@ const productsSchema = new Schema(
     },
     categoryId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "category",
-      required: [true, 'category field is required']
+      ref: "categories",
+      required: [true, 'categoryId field is required']
     },
   },
   { timestamps: true }

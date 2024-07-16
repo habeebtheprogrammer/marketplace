@@ -5,8 +5,8 @@ exports.getUsers = async (filters = {}) => {
     return data
 }
 
-exports.createUsers = async (param) => {
-    const data = await Users.create(param)
+exports.createUser = async (param) => {
+    const data = await (await Users.create(param)).toObject()
     return data
 }
 

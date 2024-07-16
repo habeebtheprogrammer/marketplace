@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const { Schema } = mongoose;
 
@@ -17,6 +18,9 @@ const wishlistsSchema = new Schema(
   },
   { timestamps: true }
 );
+
+
+wishlistsSchema.plugin(mongoosePaginate);
 
 
 const Wishlists = mongoose.model("wishlists", wishlistsSchema);

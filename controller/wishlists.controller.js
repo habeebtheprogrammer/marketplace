@@ -4,7 +4,7 @@ const { successResponse, errorResponse } = require("../utils/responder")
 exports.addToWishlists = async (req, res, next) => {
     try {
         const { productId } = req.body
-        const data = await wishlistsService.addToWishlists({ productId })
+        const data = await wishlistsService.addToWishlists({ productId, userId: req.userId })
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)
