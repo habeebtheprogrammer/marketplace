@@ -13,8 +13,8 @@ exports.addToWishlists = async (req, res, next) => {
 
 exports.removeFromWishlists = async (req, res, next) => {
     try {
-        const { wishId } = req.body
-        const data = await wishlistsService.removeFromWishlists(wishId)
+        const { productId } = req.body
+        const data = await wishlistsService.removeFromWishlists(productId)
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)

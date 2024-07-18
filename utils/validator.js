@@ -96,3 +96,15 @@ exports.updateCartValidator = async (req, res, next) => {
     };
     validate(req, res, next, validationRule)
 }
+
+exports.addAddressValidator = async (req, res, next) => {
+    const validationRule = {
+        "name": "required|string",
+        "street": "required|string",
+        "city": "required|string",
+        "state": "required|string",
+        "country": "required|string",
+        "phone": "required|string",
+    };
+    validate(req, res, next, validationRule)
+}

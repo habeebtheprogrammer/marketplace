@@ -5,7 +5,7 @@ const { addToWishlistValidator } = require('../utils/validator');
 var router = express.Router();
 
 router.post('/', checkAuth, addToWishlistValidator, wishlistsController.addToWishlists);
-router.delete('/:wishId', checkAuth, wishlistsController.removeFromWishlists);
+router.delete('/:addressId', checkAuth, wishlistsController.removeFromWishlists);
 router.get('/', checkAuth, wishlistsController.getWishlists);
 
 module.exports = router;

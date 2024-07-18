@@ -4,6 +4,7 @@ const categoriesService = require("./categories.service")
 const vendorsService = require("./vendors.service")
 const cartsService = require("./carts.service")
 const wishlistsService = require("./wishlists.service")
+const addressService = require("./address.service")
 
 module.exports = {
     usersService,
@@ -11,5 +12,6 @@ module.exports = {
     vendorsService,
     categoriesService,
     cartsService,
-    wishlistsService
+    wishlistsService,
+    addressService
 }
