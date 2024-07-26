@@ -16,9 +16,9 @@ exports.getCarts = async (req, res, next) => {
 
 exports.addToCarts = async (req, res, next) => {
     try {
-        const { productId } = req.body
+        const { productId , size} = req.body
         console.log(req.body)
-        const data = await cartsService.addToCarts({ productId, userId: req.userId })
+        const data = await cartsService.addToCarts({ productId, userId: req.userId, size })
         successResponse(res, data)
     } catch (error) {
         console.log(error)

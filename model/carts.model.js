@@ -5,16 +5,17 @@ const { Schema } = mongoose;
 
 const cartsSchema = new Schema(
   {
-    productId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "products",
-      required: [true, 'ProductId is required']
-    },
     userId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "users",
       required: [true, 'UserId is required']
     },
+    productId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "products",
+      required: [true, 'ProductId is required']
+    },
+    size: String,
     qty: {
       type: Number,
       default: 1,

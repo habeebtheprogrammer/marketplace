@@ -21,14 +21,21 @@ const productsSchema = new Schema(
       type: Number,
       default: 0,
     },
-    // is_stock: {
-    //   type: Boolean,
-    //   default: true
-    // },
-    available: {
-      type: Boolean,
-      default: true,
-      enum: { values: [true, false], message: '{VALUE} is not supported' }
+    size: [
+      {
+        title: {
+          type: String,
+          required: [true, 'Title is required']
+        },
+        is_stock: {
+          type: Number,
+          default: 1,
+        },
+      }
+    ],
+    is_stock: {
+      type: Number,
+      default: 1,
     },
     rating: {
       type: mongoose.Schema.Types.Decimal128,
