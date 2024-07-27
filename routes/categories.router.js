@@ -1,6 +1,6 @@
 var express = require('express');
 const { categoriesController } = require('../controller');
-const { checkAuth, vendorsAccessOnly } = require('../utils/auth');
+const { checkAuth, vendorsAccessOnly } = require('../utils/authMiddleware');
 const { categoryCreationValidator, updateValidator } = require('../utils/validator');
 var router = express.Router();
 

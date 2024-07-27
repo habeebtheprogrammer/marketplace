@@ -1,6 +1,6 @@
 var express = require('express');
 const { addressController } = require('../controller');
-const { checkAuth } = require('../utils/auth');
+const { checkAuth } = require('../utils/authMiddleware');
 const { addAddressValidator } = require('../utils/validator');
 var router = express.Router();
 

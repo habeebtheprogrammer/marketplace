@@ -22,7 +22,7 @@ exports.removeAddress = async (req, res, next) => {
 
 exports.getAddress = async (req, res, next) => {
     try {
-        const data = await addressService.getAddress({})
+        const data = await addressService.getAddress({userId: req.userId})
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)

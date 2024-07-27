@@ -1,6 +1,6 @@
 var express = require('express');
 const { vendorsController } = require('../controller');
-const { checkAuth, vendorsAccessOnly, adminAccessOnly } = require('../utils/auth');
+const { checkAuth, vendorsAccessOnly, adminAccessOnly } = require('../utils/authMiddleware');
 const { vendorsCreationValidator } = require('../utils/validator');
 var router = express.Router();
 

@@ -1,6 +1,6 @@
 var express = require('express');
 const { wishlistsController } = require('../controller');
-const { checkAuth } = require('../utils/auth');
+const { checkAuth } = require('../utils/authMiddleware');
 const { addToWishlistValidator } = require('../utils/validator');
 var router = express.Router();
 

@@ -1,6 +1,6 @@
 var express = require('express');
 const { cartsController } = require('../controller');
-const { checkAuth } = require('../utils/auth');
+const { checkAuth } = require('../utils/authMiddleware');
 const { addToCartValidator, updateCartValidator } = require('../utils/validator');
 var router = express.Router();
 

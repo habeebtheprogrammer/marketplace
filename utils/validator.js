@@ -68,12 +68,14 @@ exports.vendorsCreationValidator = async (req, res, next) => {
         "title": "required|string",
         "image": "required|string",
         // "openingDays": "required|array", 
-        "address.*.longitude": "required|string",
-        "address.*.latitude": "required|string",
-        "address.*.city": "required|string",
+        "address": {
+            "longitude": "required|string",
+            "latitude": "required|string",
+            "city": "required|string",
+        }
     };
     validate(req, res, next, validationRule)
-} 
+}
 
 
 exports.addToCartValidator = async (req, res, next) => {
@@ -108,3 +110,15 @@ exports.addAddressValidator = async (req, res, next) => {
     };
     validate(req, res, next, validationRule)
 }
+
+
+exports.createOrdersValidator = async (req, res, next) => {
+    const validationRule = {
+        "amountPaid": "required|numeric",
+        "deliveryAddress": {
+            "phone": "required|string",
+            "street": "required|string",
+        }
+    };
+    validate(req, res, next, validationRule)
+} 

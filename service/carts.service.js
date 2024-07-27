@@ -33,3 +33,7 @@ exports.removeFromCarts = async (param) => {
     return data
 }
  
+exports.clearCarts = async (param) => {
+  const data = await Carts.deleteMany(param)
+  return data
+}

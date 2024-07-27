@@ -1,8 +1,7 @@
 const { usersService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
 const constant = require('../utils/constant')
-const bcrypt = require("bcryptjs")
-const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs") 
 const { createToken } = require("../utils/helpers")
 
 
