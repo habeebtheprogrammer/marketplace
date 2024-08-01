@@ -1,4 +1,4 @@
-const { ordersService, cartsService } = require("../service")
+const { ordersService, cartsService, productsService } = require("../service")
 const { generateRandomNumber } = require("../utils/helpers")
 const { successResponse, errorResponse } = require("../utils/responder")
 
@@ -29,9 +29,13 @@ exports.addOrders = async (req, res, next) => {
                 price: p.productId.discounted_price || p.productId.original_price,
             }
             orders.push(item)
+            productIds.push(p.productId._id)
         })
         const data = await ordersService.addOrders({ userId: req.userId, trackingId, amountPaid, flutterwave, orderedProducts: orders, deliveryAddress })
-        const emptyCarts = await cartsService.clearCarts({userId: req.userId})
+        const emptyCarts = await cartsService.clearCarts({ userId: req.userId })
+        orderedProducts?.map(async (p) => {
+            const updateProd = await productsService.updateProducts({ "_id":  p.productId._id }, { $inc: { is_stock: -p.qty } })
+        })
         successResponse(res, data)
     } catch (error) {
         console.log(error)

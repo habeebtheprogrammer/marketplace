@@ -95,6 +95,7 @@ exports.updateCartValidator = async (req, res, next) => {
     const validationRule = {
         "cartId": "required|string",
         "qty": "required|numeric",
+        "productId": "required|string"
     };
     validate(req, res, next, validationRule)
 }
