@@ -95,13 +95,14 @@ exports.appleSignin = async (req, res, next) => {
     if (appleToken) {
 
       const { authorization, user } = appleToken
-      const { sub: userAppleId } = await appleSignin.verifyIdToken(
+      const verifyTok = await appleSignin.verifyIdToken(
         authorization.id_token, // We need to pass the token that we wish to decode.
         {
           audience: process.env.APPLE_CLIENT_ID, // client id - The same one we used  on the frontend, this is the secret key used for encoding and decoding the token.
           ignoreExpiration: true, // Token will not expire unless you manually do so.
         }
       );
+      console.log(verifyTok)
       const { email, name } = user
       const userObj = await usersService.getUsers({ email })
       if (!userObj?.totalDocs) {
