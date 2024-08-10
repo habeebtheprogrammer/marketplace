@@ -102,12 +102,12 @@ exports.appleSignin = async (req, res, next) => {
           ignoreExpiration: true, // Token will not expire unless you manually do so.
         }
       );
-      console.log(verifyTok)
-      const { email, name } = user
+      const email = verifyTok?.email
+      const name = user?.user
       const userObj = await usersService.getUsers({ email })
       if (!userObj?.totalDocs) {
         const hash = await bcrypt.hash(name.firstName, 10)
-        const data = await usersService.createUser({ firstName: name.firstName, lastName: name.lastName, password: hash, email })
+        const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email })
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
       } else {
