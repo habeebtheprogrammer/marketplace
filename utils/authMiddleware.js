@@ -111,8 +111,8 @@ exports.appleSignin = async (req, res, next) => {
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
       } else {
-        var token = createToken(JSON.stringify(user.docs[0]))
-        successResponse(res, { user: user.docs[0], token })
+        var token = createToken(JSON.stringify(userObj.docs[0]))
+        successResponse(res, { user: userObj.docs[0], token })
       }
     } else {
       next()
