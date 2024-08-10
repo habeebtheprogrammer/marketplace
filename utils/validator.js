@@ -106,7 +106,6 @@ exports.addAddressValidator = async (req, res, next) => {
         "street": "required|string",
         "city": "required|string",
         "state": "required|string",
-        "country": "required|string",
         "phone": "required|string",
     };
     validate(req, res, next, validationRule)
