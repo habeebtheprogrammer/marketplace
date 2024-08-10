@@ -41,7 +41,6 @@ exports.getProducts = async (req, res, next) => {
             ...sort,
             ...pagination
         };
-        console.log(query, options)
         const data = await productsService.getProducts({ query, options })
         successResponse(res, data)
     } catch (error) {
