@@ -70,6 +70,10 @@ const productsSchema = new Schema(
       ref: "categories",
       required: [true, 'categoryId field is required']
     },
+    archive: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );

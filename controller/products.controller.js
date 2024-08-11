@@ -36,12 +36,12 @@ exports.getProducts = async (req, res, next) => {
         var pagination = { limit, page }
 
         const query = buildFilterQuery(req.query);
-        sort = sort == 'highToLow' ? { sort: {original_price: -1} } : sort == 'lowToHigh'  ? { sort: { original_price: 1 }} : {};
+        sort = sort == 'highToLow' ? { sort: {original_price: -1} } : sort == 'lowToHigh'  ? { sort: { rating: -1 }} : {};
         const options = {
             ...sort,
             ...pagination
         };
-        const data = await productsService.getProducts({ query, options })
+        const data = await productsService.getProducts({ query: {...query, archive: false}, options })
         successResponse(res, data)
     } catch (error) {
         console.log(error)
