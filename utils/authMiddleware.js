@@ -12,11 +12,13 @@ const { usersService } = require("../service")
 exports.checkAuth = (req, res, next) => {
   var token = req.header("authorization");
   try {
-    if (token) token = token.split(" ")[1]
+    if (token) {
+      token = token.split(" ")[1]
     var data = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = data._id;
     req.userType = data.userType;
     next();
+    } else throw Error("an error has occured")
   } catch (error) {
     errorResponse(res, error, "Please login to continue", HttpStatusCode.Forbidden)
   }
