@@ -1,5 +1,6 @@
 const { errMesg, requiredErr } = require('./constant');
 const { HttpStatusCode } = require('axios');
+const { sendErrorEmail } = require('./helpers');
 
 const ApiResponder = (res, statusCode, payload, error  = false ) => {
   res.status(statusCode).send({
@@ -14,7 +15,9 @@ exports.successResponse = (res, payload = {}, message = 'Success', statusCode = 
 };
 
 exports.errorResponse = (res,  error, message = errMesg, statusCode = HttpStatusCode.InternalServerError) => {
-    var errorData  = []
+  sendErrorEmail(JSON.stringify(error))
+
+  var errorData  = []
     if(error?.name == 'ValidationError'){
         Object.keys(error?.errors).forEach(i => errorData.push(error.errors[i].message))
     } else if(error?.code == "11000" ){

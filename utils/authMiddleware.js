@@ -5,7 +5,7 @@ const { errorResponse, successResponse } = require("./responder");
 const { HttpStatusCode } = require("axios");
 const { OAuth2Client } = require('google-auth-library');
 const appleSignin = require("apple-signin-auth");
-const { createToken } = require("./helpers");
+const { createToken, sendSignupMail } = require("./helpers");
 const { usersService } = require("../service")
 
 
@@ -40,9 +40,11 @@ exports.googleAuth = async (req, res, next) => {
       const user = await usersService.getUsers({ email })
       if (!user?.totalDocs) {
         const hash = await bcrypt.hash(id, 10)
-        const user = await usersService.createUser({ firstName, lastName, password: hash })
+        const user = await usersService.createUser({ firstName, email, lastName, password: hash })
         var token = createToken(JSON.stringify(user))
         successResponse(res, { user, token })
+        sendSignupMail(email)
+
       } else {
         var token = createToken(JSON.stringify(user.docs[0]))
         successResponse(res, { user: user.docs[0], token })
@@ -53,39 +55,7 @@ exports.googleAuth = async (req, res, next) => {
     errorResponse(res, error, "An error has occured. please try again later", HttpStatusCode.Forbidden)
   }
 }
-
-exports.googleAuth = async (req, res, next) => {
-  try {
-    const { oauthToken } = req.body;
-
-    if (oauthToken) {
-      const client = new OAuth2Client();
-      const ticket = await client.verifyIdToken({
-        idToken: oauthToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
-      const firstName = payload['given_name']
-      const lastName = payload['family_name']
-      const id = payload['sub']
-      const email = payload['email']
-
-      const user = await usersService.getUsers({ email })
-      if (!user?.totalDocs) {
-        const hash = await bcrypt.hash(id, 10)
-        const userObj = await usersService.createUser({ firstName, lastName, password: hash, email })
-        var token = createToken(JSON.stringify(userObj))
-        successResponse(res, { user: userObj, token })
-      } else {
-        var token = createToken(JSON.stringify(user.docs[0]))
-        successResponse(res, { user: user.docs[0], token })
-      }
-    } else next();
-  } catch (error) {
-    console.log(error)
-    errorResponse(res, error, "An error has occured. please try again later", HttpStatusCode.Forbidden)
-  }
-}
+ 
 
 exports.appleSignin = async (req, res, next) => {
 
@@ -110,6 +80,7 @@ exports.appleSignin = async (req, res, next) => {
         const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email })
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
+        sendSignupMail(email)
       } else {
         var token = createToken(JSON.stringify(userObj.docs[0]))
         successResponse(res, { user: userObj.docs[0], token })

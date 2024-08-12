@@ -1,6 +1,19 @@
 const jwt = require("jsonwebtoken");
-
-
+const nodemailer = require("nodemailer");
+const emailTemplates = require("../emailTemplates");
+const emailTransporter = nodemailer.createTransport({
+  // service: "Outlook365",
+  host:  process.env.SMTP_HOST,
+  port: "587",
+  tls: {
+      ciphers: "SSLv3",
+      rejectUnauthorized: false,
+  },
+  auth: {
+    user:  process.env.SMTP_EMAIL, // generated ethereal user
+    pass:  process.env.SMTP_PASSWORD, // generated ethereal password
+  },
+});
 exports.generateRandomNumber = (n) => {
   return Math.floor(Math.random() * (9 * Math.pow(10, n - 1))) + Math.pow(10, n - 1);
 }
@@ -10,7 +23,37 @@ exports.createToken = (data) => {
   return token;
 };
 
+exports.sendSignupMail = (email) => {
+  emailTransporter
+    .sendMail({
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: email,
+      subject: "Welcome to 360 Gadgets Africa – Your Ultimate Tech Destination!",
+      html: emailTemplates.signup(),
+    })
+    .then((suc) => {
+      console.log(suc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
+exports.sendErrorEmail = (error) => {
+  emailTransporter
+    .sendMail({
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: 'habibmail31@gmail.com',
+      subject: "An error has occured",
+      html: `${error}`,
+    })
+    .then((suc) => {
+      console.log(suc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 exports.buildFilterQuery = (reqQuery) => {
   var filters = []
   Object.keys(reqQuery).forEach((key) => {

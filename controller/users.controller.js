@@ -2,7 +2,7 @@ const { usersService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
 const constant = require('../utils/constant')
 const bcrypt = require("bcryptjs") 
-const { createToken } = require("../utils/helpers")
+const { createToken, sendSignupMail } = require("../utils/helpers")
 
 
 exports.signin = async (req, res, next) => {
@@ -25,6 +25,7 @@ exports.createUser = async (req, res, next) => {
         const user = await usersService.createUser({ ...req.body, password: hash })
         var token = createToken(JSON.stringify(user))
         successResponse(res, {user,token})
+        sendSignupMail(user.email)
     } catch (error) {
         errorResponse(res, error)
     }

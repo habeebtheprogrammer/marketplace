@@ -19,7 +19,6 @@ const addressSchema = new Schema(
     },
     country: {
       type: String,
-      required: [true, 'Country is required']
     },
     phone: {
       type: String,
