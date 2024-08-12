@@ -12,12 +12,13 @@ const { usersService } = require("../service")
 exports.checkAuth = (req, res, next) => {
   var token = req.header("authorization");
   try {
-    if (token) {
-      token = token.split(" ")[1]
-    var data = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = data._id;
-    req.userType = data.userType;
-    next();
+    token = token.split(" ")
+    console.log(token, 'toks')
+    if (token[1]) {
+      var data = jwt.verify(token[1], process.env.JWT_SECRET);
+      req.userId = data._id;
+      req.userType = data.userType;
+      next();
     } else throw Error("an error has occured")
   } catch (error) {
     errorResponse(res, error, "Please login to continue", HttpStatusCode.Forbidden)
@@ -57,7 +58,7 @@ exports.googleAuth = async (req, res, next) => {
     errorResponse(res, error, "An error has occured. please try again later", HttpStatusCode.Forbidden)
   }
 }
- 
+
 
 exports.appleSignin = async (req, res, next) => {
 
@@ -79,7 +80,7 @@ exports.appleSignin = async (req, res, next) => {
       const userObj = await usersService.getUsers({ email })
       if (!userObj?.totalDocs) {
         const hash = await bcrypt.hash(verifyTok.sub, 10)
-        const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email })
+        const data = await usersService.createUser({ firstName: name?.firstName || "champ", lastName: name?.lastName || "champ", password: hash, email })
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
         sendSignupMail(email)
