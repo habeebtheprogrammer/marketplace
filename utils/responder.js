@@ -15,7 +15,7 @@ exports.successResponse = (res, payload = {}, message = 'Success', statusCode = 
 };
 
 exports.errorResponse = (res,  error, message = errMesg, statusCode = HttpStatusCode.InternalServerError) => {
-  sendErrorEmail(JSON.stringify(error))
+  sendErrorEmail(error)
 
   var errorData  = []
     if(error?.name == 'ValidationError'){

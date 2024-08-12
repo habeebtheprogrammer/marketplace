@@ -54,6 +54,23 @@ exports.sendErrorEmail = (error) => {
       console.log(err);
     });
 };
+
+exports.sendOrdersEmail = (order) => {
+  emailTransporter
+    .sendMail({
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: 'support@360gadgetsafrica.com',
+      subject: "You have a new order",
+      html: `Hi there, you have a new order 
+      ${order}`,
+    })
+    .then((suc) => {
+      console.log(suc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 exports.buildFilterQuery = (reqQuery) => {
   var filters = []
   Object.keys(reqQuery).forEach((key) => {

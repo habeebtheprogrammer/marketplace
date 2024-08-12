@@ -78,7 +78,7 @@ exports.appleSignin = async (req, res, next) => {
       const name = user?.user
       const userObj = await usersService.getUsers({ email })
       if (!userObj?.totalDocs) {
-        const hash = await bcrypt.hash(name.firstName, 10)
+        const hash = await bcrypt.hash(verifyTok.sub, 10)
         const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email })
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
