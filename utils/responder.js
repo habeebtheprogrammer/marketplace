@@ -24,14 +24,12 @@ exports.errorResponse = (res, error, message = errMesg, statusCode = HttpStatusC
       message = error.keyValue[i]
       errorData.push(error.keyValue[i] + " is not available")
     })
-    sendErrorEmail({ errorData, error })
   } else if (error?.message && error?.name != 'JsonWebTokenError') {
     message = error.message
     errorData.push(error.message)
-    sendErrorEmail({ errorData, error })
   } else {
     errorData.push(message)
-    sendErrorEmail({ errorData, error })
   }
+  if (error?.name != 'JsonWebTokenError') errorData.push(JSON.stringify({errorData, error}))
   return ApiResponder(res, statusCode, errorData, true);
 };
