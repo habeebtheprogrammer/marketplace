@@ -22,12 +22,12 @@ app.use(fileUpload({
   tempFileDir: '/tmp/'
 }));
 
-app.use((req, res, next) => {
-  // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  // res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-  // res.setHeader('Cross-origin-Opener-Policy','same-origin-allow-popups');
-  next()
-});
+// app.use((req, res, next) => {
+//   // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+//   // res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+//   // res.setHeader('Cross-origin-Opener-Policy','same-origin-allow-popups');
+//   next()
+// });
 app.use(helmet({ contentSecurityPolicy: false }))
 app.use(bodyParser.json());
 app.use(cors());
