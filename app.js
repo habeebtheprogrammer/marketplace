@@ -21,6 +21,10 @@ app.use(fileUpload({
   responseOnLimit: true,
   tempFileDir: '/tmp/'
 }));
+app.use((req, res, next) => {
+  res.setHeader('Cross-origin-Opener-Policy','same-origin, same-origin-allow-popups');
+  next()
+});
 app.use(helmet({ contentSecurityPolicy: false }))
 app.use(bodyParser.json());
 app.use(cors());
