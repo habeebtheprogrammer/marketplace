@@ -23,8 +23,8 @@ app.use(fileUpload({
 }));
 
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  // res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   res.setHeader('Cross-origin-Opener-Policy','same-origin-allow-popups');
   next()
 });
