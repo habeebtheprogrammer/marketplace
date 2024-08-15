@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const constant = require("./constant");
 const bcrypt = require("bcryptjs")
 const { errorResponse, successResponse } = require("./responder");
-const { HttpStatusCode } = require("axios");
+const { HttpStatusCode, default: axios } = require("axios");
 const { OAuth2Client } = require('google-auth-library');
 const appleSignin = require("apple-signin-auth");
 const { createToken, sendSignupMail } = require("./helpers");
@@ -29,11 +29,16 @@ exports.googleAuth = async (req, res, next) => {
 
     if (oauthToken) {
       const client = new OAuth2Client();
-      const ticket = await client.verifyIdToken({
-        idToken: oauthToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
+
+      // const ticket = await client.verifyIdToken({
+      //   idToken: oauthToken,
+      //   audience: process.env.GOOGLE_CLIENT_ID,
+      // });
+         const ticket = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {headers: {
+          Authorization: `Bearer ${oauthToken}`
+         }})
+        //  await client.getTokenInfo(oauthToken);
+      const payload = ticket.data;
       const firstName = payload['given_name']
       const lastName = payload['family_name']
       const id = payload['sub']
