@@ -21,7 +21,11 @@ app.use(fileUpload({
   responseOnLimit: true,
   tempFileDir: '/tmp/'
 }));
-
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
+  next();
+});
 // app.use((req, res, next) => {
 //   // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
 //   // res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
