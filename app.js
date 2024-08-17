@@ -24,6 +24,8 @@ app.use(fileUpload({
 app.use((req, res, next) => {
   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
   res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
+  res.setHeader('Content-Security-Policy-Report-Only', 
+    "script-src https://accounts.google.com/gsi/client; frame-src https://accounts.google.com/gsi/; connect-src https://accounts.google.com/gsi/");
   next();
 });
 // app.use((req, res, next) => {
