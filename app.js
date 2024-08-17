@@ -21,12 +21,6 @@ app.use(fileUpload({
   responseOnLimit: true,
   tempFileDir: '/tmp/'
 }));
-app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popup');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
-  
-  next();
-});
 // app.use((req, res, next) => {
 //   // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
 //   // res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
@@ -43,6 +37,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
+  
+  next();
+});
 app.use('/api', routes);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, "/build/index.html")));
