@@ -6,7 +6,7 @@ const cartsService = require("./carts.service")
 const wishlistsService = require("./wishlists.service")
 const addressService = require("./address.service")
 const ordersService = require("./orders.service")
-
+const swapService = require("./swap.service")
 module.exports = {
     usersService,
     productsService,
@@ -15,5 +15,6 @@ module.exports = {
     cartsService,
     wishlistsService,
     addressService,
-    ordersService
+    ordersService,
+    swapService
 }

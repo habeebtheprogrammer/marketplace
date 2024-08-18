@@ -71,6 +71,23 @@ exports.sendOrdersEmail = (order) => {
       console.log(err);
     });
 };
+
+exports.sendSwapEmail = (order) => {
+  emailTransporter
+    .sendMail({
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: 'support@360gadgetsafrica.com',
+      subject: "You have a new swap order",
+      html: `Hi there, you have a new swap order 
+      ${order}`,
+    })
+    .then((suc) => {
+      console.log(suc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 exports.buildFilterQuery = (reqQuery) => {
   var filters = []
   Object.keys(reqQuery).forEach((key) => {
