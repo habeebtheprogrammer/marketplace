@@ -27,7 +27,7 @@ app.use(fileUpload({
 //   // res.setHeader('Cross-origin-Opener-Policy','same-origin-allow-popups');
 //   next()
 // });
-app.use(helmet({ contentSecurityPolicy: false }))
+// app.use(helmet({ contentSecurityPolicy: false }))
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
