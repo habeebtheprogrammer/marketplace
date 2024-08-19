@@ -38,8 +38,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
+  res.setHeader('Cross-Origin-Opener-Policy', 'restrict-properties');
+  // res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
   
   next();
 });
