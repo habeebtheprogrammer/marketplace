@@ -27,9 +27,9 @@ app.use(fileUpload({
 //   // res.setHeader('Cross-origin-Opener-Policy','same-origin-allow-popups');
 //   next()
 // });
-// app.use(helmet({ contentSecurityPolicy: false }))
+app.use(helmet({ contentSecurityPolicy: false }))
 app.use(bodyParser.json());
-// app.use(cors());
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(logger('dev'));
@@ -37,12 +37,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use((req, res, next) => {
-  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-  res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
+// app.use((req, res, next) => {
+//   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+//   res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
   
-  next();
-});
+//   next();
+// });
 app.use('/api', routes);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, "/build/index.html")));
