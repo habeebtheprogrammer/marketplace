@@ -116,6 +116,7 @@ exports.buildFilterQuery = (reqQuery) => {
   let categoryConditions = [];
   let priceConditions = [];
   let ratingConditions = [];
+  let searchConditions = [];
 
   filters.forEach(filter => {
     const key = Object.keys(filter)[0];
@@ -125,8 +126,16 @@ exports.buildFilterQuery = (reqQuery) => {
       // Handle sorting separately
       return;
     }
+    if (key === 'title') {
+      const words = value.split(' ').filter(word => word.length > 0);
 
-    if (key === 'categoryId') {
+    // Create a regex that matches any of the words
+    const regex = words.map(word => new RegExp(word, 'i')); 
+      // Handle sorting separately
+      searchConditions.push({
+        title: { $in: regex } //
+      }) 
+    } else if (key === 'categoryId') {
       categoryConditions.push({ [key]: value });
     } else if (key === 'original_price' || key === 'rating') {
       if (Array.isArray(value)) {
@@ -152,6 +161,9 @@ exports.buildFilterQuery = (reqQuery) => {
 
   if (ratingConditions.length > 0) {
     query.$and.push({ $or: ratingConditions });
+  }
+  if(searchConditions.length > 0) {
+    query.$and.push({ $or: searchConditions });
   }
   return query.$and.length ? {...query, ...query2} : {...query2};
 }
