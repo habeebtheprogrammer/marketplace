@@ -38,8 +38,9 @@ exports.getProducts = async (req, res, next) => {
         var { sort, limit = 9, page = 1 } = req.query
 
         var pagination = { limit, page }
-
-        const query = buildFilterQuery(decodeURIComponent(req.query));
+        var q = decodeURIComponent(req.query)
+        console.log(q)
+        const query = buildFilterQuery(q);
         console.log(JSON.stringify(query),limit)
         sort = sort == 'highToLow' ? { sort: { original_price: -1 } } : sort == 'lowToHigh' ? { sort: { rating: -1 } } : {};
         const options = {
