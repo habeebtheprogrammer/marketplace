@@ -131,7 +131,7 @@ exports.buildFilterQuery = (reqQuery) => {
 
   filters.forEach(filter => {
     const key = Object.keys(filter)[0];
-    const value = filter[key];
+    const value = decodeURIComponent(filter[key])
 
     if (key === 'sort') {
       // Handle sorting separately
@@ -157,7 +157,7 @@ exports.buildFilterQuery = (reqQuery) => {
         priceConditions.push({ [key]: value });
       }
     } else {
-      query2[key] = decodeURIComponent(value)
+      query2[key] = value
     }
   });
 
