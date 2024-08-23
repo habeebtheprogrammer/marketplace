@@ -112,7 +112,7 @@ exports.buildFilterQuery = (reqQuery) => {
           } else if (key == 'rating') {
             val = { "$gte": i, "$lte": 5 }
           }
-          return ({ [key]: decodeURIComponent(val) })
+          return ({ [key]: val })
         })
 
       filters.push(...lists)
@@ -157,7 +157,7 @@ exports.buildFilterQuery = (reqQuery) => {
         priceConditions.push({ [key]: value });
       }
     } else {
-      query2[key] = value
+      query2[key] = decodeURIComponent(value)
     }
   });
 
