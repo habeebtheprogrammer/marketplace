@@ -1,6 +1,17 @@
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const emailTemplates = require("../emailTemplates");
+const AWS = require("aws-sdk")
+exports.s3Bucket = process.env.AWS_BUCKET;
+
+exports.s3 = new AWS.S3({
+  // accessKeyId: "DO00ZKFKZUK9KBM9UVGD",
+  // secretAccessKey: "BNuZl6+BfUYJG7iEcmWwjp76M6PnJDWx9N20iBRF7hQ",
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_KEY,
+  region: process.env.AWS_REGION
+});
+
 const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
   host:  process.env.SMTP_HOST,

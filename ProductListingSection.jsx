@@ -3,12 +3,7 @@ import Tilt from "react-parallax-tilt";
 import React from "react";
 
 import { useData } from "../../../../contexts/DataProvider.js";
-import { Link } from "react-router-dom";
-import { getCategoryWiseProducts } from "../../../../helpers/filter-functions/category";
-import { getRatedProducts } from "../../../../helpers/filter-functions/ratings";
-import { getPricedProducts } from "../../../../helpers/filter-functions/price";
-import { getSortedProducts } from "../../../../helpers/filter-functions/sort";
-import { getSearchedProducts } from "../../../../helpers/searchedProducts";
+import { Link } from "react-router-dom"; 
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiTwotoneHeart } from "react-icons/ai";
 import { useUserData } from "../../../../contexts/UserDataProvider.js";

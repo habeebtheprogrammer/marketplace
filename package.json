@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "apple-signin-auth": "^1.7.6",
-    "aws-sdk": "^2.1539.0",
+    "aws-sdk": "^2.751.0",
     "axios": "^1.6.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
