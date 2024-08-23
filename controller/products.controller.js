@@ -1,3 +1,4 @@
+const querystring = require("querystring");
 const { productsService } = require("../service")
 const { generateRandomNumber, groupByOr, buildFilterQuery, s3Bucket, s3 } = require("../utils/helpers")
 const { successResponse, errorResponse } = require("../utils/responder")
@@ -38,9 +39,7 @@ exports.getProducts = async (req, res, next) => {
         var { sort, limit = 9, page = 1 } = req.query
 
         var pagination = { limit, page }
-        var q = decodeURIComponent(req.query).toString()
-        console.log(q)
-        const query = buildFilterQuery(q);
+        const query = buildFilterQuery(querystring.stringify(req.query));
         console.log(JSON.stringify(query),limit)
         sort = sort == 'highToLow' ? { sort: { original_price: -1 } } : sort == 'lowToHigh' ? { sort: { rating: -1 } } : {};
         const options = {
