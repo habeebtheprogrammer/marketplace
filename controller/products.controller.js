@@ -38,7 +38,7 @@ exports.getProducts = async (req, res, next) => {
         var { sort, limit = 9, page = 1 } = req.query
 
         var pagination = { limit, page }
-        console.log(decodeURI(req.query))
+        console.log(req.query, limit, req.query.slug)
 
         const query = buildFilterQuery(req.query);
         console.log(JSON.stringify(query),limit)
