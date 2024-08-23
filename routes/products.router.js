@@ -8,6 +8,7 @@ var router = express.Router();
 router.get('/', productsController.getProducts);
 router.post('/',  productCreationValidator, productsController.createProducts);
 router.patch('/', checkAuth, vendorsAccessOnly, updateValidator, productsController.updateProducts);
+router.get('/getSingleProduct', productsController.getProduct);
 router.post('/pushimgs',  productsController.uploadImages);
 
 module.exports = router;

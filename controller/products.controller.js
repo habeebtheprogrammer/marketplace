@@ -54,6 +54,19 @@ exports.getProducts = async (req, res, next) => {
     }
 }
 
+exports.getProduct = async (req, res, next) => {
+    try {
+        var { slug } = req.query
+        console.log(slug)
+        const data = await productsService.getProducts({query: {slug}})
+        successResponse(res, data)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
+
+
 exports.uploadImages = async (req, res, next) => {
     try {
          // Handle image uploads
