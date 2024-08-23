@@ -112,7 +112,7 @@ exports.buildFilterQuery = (reqQuery) => {
           } else if (key == 'rating') {
             val = { "$gte": i, "$lte": 5 }
           }
-          return ({ [key]: val })
+          return ({ [key]: decodeURIComponent(val) })
         })
 
       filters.push(...lists)
