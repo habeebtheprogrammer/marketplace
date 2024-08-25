@@ -5,7 +5,6 @@ const fs = require("fs");
 
 exports.createProducts = async (req, res, next) => {
     try {
-console.log(req.body)
         const data = await productsService.createProducts({
             ...req.body, slug: req.body.title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5)
         })
@@ -77,6 +76,49 @@ exports.uploadImages = async (req, res, next) => {
     })
         }
     } 
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
+
+exports.uploadImages = async (req, res, next) => {
+    try {
+         // Handle image uploads
+    const images = [];
+    if (req.files && req.files.images) {
+      const files = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
+ 
+        // Save each file and add the file path or URL to images array
+        for (const key in files) {
+            const fileContent = fs.readFileSync(files[key].tempFilePath);
+         s3.upload({
+                Bucket: s3Bucket,
+                Key: "images/" + files[key].name,
+                ACL: "public-read",
+                Body: fileContent,
+                ContentType: files[key].mimetype
+            }).promise().then((result)=>{
+            images.push(result.Location)
+            if (files.length - 1 ==  key) successResponse(res, {images})
+    })
+        }
+    } 
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
+
+exports.bulkUpdate = async (req, res, next) => {
+    try {
+         // Handle image uploads
+         console.log('started')
+         const data = await productsService.bulkUpdate(
+            // { categoryId: { $ne: '65b14b7105f8b5c69b5ab4e3' } }, // Exclude the specific ID
+            // { $inc: { discounted_price: 30000, original_price: 50000 } } // Increment the price
+        )
+        successResponse(res, data)
     } catch (error) {
         console.log(error)
         errorResponse(res, error)

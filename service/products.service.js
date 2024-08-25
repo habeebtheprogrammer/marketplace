@@ -19,3 +19,7 @@ exports.updateProducts = async (param, obj) => {
     return data
 }
  
+exports.bulkUpdate = async (param, obj) => {
+    const data = await Products.updateMany(param, obj)
+    return data
+}
