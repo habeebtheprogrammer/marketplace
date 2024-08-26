@@ -156,7 +156,7 @@ exports.buildFilterQuery = (reqQuery) => {
       } else {
         priceConditions.push({ [key]: value });
       }
-    } else {
+    }else if(key == 'fbclid'){} else {
       query2[key] = value
     }
   });
