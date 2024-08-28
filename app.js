@@ -12,6 +12,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 var routes = require('./routes'); 
+const { createSiteMap } = require('./utils/sitemap');
 
 var app = express();
 // app.use(favicon(path.join(__dirname, '/build', 'favicon.ico')));
@@ -43,6 +44,7 @@ app.use(cookieParser());
   
 //   next();
 // });
+app.get('/sitemap.xml', createSiteMap)
 app.use('/api', routes);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, "/build/index.html")));
