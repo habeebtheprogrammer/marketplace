@@ -237,7 +237,7 @@ module.exports = {
                     <ul style="margin: 0; padding-left: 2em;">
                        ${order.map((item)=>
                        ` <li>
-                            <p><strong>${item?.productId?.title} ${item?.size?.title && item?.size?.title}- </strong> <span> ₦${item?.productId?.discounted_price} x ${item?.qty}</span></p>
+                            <p><strong>${item?.productId?.title} ${item?.size && item?.size}- </strong> <span> ₦${item?.productId?.discounted_price} x ${item?.qty}</span></p>
                         </li>`
                        ) }
                     </ul>
