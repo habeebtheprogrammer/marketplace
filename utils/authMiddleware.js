@@ -30,13 +30,14 @@ exports.googleAuth = async (req, res, next) => {
     if (oauthToken) {
       const client = new OAuth2Client();
 
-      // const ticket = await client.verifyIdToken({
-      //   idToken: oauthToken,
-      //   audience: process.env.GOOGLE_CLIENT_ID,
-      // });
-         const ticket = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {headers: {
-          Authorization: `Bearer ${oauthToken}`
-         }})
+      const ticket = await client.verifyIdToken({
+        idToken: oauthToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+        //  const ticket = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {headers: {
+        //   Authorization: `Bearer ${oauthToken}`
+        //  }})
+        console.log(ticket)
         //  await client.getTokenInfo(oauthToken);
       const payload = ticket.data;
       const firstName = payload['given_name']
