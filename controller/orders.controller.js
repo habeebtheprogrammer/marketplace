@@ -41,7 +41,7 @@ exports.addOrders = async (req, res, next) => {
         //send emails
         var user = await getUsers({_id: req.userId})
         sendOrdersEmail(orderedProducts)
-        sendOrderConfirmationEmail({email: user.email, order: orderedProducts, address: deliveryAddress})
+        sendOrderConfirmationEmail({email: user.docs[0]?.email, order: orderedProducts, address: deliveryAddress})
     } catch (error) {
         console.log(error)
         errorResponse(res, error)
