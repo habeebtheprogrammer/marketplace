@@ -81,7 +81,7 @@ exports.appleSignin = async (req, res, next) => {
         }
       );
       const email = verifyTok?.email
-      const name = user?.user
+      const name = user?.name
       const userObj = await usersService.getUsers({ email })
       if (!userObj?.totalDocs) {
         const hash = await bcrypt.hash(verifyTok.sub, 10)

@@ -1,5 +1,6 @@
 const { ordersService, cartsService, productsService } = require("../service")
-const { generateRandomNumber, sendOrdersEmail } = require("../utils/helpers")
+const { getUsers } = require("../service/users.service")
+const { generateRandomNumber, sendOrdersEmail, sendOrderConfirmationEmail } = require("../utils/helpers")
 const { successResponse, errorResponse } = require("../utils/responder")
 
 
@@ -37,7 +38,10 @@ exports.addOrders = async (req, res, next) => {
             const updateProd = await productsService.updateProducts({ "_id":  p.productId._id }, { $inc: { is_stock: -p.qty } })
         })
         successResponse(res, data)
+        //send emails
+        var user = await getUsers({_id: req.userId})
         sendOrdersEmail(orderedProducts)
+        sendOrderConfirmationEmail({email: user.email, order: orderedProducts, address: deliveryAddress})
     } catch (error) {
         console.log(error)
         errorResponse(res, error)
