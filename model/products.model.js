@@ -79,7 +79,7 @@ const productsSchema = new Schema(
 );
 
 // exports.productsSchema = productsSchema;
-
+productsSchema.index({ title: 'text' }); 
 productsSchema.plugin(mongoosePaginate);
 
 const Products = mongoose.model("products", productsSchema);

@@ -34,18 +34,26 @@ exports.getProducts = async (req, res, next) => {
 
     try {
         var filter = {}
-        var { sort, limit = 9, page = 1 } = req.query
+        var { sort, limit = 9, page = 1 , title} = req.query
 
         var pagination = { limit, page }
-        console.log(req.query, limit, req.query.slug)
 
         const query = buildFilterQuery(req.query);
         console.log(JSON.stringify(query),limit, sort)
-        sort = sort == 'highToLow' ? { sort: { original_price: -1 } } : sort == 'lowToHigh' ? { sort: { original_price: 1 } } : {sort: {rating: -1}};
+        var searchSortObj  = title ? {score : { $meta: 'textScore' } } : {}
+
+
+        sort = sort == 'highToLow' ? { sort: { ...searchSortObj,original_price: -1 } } : sort == 'lowToHigh' ? { sort: { ...searchSortObj,original_price: 1 } } : {sort: {...searchSortObj, rating: -1}};
+       
+       
+        if(title) sort.sort.score = { $meta: 'textScore' } 
         const options = {
             ...sort,
             ...pagination
         };
+        if(title) options.score = { $meta: 'textScore' } 
+        console.log(options, query)
+
         const data = await productsService.getProducts({ query: { ...query, archive: false }, options })
         successResponse(res, data)
     } catch (error) {
