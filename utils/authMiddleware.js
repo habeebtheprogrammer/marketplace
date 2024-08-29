@@ -39,7 +39,7 @@ exports.googleAuth = async (req, res, next) => {
         //  }})
         console.log(ticket)
         //  await client.getTokenInfo(oauthToken);
-      const payload = ticket.data;
+      const {payload} = ticket;
       const firstName = payload['given_name']
       const lastName = payload['family_name']
       const id = payload['sub']
