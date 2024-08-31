@@ -47,3 +47,16 @@ exports.addOrders = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
+
+exports.updateOrders = async (req, res, next) => {
+    try {
+        var updateObj = {}
+        Object.keys(req.body).forEach(key => {
+            updateObj[key] = req.body[key];
+        })
+        const data = await ordersService.updateOrders({ _id: updateObj._id }, updateObj)
+        successResponse(res, data)
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}

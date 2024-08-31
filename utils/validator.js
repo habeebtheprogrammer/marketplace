@@ -122,3 +122,14 @@ exports.createOrdersValidator = async (req, res, next) => {
     };
     validate(req, res, next, validationRule)
 } 
+
+exports.updateOrdersValidator = async (req, res, next) => {
+    const validationRule = {
+        "_id": "required|string",
+        "flutterwave": {
+            "transaction_id": "required|string",
+            "tx_ref": "required|string",
+        }
+    };
+    validate(req, res, next, validationRule)
+} 
