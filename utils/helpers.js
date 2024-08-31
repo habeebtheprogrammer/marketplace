@@ -123,6 +123,7 @@ exports.buildFilterQuery = (reqQuery) => {
           var val = i
           if (key == 'original_price') {
             var arr = i.split('--');
+            console.log(arr,' arr')
             val = { "$gte": parseInt(arr[0]), "$lte": parseInt(arr[1]) }
           } else if (key == 'rating') {
             val = { "$gte": i, "$lte": 5 }
