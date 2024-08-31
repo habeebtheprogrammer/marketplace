@@ -9,6 +9,7 @@ const wishlistsRouter = require("./wishlists.router")
 const addressRouter = require("./address.router");
 const ordersRouter = require('./orders.router');
 const swapRouter = require('./swap.router');
+const promoRouter = require('./promo.router');
 
 router.use("/users", usersRouter)
 router.use("/vendors", vendorsRouter)
@@ -19,5 +20,6 @@ router.use("/wishlists", wishlistsRouter)
 router.use("/address", addressRouter)
 router.use("/orders", ordersRouter)
 router.use("/swap", swapRouter)
+router.use("/promo", promoRouter)
 
 module.exports = router

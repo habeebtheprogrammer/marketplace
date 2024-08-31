@@ -22,13 +22,6 @@ app.use(fileUpload({
   responseOnLimit: true,
   tempFileDir: '/tmp/'
 }));
-// app.use((req, res, next) => {
-//   // res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
-//   // res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-//   // res.setHeader('Cross-origin-Opener-Policy','same-origin-allow-popups');
-//   next()
-// });
-// app.use(helmet({ contentSecurityPolicy: false }))
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'build')));
@@ -38,12 +31,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use((req, res, next) => {
-//   res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-//   res.setHeader('Cross-Origin-Embedder-Policy', 'same-origin-allow-popups');
-  
-//   next();
-// });
 app.get('/sitemap.xml', createSiteMap)
 app.use('/api', routes);
 
