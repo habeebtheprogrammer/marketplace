@@ -134,6 +134,7 @@ exports.buildFilterQuery = (reqQuery) => {
       filters.push(...lists)
     }
   })
+  console.log(filters,' filters')
   const query = {
     $and: []
   };
@@ -148,6 +149,7 @@ exports.buildFilterQuery = (reqQuery) => {
   filters.forEach(filter => {
     const key = Object.keys(filter)[0];
     const value = decodeURIComponent(filter[key])
+    console.log(key, value,' key value')
 
     if (key === 'sort') {
       // Handle sorting separately
@@ -194,6 +196,7 @@ exports.buildFilterQuery = (reqQuery) => {
     query2['$text'] = searchConditions[0]
 
   }
+  console.log(JSON.stringify(query), JSON.stringify(query2))
   return query.$and.length ? {...query, ...query2} : {...query2};
 }
 
