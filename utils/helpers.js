@@ -123,7 +123,6 @@ exports.buildFilterQuery = (reqQuery) => {
           var val = i
           if (key == 'original_price') {
             var arr = i.split('--');
-            console.log(arr,' arr')
             val = { "$gte": parseInt(arr[0]), "$lte": parseInt(arr[1]) }
           } else if (key == 'rating') {
             val = { "$gte": i, "$lte": 5 }
@@ -134,7 +133,6 @@ exports.buildFilterQuery = (reqQuery) => {
       filters.push(...lists)
     }
   })
-  console.log(filters,' filters')
   const query = {
     $and: []
   };
@@ -148,7 +146,7 @@ exports.buildFilterQuery = (reqQuery) => {
 
   filters.forEach(filter => {
     const key = Object.keys(filter)[0];
-    const value = decodeURIComponent(filter[key])
+    const value = filter[key] == 'original_price' ? filter[key] : decodeURIComponent(filter[key])
     console.log(key, value,' key value')
 
     if (key === 'sort') {
@@ -196,7 +194,6 @@ exports.buildFilterQuery = (reqQuery) => {
     query2['$text'] = searchConditions[0]
 
   }
-  console.log(JSON.stringify(query), JSON.stringify(query2))
   return query.$and.length ? {...query, ...query2} : {...query2};
 }
 
