@@ -146,8 +146,7 @@ exports.buildFilterQuery = (reqQuery) => {
 
   filters.forEach(filter => {
     const key = Object.keys(filter)[0];
-    const value = filter[key] == 'original_price' ? filter[key] : decodeURIComponent(filter[key])
-    console.log(key, value,' key value')
+    const value =   filter[key] == 'slug' ?  decodeURIComponent(filter[key]) : filter[key]
 
     if (key === 'sort') {
       // Handle sorting separately
