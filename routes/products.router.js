@@ -5,6 +5,7 @@ const { productCreationValidator, updateValidator } = require('../utils/validato
 const { uploadImages } = require('../controller/products.controller');
 var router = express.Router();
 
+// router.get('/bulkupdate', productsController.bulkUpdate);
 router.get('/', productsController.getProducts);
 router.post('/',  productCreationValidator, productsController.createProducts);
 router.patch('/', checkAuth, vendorsAccessOnly, updateValidator, productsController.updateProducts);

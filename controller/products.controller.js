@@ -121,10 +121,11 @@ exports.uploadImages = async (req, res, next) => {
 exports.bulkUpdate = async (req, res, next) => {
     try {
          // Handle image uploads
-         console.log('started')
          const data = await productsService.bulkUpdate(
-            // { categoryId: { $ne: '65b14b7105f8b5c69b5ab4e3' } }, // Exclude the specific ID
-            // { $inc: { discounted_price: 30000, original_price: 50000 } } // Increment the price
+            // { categoryId:  '65b14b7105f8b5c69b5ab4e3' }, // Exclude the specific ID
+            // { $inc: { discounted_price: 2000} } // Increment the price
+            { categoryId: { $ne: '65b14b7105f8b5c69b5ab4e3' } }, // Exclude the specific ID
+            { $inc: { discounted_price: 30000,  } } // Increment the price
         )
         successResponse(res, data)
     } catch (error) {

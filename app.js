@@ -31,7 +31,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.get('/robots.txt', (req, res) => {
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
 app.get('/sitemap.xml', createSiteMap)
+app.get('/robots.txt', createSiteMap)
 app.use('/api', routes);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, "/build/index.html")));
