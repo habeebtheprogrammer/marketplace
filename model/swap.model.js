@@ -16,7 +16,6 @@ const swapSchema = new Schema(
     },
     condition:  {
       type: String,
-      required: [true, 'condition is required']
     },
     preferreDeviceName:  {
       type: String,
