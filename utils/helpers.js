@@ -105,7 +105,7 @@ exports.sendSwapEmail = (order) => {
       to: 'support@360gadgetsafrica.com',
       subject: "You have a new swap order",
       html: `Hi there, you have a new swap order 
-      ${order}`,
+      ${JSON.stringify(order)}`,
     })
     .then((suc) => {
       console.log(suc);
