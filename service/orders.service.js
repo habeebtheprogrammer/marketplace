@@ -7,8 +7,9 @@ exports.getOrders = async (filters = {}) => {
           populate: {
             path: "productId",
             select: ["title", 'images']
-          }
-        }]})
+          },
+        }],
+        sort: {_id: -1}})
     return data
 }
 

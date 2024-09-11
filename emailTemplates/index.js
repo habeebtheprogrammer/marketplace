@@ -136,7 +136,7 @@ module.exports = {
     
     </html> `
   },
-  orderConfirmation: function({order, address}){
+  orderConfirmation: function({order, address, pickup}){
     return `<!DOCTYPE html>
     <html lang="en">
     
@@ -246,9 +246,134 @@ module.exports = {
                 <div class="button-container">
                     <a href="https://360gadgetsafrica.com/profile" target="_blank">View your order</a>
                 </div>
-                <p>Shipping Address: </p>
+                <p>${pickup ? "Pickup " : "Shipping "} Address: </p>
                 <p>${address?.name}, ${address?.street},</p>
                 <p>${address?.state}, ${address.phone}.</p>
+                <br />
+
+                <p>Support team,</p>
+                <p>360gadgetsafrica.</p>
+            </div>
+            <div class="footer">
+                <p>360gadgetsafrica | <a href="https://360gadgetsafrica.com">www.360gadgetsafrica.com</a></p>
+            </div>
+        </div>
+    </body>
+    
+    </html> `
+  },
+  newOrder: function({order, address, pickup}){
+    return `<!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>360 Gadgets Africa – Your Ultimate Tech Destination!</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+    
+            .container {
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+    
+            .header {
+                text-align: center;
+                padding-bottom: 20px;
+            }
+    
+            .header img {
+                max-width: 150px;
+            }
+    
+            .content {
+                padding: 20px;
+            }
+    
+            .content h1 {
+                font-size: 24px;
+                color: #333;
+                text-align: center;
+            }
+    
+            .content p {
+                font-size: 16px;
+                line-height: 1.6;
+                margin: 10px 0;
+            }
+    
+            .content .credentials {
+                background-color: #f9f9f9;
+                padding: 15px;
+                border-radius: 5px;
+                margin: 20px 0;
+                font-family: monospace;
+            }
+    
+            .content .credentials p {
+                margin: 5px 0;
+            }
+    
+            .content .button-container {
+                text-align: center;
+                margin-top: 20px;
+            }
+    
+            .content .button-container a {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #FF4B2B;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+    
+            .footer {
+                text-align: center;
+                padding: 20px;
+                font-size: 14px;
+                color: #777;
+            }
+    
+            .footer a {
+                color: #FF4B2B;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="container">
+            <div class="content"> 
+                <p>Hello 👋 </p>
+                <p>We are excited to let you know that you have received a new order. Below are the details of the purchase:
+                <div class="credentials">
+                    <ul style="margin: 0; padding-left: 2em;">
+                       ${order.map((item)=>
+                       ` <li>
+                            <p><strong>${item?.productId?.title} ${item?.size && item?.size}- </strong> <span> ₦${item?.productId?.discounted_price} x ${item?.qty}</span></p>
+                        </li>`
+                       ) }
+                    </ul>
+                </div>
+              
+              
+                <p>${pickup ? "Pickup " : "Shipping "} Address: </p>
+                <p>${address?.name}, ${address?.street},</p>
+                <p>${address?.state}, ${address.phone}.</p>
+                <p>${address.deliveryType}</p>
                 <br />
 
                 <p>Support team,</p>

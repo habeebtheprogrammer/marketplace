@@ -32,7 +32,9 @@ exports.addOrders = async (req, res, next) => {
             orders.push(item)
             // productIds.push(p.productId._id)
         })
-        const data = await ordersService.addOrders({ userId: req.userId, trackingId, amountPaid, flutterwave, orderedProducts: orders, deliveryAddress })
+        const data = await ordersService.addOrders({ userId: req.userId, trackingId, amountPaid, flutterwave, orderedProducts: orders, deliveryAddress, 
+            status: flutterwave.tx_ref == flutterwave.transaction_id ? 'awaiting payment' : 'new order'
+         })
         const emptyCarts = await cartsService.clearCarts({ userId: req.userId })
         orderedProducts?.map(async (p) => {
             const updateProd = await productsService.updateProducts({ "_id":  p.productId._id }, { $inc: { is_stock: -p.qty } })
@@ -40,8 +42,18 @@ exports.addOrders = async (req, res, next) => {
         successResponse(res, data)
         //send emails
         var user = await getUsers({_id: req.userId})
-        sendOrdersEmail(orderedProducts)
-        sendOrderConfirmationEmail({email: user.docs[0]?.email, order: orderedProducts, address: deliveryAddress})
+        var addr
+        if(flutterwave.tx_ref == flutterwave.transaction_id){
+            addr = { 
+                name: "His Grace Plaza",
+                street: "14 Francis Oremeji St, Ikeja",
+                state: "Lagos",
+                phone: "+2347069568209"
+            }
+        } else addr = deliveryAddress
+        sendOrderConfirmationEmail({email: user.docs[0]?.email, order: orderedProducts, address: addr, pickup: flutterwave.tx_ref == flutterwave.transaction_id})
+        sendOrdersEmail({ order: orderedProducts,  pickup: flutterwave.tx_ref == flutterwave.transaction_id, address: addr})
+
     } catch (error) {
         console.log(error)
         errorResponse(res, error)
@@ -50,10 +62,12 @@ exports.addOrders = async (req, res, next) => {
 
 exports.updateOrders = async (req, res, next) => {
     try {
+        console.log(req.body)
         var updateObj = {}
         Object.keys(req.body).forEach(key => {
             updateObj[key] = req.body[key];
         })
+        console.log(updateObj)
         const data = await ordersService.updateOrders({ _id: updateObj._id }, updateObj)
         successResponse(res, data)
     } catch (error) {

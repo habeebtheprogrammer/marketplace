@@ -125,10 +125,10 @@ exports.createOrdersValidator = async (req, res, next) => {
 
 exports.updateOrdersValidator = async (req, res, next) => {
     const validationRule = {
-        "_id": "required|string",
+        "_id": "required",
         "flutterwave": {
-            "transaction_id": "required|string",
-            "tx_ref": "required|string",
+            "transaction_id": "required",
+            "tx_ref": "required",
         }
     };
     validate(req, res, next, validationRule)

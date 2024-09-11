@@ -66,14 +66,13 @@ exports.sendErrorEmail = (error) => {
     });
 };
 
-exports.sendOrdersEmail = (order) => {
+exports.sendOrdersEmail = ({order,address, pickup}) => {
   emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
-      to: 'support@360gadgetsafrica.com',
+      to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com'],
       subject: "You have a new order",
-      html: `Hi there, you have a new order 
-      ${order}`,
+      html:  emailTemplates.newOrder({order, address, pickup})
     })
     .then((suc) => {
       console.log(suc);

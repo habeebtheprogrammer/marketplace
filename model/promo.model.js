@@ -8,6 +8,8 @@ const promoSchema = new Schema(
       type: Boolean,
       default: false
     },
+    text: String,
+    date: String,
   },
 );
 

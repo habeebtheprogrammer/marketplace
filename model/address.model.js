@@ -9,6 +9,9 @@ const addressSchema = new Schema(
       type: String,
       required: [true, 'Name is required']
     },
+    deliveryType: {
+      type: String,
+    },
     street: {
       type: String,
       required: [true, 'Street is required']

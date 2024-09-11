@@ -10,6 +10,11 @@ const ordersSchema = new Schema(
       ref: "users",
       required: [true, 'userId is required']
     },
+    status: {
+      type: String,
+      default: "new order",
+      enum: { values: ['awaiting payment', 'new order', 'delivered', 'cancelled', 'in transit'], message: '{VALUE} is not supported for userType field.' }
+    },
     trackingId:  {
       type: String,
       required: [true, 'trackingId is required']
