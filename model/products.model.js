@@ -73,7 +73,19 @@ const productsSchema = new Schema(
     archive: {
       type: Boolean,
       default: false
-    }
+    },
+    comments: [
+      {
+        title: String,
+        description: String,
+        images: [String],
+        rating: Number,
+        creatorId:  { 
+          type: mongoose.SchemaTypes.ObjectId,
+          ref: "users"
+        }
+      }
+    ],
   },
   { timestamps: true }
 );

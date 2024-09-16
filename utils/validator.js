@@ -55,6 +55,16 @@ exports.productCreationValidator = async (req, res, next) => {
     validate(req, res, next, validationRule)
 }
 
+exports.commentsCreationValidator = async (req, res, next) => {
+    const validationRule = {
+        "title": "required|string",
+        "description": "required|string",
+        "images": "required|array",
+        "productId": "required|string",
+        "rating": "required",
+    };
+    validate(req, res, next, validationRule)
+}
 exports.categoryCreationValidator = async (req, res, next) => {
     const validationRule = {
         "title": "required|string",

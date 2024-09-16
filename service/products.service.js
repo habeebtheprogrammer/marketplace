@@ -5,7 +5,11 @@ exports.getProducts = async ({query = {}, options = {}}) => {
         {
           path: "categoryId",
           select: "title",
-        }], ...options}, )
+        }, 
+        {
+            path: "comments.creatorId",
+            select: ["firstName", 'lastName'],
+          }], ...options}, )
     return data
 }
 
@@ -14,6 +18,10 @@ exports.createProducts = async (param) => {
     return data
 }
 
+exports.createComments = async (comments) => {
+    const data = await Products.findOneAndUpdate({_id: comments.productId}, { $addToSet: {comments}})
+    return data
+}
 exports.updateProducts = async (param, obj) => {
     const data = await Products.findOneAndUpdate(param, obj,{ new: true} )
     return data

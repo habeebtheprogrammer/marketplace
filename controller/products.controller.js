@@ -15,7 +15,17 @@ exports.createProducts = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
-
+exports.createComments = async (req, res, next) => {
+    try {
+        const data = await productsService.createComments({
+            ...req.body, creatorId: req.userId,
+        })
+        successResponse(res, data)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
 exports.updateProducts = async (req, res, next) => {
     try {
         var updateObj = {}
