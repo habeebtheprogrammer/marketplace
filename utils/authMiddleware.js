@@ -32,7 +32,7 @@ exports.googleAuth = async (req, res, next) => {
 
       const ticket = await client.verifyIdToken({
         idToken: oauthToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
+        audience: [process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_ID_2],
       });
         //  const ticket = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {headers: {
         //   Authorization: `Bearer ${oauthToken}`
