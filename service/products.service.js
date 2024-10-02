@@ -14,7 +14,8 @@ exports.getProducts = async ({ query = {}, options = {} }) => {
             }], ...options
     },)
 
-    if (options.limit == 1 && data.docs.length == 1) {
+    console.log(data?.totalDocs)
+    if (data.totalDocs ==  1) {
         await Products.findOneAndUpdate(query, {"$inc": {"views": 1}})
     }
     return data
