@@ -1,4 +1,5 @@
 const Users = require("../model/users.model")
+const Delivery = require("../model/delivery.model")
 
 exports.getUsers = async (filters = {}) => {
     const data = await Users.paginate(filters)
@@ -14,4 +15,8 @@ exports.updateUsers = async (param, obj) => {
     const data = await Users.findOneAndUpdate(param, obj,{ new: true} )
     return data
 }
- 
+
+exports.getUserDelivery = async () => {
+    const data = await Delivery.find({})
+    return data
+}

@@ -6,6 +6,7 @@ var router = express.Router();
 
 router.get('/', checkAuth, adminAccessOnly, usersController.getUsers);
 router.get('/account', checkAuth, usersController.getUserAccount);
+router.get('/delivery', usersController.getUserDelivery);
 router.patch('/account', checkAuth, usersController.updateUser);
 router.post('/signin', googleAuth, appleSignin, signinInputValidator,  usersController.signin);
 router.post('/signup', signupInputValidator, usersController.createUser);

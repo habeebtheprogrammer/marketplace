@@ -38,6 +38,7 @@ app.get('/robots.txt', (req, res) => {
 app.get('/sitemap.xml', createSiteMap)
 app.get('/robots.txt', createSiteMap)
 app.use('/api', routes);
+app.use('/v2/api', routes);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, "/build/index.html")));
 

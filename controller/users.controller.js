@@ -79,3 +79,12 @@ exports.deleteUsers = async (req, res, next) => {
     }
 }
 
+
+exports.getUserDelivery = async (req, res, next) => {
+    try { 
+        const data = await usersService.getUserDelivery({})
+        successResponse(res, data)
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
