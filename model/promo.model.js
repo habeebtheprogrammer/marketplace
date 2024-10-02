@@ -10,6 +10,7 @@ const promoSchema = new Schema(
     },
     text: String,
     date: String,
+    imgUrl: String,
   },
 );
 
