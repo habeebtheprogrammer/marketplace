@@ -13,7 +13,7 @@ const deliverySchema = new Schema(
       required: [true, 'description is required']
     }, 
     amount: {
-      type: String,
+      type: Number,
       amount: [true, 'Amount is required']
     }, 
   },
