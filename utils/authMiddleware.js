@@ -19,6 +19,7 @@ exports.checkAuth = (req, res, next) => {
     var data = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = data._id;
     req.userType = data.userType;
+    req.oneSignalId = oneSignalId
     next();
     } else throw Error("an error has occured")
   } catch (error) {
