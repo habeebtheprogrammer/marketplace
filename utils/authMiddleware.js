@@ -72,7 +72,7 @@ exports.appleSignin = async (req, res, next) => {
 
   try {
     const { appleToken } = req.body;
-    console.log(appleToken, req.header)
+    console.log(appleToken, req.header('platform'))
     if (appleToken) {
 
       const { authorization, user } = appleToken
