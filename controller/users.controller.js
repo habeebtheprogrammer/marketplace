@@ -22,7 +22,7 @@ exports.signin = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         const hash = await bcrypt.hash(req.body.password, 10)
-        const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.boy.firstName, password: hash })
+        const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash })
         var token = createToken(JSON.stringify(user))
         successResponse(res, {user,token})
         sendSignupMail(user.email)
