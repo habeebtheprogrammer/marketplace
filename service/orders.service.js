@@ -14,6 +14,7 @@ exports.getOrders = async (filters = {}) => {
 }
 
 exports.addOrders = async (param) => {
+  console.log(param)
     const data =  (await Orders.create(param)).populate( {
         path: "orderedProducts",
         populate: {
