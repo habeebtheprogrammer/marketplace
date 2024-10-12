@@ -20,7 +20,6 @@ const validate = async (req, res, next, validationRule) => {
 exports.signupInputValidator = async (req, res, next) => {
     const validationRule = {
         "firstName": "required|string",
-        "lastName": "required|string",
         "email": "required|string|email",
         "password": "required|string|min:5",
     };
