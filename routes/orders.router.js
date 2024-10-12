@@ -5,7 +5,7 @@ const { createOrdersValidator, updateOrdersValidator } = require('../utils/valid
 var router = express.Router();
 
 router.get('/', checkAuth, ordersController.getOrders);
-router.post('/', checkAuth, createOrdersValidator, ordersController.addOrders);
+router.post('/', checkAuth, ordersController.addOrders);
 router.patch('/', checkAuth, updateOrdersValidator, ordersController.updateOrders);
 
 module.exports = router;
