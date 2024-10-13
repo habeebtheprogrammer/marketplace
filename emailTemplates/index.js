@@ -95,7 +95,7 @@ module.exports = {
     <body>
         <div class="container">
             <div class="header">
-                <img src="https://res.cloudinary.com/dzvhmiutm/image/upload/v1723338006/logo_qt3of8.png"
+                <img src="https://360gadgetsafrica.s3.eu-north-1.amazonaws.com/icon.jpg"
                     alt="360gadgetsafrica Logo">
             </div>
             <div class="content"> 
