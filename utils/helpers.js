@@ -196,7 +196,7 @@ exports.buildFilterQuery = (reqQuery) => {
 }
 
 
-export const isAppleRelayEmail = (email) => {
+exports.isAppleRelayEmail = (email) => {
   // Regular expression to match random strings followed by @privaterelay.appleid.com
   const appleRelayPattern = /^[a-z0-9._%+-]+@privaterelay\.appleid\.com$/i;
   return appleRelayPattern.test(email);
