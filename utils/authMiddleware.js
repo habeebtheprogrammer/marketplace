@@ -5,7 +5,7 @@ const { errorResponse, successResponse } = require("./responder");
 const { HttpStatusCode, default: axios } = require("axios");
 const { OAuth2Client } = require('google-auth-library');
 const appleSignin = require("apple-signin-auth");
-const { createToken, sendSignupMail } = require("./helpers");
+const { createToken, sendSignupMail, isAppleRelayEmail } = require("./helpers");
 const { usersService } = require("../service")
 
 
@@ -54,7 +54,7 @@ exports.googleAuth = async (req, res, next) => {
         const user = await usersService.createUser({ firstName, email, lastName, password: hash })
         var token = createToken(JSON.stringify(user))
         successResponse(res, { user, token })
-        sendSignupMail(email)
+        !isAppleRelayEmail(email) && sendSignupMail(email)
 
       } else {
         var token = createToken(JSON.stringify(user.docs[0]))
@@ -91,7 +91,7 @@ exports.appleSignin = async (req, res, next) => {
         const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email })
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
-        sendSignupMail(email)
+        !isAppleRelayEmail(email) && sendSignupMail(email)
       } else {
         var token = createToken(JSON.stringify(userObj.docs[0]))
         successResponse(res, { user: userObj.docs[0], token })
