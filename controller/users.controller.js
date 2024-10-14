@@ -2,7 +2,7 @@ const { usersService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
 const constant = require('../utils/constant')
 const bcrypt = require("bcryptjs") 
-const { createToken, sendSignupMail } = require("../utils/helpers")
+const { createToken, sendSignupMail, isAppleRelayEmail } = require("../utils/helpers")
 
 
 exports.signin = async (req, res, next) => {
@@ -25,7 +25,7 @@ exports.createUser = async (req, res, next) => {
         const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash })
         var token = createToken(JSON.stringify(user))
         successResponse(res, {user,token})
-        sendSignupMail(user.email)
+        !isAppleRelayEmail(user.email) && sendSignupMail(user.email)
     } catch (error) {
         errorResponse(res, error)
     }
