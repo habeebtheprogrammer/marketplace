@@ -5,7 +5,7 @@ const { productCreationValidator, updateValidator, commentsCreationValidator } =
 const { uploadImages } = require('../controller/products.controller');
 var router = express.Router();
 
-// router.get('/bulkupdate', productsController.bulkUpdate);
+// router.get('/bulkUpdate', productsController.bulkUpdate);
 router.get('/', productsController.getProducts);
 router.post('/',  productCreationValidator, productsController.createProducts);
 router.post('/comments',checkAuth,  commentsCreationValidator, productsController.createComments);

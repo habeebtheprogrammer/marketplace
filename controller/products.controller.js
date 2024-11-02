@@ -53,7 +53,7 @@ exports.getProducts = async (req, res, next) => {
         var searchSortObj  = title ? {score : { $meta: 'textScore' } } : {}
 
 
-        sort = sort == 'highToLow' ? { sort: { ...searchSortObj,original_price: -1 } } : sort == 'lowToHigh' ? { sort: { ...searchSortObj,original_price: 1 } } : {sort: {...searchSortObj, views: -1}};
+        sort = sort == 'highToLow' ? { sort: { ...searchSortObj,original_price: -1 } } : sort == 'lowToHigh' ? { sort: { ...searchSortObj,original_price: 1 } } : {sort: {...searchSortObj, rating: 1}};
        
        
         if(title) sort.sort.score = { $meta: 'textScore' } 
@@ -132,8 +132,8 @@ exports.bulkUpdate = async (req, res, next) => {
     try {
          // Handle image uploads
          const data = await productsService.bulkUpdate(
-            { categoryId:  '6693a1b7eae4b1d9160fa213' }, // Exclude the specific ID
-            { $inc: { discounted_price: 10000} } // Increment the price
+            { categoryId:  '65b14b7105f8b5c69b5ab4e3' }, // Exclude the specific ID
+            { $inc: { discounted_price: -2000} } // Increment the price
             // { categoryId: { $ne: '65b14b7105f8b5c69b5ab4e3' } }, // Exclude the specific ID
             // { $inc: { discounted_price: 30000,  } } // Increment the price
         )
