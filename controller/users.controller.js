@@ -1,7 +1,7 @@
 const { usersService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
 const constant = require('../utils/constant')
-const bcrypt = require("bcryptjs") 
+const bcrypt = require("bcryptjs")
 const { createToken, sendSignupMail, isAppleRelayEmail } = require("../utils/helpers")
 
 
@@ -24,7 +24,7 @@ exports.createUser = async (req, res, next) => {
         const hash = await bcrypt.hash(req.body.password, 10)
         const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash })
         var token = createToken(JSON.stringify(user))
-        successResponse(res, {user,token})
+        successResponse(res, { user, token })
         !isAppleRelayEmail(user.email) && sendSignupMail(user.email)
     } catch (error) {
         errorResponse(res, error)
@@ -59,8 +59,19 @@ exports.getUserAccount = async (req, res, next) => {
     }
 }
 
+exports.refreshToken = async (req, res, next) => {
+    try {
+        const user = await usersService.getUsers({ _id: req.userId })
+        if (user?.docs[0]) {
+            var token = createToken(JSON.stringify(user.docs[0]))
+            successResponse(res, { user: user.docs[0], token })
+        }
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
 exports.getUsers = async (req, res, next) => {
-    try { 
+    try {
         const data = await usersService.getUsers({ "archive": false, ...req.query })
         successResponse(res, data)
     } catch (error) {
@@ -70,7 +81,7 @@ exports.getUsers = async (req, res, next) => {
 
 
 exports.deleteUsers = async (req, res, next) => {
-    try { 
+    try {
         const { _id } = req.params
         const data = await usersService.updateUsers({ _id }, { "archive": true })
         successResponse(res, data)
@@ -81,7 +92,7 @@ exports.deleteUsers = async (req, res, next) => {
 
 
 exports.getUserDelivery = async (req, res, next) => {
-    try { 
+    try {
         const data = await usersService.getUserDelivery({})
         successResponse(res, data)
     } catch (error) {

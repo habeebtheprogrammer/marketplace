@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { usersService } = require("../service")
 const constant = require("./constant");
 const bcrypt = require("bcryptjs")
 const { errorResponse, successResponse } = require("./responder");
@@ -6,7 +7,6 @@ const { HttpStatusCode, default: axios } = require("axios");
 const { OAuth2Client } = require('google-auth-library');
 const appleSignin = require("apple-signin-auth");
 const { createToken, sendSignupMail, isAppleRelayEmail } = require("./helpers");
-const { usersService } = require("../service")
 
 
 exports.checkAuth = (req, res, next) => {
