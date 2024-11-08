@@ -128,6 +128,17 @@ exports.uploadImages = async (req, res, next) => {
     }
 }
 
+exports.checkAvailability = async (req, res, next) => {
+    try {
+         // Handle image uploads
+         const data =  {}
+        successResponse(res, data)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
+
 exports.bulkUpdate = async (req, res, next) => {
     try {
          // Handle image uploads

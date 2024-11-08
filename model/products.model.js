@@ -9,6 +9,10 @@ const productsSchema = new Schema(
       type: String,
       required: [true, 'Title is required']
     },
+    priceUpdatedAt: {
+      type: Date,
+      default: Date.now
+    },
     slug: {
       type: String,
       required: [true, 'Slug is required']

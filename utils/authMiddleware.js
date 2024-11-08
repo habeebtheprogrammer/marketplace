@@ -21,6 +21,10 @@ exports.checkAuth = (req, res, next) => {
     req.userType = data.userType;
     req.oneSignalId = oneSignalId
     next();
+
+    if(oneSignalId && !data.oneSignalId){
+      usersService.updateUsers({_id: data._id}, {oneSignalId}).then((suc => console.log('onesignal update')))
+    }
     } else throw Error("an error has occured")
   } catch (error) {
     errorResponse(res, error, "Please login to continue", HttpStatusCode.Forbidden)
