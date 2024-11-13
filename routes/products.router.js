@@ -11,6 +11,8 @@ router.post('/',  productCreationValidator, productsController.createProducts);
 router.post('/comments',checkAuth,  commentsCreationValidator, productsController.createComments);
 router.patch('/', checkAuth, vendorsAccessOnly, updateValidator, productsController.updateProducts);
 router.post('/pushimgs',  productsController.uploadImages);
-router.post('/check-availabiliity', checkAuth, productsController.checkAvailability);
+router.post('/availability-requests', checkAuth, productsController.checkAvailability);
+router.get('/availability-requests', checkAuth, productsController.fetchAvailabilityRequests);
+router.patch('/availability-requests', checkAuth, productsController.updateAvailability);
 
 module.exports = router;

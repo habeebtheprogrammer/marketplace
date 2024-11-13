@@ -7,6 +7,7 @@
     "dev": "NODE_ENV=development node app.js"
   },
   "dependencies": {
+    "@onesignal/node-onesignal": "^5.0.0-alpha-01",
     "apple-signin-auth": "^1.7.6",
     "aws-sdk": "^2.751.0",
     "axios": "^1.6.5",

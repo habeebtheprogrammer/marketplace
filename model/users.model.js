@@ -32,6 +32,10 @@ const usersSchema = new Schema(
       type: Boolean,
       default: false
     },
+    vendorId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "vendors",
+    },
   },
   { timestamps: true }
 );

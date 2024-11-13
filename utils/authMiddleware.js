@@ -12,17 +12,16 @@ const { createToken, sendSignupMail, isAppleRelayEmail } = require("./helpers");
 exports.checkAuth = (req, res, next) => {
   var token = req.header("authorization");
   var oneSignalId = req.header("x-oneSignalId");
-  console.log(oneSignalId,'onesignal id')
   try {
     if (token) {
       token = token.split(" ")[1]
     var data = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = data._id;
+    req.firstName = data.firstName;
     req.userType = data.userType;
     req.oneSignalId = oneSignalId
     next();
-
-    if(oneSignalId && !data.oneSignalId){
+    if(oneSignalId && !data.oneSignalId || (oneSignalId && (oneSignalId != data.oneSignalId))){
       usersService.updateUsers({_id: data._id}, {oneSignalId}).then((suc => console.log('onesignal update')))
     }
     } else throw Error("an error has occured")

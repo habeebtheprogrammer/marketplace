@@ -1,4 +1,5 @@
 const Products = require("../model/products.model")
+const RequestsModel = require("../model/requests.model")
 
 exports.getProducts = async ({ query = {}, options = {} }) => {
 
@@ -31,6 +32,12 @@ exports.createComments = async (comments) => {
 }
 exports.updateProducts = async (param, obj) => {
     const data = await Products.findOneAndUpdate(param, obj, { new: true })
+    return data
+}
+
+exports.fetchAvailabilityRequests = async (filters = {}) => {
+    const data = await RequestsModel.paginate(filters, {populate: ["productId","userId"],
+        sort: {_id: -1}})
     return data
 }
 

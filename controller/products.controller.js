@@ -1,5 +1,7 @@
-const { productsService } = require("../service")
-const { generateRandomNumber, groupByOr, buildFilterQuery, s3Bucket, s3 } = require("../utils/helpers")
+const RequestsModel = require("../model/requests.model");
+const { productsService, usersService, vendorsService } = require("../service")
+const { generateRandomNumber, groupByOr, buildFilterQuery, s3Bucket, s3 } = require("../utils/helpers");
+const { sendNotification } = require("../utils/onesignal");
 const { successResponse, errorResponse } = require("../utils/responder")
 const fs = require("fs");
 
@@ -131,13 +133,67 @@ exports.uploadImages = async (req, res, next) => {
 exports.checkAvailability = async (req, res, next) => {
     try {
          // Handle image uploads
-         const data =  {}
+         const {variant, _id,title,vendorId} = req.body
+         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'dunurejoice20@gmail.com'] } });
+        var include_player_ids = users.docs?.map?.(u => u.oneSignalId)
+        var product = await RequestsModel.create({
+            productId: _id,   variant, userId: req.userId , vendorId
+        }) 
+        console.log(include_player_ids)
+         sendNotification({
+            // headings: { "en": `Crypto Gains Got You Feeling Rich?` },
+            // contents: { "en": `If you haven’t spent it, did it even happen? Time to turn those digital coins into real tech toys at 360GadgetsAfrica!` },
+            // include_subscription_ids:   include_player_ids,
+            // url: '360gadgetsfrica://product-description?slug=' + product?.productId?.slug
+            headings: { "en": `We Have an Update For You` },
+            contents: { "en": `${req.firstName || "A new customer"} is inquiring about the availability of the ${title} ${variant}. Could you please confirm if it’s in stock?` },
+            include_subscription_ids: include_player_ids,
+            url: '360gadgetsfrica://requests',
+          })
+        successResponse(res, product)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
+
+exports.updateAvailability = async (req, res, next) => {
+    try {
+         // Handle image uploads
+         const {  title, variant, userId, _id, confirmation} =  req.body
+         const users = await usersService.getUsers({ _id: userId });
+         var text = confirmation? `Good news, ${users.docs[0].firstName}! ${title}${variant && ' ('+variant+')'} is in stock and ready for purchase. Click add to cart and proceed to checkout. We look forward to receiving your order!`
+         : `Thank you for checking with us, ${users.docs[0].firstName}! Sadly, ${title}${variant && ' ('+variant+')'} is out of stock right now. Please check back later!`
+        const product = await RequestsModel.updateOne({  _id }, {
+            archive: true, confirmation
+        }).populate('productId')
+
+         sendNotification({
+            headings: { "en": `We Have an Update For You` },
+            contents: { "en": text},
+            include_subscription_ids:   [users.docs[0].oneSignalId,'0fea4c38-e984-40eb-866c-557d10efe32a'],
+            url: '360gadgetsfrica://product-description?slug=' + product?.productId?.slug
+        
+          })
+        successResponse(res, product)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, error)
+    }
+}
+
+exports.fetchAvailabilityRequests = async (req, res, next) => {
+    try {
+        const vendor = await vendorsService.getVendors({ creatorId: req.userId })
+        const data = await productsService.fetchAvailabilityRequests({ vendorId: vendor?.docs[0]?._id , archive: false})
+        
         successResponse(res, data)
     } catch (error) {
         console.log(error)
         errorResponse(res, error)
     }
 }
+
 
 exports.bulkUpdate = async (req, res, next) => {
     try {
