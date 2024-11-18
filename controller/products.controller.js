@@ -134,7 +134,7 @@ exports.checkAvailability = async (req, res, next) => {
     try {
          // Handle image uploads
          const {variant, _id,title,vendorId, slug, images} = req.body
-         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'devhabeeb@gmail.com'] } });
+         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'gadgetchamberteam@gmail.com'] } });
         var include_player_ids = users.docs?.map?.(u => u.oneSignalId)
         var product = await RequestsModel.create({
             productId: _id,   variant, userId: req.userId , vendorId
