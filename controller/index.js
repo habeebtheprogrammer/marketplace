@@ -9,6 +9,7 @@ const addressController = require("./address.controller")
 const ordersController = require("./orders.controller")
 const swapController = require("./swap.controller")
 const promoController = require("./promo.controller")
+const walletsController = require("./wallets.controller")
 
 module.exports  = {
     usersController,
@@ -20,5 +21,6 @@ module.exports  = {
     addressController,
     ordersController,
     swapController,
-    promoController
+    promoController,
+    walletsController
 }

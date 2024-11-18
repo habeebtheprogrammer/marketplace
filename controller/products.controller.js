@@ -199,8 +199,10 @@ exports.bulkUpdate = async (req, res, next) => {
     try {
          // Handle image uploads
          const data = await productsService.bulkUpdate(
-            { categoryId:  '65b14b7105f8b5c69b5ab4e3' }, // Exclude the specific ID
-            { $inc: { discounted_price: -2000} } // Increment the price
+            // {categoryId: '65b14b7105f8b5c69b5ab4e3'}, // Exclude the specific ID
+            // { vendorId:  '66927af6eb322a27f7c6902c' }, // Exclude the specific ID
+            // { categoryId:  '65b14b7105f8b5c69b5ab4e3' }, // Exclude the specific ID
+            // { $inc: { discounted_price: -2000} } // Increment the price
             // { categoryId: { $ne: '65b14b7105f8b5c69b5ab4e3' } }, // Exclude the specific ID
             // { $inc: { discounted_price: 30000,  } } // Increment the price
         )

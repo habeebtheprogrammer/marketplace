@@ -9,7 +9,7 @@ var router = express.Router();
 router.get('/', productsController.getProducts);
 router.post('/',  productCreationValidator, productsController.createProducts);
 router.post('/comments',checkAuth,  commentsCreationValidator, productsController.createComments);
-router.patch('/', checkAuth, vendorsAccessOnly, updateValidator, productsController.updateProducts);
+router.patch('/', checkAuth,  updateValidator, productsController.updateProducts);
 router.post('/pushimgs',  productsController.uploadImages);
 router.post('/availability-requests', checkAuth, productsController.checkAvailability);
 router.get('/availability-requests', checkAuth, productsController.fetchAvailabilityRequests);
