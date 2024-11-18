@@ -113,6 +113,22 @@ exports.sendSwapEmail = (order) => {
       console.log(err);
     });
 };
+exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) => {
+  emailTransporter
+    .sendMail({
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: email,
+      subject,
+      html:  emailTemplates.requestUpdate({title,description,slug,img}),
+    })
+    .then((suc) => {
+      console.log(suc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 exports.buildFilterQuery = (reqQuery) => {
   var filters = []
   Object.keys(reqQuery).forEach((key) => {

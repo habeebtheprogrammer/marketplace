@@ -1,6 +1,6 @@
 const RequestsModel = require("../model/requests.model");
 const { productsService, usersService, vendorsService } = require("../service")
-const { generateRandomNumber, groupByOr, buildFilterQuery, s3Bucket, s3 } = require("../utils/helpers");
+const { generateRandomNumber, groupByOr, buildFilterQuery, s3Bucket, s3, sendRequestUpdateEmail } = require("../utils/helpers");
 const { sendNotification } = require("../utils/onesignal");
 const { successResponse, errorResponse } = require("../utils/responder")
 const fs = require("fs");
@@ -133,22 +133,33 @@ exports.uploadImages = async (req, res, next) => {
 exports.checkAvailability = async (req, res, next) => {
     try {
          // Handle image uploads
-         const {variant, _id,title,vendorId} = req.body
-         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'dunurejoice20@gmail.com'] } });
+         const {variant, _id,title,vendorId, slug, images} = req.body
+         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'devhabeeb@gmail.com'] } });
         var include_player_ids = users.docs?.map?.(u => u.oneSignalId)
         var product = await RequestsModel.create({
             productId: _id,   variant, userId: req.userId , vendorId
         }) 
-        console.log(include_player_ids)
+        const text = `${req.firstName || "A new customer"} is inquiring about the availability of the ${title} ${variant}. Could you please confirm if it’s in stock?`
+         
          sendNotification({
             // headings: { "en": `Crypto Gains Got You Feeling Rich?` },
             // contents: { "en": `If you haven’t spent it, did it even happen? Time to turn those digital coins into real tech toys at 360GadgetsAfrica!` },
             // include_subscription_ids:   include_player_ids,
             // url: '360gadgetsfrica://product-description?slug=' + product?.productId?.slug
-            headings: { "en": `We Have an Update For You` },
-            contents: { "en": `${req.firstName || "A new customer"} is inquiring about the availability of the ${title} ${variant}. Could you please confirm if it’s in stock?` },
+            headings: { "en": `You have a new request` },
+            contents: { "en": text },
             include_subscription_ids: include_player_ids,
             url: '360gadgetsfrica://requests',
+          })
+          users.docs.map((u) => {
+            sendRequestUpdateEmail({
+                subject:`You have a new confimation request`,
+                email: u.email, 
+                title, 
+                slug, 
+                img: images[0],
+                description: text
+            })
           })
         successResponse(res, product)
     } catch (error) {
@@ -175,7 +186,17 @@ exports.updateAvailability = async (req, res, next) => {
             url: '360gadgetsfrica://product-description?slug=' + product?.productId?.slug
         
           })
+          sendRequestUpdateEmail({
+            subject:`Hey ${users.docs[0].firstName}, You have a new notification`,
+            email: users.docs[0].email, 
+            title: product?.productId?.title, 
+            slug: product?.productId?.slug, 
+            img: product?.productId?.images[0],
+            description: text
+        })
         successResponse(res, product)
+      
+
     } catch (error) {
         console.log(error)
         errorResponse(res, error)
