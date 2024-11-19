@@ -4,8 +4,9 @@ const { checkAuth } = require('../utils/authMiddleware');
 const { vendorsCreationValidator } = require('../utils/validator');
 var router = express.Router();
 
-router.get('/', checkAuth, walletsController.balance);
-router.post('/', checkAuth, walletsController.create);
+router.get('/balance/:accountNumber', checkAuth, walletsController.balance);
+router.get('/history/:accountNumber', checkAuth, walletsController.history);
+router.post('/setup', checkAuth, walletsController.create);
 router.patch('/fund', checkAuth, walletsController.fund);
 router.get('/debit', checkAuth, walletsController.debit);
 

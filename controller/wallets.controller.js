@@ -29,12 +29,14 @@ exports.create = async (req, res, next) => {
         const { userId, currency } = req.body;
         
         const walletData = {
-          userId,
-          currency,
+          walletReference,
+          walletName,
+          customerName,
+          customerEmail
           // Add any other required fields for wallet creation
         };
     
-        const result = await monifyRequest('/wallets', 'POST', walletData);
+        const result = await monifyRequest('/api/v1/disbursements/wallet', 'POST', walletData);
         res.json(result);
       } catch (error) {
         console.error('Error creating wallet:', error);
@@ -85,12 +87,25 @@ exports.fund = async (req, res, next) => {
 // Get wallet balance
 exports.balance = async (req, res, next) => {
     try {
-    const { walletId } = req.params;
-    const result = await monifyRequest(`/wallets/${walletId}/balance`, 'GET');
+    const { accountId } = req.params;
+    const result = await monifyRequest(`api/v1/disbursements/wallet/balance?accountNumber=${accountId}`, 'GET');
     res.json(result);
   } catch (error) {
     console.error('Error getting wallet balance:', error);
     res.status(500).json({ error: 'Failed to get wallet balance' });
   }
+}
+
+
+// Get wallet balance
+exports.history = async (req, res, next) => {
+  try {
+  const { accountId } = req.params;
+  const result = await monifyRequest(`api/v1/disbursements/wallet/transactions?accountNumber=${accountId}`, 'GET');
+  res.json(result);
+} catch (error) {
+  console.error('Error getting wallet balance:', error);
+  res.status(500).json({ error: 'Failed to get wallet balance' });
+}
 }
 

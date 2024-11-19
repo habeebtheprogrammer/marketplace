@@ -30,7 +30,7 @@ exports.createComments = async (req, res, next) => {
 }
 exports.updateProducts = async (req, res, next) => {
     try {
-        var updateObj = {}
+        var updateObj = {priceUpdatedAt: new Date()}
         Object.keys(req.body).forEach(key => {
             updateObj[key] = req.body[key];
         })
