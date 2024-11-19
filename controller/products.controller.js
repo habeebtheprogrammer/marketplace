@@ -30,11 +30,11 @@ exports.createComments = async (req, res, next) => {
 }
 exports.updateProducts = async (req, res, next) => {
     try {
-        var updateObj = {priceUpdatedAt: new Date()}
+        var updateObj = {}
         Object.keys(req.body).forEach(key => {
             updateObj[key] = req.body[key];
         })
-        console.log(updateObj)
+        updateObj.priceUpdatedAt = new Date()
         const data = await productsService.updateProducts({ _id: updateObj._id }, updateObj)
         successResponse(res, data)
     } catch (error) {
