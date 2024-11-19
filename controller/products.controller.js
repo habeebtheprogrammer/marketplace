@@ -34,6 +34,7 @@ exports.updateProducts = async (req, res, next) => {
         Object.keys(req.body).forEach(key => {
             updateObj[key] = req.body[key];
         })
+        console.log(updateObj)
         const data = await productsService.updateProducts({ _id: updateObj._id }, updateObj)
         successResponse(res, data)
     } catch (error) {
