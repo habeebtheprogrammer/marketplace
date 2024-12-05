@@ -1,7 +1,9 @@
-const { ordersService, cartsService, productsService } = require("../service")
+const { default: axios } = require("axios");
+const { ordersService, cartsService, productsService, addressService } = require("../service")
 const { getUsers } = require("../service/users.service")
 const { generateRandomNumber, sendOrdersEmail, sendOrderConfirmationEmail } = require("../utils/helpers")
 const { successResponse, errorResponse } = require("../utils/responder")
+const crypto = require("crypto");
 
 
 
@@ -67,10 +69,58 @@ exports.updateOrders = async (req, res, next) => {
         Object.keys(req.body).forEach(key => {
             updateObj[key] = req.body[key];
         })
-        console.log(updateObj)
         const data = await ordersService.updateOrders({ _id: updateObj._id }, updateObj)
         successResponse(res, data)
     } catch (error) {
+        errorResponse(res, error)
+    }
+}
+
+
+exports.webhook = async (req, res, next) => {
+    try {
+        const hash = crypto.createHmac('sha256', process.env.KORRA_SECRET_KEY).update(JSON.stringify(req.body.data)).digest('hex');
+
+        if (hash === req.headers['x-korapay-signature']) {
+            const resp = await axios(`https://api.korapay.com/merchant/api/v1/charges/${req.body.data.reference}`, {
+                headers: {
+                    Authorization: `Bearer ${process.env.KORRA_SECRET_KEY}`
+                }
+            })
+            console.log(resp?.data?.data.metadata)
+            var {email} =resp?.data?.data?.metadata
+            var user = await getUsers({email})
+            const userId = user?.docs[0]._id
+
+            const cartItems = await cartsService.getCarts({userId})
+            var orders = []
+            cartItems?.docs?.map(p => {
+                var item = {
+                    size: p.size,
+                    qty: p.qty,
+                    productId: p.productId._id,
+                    trackingId: generateRandomNumber(10),
+                    price: p.productId.discounted_price || p.productId.original_price,
+                }
+                orders.push(item)
+                // productIds.push(p.productId._id)
+            })
+        const addr = await addressService.getAddress({_id: resp?.data?.data.metadata?.addressId})
+        console.log(addr, orders)
+        const data = await ordersService.addOrders({ userId, trackingId: generateRandomNumber(10), amountPaid: req.body.data.amount, flutterwave: {
+            tx_ref: req.body.data.reference,
+            transaction_id: generateRandomNumber(10)
+        }, orderedProducts: orders, deliveryAddress: addr[0], 
+            status: 'new order'
+         })
+        const emptyCarts = await cartsService.clearCarts({ userId })
+        res.sendStatus(200)
+          // Continue with the request functionality
+        } else {
+          // Don’t do anything, the request is not from us.
+        }
+    } catch (error) {
+        console.log(error)
         errorResponse(res, error)
     }
 }

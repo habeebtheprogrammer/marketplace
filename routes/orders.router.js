@@ -7,5 +7,6 @@ var router = express.Router();
 router.get('/', checkAuth, ordersController.getOrders);
 router.post('/', checkAuth, ordersController.addOrders);
 router.patch('/', checkAuth, updateOrdersValidator, ordersController.updateOrders);
+router.post('/webhook', ordersController.webhook);
 
 module.exports = router;
