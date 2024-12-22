@@ -4,7 +4,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "GIFTING",
       "planName": "2GB",
-      "amount": "₦500.00",
+      "amount": "500.00",
       "duration": "1Month"
     },
     {
@@ -12,7 +12,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "GIFTING",
       "planName": "1GB",
-      "amount": "₦250.00",
+      "amount": "250.00",
       "duration": "1Month"
     },
     {
@@ -20,7 +20,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "500MB",
-      "amount": "₦132.00",
+      "amount": "132.00",
       "duration": "1Month"
     },
     {
@@ -28,7 +28,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "1GB",
-      "amount": "₦262.00",
+      "amount": "262.00",
       "duration": "1Month"
     },
     {
@@ -36,7 +36,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "2GB",
-      "amount": "₦524.00",
+      "amount": "524.00",
       "duration": "1Month"
     },
     {
@@ -44,7 +44,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "3GB",
-      "amount": "₦786.00",
+      "amount": "786.00",
       "duration": "1Month"
     },
     {
@@ -52,7 +52,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "5GB",
-      "amount": "₦1,310.00",
+      "amount": "1310.00",
       "duration": "1Month"
     },
     {
@@ -60,7 +60,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "10GB",
-      "amount": "₦2,620.00",
+      "amount": "2620.00",
       "duration": "1Month"
     },
     {
@@ -68,7 +68,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "500MB",
-      "amount": "₦133.00",
+      "amount": "133.00",
       "duration": "1Month"
     },
     {
@@ -76,7 +76,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "1GB",
-      "amount": "₦265.00",
+      "amount": "265.00",
       "duration": "1Month"
     },
     {
@@ -84,7 +84,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "2GB",
-      "amount": "₦530.00",
+      "amount": "530.00",
       "duration": "1Month"
     },
     {
@@ -92,7 +92,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "3GB",
-      "amount": "₦795.00",
+      "amount": "795.00",
       "duration": "1Month"
     },
     {
@@ -100,7 +100,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "5GB",
-      "amount": "₦1,325.00",
+      "amount": "1325.00",
       "duration": "1Month"
     },
     {
@@ -108,7 +108,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "10GB",
-      "amount": "₦2,650.00",
+      "amount": "2650.00",
       "duration": "1Month"
     },
     {
@@ -116,7 +116,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "GIFTING",
       "planName": "3GB",
-      "amount": "₦750.00",
+      "amount": "750.00",
       "duration": "1Month"
     },
     {
@@ -124,7 +124,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "GIFTING",
       "planName": "5GB",
-      "amount": "₦1,250.00",
+      "amount": "1250.00",
       "duration": "1Month"
     },
     {
@@ -132,7 +132,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "GIFTING",
       "planName": "1.5GB",
-      "amount": "₦465.00",
+      "amount": "465.00",
       "duration": "1Month"
     },
     {
@@ -140,7 +140,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "GIFTING",
       "planName": "2.9GB",
-      "amount": "₦940.00",
+      "amount": "940.00",
       "duration": "1Month"
     },
     {
@@ -148,7 +148,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "GIFTING",
       "planName": "4.1GB",
-      "amount": "₦1,300.00",
+      "amount": "1300.00",
       "duration": "1Month"
     },
     {
@@ -156,7 +156,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "GIFTING",
       "planName": "5.8GB",
-      "amount": "₦1,860.00",
+      "amount": "1860.00",
       "duration": "1Month"
     },
     {
@@ -164,7 +164,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "GIFTING",
       "planName": "10GB",
-      "amount": "₦3,020.00",
+      "amount": "3020.00",
       "duration": "1Month"
     },
     {
@@ -172,7 +172,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "500MB",
-      "amount": "₦138.00",
+      "amount": "138.00",
       "duration": "1Month"
     },
     {
@@ -180,7 +180,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "1GB",
-      "amount": "₦270.00",
+      "amount": "270.00",
       "duration": "1Month"
     },
     {
@@ -188,7 +188,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "2GB",
-      "amount": "₦540.00",
+      "amount": "540.00",
       "duration": "1Month"
     },
     {
@@ -196,7 +196,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "3GB",
-      "amount": "₦810.00",
+      "amount": "810.00",
       "duration": "1Month"
     },
     {
@@ -204,7 +204,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "5GB",
-      "amount": "₦1,350.00",
+      "amount": "1350.00",
       "duration": "1Month"
     },
     {
@@ -212,7 +212,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "10GB",
-      "amount": "₦2,700.00",
+      "amount": "2700.00",
       "duration": "1Month"
     },
     {
@@ -220,7 +220,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "500MB",
-      "amount": "₦140.00",
+      "amount": "140.00",
       "duration": "1Month"
     },
     {
@@ -228,7 +228,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "1GB",
-      "amount": "₦277.00",
+      "amount": "277.00",
       "duration": "1Month"
     },
     {
@@ -236,7 +236,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "2GB",
-      "amount": "₦554.00",
+      "amount": "554.00",
       "duration": "1Month"
     },
     {
@@ -244,7 +244,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "5GB",
-      "amount": "₦1,385.00",
+      "amount": "1385.00",
       "duration": "1Month"
     },
     {
@@ -252,7 +252,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "10GB",
-      "amount": "₦2,770.00",
+      "amount": "2770.00",
       "duration": "1Month"
     },
     {
@@ -260,7 +260,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "100MB",
-      "amount": "₦90.00",
+      "amount": "90.00",
       "duration": "7days"
     },
     {
@@ -268,7 +268,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "1GB",
-      "amount": "₦235.00",
+      "amount": "235.00",
       "duration": "AWOOF 2DAYS VALIDITY DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
     },
     {
@@ -276,7 +276,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "750MB",
-      "amount": "₦450.00",
+      "amount": "450.00",
       "duration": "14DAYS VALIDITY PLEASE DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
     },
     {
@@ -284,7 +284,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "SME",
       "planName": "1.1GB",
-      "amount": "₦399.00",
+      "amount": "399.00",
       "duration": "1Month"
     },
     {
@@ -292,7 +292,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "SME",
       "planName": "2GB",
-      "amount": "₦760.00",
+      "amount": "760.00",
       "duration": "1Month"
     },
     {
@@ -300,7 +300,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "GIFTING",
       "planName": "1.5GB",
-      "amount": "₦900.00",
+      "amount": "900.00",
       "duration": "1Month"
     },
     {
@@ -308,7 +308,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "GIFTING",
       "planName": "500MB",
-      "amount": "₦450.00",
+      "amount": "450.00",
       "duration": "1 Month"
     },
     {
@@ -316,7 +316,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "1GB",
-      "amount": "₦150.00",
+      "amount": "150.00",
       "duration": "1Month"
     },
     {
@@ -324,7 +324,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "2GB",
-      "amount": "₦300.00",
+      "amount": "300.00",
       "duration": "1Month"
     },
     {
@@ -332,7 +332,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "3GB",
-      "amount": "₦450.00",
+      "amount": "450.00",
       "duration": "1Month"
     },
     {
@@ -340,7 +340,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "4GB",
-      "amount": "₦600.00",
+      "amount": "600.00",
       "duration": "1Month"
     },
     {
@@ -348,7 +348,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "5GB",
-      "amount": "₦750.00",
+      "amount": "750.00",
       "duration": "1Month"
     },
     {
@@ -356,7 +356,7 @@ exports.dataplan = [
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "10GB",
-      "amount": "₦1,500.00",
+      "amount": "1500.00",
       "duration": "1Month"
     }
   ];

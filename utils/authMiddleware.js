@@ -19,6 +19,7 @@ exports.checkAuth = (req, res, next) => {
     req.userId = data._id;
     req.firstName = data.firstName;
     req.userType = data.userType;
+    req.email = data.email;
     req.oneSignalId = oneSignalId
     next();
     if(oneSignalId && !data.oneSignalId || (oneSignalId && (oneSignalId != data.oneSignalId))){

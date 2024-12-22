@@ -36,6 +36,14 @@ const usersSchema = new Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: "vendors",
     },
+    referredBy: { type: mongoose.SchemaTypes.ObjectId, ref: "users" },
+    referralCode: { type: String, unique: true },
+    referrals: { type: Number, default: 0 }, 
+    verificationCode: String,
+    accountReference: {
+      unique: true,
+      type: String,
+    }
   },
   { timestamps: true }
 );

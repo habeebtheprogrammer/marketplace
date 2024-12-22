@@ -2,7 +2,7 @@ const { usersService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
 const constant = require('../utils/constant')
 const bcrypt = require("bcryptjs")
-const { createToken, sendSignupMail, isAppleRelayEmail } = require("../utils/helpers")
+const { createToken, sendSignupMail, isAppleRelayEmail, generateRandomNumber } = require("../utils/helpers")
 
 
 exports.signin = async (req, res, next) => {
@@ -22,8 +22,25 @@ exports.signin = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         const hash = await bcrypt.hash(req.body.password, 10)
-        const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash })
+        var referrerId = ""
+        if (req.body.referralCode) {
+            const referrer = await usersService.getUsers({ referralCode: req.body.referralCode });
+
+            if (!referrer?.totalDocs) {
+                throw Error('Invalid referral code')
+            }
+            referrerId = referrer.docs[0]
+        }
+        const referralCode = req.body.firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4);
+
+        const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash, referralCode, referredBy: referrerId, verificationCode: generateRandomNumber(5) })
         var token = createToken(JSON.stringify(user))
+        if (referrerId) {
+            await usersService.updateUsers(
+                { _id: referrerId },
+                { $inc: { referrals: 1 } }
+            );
+        }
         successResponse(res, { user, token })
         !isAppleRelayEmail(user.email) && sendSignupMail(user.email)
     } catch (error) {
@@ -50,6 +67,19 @@ exports.updateUser = async (req, res, next) => {
     }
 }
 
+exports.verifyEmail = async (req, res, next) => {
+    try {
+        var { email, verificationCode } = request.body;
+        const user = await usersService.findOne({ email, verificationCode })
+
+        if (!user?.totalDocs) throw Error('"Verification code is not correct"')
+        const data = await usersService.updateUsers({ _id: user?.docs[0]._id }, { verificationCode: '' })
+        successResponse(res, data)
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
+
 exports.getUserAccount = async (req, res, next) => {
     try {
         const data = await usersService.getUsers({ _id: req.userId })
@@ -63,8 +93,13 @@ exports.refreshToken = async (req, res, next) => {
     try {
         const user = await usersService.getUsers({ _id: req.userId })
         if (user?.docs[0]) {
+            if (!user.docs[0].referralCode) {
+                const referralCode = user.docs[0].firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4);
+                const data = await usersService.updateUsers({ _id: user.docs[0]._id }, { referralCode })
+            }
             var token = createToken(JSON.stringify(user.docs[0]))
             successResponse(res, { user: user.docs[0], token })
+
         }
     } catch (error) {
         errorResponse(res, error)
