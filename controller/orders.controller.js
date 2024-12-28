@@ -1,9 +1,10 @@
 const { default: axios } = require("axios");
-const { ordersService, cartsService, productsService, addressService } = require("../service")
+const { ordersService, cartsService, productsService, addressService, walletsService } = require("../service")
 const { getUsers } = require("../service/users.service")
 const { generateRandomNumber, sendOrdersEmail, sendOrderConfirmationEmail } = require("../utils/helpers")
 const { successResponse, errorResponse } = require("../utils/responder")
 const crypto = require("crypto");
+const { sendNotification } = require("../utils/onesignal");
 
 
 
@@ -21,6 +22,10 @@ exports.getOrders = async (req, res, next) => {
 exports.addOrders = async (req, res, next) => {
     try {
         const { amountPaid, flutterwave, orderedProducts, deliveryAddress } = req.body
+
+        var wallet = await walletsService.getWallets({ userId: req.userId })
+        if(wallet.docs[0].balance < parseInt(amountPaid) || wallet.totalDocs == 0 ) throw new Error("Insufficient balance. please fund your wallet");
+        
         const trackingId = generateRandomNumber(10)
         var orders = []
         orderedProducts?.map(p => {
@@ -35,7 +40,7 @@ exports.addOrders = async (req, res, next) => {
             // productIds.push(p.productId._id)
         })
         const data = await ordersService.addOrders({ userId: req.userId, trackingId, amountPaid, flutterwave, orderedProducts: orders, deliveryAddress, 
-            status: flutterwave.tx_ref == flutterwave.transaction_id ? 'awaiting payment' : 'new order'
+            status:  'new order'
          })
         const emptyCarts = await cartsService.clearCarts({ userId: req.userId })
         orderedProducts?.map(async (p) => {
@@ -44,18 +49,26 @@ exports.addOrders = async (req, res, next) => {
         successResponse(res, data)
         //send emails
         var user = await getUsers({_id: req.userId})
-        var addr
-        if(flutterwave.tx_ref == flutterwave.transaction_id){
-            addr = { 
-                name: "His Grace Plaza",
-                street: "14 Francis Oremeji St, Ikeja",
-                state: "Lagos",
-                phone: "+2347069568209"
-            }
-        } else addr = deliveryAddress
+        var addr = deliveryAddress
         sendOrderConfirmationEmail({email: user.docs[0]?.email, order: orderedProducts, address: addr, pickup: flutterwave.tx_ref == flutterwave.transaction_id})
         sendOrdersEmail({ order: orderedProducts,  pickup: flutterwave.tx_ref == flutterwave.transaction_id, address: addr})
-
+        await walletsService.updateWallet({ userId: req.userId }, {$inc: {balance:  -parseInt(amountPaid)}})
+        const wallData = {
+          "amount": amountPaid,
+          "userId": user.docs[0]._id,
+          "reference": 'gadgets-'+ generateRandomNumber(11),
+          "narration": "Gadget/Accessories purchase",
+          "currency": "NGN",
+          "type": 'debit',
+          "status": "successful"
+        }
+        await walletsService.saveTransactions(wallData)
+        sendNotification({
+            headings: { "en": `Payment successful` },
+            contents: { "en": `Congratulations ${req.firstName}! Your purchase was successful. Refer a friend to try 360gadgetsafrica to earn with us.` },
+            include_subscription_ids: [req.oneSignalId],
+            url: 'gadgetsafrica://transactions',
+          })
     } catch (error) {
         console.log(error)
         errorResponse(res, error)

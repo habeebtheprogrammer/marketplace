@@ -3,7 +3,15 @@ const Delivery = require("../model/delivery.model")
 
 exports.getUsers = async (filters = {}) => {
     const data = await Users.paginate(filters,  {
-        populate: ['vendorId']})
+        populate: [
+            {
+                path: "vendorId",
+            },
+            {
+                path: "referredBy",
+                select: ["firstName", 'oneSignalId'],
+            }]
+    })
     return data
 }
 

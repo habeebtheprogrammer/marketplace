@@ -11,6 +11,8 @@ router.get('/delivery', usersController.getUserDelivery);
 router.patch('/account', checkAuth, usersController.updateUser);
 router.post('/signin', googleAuth, appleSignin, signinInputValidator,  usersController.signin);
 router.post('/signup', signupInputValidator, usersController.createUser);
+router.post('/sendOtp', usersController.sendOtpEmail);
+router.post('/verifyOtp', usersController.verifyOtp);
 router.delete('/delete/:_id', checkAuth, adminAccessOnly, usersController.deleteUsers);
 
 module.exports = router;

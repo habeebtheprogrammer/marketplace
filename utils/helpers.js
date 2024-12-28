@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const emailTemplates = require("../emailTemplates");
 const AWS = require("aws-sdk")
+const crypto = require("crypto")
 exports.s3Bucket = process.env.AWS_BUCKET;
 
 exports.s3 = new AWS.S3({
@@ -41,6 +42,23 @@ exports.sendSignupMail = (email) => {
       to: email,
       subject: "Welcome to 360 Gadgets Africa – Your Ultimate Tech Destination!",
       html: emailTemplates.signup(),
+    })
+    .then((suc) => {
+      console.log(suc);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+
+exports.sendOtpCode = (email, code) => {
+  emailTransporter
+    .sendMail({
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: email,
+      subject: "Verify your account",
+      html: emailTemplates.otpCode(code),
     })
     .then((suc) => {
       console.log(suc);
@@ -218,3 +236,11 @@ exports.isAppleRelayEmail = (email) => {
   return appleRelayPattern.test(email);
 };
  
+// Function to verify the HMAC signature
+exports.verifyMonnifySignature = (payload, signature) => {
+  const hash = crypto
+    .createHmac("sha512", process.env.MONIFY_SECRET_KEY)
+    .update(JSON.stringify(payload))
+    .digest("hex");
+  return hash === signature;
+}

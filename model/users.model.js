@@ -40,10 +40,18 @@ const usersSchema = new Schema(
     referralCode: { type: String, unique: true },
     referrals: { type: Number, default: 0 }, 
     verificationCode: String,
-    accountReference: {
-      unique: true,
-      type: String,
-    }
+    deviceid: String,
+    location: {
+      latitude: String,
+      longitude: String,
+      city: String,
+      platform: String,
+      buildnumber: String,
+      buildversion: String,
+      model: String, 
+      deviceid: String, 
+      lastseen: Date,
+    },
   },
   { timestamps: true }
 );

@@ -1,9 +1,10 @@
 const fetch = require('node-fetch');
 const axios = require("axios");
-const { usersService } = require('../service');
-const { dataplan } = require('../utils/dataplan');
-const { generateRandomNumber } = require('../utils/helpers');
+const { usersService, walletsService } = require('../service');
+const { dataplan, detectNetwork } = require('../utils/vtu');
+const { generateRandomNumber, verifyMonnifySignature } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
+const { sendNotification } = require('../utils/onesignal');
 
 const MONIFY_API_KEY = process.env.MONIFY_API_KEY;
 const MONIFY_SECRET_KEY = process.env.MONIFY_SECRET_KEY;
@@ -52,7 +53,6 @@ async function monnify(endpoint, method, body = null) {
   })
 
   const getToken = await requestToken.json()
-  console.log(getToken)
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${getToken?.responseBody?.accessToken}`,
@@ -68,91 +68,125 @@ async function monnify(endpoint, method, body = null) {
   const response = await fetch(url, options);
   return await response.json();
 }
-// Create a new wallet
 
-exports.create = async (req, res, next) => {
+exports.fetch = async (req, res, next) => {
   try {
+    var wallet = await walletsService.getWallets({ userId: req.userId })
+    if (wallet.totalDocs == 0) {
+      wallet = await walletsService.createWallet({
+        userId: req.userId,
+        balance: 50
+      })
+      const bonus = {
+        "amount": 50,
+        "userId": req.userId,
+        "reference": "SignuBonus" + '--' + generateRandomNumber(10),
+        "narration": "Signup bonus",
+        "currency": "NGN",
+        "type": 'credit',
+        "status": "successful"
+      }
+      await walletsService.saveTransactions(bonus)
+      sendNotification({
+        headings: { "en": `₦50 was credited to your wallet` },
+        contents: { "en": `Congratulations ${req.firstName}! Your just earned ₦50 on signup bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
+        include_subscription_ids: [req.oneSignalId],
+        url: 'gadgetsafrica://profile',
+      })
 
-    const user = await usersService.getUsers({ _id: req.uid })
-    const walletData = {
-      "accountName": user[0]?.firstName + ' ' + user?.lastName,
-      "currencyCode": "NGN",
-      "contractCode": process.env.MONIFY_CONTRACT_CODE,
-      "customerName": user[0]?.firstName + ' ' + user?.lastName,
-      "customerEmail": user[0]?.email
+      //referral bonus
+      var user = await usersService.getUsers({ _id: req.userId, deviceid: req.deviceid })
+      if (user.docs[0].referredBy?._id && user.totalDocs == 1 ) {
+      var check = await usersService.getUsers({ _id: req.userId })
+        
+        await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
+    
+        const bonus1 = {
+          "amount": 25,
+          "userId": user.docs[0]?.referredBy?._id,
+          "reference": "Referral" + '--' + generateRandomNumber(10),
+          "narration": "Referral bonus for new user",
+          "currency": "NGN",
+          "type": 'credit',
+          "status": "successful"
+        }
+        await walletsService.saveTransactions(bonus1) 
+        sendNotification({
+          headings: { "en": `₦25 was credited to your wallet` },
+          contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦25 on referral bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
+          include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
+          url: 'gadgetsafrica://profile',
+        })
+      }
+
     }
-    const result = await monnify('/api/v2/bank-transfer/reserved-accounts', 'POST', walletData);
-    res.json(result);
-    console.log(result)
+
+    var result = await monnify('/api/v2/bank-transfer/reserved-accounts/' + req.userId, 'GET');
+    if (!result.requestSuccessful) {
+      const walletData = {
+        "accountName": req.firstName + ' ' + req.lastName,
+        "currencyCode": "NGN",
+        "contractCode": process.env.MONIFY_CONTRACT_CODE,
+        "customerName": req.firstName + ' ' + req.lastName,
+        "customerEmail": req.email,
+        "accountReference": req.userId,
+        "bvn": "22325291031"
+      }
+      result = await monnify('/api/v1/bank-transfer/reserved-accounts', 'POST', walletData);
+    }
+    if (result?.requestSuccessful) {
+      var accounts = result.responseBody.accounts?.map(account => ({
+        accountName: result.responseBody.accountName,
+        accountNumber: account.accountNumber,
+        bankName: account.bankName
+      }))
+    }
+   
+    res.json({
+      balance: wallet.docs[0]?.balance,
+      accounts
+    });
+
   } catch (error) {
-    console.error('Error creating wallet:', error);
-    res.status(500).json({ error: 'Failed to create wallet' });
+    console.error('Error fetching wallet:', error);
+    res.status(500).json({ error: 'Failed to fetch wallet' });
   }
 }
 
 
-exports.fetch = async (req, res, next) => {
+exports.fetchTransactions = async (req, res, next) => {
   try {
-    const user = await usersService.getUsers({ _id: req.userId })
-    if (user.docs[0]?.accountReference) {
-      var result = await monnify('/api/v2/bank-transfer/reserved-accounts/' + req.userId, 'GET');
-    } else if (user.docs[0]?.email) {
-      const walletData = {
-        "accountName": user.docs[0]?.firstName + ' ' + user.docs[0]?.lastName,
-        "currencyCode": "NGN",
-        "contractCode": process.env.MONIFY_CONTRACT_CODE,
-        "customerName": user.docs[0]?.firstName + ' ' + user.docs[0]?.lastName,
-        "customerEmail": user.docs[0]?.email,
-        "accountReference": req.userId
-      }
-      result = await monnify('/api/v1/bank-transfer/reserved-accounts', 'POST', walletData);
-      if (result?.requestSuccessful == true) {
-        await usersService.updateUsers({ _id: req.userId }, { accountReference: req.userId })
-      }
-    }
-    if (result.requestSuccessful == true) {
-
-      // const  balance =  await monnify('/api/v2/disbursements/wallet-balance?accountNumber=' + result.responseBody.accounts[0].accountNumber, 'GET');
-      res.json({
-        accounts: result.responseBody.accounts[0],
-        accountName: result.responseBody.accountName,
-        status: result.responseBody.status,
-        totalAmount: result.responseBody.totalAmount
-      });
-    }
-    else throw Error("Error fetching wallet")
+    var transactions = await walletsService.fetchTransactions({ userId: req.userId })
+    successResponse(res, transactions)
   } catch (error) {
-    console.error('Error creating wallet:', error);
-    res.status(500).json({ error: 'Failed to create wallet' });
+    errorResponse(res, error)
   }
 }
 
 
 exports.withdraw = async (req, res, next) => {
-  try {console.log(req.body)
-    var acct = await monnify('/api/v2/bank-transfer/reserved-accounts/' + req.userId, 'GET');
-    if(acct.requestSuccessful){
-      const source = {
-        "amount": req.body.amount,
-        "reference":"referen00ce---"+generateRandomNumber(5),
-        "narration":"Withrawal",
-        "destinationBankCode": req.body.bankCode,
-        "destinationAccountNumber": req.body.accountNumber,
-        "currency": "NGN",
-        "sourceAccountNumber": acct.responseBody.accounts[0].accountNumber
-      }
-    result = await monnify('/api/v2/disbursements/single', 'POST', source);
-    console.log(result)
-      if (result?.requestSuccessful == true) {
-     res.json({success: true})
+  try {
+    var wallet = await walletsService.getWallets({ userId: req.userId })
+    if (wallet.docs[0].balance < parseInt(req.body.amount)) throw new Error("Insufficient balance. please fund your wallet");
+    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
+    const data = {
+      "amount": req.body.amount,
+      "userId": req.userId,
+      "reference": req.body.reference + '--' + generateRandomNumber(10),
+      "narration": "Withdrawal to ******" + req.body.accountNumber.substr(6),
+      "destinationBankCode": req.body.bankCode,
+      "destinationBankName": req.body.bankName,
+      "destinationAccountNumber": req.body.accountNumber,
+      "destinationAccountName": req.body.accountName,
+      "currency": "NGN",
+      "type": 'debit',
+      "status": "pending"
     }
-  }
-   
-  
-   
+    const transaction = await walletsService.saveTransactions(data)
+    successResponse(res, transaction)
   } catch (error) {
-    console.error('Error creating wallet:', error);
-    res.status(500).json({ error: 'Failed to create wallet' });
+    console.log(error)
+    errorResponse(res, error)
   }
 }
 exports.fetchDataPlan = async (req, res, next) => {
@@ -167,8 +201,19 @@ exports.fetchDataPlan = async (req, res, next) => {
 
 exports.buyDataPlan = async (req, res, next) => {
   try {
-    console.log('buying', req.body)
-
+    var wallet = await walletsService.getWallets({ userId: req.userId })
+    if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
+    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
+    const data = {
+      "amount": req.body.plan.amount,
+      "userId": req.userId,
+      "reference": "Data" + '--' + generateRandomNumber(10),
+      "narration": "Data topup to " + req.body.phone,
+      "currency": "NGN",
+      "type": 'debit',
+      "status": "successful"
+    }
+    const transaction = await walletsService.saveTransactions(data)
 
     var plan = dataplan.find(d => d.planId == req.body.plan.planId);
     var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
@@ -183,8 +228,79 @@ exports.buyDataPlan = async (req, res, next) => {
     console.log(vtc, obj)
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ['An error has occured. please try again later'] });
-    } else if (vtc?.status == 'success') successResponse(res, { status: vtc?.status }, vtc?.message)
-    else successResponse(res, { status: vtc?.status }, vtc?.message)
+      await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: parseInt(req.body.plan.amount) } })
+      await walletsService.saveTransactions({
+        ...data,
+        "reference": "Data" + '--' + generateRandomNumber(10),
+        "narration": "RSVL for Data topup to " + req.body.phone,
+        "status": 'successful', type: 'credit'
+      })
+    } else {
+      successResponse(res, transaction)
+      sendNotification({
+        headings: { "en": `Payment successful` },
+        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${plan.planName} data to ${req.body.phone}. Refer a friend to try 360gadgetsafrica to earn with us.` },
+        include_subscription_ids: [req.oneSignalId],
+        url: 'gadgetsafrica://profile',
+      })
+    }
+
+  } catch (error) {
+    console.log(error)
+    errorResponse(res, error)
+  }
+}
+
+exports.buyAirtime = async (req, res, next) => {
+  try {
+    var wallet = await walletsService.getWallets({ userId: req.userId })
+    if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
+    await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
+    const data = {
+      "amount": req.body.amount,
+      "userId": req.userId,
+      "reference": "Airtime" + '--' + generateRandomNumber(10),
+      "narration": "Airtime topup to " + req.body.phone,
+      "currency": "NGN",
+      "type": 'debit',
+      "status": "successful"
+    }
+    const transaction = await walletsService.saveTransactions(data)
+
+    const provider = detectNetwork(req.body.phone)
+    var net = provider == 'MTN' ? 1 : provider == "AIRTEL" ? 2 : provider == "GLO" ? 3 : 4
+    var obj = {
+      network: net,
+      phone: req.body.phone,
+      amount: req.body.amount,
+      bypass: false,
+      plan_type: 'VTU',
+      'request-id': "Airtime_" + generateRandomNumber(11),
+    }
+    const vtc = await quickVTU('/api/topup', "POST", obj)
+    console.log(vtc, obj)
+
+
+    if (vtc?.status == 'fail') {
+      res.status(500).json({ errors: ['An error has occured. please try again later'] });
+      await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: parseInt(req.body.amount) } })
+      await walletsService.saveTransactions({
+        ...data,
+        "reference": "Airtime" + '--' + generateRandomNumber(10),
+        "narration": "RSVL for Airtime topup to " + req.body.phone,
+        "status": 'successful', type: 'credit'
+      })
+    } else {
+      successResponse(res, transaction)
+      sendNotification({
+        headings: { "en": `Payment successful` },
+        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try 360gadgetsafrica to earn with us.` },
+        include_subscription_ids: [req.oneSignalId],
+        url: 'gadgetsafrica://profile',
+      })
+    }
   } catch (error) {
     console.log(error?.response?.data)
     errorResponse(res, error)
@@ -207,7 +323,6 @@ exports.verifyBank = async (req, res, next) => {
       bankCode,
       accountNumber
     } = req.body
-    console.log(req.body)
     const verifyAcct = await monnify(`/api/v1/disbursements/account/validate?accountNumber=${accountNumber}&bankCode=${bankCode.replace(/^0+/, "")}`, "GET")
     console.log(verifyAcct)
     if (verifyAcct.requestSuccessful) {
@@ -218,46 +333,71 @@ exports.verifyBank = async (req, res, next) => {
   }
 }
 
-// request payout 
-exports.payout = async (req, res, next) => {
+
+
+
+exports.webhook = async (req, res, next) => {
   try {
+    const signature = req.headers["monnify-signature"];
+    const payload = req.body;
+    const trans = await walletsService.fetchTransactions({ 'reference': payload.eventData.transactionReference })
+    // Verify the signature
+    if (!verifyMonnifySignature(payload, signature)) {
+      return res.status(401).json({ message: "Invalid signature" });
+    }
+    if (trans.totalDocs != 0) {
+      return res.status(200).json({ message: "Webhook received successfully" });
+    }
+
+    // Extract payment details from the webhook payload
+
     const {
-      destination: {
-        amount,
-        currency,
-        narration,
-        bank_account: {
-          bank,
-          account,
-          account_name
-        }
+      eventType,
+      eventData: {
+        settlementAmount,
+        product,
+        amountPaid,
+        transactionReference,
+        destinationAccountInformation: { bankCode, bankName, accountNumber },
       }
-    } = req.body;
+    } = payload;
+    // Process the reserved account payment
+    if (req.body.eventType === "SUCCESSFUL_TRANSACTION" && product.type == "RESERVED_ACCOUNT") {
+      var user = await usersService.getUsers({ _id: product.reference })
 
-
-    const payload = {
-      reference: generateRandomNumber(11),
-      destination: {
-        type: 'bank_account',
-        amount: amount,
-        currency: currency || 'NGN',
-        narration: narration || 'Payout',
-        bank_account: {
-          bank,
-          account,
-          account_name
+      if (user.totalDocs) {
+        const data = {
+          "amount": amountPaid,
+          "userId": user.docs[0]._id,
+          "reference": transactionReference,
+          "narration": "Wallet funding",
+          "destinationBankCode": bankCode,
+          "destinationBankName": bankName,
+          "destinationAccountNumber": accountNumber,
+          // "destinationAccountName": req.body.accountName,
+          "currency": "NGN",
+          "type": 'credit',
+          "status": "successful"
         }
+        await walletsService.saveTransactions(data)
+        await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amountPaid) } })
+        sendNotification({
+          headings: { "en": `₦${amountPaid} was credited to your wallet` },
+          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amountPaid}. Refer a friend to try 360gadgetsafrica to earn with us.` },
+          include_subscription_ids: [user.docs[0].oneSignalId],
+          url: 'gadgetsafrica://transactions',
+        })
       }
-    };
 
-    const suc = await korraPay('https://api.korapay.com/merchant/api/v1/transactions/disburse',
-      "POST", payload);
+    } else {
+      console.log(`Event received but not handled: ${eventType}`);
+    }
 
-    successResponse(res, suc)
+    // Send a response to Monnify
+    return res.status(200).json({ message: "Webhook received successfully" });
 
   } catch (error) {
-    errorResponse(res, error)
+    console.log(error)
+
   }
 }
-
-

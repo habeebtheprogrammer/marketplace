@@ -18,9 +18,13 @@ exports.checkAuth = (req, res, next) => {
     var data = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = data._id;
     req.firstName = data.firstName;
+    req.lastName = data.lastName;
     req.userType = data.userType;
     req.email = data.email;
     req.oneSignalId = oneSignalId
+    if(data.verificationCode && req.originalUrl != '/api/users/refreshToken'){
+      throw Error("Please verify your account")
+    }
     next();
     if(oneSignalId && !data.oneSignalId || (oneSignalId && (oneSignalId != data.oneSignalId))){
       usersService.updateUsers({_id: data._id}, {oneSignalId}).then((suc => console.log('onesignal update')))
@@ -55,7 +59,7 @@ exports.googleAuth = async (req, res, next) => {
       const user = await usersService.getUsers({ email })
       if (!user?.totalDocs) {
         const hash = await bcrypt.hash(id, 10)
-        const user = await usersService.createUser({ firstName, email, lastName, password: hash })
+        const user = await usersService.createUser({ firstName, email, lastName, password: hash,  deviceid: req.headers.deviceid })
         var token = createToken(JSON.stringify(user))
         successResponse(res, { user, token })
         !isAppleRelayEmail(email) && sendSignupMail(email)
@@ -92,7 +96,7 @@ exports.appleSignin = async (req, res, next) => {
       const userObj = await usersService.getUsers({ email })
       if (!userObj?.totalDocs) {
         const hash = await bcrypt.hash(verifyTok.sub, 10)
-        const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email })
+        const data = await usersService.createUser({ firstName: name?.firstName|| "champ", lastName: name?.lastName || "champ", password: hash, email ,  deviceid: req.headers.deviceid })
         var token = createToken(JSON.stringify(data))
         successResponse(res, { user: data, token })
         !isAppleRelayEmail(email) && sendSignupMail(email)
