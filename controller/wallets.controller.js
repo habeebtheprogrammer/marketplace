@@ -72,7 +72,7 @@ async function monnify(endpoint, method, body = null) {
 exports.fetch = async (req, res, next) => {
   try {
     var wallet = await walletsService.getWallets({ userId: req.userId })
-    if (wallet.totalDocs == 0) {
+    if (wallet.totalDocs == 0 && req.oneSignalId) {
       wallet = await walletsService.createWallet({
         userId: req.userId,
         balance: 50
@@ -89,7 +89,7 @@ exports.fetch = async (req, res, next) => {
       await walletsService.saveTransactions(bonus)
       sendNotification({
         headings: { "en": `₦50 was credited to your wallet` },
-        contents: { "en": `Congratulations ${req.firstName}! Your just earned ₦50 on signup bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
+        contents: { "en": `Congratulations ${req.firstName}! Your just earned ₦50 signup bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
         include_subscription_ids: [req.oneSignalId],
         url: 'gadgetsafrica://profile',
       })
@@ -141,9 +141,9 @@ exports.fetch = async (req, res, next) => {
         bankName: account.bankName
       }))
     }
-   
+   console.log(result)
     res.json({
-      balance: wallet.docs[0]?.balance,
+      balance: wallet?.docs[0]?.balance,
       accounts
     });
 
