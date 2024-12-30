@@ -148,7 +148,7 @@ exports.fetch = async (req, res, next) => {
       }))
     }
     res.json({
-      balance: wallet?.docs[0]?.balance,
+      balance: wallet.totalDocs == 1 ? wallet?.docs[0]?.balance : 0,
       accounts
     });
 
