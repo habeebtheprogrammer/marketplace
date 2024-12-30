@@ -116,7 +116,9 @@ exports.fetch = async (req, res, next) => {
         //   include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
         //   url: 'gadgetsafrica://profile',
         // })
+        console.log( user, 'asdf')
       } else if (!user.docs[0].deviceid) {
+        console.log( user,'llll')
         await usersService.updateUsers({ _id: req.userId }, { deviceid: req.deviceid })
       }
 
