@@ -141,7 +141,6 @@ exports.fetch = async (req, res, next) => {
         bankName: account.bankName
       }))
     }
-   console.log(result)
     res.json({
       balance: wallet?.docs[0]?.balance,
       accounts
