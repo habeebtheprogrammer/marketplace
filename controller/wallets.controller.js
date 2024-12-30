@@ -118,7 +118,9 @@ exports.fetch = async (req, res, next) => {
         // })
       } else  {
       var user2 = await usersService.getUsers({ _id: req.userId })
-        if(!user2.docs[0].deviceid){
+      console.log(req.headers ,'header')
+        if(user2.docs[0].deviceid == null){
+          console.log('update this', req.headers.deviceid)
           await usersService.updateUsers({ _id: req.userId }, { deviceid: req.headers.deviceid })
         }
       }
