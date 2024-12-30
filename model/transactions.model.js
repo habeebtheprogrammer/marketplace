@@ -15,6 +15,10 @@ var transactionsSchema = mongoose.Schema({
     unique: true,
     required: [true, 'Reference is required']
   },
+  fee:{
+    type: Number,
+    default: 0
+  },
   narration: {
     type: String,
     required: [true, 'Narration is required']

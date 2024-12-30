@@ -244,3 +244,12 @@ exports.verifyMonnifySignature = (payload, signature) => {
     .digest("hex");
   return hash === signature;
 }
+
+exports.calculateFee = (initFee = 1.7, amount)=>{
+  const feePercentage = initFee/100; 
+  const maxFee = 2000; // Maximum fee
+  const minFee = 100; // Minimum fee
+  const calculatedFee = amount * feePercentage;
+  const fee = Math.max(minFee, Math.min(calculatedFee, maxFee)); // Ensures fee is between minFee and maxFee
+  return Math.round(fee * 10) / 10; // Rounds to 1 decimal place
+}

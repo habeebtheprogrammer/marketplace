@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
 const { dataplan, detectNetwork } = require('../utils/vtu');
-const { generateRandomNumber, verifyMonnifySignature } = require('../utils/helpers');
+const { generateRandomNumber, verifyMonnifySignature, calculateFee } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
@@ -167,10 +167,11 @@ exports.withdraw = async (req, res, next) => {
   try {
     var wallet = await walletsService.getWallets({ userId: req.userId })
     if (wallet.docs[0].balance < parseInt(req.body.amount)) throw new Error("Insufficient balance. please fund your wallet");
-    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
+    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount + (req.body.fee || calculateFee(1.7, req.body.amount))) } })
     const data = {
       "amount": req.body.amount,
       "userId": req.userId,
+      "fee": req.body.fee,
       "reference": req.body.reference + '--' + generateRandomNumber(10),
       "narration": "Withdrawal to ******" + req.body.accountNumber.substr(6),
       "destinationBankCode": req.body.bankCode,
