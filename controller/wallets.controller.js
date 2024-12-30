@@ -94,7 +94,7 @@ exports.fetch = async (req, res, next) => {
       //   url: 'gadgetsafrica://profile',
       // })
 
-      var user = await usersService.getUsers({ _id: req.userId, deviceid: req.deviceid })
+      var user = await usersService.getUsers({ _id: req.userId, deviceid: req.headers.deviceid })
       if (user.docs[0].referredBy?._id && user.totalDocs == 1) {
         // var check = await usersService.getUsers({ _id: req.userId })
 
@@ -118,9 +118,8 @@ exports.fetch = async (req, res, next) => {
         // })
       } else  {
       var user2 = await usersService.getUsers({ _id: req.userId })
-      console.log(user2.docs[0].deviceid, 'check', req.deviceid)
         if(!user2.docs[0].deviceid){
-          await usersService.updateUsers({ _id: req.userId }, { deviceid: req.deviceid })
+          await usersService.updateUsers({ _id: req.userId }, { deviceid: req.headers.deviceid })
         }
       }
 
