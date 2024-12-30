@@ -116,10 +116,12 @@ exports.fetch = async (req, res, next) => {
         //   include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
         //   url: 'gadgetsafrica://profile',
         // })
-        console.log( user, 'asdf')
-      } else if (!user.docs[0].deviceid) {
-        console.log( user,'llll')
-        await usersService.updateUsers({ _id: req.userId }, { deviceid: req.deviceid })
+      } else  {
+      var user2 = await usersService.getUsers({ _id: req.userId })
+      console.log(user2.docs[0])
+        if(user2.totalDocs == 1 && (!user2.docs[0].deviceid)){
+          await usersService.updateUsers({ _id: req.userId }, { deviceid: req.deviceid })
+        }
       }
 
     }
