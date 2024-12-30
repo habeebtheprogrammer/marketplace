@@ -95,7 +95,7 @@ exports.fetch = async (req, res, next) => {
       // })
 
       var user = await usersService.getUsers({ _id: req.userId, deviceid: req.headers.deviceid })
-      if (user.docs[0].referredBy?._id && user.totalDocs == 1) {
+      if (user.totalDocs == 1 && user.docs[0].referredBy?._id ) {
         // var check = await usersService.getUsers({ _id: req.userId })
 
         // await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
