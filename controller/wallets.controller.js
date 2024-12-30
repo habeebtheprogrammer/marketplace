@@ -165,9 +165,10 @@ exports.fetchTransactions = async (req, res, next) => {
 
 exports.withdraw = async (req, res, next) => {
   try {
+    const fee = (req.body.fee || calculateFee(1.7, req.body.amount))
     var wallet = await walletsService.getWallets({ userId: req.userId })
     if (wallet.docs[0].balance < parseInt(req.body.amount)) throw new Error("Insufficient balance. please fund your wallet");
-    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount + (req.body.fee || calculateFee(1.7, req.body.amount))) } })
+    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -(parseInt(req.body.amount) + fee) } })
     const data = {
       "amount": req.body.amount,
       "userId": req.userId,
