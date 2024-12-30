@@ -72,20 +72,20 @@ async function monnify(endpoint, method, body = null) {
 exports.fetch = async (req, res, next) => {
   try {
     var wallet = await walletsService.getWallets({ userId: req.userId })
-    if (wallet.totalDocs == 0 ) {
+    if (wallet.totalDocs == 0) {
       wallet = await walletsService.createWallet({
         userId: req.userId,
         balance: 0
       })
-      const bonus = {
-        "amount": 50,
-        "userId": req.userId,
-        "reference": "SignuBonus" + '--' + generateRandomNumber(10),
-        "narration": "Signup bonus",
-        "currency": "NGN",
-        "type": 'credit',
-        "status": "successful"
-      }
+      // const bonus = {
+      //   "amount": 50,
+      //   "userId": req.userId,
+      //   "reference": "SignuBonus" + '--' + generateRandomNumber(10),
+      //   "narration": "Signup bonus",
+      //   "currency": "NGN",
+      //   "type": 'credit',
+      //   "status": "successful"
+      // }
       // await walletsService.saveTransactions(bonus)
       // sendNotification({
       //   headings: { "en": `₦50 was credited to your wallet` },
@@ -94,30 +94,31 @@ exports.fetch = async (req, res, next) => {
       //   url: 'gadgetsafrica://profile',
       // })
 
-      //referral bonus
-      // var user = await usersService.getUsers({ _id: req.userId, deviceid: req.deviceid })
-      // if (user.docs[0].referredBy?._id && user.totalDocs == 1 ) {
-      // var check = await usersService.getUsers({ _id: req.userId })
-        
-      //   await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
-    
-      //   const bonus1 = {
-      //     "amount": 25,
-      //     "userId": user.docs[0]?.referredBy?._id,
-      //     "reference": "Referral" + '--' + generateRandomNumber(10),
-      //     "narration": "Referral bonus for new user",
-      //     "currency": "NGN",
-      //     "type": 'credit',
-      //     "status": "successful"
-      //   }
-      //   await walletsService.saveTransactions(bonus1) 
-      //   sendNotification({
-      //     headings: { "en": `₦25 was credited to your wallet` },
-      //     contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦25 on referral bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
-      //     include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
-      //     url: 'gadgetsafrica://profile',
-      //   })
-      // }
+      var user = await usersService.getUsers({ _id: req.userId, deviceid: req.deviceid })
+      if (user.docs[0].referredBy?._id && user.totalDocs == 1) {
+        // var check = await usersService.getUsers({ _id: req.userId })
+
+        // await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
+
+        // const bonus1 = {
+        //   "amount": 25,
+        //   "userId": user.docs[0]?.referredBy?._id,
+        //   "reference": "Referral" + '--' + generateRandomNumber(10),
+        //   "narration": "Referral bonus for new user",
+        //   "currency": "NGN",
+        //   "type": 'credit',
+        //   "status": "successful"
+        // }
+        // await walletsService.saveTransactions(bonus1)
+        // sendNotification({
+        //   headings: { "en": `₦25 was credited to your wallet` },
+        //   contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦25 on referral bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
+        //   include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
+        //   url: 'gadgetsafrica://profile',
+        // })
+      } else if (!user.docs[0].deviceid) {
+        await usersService.updateUsers({ _id: req.userId }, { deviceid: req.deviceid })
+      }
 
     }
 
