@@ -22,21 +22,23 @@ exports.signin = async (req, res, next) => {
 exports.createUser = async (req, res, next) => {
     try {
         const hash = await bcrypt.hash(req.body.password, 10)
-        var referrerId = ""
+    
+     
+        var query = { ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash, referralCode, verificationCode: generateRandomNumber(5) , deviceid: req.headers.deviceid}
         if (req.body.referralCode) {
             const referrer = await usersService.getUsers({ referralCode: req.body.referralCode });
             if (!referrer?.totalDocs) {
                 throw Error('Invalid referral code')
             }
-            referrerId = referrer.docs[0]
+            query.referrerId = referrer.docs[0]._id
         }
         const referralCode = req.body.firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4);
 
-        const user = await usersService.createUser({ ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash, referralCode, referredBy: referrerId, verificationCode: generateRandomNumber(5) , deviceid: req.headers.deviceid})
+        const user = await usersService.createUser()
         var token = createToken(JSON.stringify(user))
-        if (referrerId) {
+        if (query.referrerId) {
             await usersService.updateUsers(
-                { _id: referrerId },
+                { _id: query.referrerId },
                 { $inc: { referrals: 1 } }
             );
 
