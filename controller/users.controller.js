@@ -23,6 +23,7 @@ exports.createUser = async (req, res, next) => {
     try {
         const hash = await bcrypt.hash(req.body.password, 10)
     
+        const referralCode = req.body.firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4);
      
         var query = { ...req.body, lastName: req.body.lastName || req.body.firstName, password: hash, referralCode, verificationCode: generateRandomNumber(5) , deviceid: req.headers.deviceid}
         if (req.body.referralCode) {
@@ -32,7 +33,6 @@ exports.createUser = async (req, res, next) => {
             }
             query.referrerId = referrer.docs[0]._id
         }
-        const referralCode = req.body.firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4);
 
         const user = await usersService.createUser()
         var token = createToken(JSON.stringify(user))
