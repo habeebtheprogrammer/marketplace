@@ -240,7 +240,7 @@ exports.buyDataPlan = async (req, res, next) => {
       await walletsService.saveTransactions({
         ...data,
         "reference": "Data" + '--' + generateRandomNumber(10),
-        "narration": "RSVL for Data topup to " + req.body.phone,
+        "narration": "RSVL for Data topup ",
         "status": 'successful', type: 'credit'
       })
     } else {
