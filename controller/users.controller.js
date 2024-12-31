@@ -34,7 +34,7 @@ exports.createUser = async (req, res, next) => {
             query.referrerId = referrer.docs[0]._id
         }
 
-        const user = await usersService.createUser()
+        const user = await usersService.createUser(query)
         var token = createToken(JSON.stringify(user))
         if (query.referrerId) {
             await usersService.updateUsers(
