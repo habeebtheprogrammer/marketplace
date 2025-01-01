@@ -73,9 +73,10 @@ exports.fetch = async (req, res, next) => {
   try {
     var wallet = await walletsService.getWallets({ userId: req.userId })
     if (wallet.totalDocs == 0) {
+      var user = await usersService.getUsers({ "$or" : [{_id: req.userId },{email: "archive."+req.email}]})
       wallet = await walletsService.createWallet({
         userId: req.userId,
-        balance: 50
+        balance: (user.totalDocs == 1) && req.headers.deviceid ? 50 : 0
       })
       const bonus = {
         "amount": 50,
@@ -86,20 +87,22 @@ exports.fetch = async (req, res, next) => {
         "type": 'credit',
         "status": "successful"
       }
-      await walletsService.saveTransactions(bonus)
-      sendNotification({
-        headings: { "en": `₦50 was credited to your wallet` },
-        contents: { "en": `Congratulations ${req.firstName}! Your just earned ₦50 signup bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
-        include_subscription_ids: [req.oneSignalId],
-        url: 'gadgetsafrica://profile',
-      })
+      if((user.totalDocs == 1) && req.headers.deviceid ) {
+        await walletsService.saveTransactions(bonus)
+        sendNotification({
+          headings: { "en": `₦50 was credited to your wallet` },
+          contents: { "en": `Congratulations ${req.firstName}! Your just earned ₦50 signup bonus. Refer more friends to try 360gadgetsafrica to earn more.` },
+          include_subscription_ids: [req.oneSignalId],
+          url: 'gadgetsafrica://profile',
+        })
+    }
 
-      var user = await usersService.getUsers({ _id: req.userId, deviceid: req.headers.deviceid })
-      if (user.totalDocs == 1 && user.docs[0].referredBy?._id && user?.verificationCode == '') {
-        var check = await usersService.getUsers({ _id: req.userId })
+      var checkForDevice = await usersService.getUsers({deviceid: req.headers.deviceid})
 
-        await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
+      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId )) { 
+      if(user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1){
 
+      await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
         const bonus1 = {
           "amount": 25,
           "userId": user.docs[0]?.referredBy?._id,
@@ -116,17 +119,15 @@ exports.fetch = async (req, res, next) => {
           include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
           url: 'gadgetsafrica://profile',
         })
-      } else  {
-      var user2 = await usersService.getUsers({ _id: req.userId })
-        if(user2.docs[0].deviceid == null){
+      }
+
+      } else if(req.headers.deviceid && user.docs[0].deviceid == '') {
           await usersService.updateUsers({ _id: req.userId }, { deviceid: req.headers.deviceid })
-        }
       }
 
     }
 
     var result = await monnify('/api/v2/bank-transfer/reserved-accounts/' + req.userId, 'GET');
-    console.log(result, req.userId)
     if (!result.requestSuccessful) {
       const walletData = {
         "accountName": req.firstName + ' ' + req.lastName,
@@ -239,7 +240,7 @@ exports.buyDataPlan = async (req, res, next) => {
       await walletsService.saveTransactions({
         ...data,
         "reference": "Data" + '--' + generateRandomNumber(10),
-        "narration": "RSVL for Data topup ",
+        "narration": "RVSL for Data topup ",
         "status": 'successful', type: 'credit'
       })
       sendNotification({
@@ -300,7 +301,7 @@ exports.buyAirtime = async (req, res, next) => {
       await walletsService.saveTransactions({
         ...data,
         "reference": "Airtime" + '--' + generateRandomNumber(10),
-        "narration": "RSVL for Airtime topup to " + req.body.phone,
+        "narration": "RVSL for Airtime topup ",
         "status": 'successful', type: 'credit'
       })
       sendNotification({
