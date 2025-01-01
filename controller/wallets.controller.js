@@ -235,14 +235,20 @@ exports.buyDataPlan = async (req, res, next) => {
     const vtc = await quickVTU('/api/data', "POST", obj)
     console.log(vtc, obj)
     if (vtc?.status == 'fail') {
-      res.status(500).json({ errors: ['An error has occured. please try again later'] });
+      res.status(500).json({ errors: ['Transaction failed. please try again'] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
-      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: parseInt(req.body.plan.amount) } })
+      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
       await walletsService.saveTransactions({
         ...data,
         "reference": "Data" + '--' + generateRandomNumber(10),
         "narration": "RSVL for Data topup ",
         "status": 'successful', type: 'credit'
+      })
+      sendNotification({
+        headings: { "en": `Network challanges` },
+        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
+        include_subscription_ids: [req.oneSignalId],
+        url: 'gadgetsafrica://profile',
       })
     } else {
       successResponse(res, transaction)
@@ -290,14 +296,20 @@ exports.buyAirtime = async (req, res, next) => {
 
 
     if (vtc?.status == 'fail') {
-      res.status(500).json({ errors: ['An error has occured. please try again later'] });
+      res.status(500).json({ errors: ["Transaction failed. please try again later"] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
-      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: parseInt(req.body.amount) } })
+      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.amount) } })
       await walletsService.saveTransactions({
         ...data,
         "reference": "Airtime" + '--' + generateRandomNumber(10),
         "narration": "RSVL for Airtime topup to " + req.body.phone,
         "status": 'successful', type: 'credit'
+      })
+      sendNotification({
+        headings: { "en": `Network challanges` },
+        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges caused by the service provider. Please try again later.` },
+        include_subscription_ids: [req.oneSignalId],
+        url: 'gadgetsafrica://profile',
       })
     } else {
       successResponse(res, transaction)

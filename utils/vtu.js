@@ -24,6 +24,15 @@ exports.detectNetwork = (phoneNumber) => {
 };
 
 exports.dataplan = [
+
+  {
+    "planId": 10,
+    "network": "MTN",
+    "planType": "COOPERATE GIFTING",
+    "planName": "500MB",
+    "amount": "133.00",
+    "duration": "1Month"
+  },
     {
       "planId": 4,
       "network": "MTN",
@@ -32,29 +41,12 @@ exports.dataplan = [
       "amount": "132.00",
       "duration": "1Month"
     },
-
-    {
-      "planId": 10,
-      "network": "MTN",
-      "planType": "COOPERATE GIFTING",
-      "planName": "500MB",
-      "amount": "133.00",
-      "duration": "1Month"
-    },
     {
       "planId": 2,
       "network": "MTN",
       "planType": "GIFTING",
       "planName": "1GB",
       "amount": "250.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 5,
-      "network": "MTN",
-      "planType": "SME",
-      "planName": "1GB",
-      "amount": "262.00",
       "duration": "1Month"
     },
 
@@ -67,6 +59,14 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 5,
+      "network": "MTN",
+      "planType": "SME",
+      "planName": "1GB",
+      "amount": "262.00",
+      "duration": "1Month"
+    },
+    {
       "planId": 1,
       "network": "MTN",
       "planType": "GIFTING",
@@ -75,19 +75,19 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
-      "planId": 6,
-      "network": "MTN",
-      "planType": "SME",
-      "planName": "2GB",
-      "amount": "524.00",
-      "duration": "1Month"
-    },
-    {
       "planId": 15,
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
       "planName": "2GB",
       "amount": "530.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 6,
+      "network": "MTN",
+      "planType": "SME",
+      "planName": "2GB",
+      "amount": "524.00",
       "duration": "1Month"
     },
     {
