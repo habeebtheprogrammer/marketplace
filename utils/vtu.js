@@ -25,11 +25,20 @@ exports.detectNetwork = (phoneNumber) => {
 
 exports.dataplan = [
     {
-      "planId": 1,
+      "planId": 4,
       "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "2GB",
-      "amount": "500.00",
+      "planType": "SME",
+      "planName": "500MB",
+      "amount": "132.00",
+      "duration": "1Month"
+    },
+
+    {
+      "planId": 10,
+      "network": "MTN",
+      "planType": "COOPERATE GIFTING",
+      "planName": "500MB",
+      "amount": "133.00",
       "duration": "1Month"
     },
     {
@@ -41,19 +50,28 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
-      "planId": 4,
-      "network": "MTN",
-      "planType": "SME",
-      "planName": "500MB",
-      "amount": "132.00",
-      "duration": "1Month"
-    },
-    {
       "planId": 5,
       "network": "MTN",
       "planType": "SME",
       "planName": "1GB",
       "amount": "262.00",
+      "duration": "1Month"
+    },
+
+    {
+      "planId": 14,
+      "network": "MTN",
+      "planType": "COOPERATE GIFTING",
+      "planName": "1GB",
+      "amount": "265.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 1,
+      "network": "MTN",
+      "planType": "GIFTING",
+      "planName": "2GB",
+      "amount": "500.00",
       "duration": "1Month"
     },
     {
@@ -65,11 +83,54 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 15,
+      "network": "MTN",
+      "planType": "COOPERATE GIFTING",
+      "planName": "2GB",
+      "amount": "530.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 49,
+      "network": "MTN",
+      "planType": "GIFTING",
+      "planName": "3GB",
+      "amount": "750.00",
+      "duration": "1Month"
+    },
+
+    {
+      "planId": 16,
+      "network": "MTN",
+      "planType": "COOPERATE GIFTING",
+      "planName": "3GB",
+      "amount": "795.00",
+      "duration": "1Month"
+    },
+
+    {
       "planId": 7,
       "network": "MTN",
       "planType": "SME",
       "planName": "3GB",
       "amount": "786.00",
+      "duration": "1Month"
+    },
+
+    {
+      "planId": 50,
+      "network": "MTN",
+      "planType": "GIFTING",
+      "planName": "5GB",
+      "amount": "1250.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 17,
+      "network": "MTN",
+      "planType": "COOPERATE GIFTING",
+      "planName": "5GB",
+      "amount": "1325.00",
       "duration": "1Month"
     },
     {
@@ -89,46 +150,6 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
-      "planId": 10,
-      "network": "MTN",
-      "planType": "COOPERATE GIFTING",
-      "planName": "500MB",
-      "amount": "133.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 14,
-      "network": "MTN",
-      "planType": "COOPERATE GIFTING",
-      "planName": "1GB",
-      "amount": "265.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 15,
-      "network": "MTN",
-      "planType": "COOPERATE GIFTING",
-      "planName": "2GB",
-      "amount": "530.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 16,
-      "network": "MTN",
-      "planType": "COOPERATE GIFTING",
-      "planName": "3GB",
-      "amount": "795.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 17,
-      "network": "MTN",
-      "planType": "COOPERATE GIFTING",
-      "planName": "5GB",
-      "amount": "1325.00",
-      "duration": "1Month"
-    },
-    {
       "planId": 18,
       "network": "MTN",
       "planType": "COOPERATE GIFTING",
@@ -136,62 +157,7 @@ exports.dataplan = [
       "amount": "2650.00",
       "duration": "1Month"
     },
-    {
-      "planId": 49,
-      "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "3GB",
-      "amount": "750.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 50,
-      "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "5GB",
-      "amount": "1250.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 24,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "1.5GB",
-      "amount": "465.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 25,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "2.9GB",
-      "amount": "940.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 26,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "4.1GB",
-      "amount": "1300.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 27,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "5.8GB",
-      "amount": "1860.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 28,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "10GB",
-      "amount": "3020.00",
-      "duration": "1Month"
-    },
+
     {
       "planId": 36,
       "network": "GLO",
@@ -206,6 +172,14 @@ exports.dataplan = [
       "planType": "COOPERATE GIFTING",
       "planName": "1GB",
       "amount": "270.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 24,
+      "network": "GLO",
+      "planType": "GIFTING",
+      "planName": "1.5GB",
+      "amount": "465.00",
       "duration": "1Month"
     },
     {
@@ -225,11 +199,36 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 25,
+      "network": "GLO",
+      "planType": "GIFTING",
+      "planName": "2.9GB",
+      "amount": "940.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 26,
+      "network": "GLO",
+      "planType": "GIFTING",
+      "planName": "4.1GB",
+      "amount": "1300.00",
+      "duration": "1Month"
+    },
+
+    {
       "planId": 40,
       "network": "GLO",
       "planType": "COOPERATE GIFTING",
       "planName": "5GB",
       "amount": "1350.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 27,
+      "network": "GLO",
+      "planType": "GIFTING",
+      "planName": "5.8GB",
+      "amount": "1860.00",
       "duration": "1Month"
     },
     {
@@ -241,6 +240,23 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 28,
+      "network": "GLO",
+      "planType": "GIFTING",
+      "planName": "10GB",
+      "amount": "3020.00",
+      "duration": "1Month"
+    },
+
+    {
+      "planId": 32,
+      "network": "AIRTEL",
+      "planType": "COOPERATE GIFTING",
+      "planName": "100MB",
+      "amount": "90.00",
+      "duration": "7days"
+    },
+    {
       "planId": 19,
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
@@ -249,12 +265,28 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 51,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "1GB",
+      "amount": "235.00",
+      "duration": "AWOOF 2DAYS VALIDITY DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
+    },
+    {
       "planId": 20,
       "network": "AIRTEL",
       "planType": "COOPERATE GIFTING",
       "planName": "1GB",
       "amount": "277.00",
       "duration": "1Month"
+    },
+    {
+      "planId": 52,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "750MB",
+      "amount": "450.00",
+      "duration": "14DAYS VALIDITY PLEASE DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
     },
     {
       "planId": 21,
@@ -281,62 +313,6 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
-      "planId": 32,
-      "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
-      "planName": "100MB",
-      "amount": "90.00",
-      "duration": "7days"
-    },
-    {
-      "planId": 51,
-      "network": "AIRTEL",
-      "planType": "GIFTING",
-      "planName": "1GB",
-      "amount": "235.00",
-      "duration": "AWOOF 2DAYS VALIDITY DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
-    },
-    {
-      "planId": 52,
-      "network": "AIRTEL",
-      "planType": "GIFTING",
-      "planName": "750MB",
-      "amount": "450.00",
-      "duration": "14DAYS VALIDITY PLEASE DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
-    },
-    {
-      "planId": 29,
-      "network": "9MOBILE",
-      "planType": "SME",
-      "planName": "1.1GB",
-      "amount": "399.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 30,
-      "network": "9MOBILE",
-      "planType": "SME",
-      "planName": "2GB",
-      "amount": "760.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 33,
-      "network": "9MOBILE",
-      "planType": "GIFTING",
-      "planName": "1.5GB",
-      "amount": "900.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 34,
-      "network": "9MOBILE",
-      "planType": "GIFTING",
-      "planName": "500MB",
-      "amount": "450.00",
-      "duration": "1 Month"
-    },
-    {
       "planId": 42,
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
@@ -353,12 +329,29 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 29,
+      "network": "9MOBILE",
+      "planType": "SME",
+      "planName": "1.1GB",
+      "amount": "399.00",
+      "duration": "1Month"
+    },
+    {
       "planId": 44,
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "3GB",
       "amount": "450.00",
       "duration": "1Month"
+    },
+
+    {
+      "planId": 34,
+      "network": "9MOBILE",
+      "planType": "GIFTING",
+      "planName": "500MB",
+      "amount": "450.00",
+      "duration": "1 Month"
     },
     {
       "planId": 45,
@@ -369,11 +362,27 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 30,
+      "network": "9MOBILE",
+      "planType": "SME",
+      "planName": "2GB",
+      "amount": "760.00",
+      "duration": "1Month"
+    },
+    {
       "planId": 46,
       "network": "9MOBILE",
       "planType": "COOPERATE GIFTING",
       "planName": "5GB",
       "amount": "750.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 33,
+      "network": "9MOBILE",
+      "planType": "GIFTING",
+      "planName": "1.5GB",
+      "amount": "900.00",
       "duration": "1Month"
     },
     {

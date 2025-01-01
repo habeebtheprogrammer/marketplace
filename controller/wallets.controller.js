@@ -128,6 +128,7 @@ exports.fetch = async (req, res, next) => {
     }
 
     var result = await monnify('/api/v2/bank-transfer/reserved-accounts/' + req.userId, 'GET');
+    console.log(result, req.userId)
     if (!result.requestSuccessful) {
       const walletData = {
         "accountName": req.firstName + ' ' + req.lastName,
@@ -254,8 +255,7 @@ exports.buyDataPlan = async (req, res, next) => {
     }
 
   } catch (error) {
-    console.log(error)
-    errorResponse(res, error)
+    errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
 
@@ -309,8 +309,7 @@ exports.buyAirtime = async (req, res, next) => {
       })
     }
   } catch (error) {
-    console.log(error?.response?.data)
-    errorResponse(res, error)
+    errorResponse(res, error,  "Transaction failed due to network. please try again")
   }
 }
 exports.fetchBanks = async (req, res, next) => {
