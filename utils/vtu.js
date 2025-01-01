@@ -28,7 +28,7 @@ exports.dataplan = [
   {
     "planId": 10,
     "network": "MTN",
-    "planType": "COOPERATE GIFTING",
+    "planType": "COOPERATE",
     "planName": "500MB",
     "amount": "133.00",
     "duration": "1Month"
@@ -53,7 +53,7 @@ exports.dataplan = [
     {
       "planId": 14,
       "network": "MTN",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "265.00",
       "duration": "1Month"
@@ -77,7 +77,7 @@ exports.dataplan = [
     {
       "planId": 15,
       "network": "MTN",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "530.00",
       "duration": "1Month"
@@ -102,7 +102,7 @@ exports.dataplan = [
     {
       "planId": 16,
       "network": "MTN",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "3GB",
       "amount": "795.00",
       "duration": "1Month"
@@ -128,7 +128,7 @@ exports.dataplan = [
     {
       "planId": 17,
       "network": "MTN",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "1325.00",
       "duration": "1Month"
@@ -152,7 +152,7 @@ exports.dataplan = [
     {
       "planId": 18,
       "network": "MTN",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "2650.00",
       "duration": "1Month"
@@ -161,7 +161,7 @@ exports.dataplan = [
     {
       "planId": 36,
       "network": "GLO",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "500MB",
       "amount": "138.00",
       "duration": "1Month"
@@ -169,7 +169,7 @@ exports.dataplan = [
     {
       "planId": 37,
       "network": "GLO",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "270.00",
       "duration": "1Month"
@@ -185,7 +185,7 @@ exports.dataplan = [
     {
       "planId": 38,
       "network": "GLO",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "540.00",
       "duration": "1Month"
@@ -193,7 +193,7 @@ exports.dataplan = [
     {
       "planId": 39,
       "network": "GLO",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "3GB",
       "amount": "810.00",
       "duration": "1Month"
@@ -218,7 +218,7 @@ exports.dataplan = [
     {
       "planId": 40,
       "network": "GLO",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "1350.00",
       "duration": "1Month"
@@ -234,7 +234,7 @@ exports.dataplan = [
     {
       "planId": 47,
       "network": "GLO",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "2700.00",
       "duration": "1Month"
@@ -251,7 +251,7 @@ exports.dataplan = [
     {
       "planId": 32,
       "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "100MB",
       "amount": "90.00",
       "duration": "7days"
@@ -259,7 +259,7 @@ exports.dataplan = [
     {
       "planId": 19,
       "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "500MB",
       "amount": "140.00",
       "duration": "1Month"
@@ -270,12 +270,12 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "1GB",
       "amount": "235.00",
-      "duration": "AWOOF 2DAYS VALIDITY DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
+      "duration": "2DAYS"
     },
     {
       "planId": 20,
       "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "277.00",
       "duration": "1Month"
@@ -286,12 +286,12 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "750MB",
       "amount": "450.00",
-      "duration": "14DAYS VALIDITY PLEASE DON'T BUY THIS PLAN IF YOU'RE OWING AIRTEL MONEY"
+      "duration": "14DAYS"
     },
     {
       "planId": 21,
       "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "554.00",
       "duration": "1Month"
@@ -299,7 +299,7 @@ exports.dataplan = [
     {
       "planId": 22,
       "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "1385.00",
       "duration": "1Month"
@@ -307,7 +307,7 @@ exports.dataplan = [
     {
       "planId": 23,
       "network": "AIRTEL",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "2770.00",
       "duration": "1Month"
@@ -315,7 +315,7 @@ exports.dataplan = [
     {
       "planId": 42,
       "network": "9MOBILE",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "150.00",
       "duration": "1Month"
@@ -323,7 +323,7 @@ exports.dataplan = [
     {
       "planId": 43,
       "network": "9MOBILE",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "300.00",
       "duration": "1Month"
@@ -339,7 +339,7 @@ exports.dataplan = [
     {
       "planId": 44,
       "network": "9MOBILE",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "3GB",
       "amount": "450.00",
       "duration": "1Month"
@@ -356,7 +356,7 @@ exports.dataplan = [
     {
       "planId": 45,
       "network": "9MOBILE",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "4GB",
       "amount": "600.00",
       "duration": "1Month"
@@ -372,7 +372,7 @@ exports.dataplan = [
     {
       "planId": 46,
       "network": "9MOBILE",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "750.00",
       "duration": "1Month"
@@ -388,7 +388,7 @@ exports.dataplan = [
     {
       "planId": 48,
       "network": "9MOBILE",
-      "planType": "COOPERATE GIFTING",
+      "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "1500.00",
       "duration": "1Month"
