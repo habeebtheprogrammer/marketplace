@@ -56,7 +56,7 @@ exports.getProducts = async (req, res, next) => {
         var searchSortObj  = title ? {score : { $meta: 'textScore' } } : {}
 
 
-        sort = sort == 'highToLow' ? { sort: { ...searchSortObj,original_price: -1 } } : sort == 'lowToHigh' ? { sort: { ...searchSortObj,original_price: 1 } } : {sort: {...searchSortObj, views: -1, rating: -1}};
+        sort = sort == 'highToLow' ? { sort: { ...searchSortObj,original_price: -1 } } : sort == 'lowToHigh' ? { sort: { ...searchSortObj,original_price: 1 } } : {sort: {...searchSortObj, priceUpdatedAt: -1}};
        
        
         if(title) sort.sort.score = { $meta: 'textScore' } 
