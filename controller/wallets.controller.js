@@ -74,9 +74,10 @@ exports.fetch = async (req, res, next) => {
     var wallet = await walletsService.getWallets({ userId: req.userId })
     if (wallet.totalDocs == 0) {
       var user = await usersService.getUsers({ "$or" : [{_id: req.userId },{email: "archive."+req.email}]})
+      var checkForDevice = await usersService.getUsers({deviceid: req.headers.deviceid})
       wallet = await walletsService.createWallet({
         userId: req.userId,
-        balance: (user.totalDocs == 1) && req.headers.deviceid ? 50 : 0
+        balance: (user.totalDocs == 1) && req.headers.deviceid && (checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId ) ? 50 : 0
       })
       const bonus = {
         "amount": 50,
@@ -97,7 +98,6 @@ exports.fetch = async (req, res, next) => {
         })
     }
 
-      var checkForDevice = await usersService.getUsers({deviceid: req.headers.deviceid})
 
       if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId )) { 
       if(user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1){
