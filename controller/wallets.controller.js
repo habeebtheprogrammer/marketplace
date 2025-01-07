@@ -240,7 +240,7 @@ exports.buyDataPlan = async (req, res, next) => {
     const vtc = await quickVTU('/api/data', "POST", obj)
     console.log(vtc, obj)
     if (vtc?.status == 'fail') {
-      res.status(500).json({ errors: ['Transaction failed. please try again'] });
+      res.status(500).json({ errors: ['Network failed. Try another plan'] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
       await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
       await walletsService.saveTransactions({
@@ -250,7 +250,7 @@ exports.buyDataPlan = async (req, res, next) => {
         "status": 'successful', type: 'credit'
       })
       sendNotification({
-        headings: { "en": `Network challanges` },
+        headings: { "en": `Network issues. Try another plan` },
         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
         include_subscription_ids: [req.oneSignalId],
         url: 'gadgetsafrica://profile',
