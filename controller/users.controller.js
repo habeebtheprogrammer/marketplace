@@ -45,7 +45,7 @@ exports.createUser = async (req, res, next) => {
         }
         successResponse(res, { user, token })
         !isAppleRelayEmail(user.email) && sendSignupMail(user.email)
-        if(user.verificationCode) sendOtpCode(user.email, user.docs[0].verificationCode)
+        if(user.verificationCode) sendOtpCode(user.email, user.verificationCode)
     } catch (error) {
         errorResponse(res, error)
     }
