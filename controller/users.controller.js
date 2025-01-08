@@ -31,14 +31,14 @@ exports.createUser = async (req, res, next) => {
             if (!referrer?.totalDocs) {
                 throw Error('Invalid referral code')
             }
-            query.referrerId = referrer.docs[0]._id
+            query.referredBy = referrer.docs[0]._id
         }
 
         const user = await usersService.createUser(query)
         var token = createToken(JSON.stringify(user))
-        if (query.referrerId) {
+        if (query.referredBy) {
             await usersService.updateUsers(
-                { _id: query.referrerId },
+                { _id: query.referredBy },
                 { $inc: { referrals: 1 } }
             );
 

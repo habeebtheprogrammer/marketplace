@@ -95,7 +95,7 @@ module.exports = {
     <body>
         <div class="container">
             <div class="header">
-                <img src="https://360gadgetsafrica.s3.eu-north-1.amazonaws.com/icon.jpg"
+                <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1735744097/360/zpibebpd5dopnxvttltd.png"
                     alt="360gadgetsafrica Logo">
             </div>
             <div class="content"> 
@@ -521,7 +521,7 @@ module.exports = {
                             <tr>
                                 <td class="logo" style="text-align: center;">
                                     <a href="#"><img width="50px"
-                                            src="https://360gadgetsafrica.s3.eu-north-1.amazonaws.com/icon.jpg"></a>
+                                            src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1735744097/360/zpibebpd5dopnxvttltd.png"></a>
                                 </td>
                             </tr>
                         </table>
@@ -1257,7 +1257,7 @@ module.exports = {
                             <tr>
                                 <td class="logo" style="text-align: center;">
                                     <a href="#"><img width="50px"
-                                            src="https://360gadgetsafrica.s3.eu-north-1.amazonaws.com/icon.jpg"></a>
+                                            src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1735744097/360/zpibebpd5dopnxvttltd.png"></a>
                                 </td>
                             </tr>
                         </table>
