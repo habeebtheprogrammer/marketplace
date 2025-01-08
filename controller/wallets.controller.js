@@ -104,7 +104,7 @@ exports.fetch = async (req, res, next) => {
         })
       }
  
-
+console.log(user.docs[0].referredBy)
       if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
 

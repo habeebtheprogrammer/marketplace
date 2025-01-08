@@ -9,7 +9,7 @@ exports.getUsers = async (filters = {}) => {
             },
             {
                 path: "referredBy",
-                select: ["firstName", 'oneSignalId'],
+                select: ["firstName", 'oneSignalId',"_id"],
             }]
     })
     return data
