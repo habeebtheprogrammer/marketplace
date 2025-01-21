@@ -238,7 +238,7 @@ exports.buyDataPlan = async (req, res, next) => {
       'request-id': "Data_" + generateRandomNumber(11),
     }
     const vtc = await quickVTU('/api/data', "POST", obj)
-    console.log(vtc, obj)
+    console.log(vtc, obj, 'resp')
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ['Network failed. Try another plan'] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
@@ -265,7 +265,7 @@ exports.buyDataPlan = async (req, res, next) => {
       })
     }
 
-  } catch (error) {
+  } catch (error) {console.log(error)
     errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
