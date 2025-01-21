@@ -213,7 +213,6 @@ exports.fetchDataPlan = async (req, res, next) => {
 
 
 exports.buyDataPlan = async (req, res, next) => {
-  try {
     var wallet = await walletsService.getWallets({ userId: req.userId })
     if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
     var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
@@ -237,6 +236,7 @@ exports.buyDataPlan = async (req, res, next) => {
       bypass: false,
       'request-id': "Data_" + generateRandomNumber(11),
     }
+  try {
     const vtc = await quickVTU('/api/data', "POST", obj)
     console.log(vtc, obj, 'resp')
     if (vtc?.status == 'fail') {
@@ -266,7 +266,23 @@ exports.buyDataPlan = async (req, res, next) => {
     }
 
   } catch (error) {console.log(error)
-    errorResponse(res, error, "Transaction failed due to network. please try again")
+    if(error?.response?.data?.status == "fail"){
+        res.status(500).json({ errors: ['Network failed. Try another plan'] });
+        await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+        await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
+        await walletsService.saveTransactions({
+          ...data,
+          "reference": "Data" + '--' + generateRandomNumber(10),
+          "narration": "RVSL for Data topup ",
+          "status": 'successful', type: 'credit'
+        })
+        sendNotification({
+          headings: { "en": `Network issues. Try another plan` },
+          contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
+          include_subscription_ids: [req.oneSignalId],
+          url: 'gadgetsafrica://profile',
+        })
+    } else  errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
 
