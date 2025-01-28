@@ -332,14 +332,14 @@ exports.dataplan = [
       "amount": "300.00",
       "duration": "1Month"
     },
-    {
-      "planId": 29,
-      "network": "9MOBILE",
-      "planType": "SME",
-      "planName": "1.1GB",
-      "amount": "399.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 29,
+    //   "network": "9MOBILE",
+    //   "planType": "SME",
+    //   "planName": "1.1GB",
+    //   "amount": "399.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 44,
       "network": "9MOBILE",
@@ -349,14 +349,14 @@ exports.dataplan = [
       "duration": "1Month"
     },
 
-    {
-      "planId": 34,
-      "network": "9MOBILE",
-      "planType": "GIFTING",
-      "planName": "500MB",
-      "amount": "450.00",
-      "duration": "1 Month"
-    },
+    // {
+    //   "planId": 34,
+    //   "network": "9MOBILE",
+    //   "planType": "GIFTING",
+    //   "planName": "500MB",
+    //   "amount": "450.00",
+    //   "duration": "1 Month"
+    // },
     {
       "planId": 45,
       "network": "9MOBILE",
@@ -365,14 +365,14 @@ exports.dataplan = [
       "amount": "600.00",
       "duration": "1Month"
     },
-    {
-      "planId": 30,
-      "network": "9MOBILE",
-      "planType": "SME",
-      "planName": "2GB",
-      "amount": "760.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 30,
+    //   "network": "9MOBILE",
+    //   "planType": "SME",
+    //   "planName": "2GB",
+    //   "amount": "760.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 46,
       "network": "9MOBILE",
@@ -381,14 +381,14 @@ exports.dataplan = [
       "amount": "750.00",
       "duration": "1Month"
     },
-    {
-      "planId": 33,
-      "network": "9MOBILE",
-      "planType": "GIFTING",
-      "planName": "1.5GB",
-      "amount": "900.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 33,
+    //   "network": "9MOBILE",
+    //   "planType": "GIFTING",
+    //   "planName": "1.5GB",
+    //   "amount": "900.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 48,
       "network": "9MOBILE",
