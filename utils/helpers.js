@@ -88,7 +88,7 @@ exports.sendOrdersEmail = ({order,address, pickup}) => {
   emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
-      to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com'],
+      to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
       subject: "You have a new order",
       html:  emailTemplates.newOrder({order, address, pickup})
     })

@@ -135,7 +135,7 @@ exports.checkAvailability = async (req, res, next) => {
     try {
          // Handle image uploads
          const {variant, _id,title,vendorId, slug, images} = req.body
-         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'gadgetchamberteam@gmail.com'] } });
+         const users = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'gadgetchamberteam@gmail.com', 'devhabeeb@gmail.com',] } });
         var include_player_ids = users.docs?.map?.(u => u.oneSignalId)
         var product = await RequestsModel.create({
             productId: _id,   variant, userId: req.userId , vendorId
@@ -179,11 +179,13 @@ exports.updateAvailability = async (req, res, next) => {
         const product = await RequestsModel.updateOne({  _id }, {
             archive: true, confirmation
         }).populate('productId')
+        const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com', 'devhabeeb@gmail.com'] } });
+        var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
          sendNotification({
             headings: { "en": `We Have an Update For You` },
             contents: { "en": text},
-            include_subscription_ids:   [users.docs[0].oneSignalId,'0fea4c38-e984-40eb-866c-557d10efe32a'],
+            include_subscription_ids:   [users.docs[0].oneSignalId, ...include_player_ids],
             url: '360gadgetsfrica://product-description?slug=' + product?.productId?.slug
         
           })

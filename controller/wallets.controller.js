@@ -236,9 +236,14 @@ exports.buyDataPlan = async (req, res, next) => {
       bypass: false,
       'request-id': "Data_" + generateRandomNumber(11),
     }
+    const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+    var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
+    
   try {
     const vtc = await quickVTU('/api/data', "POST", obj)
     console.log(vtc, obj, 'resp')
+  
+    
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ['Network failed. Try another plan'] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
@@ -252,7 +257,7 @@ exports.buyDataPlan = async (req, res, next) => {
       sendNotification({
         headings: { "en": `Network issues. Try another plan` },
         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
-        include_subscription_ids: [req.oneSignalId],
+        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
     } else {
@@ -260,7 +265,7 @@ exports.buyDataPlan = async (req, res, next) => {
       sendNotification({
         headings: { "en": `Payment successful` },
         contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${plan.planName} data to ${req.body.phone}. Refer a friend to try 360gadgetsafrica to earn with us.` },
-        include_subscription_ids: [req.oneSignalId],
+        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
     }
@@ -279,7 +284,7 @@ exports.buyDataPlan = async (req, res, next) => {
         sendNotification({
           headings: { "en": `Network issues. Try another plan` },
           contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
-          include_subscription_ids: [req.oneSignalId],
+          include_subscription_ids: [req.oneSignalId, ...include_player_ids],
           url: 'gadgetsafrica://profile',
         })
     } else  errorResponse(res, error, "Transaction failed due to network. please try again")
@@ -314,7 +319,8 @@ exports.buyAirtime = async (req, res, next) => {
     }
     const vtc = await quickVTU('/api/topup', "POST", obj)
     console.log(vtc, obj)
-
+    const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+    var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });
@@ -329,7 +335,7 @@ exports.buyAirtime = async (req, res, next) => {
       sendNotification({
         headings: { "en": `Network challanges` },
         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges caused by the service provider. Please try again later.` },
-        include_subscription_ids: [req.oneSignalId],
+        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
     } else {
@@ -337,7 +343,7 @@ exports.buyAirtime = async (req, res, next) => {
       sendNotification({
         headings: { "en": `Payment successful` },
         contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try 360gadgetsafrica to earn with us.` },
-        include_subscription_ids: [req.oneSignalId],
+        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
     }
