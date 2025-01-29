@@ -43,14 +43,14 @@ exports.dataplan = [
       // "amount": "132.00",
       "duration": "1Month"
     },
-    {
-      "planId": 2,
-      "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "1GB",
-      "amount": "250.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 2,
+    //   "network": "MTN",
+    //   "planType": "GIFTING",
+    //   "planName": "1GB",
+    //   "amount": "250.00",
+    //   "duration": "1Month"
+    // },
 
     {
       "planId": 14,
@@ -68,14 +68,14 @@ exports.dataplan = [
       "amount": "262.00",
       "duration": "1Month"
     },
-    {
-      "planId": 1,
-      "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "2GB",
-      "amount": "500.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 1,
+    //   "network": "MTN",
+    //   "planType": "GIFTING",
+    //   "planName": "2GB",
+    //   "amount": "500.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 15,
       "network": "MTN",
@@ -92,14 +92,14 @@ exports.dataplan = [
       "amount": "524.00",
       "duration": "1Month"
     },
-    {
-      "planId": 49,
-      "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "3GB",
-      "amount": "750.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 49,
+    //   "network": "MTN",
+    //   "planType": "GIFTING",
+    //   "planName": "3GB",
+    //   "amount": "750.00",
+    //   "duration": "1Month"
+    // },
 
     {
       "planId": 16,
@@ -119,14 +119,14 @@ exports.dataplan = [
       "duration": "1Month"
     },
 
-    {
-      "planId": 50,
-      "network": "MTN",
-      "planType": "GIFTING",
-      "planName": "5GB",
-      "amount": "1250.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 50,
+    //   "network": "MTN",
+    //   "planType": "GIFTING",
+    //   "planName": "5GB",
+    //   "amount": "1250.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 17,
       "network": "MTN",
@@ -177,14 +177,14 @@ exports.dataplan = [
       "amount": "270.00",
       "duration": "1Month"
     },
-    {
-      "planId": 24,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "1.5GB",
-      "amount": "465.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 24,
+    //   "network": "GLO",
+    //   "planType": "GIFTING",
+    //   "planName": "1.5GB",
+    //   "amount": "465.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 38,
       "network": "GLO",
@@ -201,22 +201,22 @@ exports.dataplan = [
       "amount": "810.00",
       "duration": "1Month"
     },
-    {
-      "planId": 25,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "2.9GB",
-      "amount": "940.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 26,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "4.1GB",
-      "amount": "1300.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 25,
+    //   "network": "GLO",
+    //   "planType": "GIFTING",
+    //   "planName": "2.9GB",
+    //   "amount": "940.00",
+    //   "duration": "1Month"
+    // },
+    // {
+    //   "planId": 26,
+    //   "network": "GLO",
+    //   "planType": "GIFTING",
+    //   "planName": "4.1GB",
+    //   "amount": "1300.00",
+    //   "duration": "1Month"
+    // },
 
     {
       "planId": 40,
@@ -226,14 +226,14 @@ exports.dataplan = [
       "amount": "1350.00",
       "duration": "1Month"
     },
-    {
-      "planId": 27,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "5.8GB",
-      "amount": "1860.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 27,
+    //   "network": "GLO",
+    //   "planType": "GIFTING",
+    //   "planName": "5.8GB",
+    //   "amount": "1860.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 47,
       "network": "GLO",
@@ -242,14 +242,14 @@ exports.dataplan = [
       "amount": "2700.00",
       "duration": "1Month"
     },
-    {
-      "planId": 28,
-      "network": "GLO",
-      "planType": "GIFTING",
-      "planName": "10GB",
-      "amount": "3020.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 28,
+    //   "network": "GLO",
+    //   "planType": "GIFTING",
+    //   "planName": "10GB",
+    //   "amount": "3020.00",
+    //   "duration": "1Month"
+    // },
 
     {
       "planId": 32,
