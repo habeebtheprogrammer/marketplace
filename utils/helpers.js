@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const emailTemplates = require("../emailTemplates");
 const AWS = require("aws-sdk")
-const crypto = require("crypto")
+const crypto = require("crypto");
+const { getCategories } = require("../service/categories.service");
 exports.s3Bucket = process.env.AWS_BUCKET;
 
 exports.s3 = new AWS.S3({
@@ -147,88 +148,76 @@ exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) =
     });
 };
 
-exports.buildFilterQuery = (reqQuery) => {
-  var filters = []
-  Object.keys(reqQuery).forEach((key) => {
-    if (reqQuery[key] !== "" && (key != "limit" && key != "page")) {
-      lists = reqQuery[key].split(",")
-        .map(i => {
-          var val = i
-          if (key == 'original_price') {
-            var arr = i.split('--');
-            val = { "$gte": parseInt(arr[0]), "$lte": parseInt(arr[1]) }
-          } else if (key == 'rating') {
-            val = { "$gte": i, "$lte": 5 }
-          }
-          return ({ [key]: val })
-        })
+exports.buildFilterQuery = async (reqQuery) => {
+  let filters = [];
+  
+  for (const key of Object.keys(reqQuery)) {
+    if (reqQuery[key] !== "" && key !== "limit" && key !== "page") {
+      let lists = reqQuery[key].split(",").map(i => {
+        let val = i;
+        
+        if (key === 'original_price') {
+          const arr = i.split('--');
+          val = { "$gte": parseInt(arr[0]), "$lte": parseInt(arr[1]) };
+        } else if (key === 'rating') {
+          val = { "$gte": i, "$lte": 5 };
+        }
 
-      filters.push(...lists)
+        return { [key]: val };
+      });
+
+      filters.push(...lists);
     }
-  })
-  const query = {
-    $and: []
-  };
-  const query2 = {}
+  }
 
-  // Initialize containers for $or conditions
+  const query = { $and: [] };
+  const query2 = {};
+
+  // Containers for different query conditions
   let categoryConditions = [];
   let priceConditions = [];
   let ratingConditions = [];
   let searchConditions = [];
 
-  filters.forEach(filter => {
+  for (const filter of filters) {
     const key = Object.keys(filter)[0];
-    const value =   filter[key] == 'slug' ?  decodeURIComponent(filter[key]) : filter[key]
+    let value = key === 'slug' ? decodeURIComponent(filter[key]) : filter[key];
 
     if (key === 'sort') {
-      // Handle sorting separately
-      return;
+      continue; // Skip sorting here
     }
+    
     if (key === 'title') {
-      const words = value.split(' ').filter(word => word.length > 0);
-
-    // Create a regex that matches any of the words
-    // const regex = new RegExp(searchTerm, 'i')
-    // const regex = words.map(word => new RegExp(word, 'i')); 
-      // Handle sorting separately
-      searchConditions.push( { $search: value } ) 
+      searchConditions.push({ $search: value });
     } else if (key === 'categoryId') {
       categoryConditions.push({ [key]: value });
+    } else if (key === 'category') {
+      // Await category fetch and update the condition
+    const cat = await getCategories({ slug: value });
+      if (cat.totalDocs && cat.docs.length > 0) {
+        console.log(cat.totalDocs,'totaldocs')
+        categoryConditions.push({ categoryId: cat.docs[0]._id });
+      }
     } else if (key === 'original_price' || key === 'rating') {
       if (Array.isArray(value)) {
-        value.forEach(range => {
-          priceConditions.push({ [key]: range });
-        });
+        value.forEach(range => priceConditions.push({ [key]: range }));
       } else {
         priceConditions.push({ [key]: value });
       }
-    }else if(key == 'fbclid'){} else {
-      query2[key] = value
+    } else if (key !== 'fbclid') {
+      query2[key] = value;
     }
-  });
+  }
 
   // Add conditions to the query
-  if (categoryConditions.length > 0) {
-    query.$and.push({ $or: categoryConditions });
-  }
+  if (categoryConditions.length > 0) query.$and.push({ $or: categoryConditions });
+  if (priceConditions.length > 0) query.$and.push({ $or: priceConditions });
+  if (ratingConditions.length > 0) query.$and.push({ $or: ratingConditions });
+  if (searchConditions.length > 0) query2['$text'] = searchConditions[0];
+  console.log(query, query2)
 
-  if (priceConditions.length > 0) {
-    query.$and.push({ $or: priceConditions });
-  }
-
-  if (ratingConditions.length > 0) {
-    query.$and.push({ $or: ratingConditions });
-  }
-  if(searchConditions.length > 0) {
-    // query.$and.push({ $or: searchConditions });
-  
-    query2['$text'] = searchConditions[0]
-
-  }
-  return query.$and.length ? {...query, ...query2} : {...query2};
-}
-
+  return query.$and.length ? { ...query, ...query2 } : { ...query2 };
+};
 
 exports.isAppleRelayEmail = (email) => {
   // Regular expression to match random strings followed by @privaterelay.appleid.com
