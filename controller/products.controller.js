@@ -51,7 +51,7 @@ exports.getProducts = async (req, res, next) => {
 
         var pagination = { limit, page }
 
-        const query = buildFilterQuery(req.query);
+        const query = await buildFilterQuery(req.query);
         console.log(JSON.stringify(query),limit, sort)
         var searchSortObj  = title ? {score : { $meta: 'textScore' } } : {}
 
