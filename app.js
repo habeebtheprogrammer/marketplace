@@ -36,7 +36,7 @@ nextApp.prepare().then(() => {
   app.use('/_next', express.static(path.join(__dirname, '.next')));
 
   app.get('/robots.txt', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+    res.sendFile(path.join(__dirname,  'robots.txt'));
   }); 
 
   app.get('/sitemap.xml', createSiteMap);
