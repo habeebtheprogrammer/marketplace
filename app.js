@@ -23,7 +23,12 @@ app.use(fileUpload({
   tempFileDir: '/tmp/'
 }));
 app.use(bodyParser.json());
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+  origin: 'https://www.360gadgetsafrica.com',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(logger('dev'));
