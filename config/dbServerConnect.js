@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const connect = app => {
   try {
     var port = process.env.PORT || 4000
-
+console.log(process.env.DB_URL)
     mongoose.Promise = global.Promise;
     mongoose.connect(process.env.DB_URL)
 

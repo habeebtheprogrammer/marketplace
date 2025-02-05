@@ -1,4 +1,4 @@
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}.local` })
+require('dotenv').config({ path: `.env.production.local` })
 var dbServerConnect = require("./config/dbServerConnect");
 var express = require('express');
 var path = require('path');
@@ -13,7 +13,7 @@ const helmet = require("helmet");
 
 var routes = require('./routes'); 
 const { createSiteMap } = require('./utils/sitemap');
-
+console.log(process.env.NODE_ENV)
 var app = express();
 // app.use(favicon(path.join(__dirname, '/build', 'favicon.ico')));
 
