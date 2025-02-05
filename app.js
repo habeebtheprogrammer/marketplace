@@ -1,57 +1,46 @@
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}.local` })
-const express = require('express');
-const next = require('next');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+var dbServerConnect = require("./config/dbServerConnect");
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 const fileUpload = require('express-fileupload');
+const favicon = require('serve-favicon');
+
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const helmet = require("helmet");
 
-const dev =false;
-const nextApp = next({ dev });
-const handle = nextApp.getRequestHandler();
-
-const dbServerConnect = require("./config/dbServerConnect");
-const routes = require('./routes');
+var routes = require('./routes'); 
 const { createSiteMap } = require('./utils/sitemap');
 
-nextApp.prepare().then(() => {
-  const app = express();
+var app = express();
+// app.use(favicon(path.join(__dirname, '/build', 'favicon.ico')));
 
-  app.use(fileUpload({
-    useTempFiles: true,
-    responseOnLimit: true,
-    tempFileDir: '/tmp/'
-  }));
-  app.use(bodyParser.json());
-  app.use(cors());
+app.use(fileUpload({
+  useTempFiles: true,
+  responseOnLimit: true,
+  tempFileDir: '/tmp/'
+}));
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'build')));
 
-  app.use(logger('dev'));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-  app.use(cookieParser());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-  // Serve static files from the Next.js .next directory
-  app.use('/_next', express.static(path.join(__dirname, '.next')));
-
-  app.get('/robots.txt', (req, res) => {
-    res.sendFile(path.join(__dirname,  'robots.txt'));
-  }); 
-
-  app.get('/sitemap.xml', createSiteMap);
-  app.use('/api', routes);
-
-  // Handle all other routes with Next.js
-  app.all('*', (req, res) => {
-    return handle(req, res);
-  });
-
-  dbServerConnect(app);
-
-  const port = process.env.PORT || 3000;
-  app.listen(port, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
-  });
+app.get('/robots.txt', (req, res) => {
+  res.sendFile(path.join(__dirname, 'robots.txt'));
 });
+
+app.get('/sitemap.xml', createSiteMap)
+app.get('/robots.txt', createSiteMap)
+app.use('/api', routes);
+
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, "/build/index.html")));
+
+// app.get('*', (req, res) =>  res.json({error: "path not found"}))
+
+dbServerConnect(app)
