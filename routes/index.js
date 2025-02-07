@@ -11,6 +11,7 @@ const ordersRouter = require('./orders.router');
 const swapRouter = require('./swap.router');
 const promoRouter = require('./promo.router');
 const walletsRouter = require('./wallets.router');
+const blogpostsRouter = require('./blogposts.router');
 
 router.use("/users", usersRouter)
 router.use("/vendors", vendorsRouter)
@@ -23,5 +24,6 @@ router.use("/orders", ordersRouter)
 router.use("/swap", swapRouter)
 router.use("/promo", promoRouter)
 router.use("/wallets", walletsRouter)
+router.use("/blog", blogpostsRouter)
 
 module.exports = router
