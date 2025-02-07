@@ -14,7 +14,7 @@ exports.createBlogposts = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
-exports.updateProducts = async (req, res, next) => {
+exports.updateBlogposts = async (req, res, next) => {
     try {
         var updateObj = {}
         Object.keys(req.body).forEach(key => {
@@ -46,7 +46,7 @@ exports.getBlogposts = async (req, res, next) => {
             ...pagination
         };
 
-        const data = await productsService.getProducts({ query: { ...query, archive: false }, options })
+        const data = await blogpostsService.getBlogPosts({ query: { ...query, archive: false }, options })
         successResponse(res, data)
     } catch (error) {
         console.log(error)
