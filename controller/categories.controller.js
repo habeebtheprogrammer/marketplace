@@ -22,7 +22,6 @@ exports.updateCategories = async (req, res, next) => {
             }
         })
         const vendor = await vendorsService.getVendors({creatorId: req.userId})
-        console.log(updateObj, vendor)
         const data = await categoriesService.updateCategories({ _id: updateObj._id, vendorId: vendor.docs[0]._id }, updateObj)
         successResponse(res, data)
     } catch (error) {
@@ -33,7 +32,6 @@ exports.updateCategories = async (req, res, next) => {
 exports.getCategories = async (req, res, next) => {
     try {
         const data = await categoriesService.getCategories({})
-        console.log(data)
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)

@@ -14,6 +14,7 @@ exports.s3 = new AWS.S3({
   region: process.env.AWS_REGION
 });
 
+
 const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
   host:  process.env.SMTP_HOST,
@@ -146,6 +147,15 @@ exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) =
     .catch((err) => {
       console.log(err);
     });
+};
+
+exports.slugify = (text) => {
+  return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "") // Remove special characters except space and hyphen
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-"); // Remove duplicate hyphens
 };
 
 exports.buildFilterQuery = async (reqQuery) => {

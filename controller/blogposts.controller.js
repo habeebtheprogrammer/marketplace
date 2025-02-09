@@ -1,11 +1,11 @@
 const { blogpostsService, } = require("../service")
-const { generateRandomNumber,  } = require("../utils/helpers");
+const { generateRandomNumber, slugify,  } = require("../utils/helpers");
 const { successResponse, errorResponse } = require("../utils/responder")
 
 exports.createBlogposts = async (req, res, next) => {
     try {
         const data = await blogpostsService.createBlogposts({
-            ...req.body, slug: req.body.title?.replace(/[" "]/gi, "-") + '-' + generateRandomNumber(5)
+            ...req.body, slug: slugify(req.body.title ) + '-' + generateRandomNumber(5)
         })
         
         successResponse(res, data)
@@ -35,17 +35,19 @@ exports.getBlogposts = async (req, res, next) => {
         var filter = {}
         var { sort, limit = 9, page = 1 , title} = req.query
 
-        var pagination = { limit, page }
+        var opt = { limit, page }
 
         var query = {}
         Object.keys(req.query).forEach(key => {
             if (req.query['slug']) query[key] = req.query[key];
+            if(sort) opt.sort = {[req.query[key]]: -1}
         })
 
         const options = {
-            ...pagination
+            sort: {_id: -1},
+            ...opt
         };
-
+        
         const data = await blogpostsService.getBlogPosts({ query: { ...query, archive: false }, options })
         successResponse(res, data)
     } catch (error) {
