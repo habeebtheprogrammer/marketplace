@@ -256,7 +256,7 @@ exports.buyDataPlan = async (req, res, next) => {
       })
       sendNotification({
         headings: { "en": `Network issues. Try another plan` },
-        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
+        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${net} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -264,7 +264,7 @@ exports.buyDataPlan = async (req, res, next) => {
       successResponse(res, transaction)
       sendNotification({
         headings: { "en": `Payment successful` },
-        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${plan.planName} data to ${req.body.phone}. Refer a friend to try 360gadgetsafrica to earn with us.` },
+        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} data to ${req.body.phone}. Refer a friend to try 360gadgetsafrica and earn ₦25` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -283,7 +283,7 @@ exports.buyDataPlan = async (req, res, next) => {
         })
         sendNotification({
           headings: { "en": `Network issues. Try another plan` },
-          contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planType}. Please try another plan or try again later.` },
+          contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${net} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
           include_subscription_ids: [req.oneSignalId, ...include_player_ids],
           url: 'gadgetsafrica://profile',
         })
@@ -342,7 +342,7 @@ exports.buyAirtime = async (req, res, next) => {
       successResponse(res, transaction)
       sendNotification({
         headings: { "en": `Payment successful` },
-        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try 360gadgetsafrica to earn with us.` },
+        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try 360gadgetsafrica and earn ₦25` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
