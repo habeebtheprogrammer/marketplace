@@ -25,15 +25,15 @@ exports.detectNetwork = (phoneNumber) => {
 
 exports.dataplan = [
 
-  {
-    "planId": 10,
-    "network": "MTN",
-    "planType": "COOPERATE",
-    "planName": "500MB",
-    "amount": "75.00",
-    // "amount": "133.00",
-    "duration": "1Month"
-  },
+  // {
+  //   "planId": 10,
+  //   "network": "MTN",
+  //   "planType": "COOPERATE",
+  //   "planName": "500MB",
+  //   "amount": "75.00",
+  //   // "amount": "133.00",
+  //   "duration": "1Month"
+  // },
     {
       "planId": 4,
       "network": "MTN",
@@ -52,14 +52,14 @@ exports.dataplan = [
     //   "duration": "1Month"
     // },
 
-    {
-      "planId": 14,
-      "network": "MTN",
-      "planType": "COOPERATE",
-      "planName": "1GB",
-      "amount": "265.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 14,
+    //   "network": "MTN",
+    //   "planType": "COOPERATE",
+    //   "planName": "1GB",
+    //   "amount": "265.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 5,
       "network": "MTN",
@@ -76,14 +76,14 @@ exports.dataplan = [
     //   "amount": "500.00",
     //   "duration": "1Month"
     // },
-    {
-      "planId": 15,
-      "network": "MTN",
-      "planType": "COOPERATE",
-      "planName": "2GB",
-      "amount": "530.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 15,
+    //   "network": "MTN",
+    //   "planType": "COOPERATE",
+    //   "planName": "2GB",
+    //   "amount": "530.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 6,
       "network": "MTN",
@@ -101,14 +101,14 @@ exports.dataplan = [
     //   "duration": "1Month"
     // },
 
-    {
-      "planId": 16,
-      "network": "MTN",
-      "planType": "COOPERATE",
-      "planName": "3GB",
-      "amount": "795.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 16,
+    //   "network": "MTN",
+    //   "planType": "COOPERATE",
+    //   "planName": "3GB",
+    //   "amount": "795.00",
+    //   "duration": "1Month"
+    // },
 
     {
       "planId": 7,
@@ -127,14 +127,14 @@ exports.dataplan = [
     //   "amount": "1250.00",
     //   "duration": "1Month"
     // },
-    {
-      "planId": 17,
-      "network": "MTN",
-      "planType": "COOPERATE",
-      "planName": "5GB",
-      "amount": "1325.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 17,
+    //   "network": "MTN",
+    //   "planType": "COOPERATE",
+    //   "planName": "5GB",
+    //   "amount": "1325.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 8,
       "network": "MTN",
@@ -151,14 +151,14 @@ exports.dataplan = [
       "amount": "2620.00",
       "duration": "1Month"
     },
-    {
-      "planId": 18,
-      "network": "MTN",
-      "planType": "COOPERATE",
-      "planName": "10GB",
-      "amount": "2650.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 18,
+    //   "network": "MTN",
+    //   "planType": "COOPERATE",
+    //   "planName": "10GB",
+    //   "amount": "2650.00",
+    //   "duration": "1Month"
+    // },
 
     {
       "planId": 36,
