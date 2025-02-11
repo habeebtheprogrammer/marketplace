@@ -256,7 +256,7 @@ exports.buyDataPlan = async (req, res, next) => {
       })
       sendNotification({
         headings: { "en": `Network issues. Try another plan` },
-        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${provider} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -283,7 +283,7 @@ exports.buyDataPlan = async (req, res, next) => {
         })
         sendNotification({
           headings: { "en": `Network issues. Try another plan` },
-          contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${provider} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+          contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
           include_subscription_ids: [req.oneSignalId, ...include_player_ids],
           url: 'gadgetsafrica://profile',
         })
