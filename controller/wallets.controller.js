@@ -167,7 +167,7 @@ console.log(user.docs[0].referredBy)
 
 exports.fetchTransactions = async (req, res, next) => {
   try {
-    var transactions = await walletsService.fetchTransactions({ userId: req.userId })
+    var transactions = await walletsService.fetchTransactions({ userId: req.userId }, {sort: {_id: -1}, limit: 30})
     successResponse(res, transactions)
   } catch (error) {
     errorResponse(res, error)
