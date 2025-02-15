@@ -256,7 +256,15 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "100MB",
-      "amount": "90.00",
+      "amount": "75.00",
+      "duration": "7days"
+    },
+    {
+      "planId": 31,
+      "network": "AIRTEL",
+      "planType": "COOPERATE",
+      "planName": "300MB",
+      "amount": "110.00",
       "duration": "7days"
     },
     {
@@ -264,7 +272,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "500MB",
-      "amount": "75.00",
+      "amount": "150.00",
       // "amount": "140.00",
       "duration": "1Month"
     },
@@ -273,7 +281,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "1GB",
-      "amount": "235.00",
+      "amount": "240.00",
       "duration": "2DAYS"
     },
     {
@@ -281,39 +289,55 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "1GB",
-      "amount": "277.00",
+      "amount": "560.00",
       "duration": "1Month"
-    },
-    {
-      "planId": 52,
-      "network": "AIRTEL",
-      "planType": "GIFTING",
-      "planName": "750MB",
-      "amount": "460.00",
-      "duration": "14DAYS"
     },
     {
       "planId": 21,
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "2GB",
-      "amount": "554.00",
+      "amount": "1130.00",
       "duration": "1Month"
+    },
+    {
+      "planId": 58,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "2GB",
+      "amount": "350.00",
+      "duration": "2Days"
     },
     {
       "planId": 53,
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "3GB",
-      "amount": "560.00",
+      "amount": "550.00",
       "duration": "7DAYS"
+    },
+    {
+      "planId": 57,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "4GB",
+      "amount": "1050.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 52,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "5GB",
+      "amount": "1200.00",
+      "duration": "14DAYS"
     },
     {
       "planId": 22,
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "5GB",
-      "amount": "1385.00",
+      "amount": "2810.00",
       "duration": "1Month"
     },
     {
@@ -321,7 +345,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "10GB",
-      "amount": "2770.00",
+      "amount": "5610.00",
       "duration": "1Month"
     },
     {
@@ -329,7 +353,15 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "10GB",
-      "amount": "2800.00",
+      "amount": "2300.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 56,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "15GB",
+      "amount": "3150.00",
       "duration": "1Month"
     },
     {
