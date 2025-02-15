@@ -289,7 +289,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "750MB",
-      "amount": "450.00",
+      "amount": "460.00",
       "duration": "14DAYS"
     },
     {
@@ -299,6 +299,14 @@ exports.dataplan = [
       "planName": "2GB",
       "amount": "554.00",
       "duration": "1Month"
+    },
+    {
+      "planId": 53,
+      "network": "AIRTEL",
+      "planType": "COOPERATE",
+      "planName": "3GB",
+      "amount": "560.00",
+      "duration": "7DAYS"
     },
     {
       "planId": 22,
@@ -314,6 +322,14 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "2770.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 54,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "10GB",
+      "amount": "2800.00",
       "duration": "1Month"
     },
     {
