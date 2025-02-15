@@ -303,7 +303,7 @@ exports.dataplan = [
     {
       "planId": 53,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "GIFTING",
       "planName": "3GB",
       "amount": "560.00",
       "duration": "7DAYS"
