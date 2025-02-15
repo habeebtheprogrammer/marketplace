@@ -197,6 +197,14 @@ exports.withdraw = async (req, res, next) => {
     }
     const transaction = await walletsService.saveTransactions(data)
     successResponse(res, transaction)
+    const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+    var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
+    sendNotification({
+      headings: { "en": `Withdrawal request.` },
+      contents: { "en": `Hi There, You have a new withdrawal request of N${req.body.amount}` },
+      include_subscription_ids: [ ...include_player_ids],
+      url: 'gadgetsafrica://profile',
+    })
   } catch (error) {
     console.log(error)
     errorResponse(res, error)
