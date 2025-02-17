@@ -240,7 +240,7 @@ exports.buyDataPlan = async (req, res, next) => {
   var obj = {
     network: net,
     data_plan: plan.planId,
-    phone: req.body.phone,
+    phone: req.body.phone.replace(/\s+/g, ""),
     bypass: false,
     'request-id': "Data_" + generateRandomNumber(11),
   }
@@ -321,7 +321,7 @@ exports.buyAirtime = async (req, res, next) => {
   var net = provider == 'MTN' ? 1 : provider == "AIRTEL" ? 2 : provider == "GLO" ? 3 : 4
   var obj = {
     network: net,
-    phone: req.body.phone,
+    phone: req.body.phone.replace(/\s+/g, ""),
     amount: req.body.amount,
     bypass: false,
     plan_type: 'VTU',
