@@ -233,7 +233,6 @@ exports.buyDataPlan = async (req, res, next) => {
     "type": 'debit',
     "status": "successful"
   }
-  console.log(data)
   const transaction = await walletsService.saveTransactions(data)
 
   var plan = dataplan.find(d => d.planId == req.body.plan.planId);
@@ -245,6 +244,8 @@ exports.buyDataPlan = async (req, res, next) => {
     bypass: false,
     'request-id': "Data_" + generateRandomNumber(11),
   }
+  console.log(obj)
+
   const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
   var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
