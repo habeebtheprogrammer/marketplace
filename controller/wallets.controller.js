@@ -356,6 +356,7 @@ exports.buyAirtime = async (req, res, next) => {
       })
     }
   } catch (error) {
+    console.log(error?.response?.data )
     if(error?.response?.data?.status == "fail"){
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
