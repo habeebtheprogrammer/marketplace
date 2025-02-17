@@ -75,35 +75,38 @@ exports.fetch = async (req, res, next) => {
     if (wallet.totalDocs == 0) {
       var user = await usersService.getUsers({ "$or": [{ _id: req.userId }, { email: "archive." + req.email }] })
       var checkForDevice = await usersService.getUsers({ deviceid: req.headers.deviceid })
-
-      if ((user.totalDocs == 1) && req.headers.deviceid && (checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
-        wallet = await walletsService.createWallet({
-          userId: req.userId,
-          balance: 50
-        })
-        const bonus = {
-          "amount": 50,
-          "userId": req.userId,
-          "reference": "SignupBonus" + '--' + generateRandomNumber(10),
-          "narration": "Signup bonus",
-          "currency": "NGN",
-          "type": 'credit',
-          "status": "successful"
-        }
-        await walletsService.saveTransactions(bonus)
-        sendNotification({
-          headings: { "en": `₦50 was credited to your wallet` },
-          contents: { "en": `Congratulations ${req.firstName}! You just earned ₦50 signup bonus. Refer more friends download 360gadgetsafrica to earn more.` },
-          include_subscription_ids: [req.oneSignalId],
-          url: 'gadgetsafrica://profile',
-        })
-      } else {
-        wallet = await walletsService.createWallet({
-          userId: req.userId,
-          balance: 0
-        })
-      }
-
+ 
+      // if ((user.totalDocs == 1) && req.headers.deviceid && (checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
+      //   wallet = await walletsService.createWallet({
+      //     userId: req.userId,
+      //     balance: 50
+      //   })
+      //   const bonus = {
+      //     "amount": 50,
+      //     "userId": req.userId,
+      //     "reference": "SignupBonus" + '--' + generateRandomNumber(10),
+      //     "narration": "Signup bonus",
+      //     "currency": "NGN",
+      //     "type": 'credit',
+      //     "status": "successful"
+      //   }
+      //   await walletsService.saveTransactions(bonus)
+      //   sendNotification({
+      //     headings: { "en": `₦50 was credited to your wallet` },
+      //     contents: { "en": `Congratulations ${req.firstName}! You just earned ₦50 signup bonus. Refer more friends download 360gadgetsafrica to earn more.` },
+      //     include_subscription_ids: [req.oneSignalId],
+      //     url: 'gadgetsafrica://profile',
+      //   })
+      // } else {
+      //   wallet = await walletsService.createWallet({
+      //     userId: req.userId,
+      //     balance: 0
+      //   })
+      // }
+      wallet = await walletsService.createWallet({
+        userId: req.userId,
+        balance: 0
+      })
       console.log(user.docs[0].referredBy)
       if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {

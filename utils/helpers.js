@@ -252,3 +252,17 @@ exports.calculateFee = (initFee = 1.7, amount)=>{
   const fee = Math.max(minFee, Math.min(calculatedFee, maxFee)); // Ensures fee is between minFee and maxFee
   return Math.round(fee * 10) / 10; // Rounds to 1 decimal place
 }
+
+exports.isNotableEmail = (email) => {
+  const notableProviders = [
+      "gmail.com", "yahoo.com", "outlook.com", "hotmail.com", 
+      "icloud.com", "aol.com", "protonmail.com", "zoho.com", 
+      "yandex.com", "mail.com", "gmx.com", "live.com"
+  ];
+
+  // Extract domain from email
+  const domain = email.split("@")[1]?.toLowerCase();
+
+  // Check if domain is in the notable providers list
+  return notableProviders.includes(domain);
+}
