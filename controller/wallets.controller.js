@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
 const { dataplan, detectNetwork } = require('../utils/vtu');
-const { generateRandomNumber, verifyMonnifySignature, calculateFee } = require('../utils/helpers');
+const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
@@ -107,8 +107,8 @@ exports.fetch = async (req, res, next) => {
         userId: req.userId,
         balance: 0
       })
-      console.log(user.docs[0].referredBy)
-      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
+      console.log("is notable", req.email)
+      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email) ) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
 
           await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
