@@ -372,8 +372,7 @@ exports.buyAirtime = async (req, res, next) => {
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
-  }
-    errorResponse(res, error, "Transaction failed due to network. please try again")
+  } else errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
 exports.fetchBanks = async (req, res, next) => {
