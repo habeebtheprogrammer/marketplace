@@ -356,7 +356,23 @@ exports.buyAirtime = async (req, res, next) => {
       })
     }
   } catch (error) {
-    console.log(error)
+    if(error?.response?.data?.status == "fail"){
+      res.status(500).json({ errors: ["Transaction failed. please try again later"] });
+      await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.amount) } })
+      await walletsService.saveTransactions({
+        ...data,
+        "reference": "Airtime" + '--' + generateRandomNumber(10),
+        "narration": "RVSL for Airtime topup ",
+        "status": 'successful', type: 'credit'
+      })
+      sendNotification({
+        headings: { "en": `Network challanges` },
+        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges caused by the service provider. Please try again later.` },
+        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+        url: 'gadgetsafrica://profile',
+      })
+  }
     errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
