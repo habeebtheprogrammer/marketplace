@@ -224,10 +224,11 @@ exports.buyDataPlan = async (req, res, next) => {
   var wallet = await walletsService.getWallets({ userId: req.userId })
   if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
   var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
+  const ref = "Data" + '--' + generateRandomNumber(11)
   const data = {
     "amount": req.body.plan.amount,
     "userId": req.userId,
-    "reference": "Data" + '--' + generateRandomNumber(10),
+    "reference": ref,
     "narration": "Data topup to " + req.body.phone,
     "currency": "NGN",
     "type": 'debit',
@@ -242,7 +243,7 @@ exports.buyDataPlan = async (req, res, next) => {
     data_plan: plan.planId,
     phone: req.body.phone.replace(/\s+/g, ""),
     bypass: false,
-    'request-id': "Data_" + generateRandomNumber(11),
+    'request-id': ref,
   }
   console.log(obj)
 
@@ -306,10 +307,11 @@ exports.buyAirtime = async (req, res, next) => {
   var wallet = await walletsService.getWallets({ userId: req.userId })
   if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
   await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
+  const ref =  "Airtime" + '--' + generateRandomNumber(11)
   const data = {
     "amount": req.body.amount,
     "userId": req.userId,
-    "reference": "Airtime" + '--' + generateRandomNumber(10),
+    "reference":ref,
     "narration": "Airtime topup to " + req.body.phone,
     "currency": "NGN",
     "type": 'debit',
@@ -325,7 +327,7 @@ exports.buyAirtime = async (req, res, next) => {
     amount: req.body.amount,
     bypass: false,
     plan_type: 'VTU',
-    'request-id': "Airtime_" + generateRandomNumber(11),
+    'request-id': ref,
   }
   const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
   var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
