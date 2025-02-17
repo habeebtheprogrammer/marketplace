@@ -103,8 +103,8 @@ exports.fetch = async (req, res, next) => {
           balance: 0
         })
       }
- 
-console.log(user.docs[0].referredBy)
+
+      console.log(user.docs[0].referredBy)
       if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
 
@@ -167,7 +167,7 @@ console.log(user.docs[0].referredBy)
 
 exports.fetchTransactions = async (req, res, next) => {
   try {
-    var transactions = await walletsService.fetchTransactions({ userId: req.userId }, {sort: {_id: -1}, limit: 30})
+    var transactions = await walletsService.fetchTransactions({ userId: req.userId }, { sort: { _id: -1 }, limit: 30 })
     successResponse(res, transactions)
   } catch (error) {
     errorResponse(res, error)
@@ -202,7 +202,7 @@ exports.withdraw = async (req, res, next) => {
     sendNotification({
       headings: { "en": `Withdrawal request.` },
       contents: { "en": `Hi There, You have a new withdrawal request of N${req.body.amount}` },
-      include_subscription_ids: [ ...include_player_ids],
+      include_subscription_ids: [...include_player_ids],
       url: 'gadgetsafrica://profile',
     })
   } catch (error) {
@@ -221,37 +221,37 @@ exports.fetchDataPlan = async (req, res, next) => {
 
 
 exports.buyDataPlan = async (req, res, next) => {
-    var wallet = await walletsService.getWallets({ userId: req.userId })
-    if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
-    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
-    const data = {
-      "amount": req.body.plan.amount,
-      "userId": req.userId,
-      "reference": "Data" + '--' + generateRandomNumber(10),
-      "narration": "Data topup to " + req.body.phone,
-      "currency": "NGN",
-      "type": 'debit',
-      "status": "successful"
-    }
-    const transaction = await walletsService.saveTransactions(data)
+  var wallet = await walletsService.getWallets({ userId: req.userId })
+  if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
+  var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
+  const data = {
+    "amount": req.body.plan.amount,
+    "userId": req.userId,
+    "reference": "Data" + '--' + generateRandomNumber(10),
+    "narration": "Data topup to " + req.body.phone,
+    "currency": "NGN",
+    "type": 'debit',
+    "status": "successful"
+  }
+  const transaction = await walletsService.saveTransactions(data)
 
-    var plan = dataplan.find(d => d.planId == req.body.plan.planId);
-    var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
-    var obj = {
-      network: net,
-      data_plan: plan.planId,
-      phone: req.body.phone,
-      bypass: false,
-      'request-id': "Data_" + generateRandomNumber(11),
-    }
-    const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
-    var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
-    
+  var plan = dataplan.find(d => d.planId == req.body.plan.planId);
+  var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
+  var obj = {
+    network: net,
+    data_plan: plan.planId,
+    phone: req.body.phone,
+    bypass: false,
+    'request-id': "Data_" + generateRandomNumber(11),
+  }
+  const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+  var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
+
   try {
     const vtc = await quickVTU('/api/data', "POST", obj)
     console.log(vtc, obj, 'resp')
-  
-    
+
+
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ['Network failed. Try another plan'] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
@@ -278,57 +278,58 @@ exports.buyDataPlan = async (req, res, next) => {
       })
     }
 
-  } catch (error) {console.log(error)
-    if(error?.response?.data?.status == "fail"){
-        res.status(500).json({ errors: ['Network failed. Try another plan'] });
-        await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
-        await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
-        await walletsService.saveTransactions({
-          ...data,
-          "reference": "Data" + '--' + generateRandomNumber(10),
-          "narration": "RVSL for Data topup ",
-          "status": 'successful', type: 'credit'
-        })
-        sendNotification({
-          headings: { "en": `Network issues. Try another plan` },
-          contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
-          include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-          url: 'gadgetsafrica://profile',
-        })
-    } else  errorResponse(res, error, "Transaction failed due to network. please try again")
+  } catch (error) {
+    console.log(error)
+    if (error?.response?.data?.status == "fail") {
+      res.status(500).json({ errors: ['Network failed. Try another plan'] });
+      await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
+      await walletsService.saveTransactions({
+        ...data,
+        "reference": "Data" + '--' + generateRandomNumber(10),
+        "narration": "RVSL for Data topup ",
+        "status": 'successful', type: 'credit'
+      })
+      sendNotification({
+        headings: { "en": `Network issues. Try another plan` },
+        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+        url: 'gadgetsafrica://profile',
+      })
+    } else errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
 
 exports.buyAirtime = async (req, res, next) => {
-    var wallet = await walletsService.getWallets({ userId: req.userId })
-    if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
-    await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
-    const data = {
-      "amount": req.body.amount,
-      "userId": req.userId,
-      "reference": "Airtime" + '--' + generateRandomNumber(10),
-      "narration": "Airtime topup to " + req.body.phone,
-      "currency": "NGN",
-      "type": 'debit',
-      "status": "successful"
-    }
-    const transaction = await walletsService.saveTransactions(data)
+  var wallet = await walletsService.getWallets({ userId: req.userId })
+  if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
+  await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
+  const data = {
+    "amount": req.body.amount,
+    "userId": req.userId,
+    "reference": "Airtime" + '--' + generateRandomNumber(10),
+    "narration": "Airtime topup to " + req.body.phone,
+    "currency": "NGN",
+    "type": 'debit',
+    "status": "successful"
+  }
+  const transaction = await walletsService.saveTransactions(data)
 
-    const provider = detectNetwork(req.body.phone)
-    var net = provider == 'MTN' ? 1 : provider == "AIRTEL" ? 2 : provider == "GLO" ? 3 : 4
-    var obj = {
-      network: net,
-      phone: req.body.phone,
-      amount: req.body.amount,
-      bypass: false,
-      plan_type: 'VTU',
-      'request-id': "Airtime_" + generateRandomNumber(11),
-    }
-    const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
-    var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
+  const provider = detectNetwork(req.body.phone)
+  var net = provider == 'MTN' ? 1 : provider == "AIRTEL" ? 2 : provider == "GLO" ? 3 : 4
+  var obj = {
+    network: net,
+    phone: req.body.phone,
+    amount: req.body.amount,
+    bypass: false,
+    plan_type: 'VTU',
+    'request-id': "Airtime_" + generateRandomNumber(11),
+  }
+  const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+  var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
-    try {
-      const vtc = await quickVTU('/api/topup', "POST", obj)
+  try {
+    const vtc = await quickVTU('/api/topup', "POST", obj)
     console.log(vtc, obj)
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });
@@ -356,8 +357,8 @@ exports.buyAirtime = async (req, res, next) => {
       })
     }
   } catch (error) {
-    console.log(error?.response?.data )
-    if(error?.response?.data?.status == "fail"){
+    console.log(error?.response?.data)
+    if (error?.response?.data?.status == "fail") {
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
       await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.amount) } })
@@ -373,7 +374,7 @@ exports.buyAirtime = async (req, res, next) => {
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
-  } else errorResponse(res, error, "Transaction failed due to network. please try again")
+    } else errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
 exports.fetchBanks = async (req, res, next) => {
@@ -471,3 +472,70 @@ exports.webhook = async (req, res, next) => {
 
   }
 }
+
+
+// Webhook Endpoint
+exports.flwhook = async (req, res, next) => {
+  console.log('received')
+  // Verify the request is from Flutterwave
+  const signature = req.headers["verif-hash"]; // Flutterwave sends this
+  if (!signature || signature !== process.env.FLW_SECRET_HASH) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const payload = req.body;
+
+
+  // Process the event based on its type
+  if (payload.event === "charge.completed" && payload.data.status == 'successful') {
+    var { customer, created_at, charged_amount, amount, id, tx_ref } = payload.data
+    console.log("Received Flutterwave webhook:", id);
+
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.FLW_SECRET_KEY}`
+    }
+    try {
+      // const res = await axios({ method: 'get', url: `https://api.flutterwave.com/v3/transactions/${id}/verify`, data: {}, headers, json: true });
+      // const result = res && res.data;
+      // if ((result.status == 'success' || result.status == 'successful') &&  result?.data?.meta?.type == 'funding') {
+        // var {bankname, originatoraccountnumber, } = result?.data?.meta
+        var user = await usersService.getUsers({ email: customer.email })
+        if (user.totalDocs) {
+          const data = {
+            "amount": amount,
+            "userId": user.docs[0]._id,
+            "reference": tx_ref,
+            "narration": "Wallet funding",
+            "destinationBankCode": "N/A",
+            "destinationBankName": "N/A",
+            "destinationAccountNumber": "N/A",
+            // "destinationAccountName": req.body.accountName,
+            "currency": "NGN",
+            "type": 'credit',
+            "status": "successful",
+          }
+          await walletsService.saveTransactions(data)
+          await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amount) } })
+          sendNotification({
+            headings: { "en": `₦${amount} was credited to your wallet` },
+            contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try 360gadgetsafrica to earn with us.` },
+            include_subscription_ids: [user.docs[0].oneSignalId],
+            url: 'gadgetsafrica://transactions',
+          })
+        }
+      // }
+    } catch (error) {
+      console.log(error)
+      
+    }
+   
+    // Update your database, send emails, etc.
+  } else if (payload.event === "transfer.completed") {
+    console.log("Transfer completed:", payload.data);
+  }
+
+  // Send a response to acknowledge receipt
+  res.status(200).json({ message: "Webhook received successfully" });
+}
+

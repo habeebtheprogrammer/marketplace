@@ -14,5 +14,6 @@ router.post('/verifyBank', checkAuth, walletsController.verifyBank);
 router.get('/transactions', checkAuth, walletsController.fetchTransactions);
 router.post('/withdraw', checkAuth, walletsController.withdraw);
 router.post('/monnify-hoook', walletsController.webhook);
+router.post('/f-hoook', walletsController.flwhook);
 
 module.exports = router;
