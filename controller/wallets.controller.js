@@ -227,7 +227,7 @@ exports.buyDataPlan = async (req, res, next) => {
   var wallet = await walletsService.getWallets({ userId: req.userId })
   if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
   var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
-  const ref = "Data" + '--' + generateRandomNumber(11)
+  const ref = "Data_"  + generateRandomNumber(11)
   const data = {
     "amount": req.body.plan.amount,
     "userId": req.userId,
@@ -264,7 +264,7 @@ exports.buyDataPlan = async (req, res, next) => {
       await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
       await walletsService.saveTransactions({
         ...data,
-        "reference": "Data" + '--' + generateRandomNumber(10),
+        "reference": "Data_" +   generateRandomNumber(10),
         "narration": "RVSL for Data topup ",
         "status": 'successful', type: 'credit'
       })
@@ -310,7 +310,7 @@ exports.buyAirtime = async (req, res, next) => {
   var wallet = await walletsService.getWallets({ userId: req.userId })
   if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
   await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
-  const ref =  "Airtime" + '--' + generateRandomNumber(11)
+  const ref =  "Airtime_" +   + generateRandomNumber(11)
   const data = {
     "amount": req.body.amount,
     "userId": req.userId,
