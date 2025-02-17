@@ -266,3 +266,11 @@ exports.isNotableEmail = (email) => {
   // Check if domain is in the notable providers list
   return notableProviders.includes(domain);
 }
+
+exports.removeCountryCode = (phoneNumber, countryCode = "+234") => {
+  // Ensure the phone number starts with the country code
+  if (phoneNumber.startsWith(countryCode)) {
+      return phoneNumber.slice(countryCode.length);
+  }
+  return phoneNumber; // Return original if no country code is found
+}

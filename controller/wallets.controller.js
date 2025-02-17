@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
 const { dataplan, detectNetwork } = require('../utils/vtu');
-const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail } = require('../utils/helpers');
+const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
@@ -244,7 +244,7 @@ exports.buyDataPlan = async (req, res, next) => {
   var obj = {
     network: net,
     data_plan: plan.planId,
-    phone: req.body.phone.replace(/\s+/g, ""),
+    phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
     bypass: false,
     'request-id': ref,
   }
@@ -326,7 +326,7 @@ exports.buyAirtime = async (req, res, next) => {
   var net = provider == 'MTN' ? 1 : provider == "AIRTEL" ? 2 : provider == "GLO" ? 3 : 4
   var obj = {
     network: net,
-    phone: req.body.phone.replace(/\s+/g, ""),
+    phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
     amount: req.body.amount,
     bypass: false,
     plan_type: 'VTU',
