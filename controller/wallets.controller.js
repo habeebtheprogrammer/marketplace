@@ -233,6 +233,7 @@ exports.buyDataPlan = async (req, res, next) => {
     "type": 'debit',
     "status": "successful"
   }
+  console.log(data)
   const transaction = await walletsService.saveTransactions(data)
 
   var plan = dataplan.find(d => d.planId == req.body.plan.planId);
