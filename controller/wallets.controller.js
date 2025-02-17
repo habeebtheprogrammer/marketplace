@@ -356,6 +356,7 @@ exports.buyAirtime = async (req, res, next) => {
       })
     }
   } catch (error) {
+    console.log(error)
     errorResponse(res, error, "Transaction failed due to network. please try again")
   }
 }
