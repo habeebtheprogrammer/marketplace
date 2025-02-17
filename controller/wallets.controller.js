@@ -300,7 +300,6 @@ exports.buyDataPlan = async (req, res, next) => {
 }
 
 exports.buyAirtime = async (req, res, next) => {
-  try {
     var wallet = await walletsService.getWallets({ userId: req.userId })
     if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
     await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
@@ -325,6 +324,7 @@ exports.buyAirtime = async (req, res, next) => {
       plan_type: 'VTU',
       'request-id': "Airtime_" + generateRandomNumber(11),
     }
+  try {
     const vtc = await quickVTU('/api/topup', "POST", obj)
     console.log(vtc, obj)
     const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
