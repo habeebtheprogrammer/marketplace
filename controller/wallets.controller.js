@@ -324,12 +324,12 @@ exports.buyAirtime = async (req, res, next) => {
       plan_type: 'VTU',
       'request-id': "Airtime_" + generateRandomNumber(11),
     }
-    const vtc = await quickVTU('/api/topup', "POST", obj)
-    console.log(vtc, obj)
     const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
     var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
-    try {
 
+    try {
+      const vtc = await quickVTU('/api/topup', "POST", obj)
+    console.log(vtc, obj)
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
