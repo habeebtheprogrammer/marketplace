@@ -39,7 +39,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "500MB",
-      "amount": "75.00",
+      "amount": "140.00",
       // "amount": "132.00",
       "duration": "1Month"
     },
@@ -165,8 +165,8 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "500MB",
-      "amount": "75.00",
-      // "amount": "138.00",
+      // "amount": "75.00",
+      "amount": "140.00",
       "duration": "1Month"
     },
     {
@@ -272,7 +272,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "500MB",
-      "amount": "150.00",
+      "amount": "290.00",
       // "amount": "140.00",
       "duration": "1Month"
     },
