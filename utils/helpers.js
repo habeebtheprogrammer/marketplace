@@ -270,7 +270,13 @@ exports.isNotableEmail = (email) => {
 exports.removeCountryCode = (phoneNumber, countryCode = "+234") => {
   // Ensure the phone number starts with the country code
   if (phoneNumber.startsWith(countryCode)) {
-      return phoneNumber.slice(countryCode.length);
+      phoneNumber = phoneNumber.slice(countryCode.length); // Remove country code
   }
-  return phoneNumber; // Return original if no country code is found
+
+  // Ensure the number starts with '0'
+  if (!phoneNumber.startsWith("0")) {
+      phoneNumber = "0" + phoneNumber;
+  }
+
+  return phoneNumber;
 }
