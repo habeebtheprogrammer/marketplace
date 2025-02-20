@@ -161,6 +161,14 @@ exports.dataplan = [
     // },
 
     {
+      "planId": 35,
+      "network": "GLO",
+      "planType": "COOPERATE",
+      "planName": "200MB",
+      "amount": "75.00",
+      "duration": "1Month"
+    },
+    {
       "planId": 36,
       "network": "GLO",
       "planType": "COOPERATE",
@@ -170,11 +178,19 @@ exports.dataplan = [
       "duration": "1Month"
     },
     {
+      "planId": 65,
+      "network": "GLO",
+      "planType": "SME",
+      "planName": "1GB",
+      "amount": "220.00",
+      "duration": "1day"
+    },
+    {
       "planId": 37,
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "1GB",
-      "amount": "270.00",
+      "amount": "273.00",
       "duration": "1Month"
     },
     // {
@@ -190,16 +206,32 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "2GB",
-      "amount": "546.00",
+      "amount": "536.00",
       "duration": "1Month"
+    },
+    {
+      "planId": 66,
+      "network": "GLO",
+      "planType": "SME",
+      "planName": "2GB",
+      "amount": "320.00",
+      "duration": "1day"
     },
     {
       "planId": 39,
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "3GB",
-      "amount": "814.00",
+      "amount": "800.00",
       "duration": "1Month"
+    },
+    {
+      "planId": 67,
+      "network": "GLO",
+      "planType": "SME",
+      "planName": "3.5GB",
+      "amount": "510.00",
+      "duration": "2days"
     },
     // {
     //   "planId": 25,
@@ -223,7 +255,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "5GB",
-      "amount": "1360.00",
+      "amount": "1335.00",
       "duration": "1Month"
     },
     // {
@@ -239,8 +271,17 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "10GB",
-      "amount": "2700.00",
+      "amount": "2680.00",
       "duration": "1Month"
+    },
+
+    {
+      "planId": 68,
+      "network": "GLO",
+      "planType": "SME",
+      "planName": "15GB",
+      "amount": "2050.00",
+      "duration": "7days"
     },
     // {
     //   "planId": 28,
@@ -260,6 +301,22 @@ exports.dataplan = [
       "duration": "7days"
     },
     {
+      "planId": 59,
+      "network": "AIRTEL",
+      "planType": "SME",
+      "planName": "150MB",
+      "amount": "80.00",
+      "duration": "1day"
+    },
+    {
+      "planId": 60,
+      "network": "AIRTEL",
+      "planType": "SME",
+      "planName": "300MB",
+      "amount": "140.00",
+      "duration": "2days"
+    },
+    {
       "planId": 31,
       "network": "AIRTEL",
       "planType": "COOPERATE",
@@ -272,7 +329,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "500MB",
-      "amount": "290.00",
+      "amount": "285.00",
       // "amount": "140.00",
       "duration": "1Month"
     },
@@ -280,8 +337,8 @@ exports.dataplan = [
       "planId": 51,
       "network": "AIRTEL",
       "planType": "GIFTING",
-      "planName": "1GB",
-      "amount": "245.00",
+      "planName": "600MB",
+      "amount": "235.00",
       "duration": "2DAYS"
     },
     {
@@ -289,15 +346,23 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "1GB",
-      "amount": "570.00",
+      "amount": "560.00",
       "duration": "1Month"
+    },
+    {
+      "planId": 61,
+      "network": "AIRTEL",
+      "planType": "SME",
+      "planName": "1GB",
+      "amount": "303.00",
+      "duration": "7days"
     },
     {
       "planId": 21,
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "2GB",
-      "amount": "1140.00",
+      "amount": "1120.00",
       "duration": "1Month"
     },
     {
@@ -315,6 +380,15 @@ exports.dataplan = [
       "planName": "3GB",
       "amount": "535.00",
       "duration": "7DAYS"
+    },
+
+    {
+      "planId": 62,
+      "network": "AIRTEL",
+      "planType": "SME",
+      "planName": "3GB",
+      "amount": "1090.00",
+      "duration": "7days"
     },
     {
       "planId": 57,
@@ -337,7 +411,24 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "5GB",
-      "amount": "2820.00",
+      "amount": "2770.00",
+      "duration": "1Month"
+    },
+
+    {
+      "planId": 63,
+      "network": "AIRTEL",
+      "planType": "SME",
+      "planName": "7GB",
+      "amount": "2125.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 54,
+      "network": "AIRTEL",
+      "planType": "GIFTING",
+      "planName": "7GB",
+      "amount": "2300.00",
       "duration": "1Month"
     },
     {
@@ -345,23 +436,23 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "COOPERATE",
       "planName": "10GB",
-      "amount": "5620.00",
-      "duration": "1Month"
-    },
-    {
-      "planId": 54,
-      "network": "AIRTEL",
-      "planType": "GIFTING",
-      "planName": "10GB",
-      "amount": "2300.00",
+      "amount": "5550.00",
       "duration": "1Month"
     },
     {
       "planId": 56,
       "network": "AIRTEL",
       "planType": "GIFTING",
-      "planName": "15GB",
+      "planName": "10GB",
       "amount": "3180.00",
+      "duration": "1Month"
+    },
+    {
+      "planId": 64,
+      "network": "AIRTEL",
+      "planType": "SME",
+      "planName": "10GB",
+      "amount": "3120.00",
       "duration": "1Month"
     },
     {
