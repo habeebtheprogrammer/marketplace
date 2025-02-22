@@ -135,14 +135,14 @@ exports.dataplan = [
     //   "amount": "1325.00",
     //   "duration": "1Month"
     // },
-    {
-      "planId": 8,
-      "network": "MTN",
-      "planType": "SME",
-      "planName": "5GB",
-      "amount": "1315.00",
-      "duration": "1Month"
-    },
+    // {
+    //   "planId": 8,
+    //   "network": "MTN",
+    //   "planType": "SME",
+    //   "planName": "5GB",
+    //   "amount": "1315.00",
+    //   "duration": "1Month"
+    // },
     {
       "planId": 9,
       "network": "MTN",
