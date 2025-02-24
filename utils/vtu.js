@@ -165,7 +165,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "200MB",
-      "amount": "75.00",
+      "amount": "85.00",
       "duration": "1Month"
     },
     {
@@ -174,7 +174,7 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "500MB",
       // "amount": "75.00",
-      "amount": "145.00",
+      "amount": "153.00",
       "duration": "1Month"
     },
     {
@@ -190,7 +190,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "1GB",
-      "amount": "273.00",
+      "amount": "295.00",
       "duration": "1Month"
     },
     // {
@@ -206,7 +206,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "2GB",
-      "amount": "536.00",
+      "amount": "580.00",
       "duration": "1Month"
     },
     {
@@ -222,7 +222,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "3GB",
-      "amount": "800.00",
+      "amount": "865.00",
       "duration": "1Month"
     },
     {
@@ -255,7 +255,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "5GB",
-      "amount": "1335.00",
+      "amount": "1445.00",
       "duration": "1Month"
     },
     // {
@@ -271,7 +271,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "10GB",
-      "amount": "2680.00",
+      "amount": "2900.00",
       "duration": "1Month"
     },
 
