@@ -1,14 +1,12 @@
 const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
-const { dataplan, detectNetwork } = require('../utils/vtu');
+const { dataplan, detectNetwork, bilalsvtu } = require('../utils/vtu');
 const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
-const MONIFY_API_KEY = process.env.MONIFY_API_KEY;
-const MONIFY_SECRET_KEY = process.env.MONIFY_SECRET_KEY;
-const MONIFY_BASE_URL = process.env.MONIFY_BASE_URL;
+const vendor = "BILALSDATAHUB"  //'QUICKVTU' or 'BILALSDATAHUB'
 
 // Helper function to make authenticated requests to Monify API
 async function korraPay(endpoint, method, body = null, apikey) {
@@ -31,11 +29,33 @@ async function quickVTU(endpoint, method, body = null) {
   // const url = `${MONIFY_BASE_URL}${endpoint}`;
   const config = {
     headers: {
-      Authorization: 'Token 697bacbf1fc0ffd50e44bd689eba57a825d788acb5e09ec12eafc1d9c009',
+      Authorization: `Token ${process.env.QUICKVTU_TOKEN}`,
       'Content-Type': 'application/json',
     },
   };
   const result = await axios.post('https://quickvtu.com' + endpoint, JSON.stringify(body), config)
+  return result.data
+}
+async function quickVTU(endpoint, method, body = null) {
+  // const url = `${MONIFY_BASE_URL}${endpoint}`;
+  var result
+  if(vendor == 'QUICKVTU'){
+    const config = {
+      headers: {
+        Authorization: `Token ${process.env.QUICKVTU_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    };
+     result = await axios.post('https://quickvtu.com' + endpoint, JSON.stringify(body), config)
+  } else {
+    const config = {
+      headers: {
+        Authorization: `Token ${process.env.BILALSHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+    };
+     result = await axios.post('https://bilalsadasub.com' + endpoint, JSON.stringify(body), config)
+  }
   return result.data
 }
 
@@ -215,7 +235,7 @@ exports.withdraw = async (req, res, next) => {
 }
 exports.fetchDataPlan = async (req, res, next) => {
   try {
-    res.json({ dataplan });
+    res.json({ dataplan: vendor == "QUICKVTU" ? dataplan : bilalsvtu });
   } catch (error) {
     console.error('Error creating wallet:', error);
     res.status(500).json({ error: 'Failed to create wallet' });
@@ -239,7 +259,7 @@ exports.buyDataPlan = async (req, res, next) => {
   }
   const transaction = await walletsService.saveTransactions(data)
 
-  var plan = dataplan.find(d => d.planId == req.body.plan.planId);
+  var plan = vendor == 'QUICKVTU' ?  dataplan.find(d => d.planId == req.body.plan.planId) : bilalsvtu.find(d => d.planId == req.body.plan.planId);
   var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
   var obj = {
     network: net,
