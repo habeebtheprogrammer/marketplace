@@ -607,7 +607,7 @@ exports.bilalsvtu =  [
   //   "planId": "47",
   //   "amount": "147.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -616,7 +616,7 @@ exports.bilalsvtu =  [
   //   "planId": "25",
   //   "amount": "411.00",
   //   "planType": "SME",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -625,7 +625,7 @@ exports.bilalsvtu =  [
   //   "planId": "27",
   //   "amount": "895.00",
   //   "planType": "GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -634,7 +634,7 @@ exports.bilalsvtu =  [
   //   "planId": "48",
   //   "amount": "300.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -643,7 +643,7 @@ exports.bilalsvtu =  [
   //   "planId": "49",
   //   "amount": "450.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -652,7 +652,7 @@ exports.bilalsvtu =  [
   //   "planId": "50",
   //   "amount": "700.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -661,7 +661,7 @@ exports.bilalsvtu =  [
   //   "planId": "51",
   //   "amount": "876.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -670,7 +670,7 @@ exports.bilalsvtu =  [
   //   "planId": "52",
   //   "amount": "1752.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -679,7 +679,7 @@ exports.bilalsvtu =  [
   //   "planId": "45",
   //   "amount": "101.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "AIRTEL",
   //   "vendor": "bilal"
   // },
@@ -697,7 +697,7 @@ exports.bilalsvtu =  [
     "planId": "44",
     "amount": "203.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -715,7 +715,7 @@ exports.bilalsvtu =  [
     "planId": "7",
     "amount": "277.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -724,7 +724,7 @@ exports.bilalsvtu =  [
     "planId": "8",
     "amount": "554.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -742,7 +742,7 @@ exports.bilalsvtu =  [
     "planId": "9",
     "amount": "1108.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -769,7 +769,7 @@ exports.bilalsvtu =  [
     "planId": "75",
     "amount": "846.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -778,7 +778,7 @@ exports.bilalsvtu =  [
     "planId": "10",
     "amount": "2771.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -796,7 +796,7 @@ exports.bilalsvtu =  [
     "planId": "26",
     "amount": "5542.00",
     "planType": "COOPERATE",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -805,7 +805,7 @@ exports.bilalsvtu =  [
     "planId": "73",
     "amount": "3172.00",
     "planType": "GIFTING PROMO",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -814,7 +814,7 @@ exports.bilalsvtu =  [
     "planId": "74",
     "amount": "4254.00",
     "planType": "GIFTING PROMO",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -823,7 +823,7 @@ exports.bilalsvtu =  [
   //   "planId": "29",
   //   "amount": "62.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -850,7 +850,7 @@ exports.bilalsvtu =  [
   //   "planId": "32",
   //   "amount": "560.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -859,7 +859,7 @@ exports.bilalsvtu =  [
   //   "planId": "33",
   //   "amount": "840.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -868,7 +868,7 @@ exports.bilalsvtu =  [
   //   "planId": "34",
   //   "amount": "1386.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days",
+  //   "duration": "1Month",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -877,7 +877,7 @@ exports.bilalsvtu =  [
   //   "planId": "35",
   //   "amount": "2772.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30days after redeeming",
+  //   "duration": "1Month after redeeming",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -886,7 +886,7 @@ exports.bilalsvtu =  [
     "planId": "1",
     "amount": "305.00",
     "planType": "SME",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -895,7 +895,7 @@ exports.bilalsvtu =  [
     "planId": "2",
     "amount": "610.00",
     "planType": "SME",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -904,7 +904,7 @@ exports.bilalsvtu =  [
     "planId": "3",
     "amount": "1220.00",
     "planType": "SME",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -913,7 +913,7 @@ exports.bilalsvtu =  [
     "planId": "4",
     "amount": "1830.00",
     "planType": "SME",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -931,7 +931,7 @@ exports.bilalsvtu =  [
     "planId": "6",
     "amount": "6100.00",
     "planType": "SME",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "MTN",
     "vendor": "bilal"
   }
