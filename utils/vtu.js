@@ -662,14 +662,6 @@ exports.bilalsvtu =  [
     "network": "AIRTEL"
   },
   {
-    "planName": "750MB",
-    "planId": "53",
-    "amount": "487.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
     "planName": "1GB",
     "planId": "8",
     "amount": "554.00",
@@ -686,14 +678,6 @@ exports.bilalsvtu =  [
     "network": "AIRTEL"
   },
   {
-    "planName": "1.5GB",
-    "planId": "54",
-    "amount": "1015.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
     "planName": "2GB",
     "planId": "9",
     "amount": "1108.00",
@@ -703,26 +687,10 @@ exports.bilalsvtu =  [
   },
   {
     "planName": "2GB",
-    "planId": "55",
-    "amount": "1220.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "2GB",
     "planId": "70",
     "amount": "580.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "3GB",
-    "planId": "56",
-    "amount": "1530.00",
-    "planType": "GIFTING",
-    "duration": "1500",
     "network": "AIRTEL"
   },
   {
@@ -738,14 +706,6 @@ exports.bilalsvtu =  [
     "planId": "75",
     "amount": "846.00",
     "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "4.5GB",
-    "planId": "57",
-    "amount": "2046.00",
-    "planType": "GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
   },
@@ -782,14 +742,6 @@ exports.bilalsvtu =  [
     "network": "AIRTEL"
   },
   {
-    "planName": "11GB",
-    "planId": "58",
-    "amount": "4112.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
     "planName": "20GB",
     "planId": "74",
     "amount": "4254.00",
@@ -822,42 +774,10 @@ exports.bilalsvtu =  [
     "network": "GLO"
   },
   {
-    "planName": "1GB",
-    "planId": "76",
-    "amount": "210.00",
-    "planType": "GIFTING PROMO",
-    "duration": "24hours",
-    "network": "GLO"
-  },
-  {
-    "planName": "1.5GB",
-    "planId": "11",
-    "amount": "475.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
     "planName": "2GB",
     "planId": "32",
     "amount": "560.00",
     "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "2GB",
-    "planId": "77",
-    "amount": "320.00",
-    "planType": "GIFTING PROMO",
-    "duration": "24hours",
-    "network": "GLO"
-  },
-  {
-    "planName": "2.9GB",
-    "planId": "12",
-    "amount": "969.00",
-    "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
   },
@@ -870,42 +790,10 @@ exports.bilalsvtu =  [
     "network": "GLO"
   },
   {
-    "planName": "3.5GB",
-    "planId": "78",
-    "amount": "535.00",
-    "planType": "GIFTING PROMO",
-    "duration": "2 days",
-    "network": "GLO"
-  },
-  {
-    "planName": "4.1GB",
-    "planId": "13",
-    "amount": "1331.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
     "planName": "5GB",
     "planId": "34",
     "amount": "1386.00",
     "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "5.8GB",
-    "planId": "14",
-    "amount": "1909.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "10GB",
-    "planId": "15",
-    "amount": "3132.00",
-    "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
   },
@@ -915,14 +803,6 @@ exports.bilalsvtu =  [
     "amount": "2772.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days after redeeming",
-    "network": "GLO"
-  },
-  {
-    "planName": "15GB",
-    "planId": "79",
-    "amount": "2103.00",
-    "planType": "GIFTING PROMO",
-    "duration": "7 days",
     "network": "GLO"
   },
   {

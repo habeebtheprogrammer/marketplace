@@ -645,10 +645,15 @@ function convertToMB(size) {
     "MTN", 
     ["COOPERATE GIFTING", "GIFTING"]
   );
-  const filteredPlans = filterPlans(
+  const filteredAirtel = filterPlans(
     filteredMtn, 
-    "MTN", 
-    ["COOPERATE GIFTING", "GIFTING"]
+    "AIRTEL", 
+    ["GIFTING"]
+  );
+  const filteredPlans = filterPlans(
+    filteredAirtel, 
+    "GLO", 
+    ["GIFTING", "GIFTING PROMO"]
   );
   // Output the filtered results
   console.log(JSON.stringify(filteredPlans, null, 2));
