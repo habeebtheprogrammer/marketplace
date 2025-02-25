@@ -646,13 +646,13 @@ exports.bilalsvtu =   [
       "planType": "COOPERATE GIFTING",
       "network": "AIRTEL"
     },
-    {
-      "planName": "750MB",
-      "planId": "53",
-      "amount": "487.00",
-      "planType": "GIFTING",
-      "network": "AIRTEL"
-    },
+    // {
+    //   "planName": "750MB",
+    //   "planId": "53",
+    //   "amount": "487.00",
+    //   "planType": "GIFTING",
+    //   "network": "AIRTEL"
+    // },
     {
       "planName": "1GB",
       "planId": "8",
@@ -667,13 +667,13 @@ exports.bilalsvtu =   [
       "planType": "GIFTING PROMO",
       "network": "AIRTEL"
     },
-    {
-      "planName": "1.5GB",
-      "planId": "54",
-      "amount": "1015.00",
-      "planType": "GIFTING",
-      "network": "AIRTEL"
-    },
+    // {
+    //   "planName": "1.5GB",
+    //   "planId": "54",
+    //   "amount": "1015.00",
+    //   "planType": "GIFTING",
+    //   "network": "AIRTEL"
+    // },
     {
       "planName": "2GB",
       "planId": "9",
@@ -681,13 +681,13 @@ exports.bilalsvtu =   [
       "planType": "COOPERATE GIFTING",
       "network": "AIRTEL"
     },
-    {
-      "planName": "2GB",
-      "planId": "55",
-      "amount": "1220.00",
-      "planType": "GIFTING",
-      "network": "AIRTEL"
-    },
+    // {
+    //   "planName": "2GB",
+    //   "planId": "55",
+    //   "amount": "1220.00",
+    //   "planType": "GIFTING",
+    //   "network": "AIRTEL"
+    // },
     {
       "planName": "2GB",
       "planId": "70",
@@ -695,13 +695,13 @@ exports.bilalsvtu =   [
       "planType": "GIFTING PROMO",
       "network": "AIRTEL"
     },
-    {
-      "planName": "3GB",
-      "planId": "56",
-      "amount": "1530.00",
-      "planType": "GIFTING",
-      "network": "AIRTEL"
-    },
+    // {
+    //   "planName": "3GB",
+    //   "planId": "56",
+    //   "amount": "1530.00",
+    //   "planType": "GIFTING",
+    //   "network": "AIRTEL"
+    // },
     {
       "planName": "3GB",
       "planId": "71",
@@ -716,13 +716,13 @@ exports.bilalsvtu =   [
       "planType": "COOPERATE GIFTING",
       "network": "AIRTEL"
     },
-    {
-      "planName": "4.5GB",
-      "planId": "57",
-      "amount": "2046.00",
-      "planType": "GIFTING",
-      "network": "AIRTEL"
-    },
+    // {
+    //   "planName": "4.5GB",
+    //   "planId": "57",
+    //   "amount": "2046.00",
+    //   "planType": "GIFTING",
+    //   "network": "AIRTEL"
+    // },
     {
       "planName": "5GB",
       "planId": "10",
@@ -751,13 +751,13 @@ exports.bilalsvtu =   [
       "planType": "GIFTING PROMO",
       "network": "AIRTEL"
     },
-    {
-      "planName": "11GB",
-      "planId": "58",
-      "amount": "4112.00",
-      "planType": "GIFTING",
-      "network": "AIRTEL"
-    },
+    // {
+    //   "planName": "11GB",
+    //   "planId": "58",
+    //   "amount": "4112.00",
+    //   "planType": "GIFTING",
+    //   "network": "AIRTEL"
+    // },
     {
       "planName": "20GB",
       "planId": "74",
