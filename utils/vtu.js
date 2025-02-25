@@ -1053,14 +1053,14 @@ exports.bilalsvtu =    [
     "duration": "30days",
     "network": "MTN"
   },
-  {
-    "planName": "3GB",
-    "planId": "22",
-    "amount": "825.00",
-    "planType": "COOPERATE",
-    "duration": "30 days",
-    "network": "MTN"
-  },
+  // {
+  //   "planName": "3GB",
+  //   "planId": "22",
+  //   "amount": "825.00",
+  //   "planType": "COOPERATE",
+  //   "duration": "30 days",
+  //   "network": "MTN"
+  // },
   // {
   //   "planName": "3GB",
   //   "planId": "64",
@@ -1109,28 +1109,28 @@ exports.bilalsvtu =    [
     "duration": "30days",
     "network": "MTN"
   },
-  {
-    "planName": "10GB",
-    "planId": "24",
-    "amount": "2752.00",
-    "planType": "COOPERATE",
-    "duration": "30days",
-    "network": "MTN"
-  },
-  {
-    "planName": "400GB",
-    "planId": "62",
-    "amount": "53096.00",
-    "planType": "COOPERATE",
-    "duration": "90 days plan",
-    "network": "MTN"
-  },
-  {
-    "planName": "1TB",
-    "planId": "40",
-    "amount": "107485.00",
-    "planType": "COOPERATE",
-    "duration": "Yearly",
-    "network": "MTN"
-  }
+  // {
+  //   "planName": "10GB",
+  //   "planId": "24",
+  //   "amount": "2752.00",
+  //   "planType": "COOPERATE",
+  //   "duration": "30days",
+  //   "network": "MTN"
+  // },
+  // {
+  //   "planName": "400GB",
+  //   "planId": "62",
+  //   "amount": "53096.00",
+  //   "planType": "COOPERATE",
+  //   "duration": "90 days plan",
+  //   "network": "MTN"
+  // },
+  // {
+  //   "planName": "1TB",
+  //   "planId": "40",
+  //   "amount": "107485.00",
+  //   "planType": "COOPERATE",
+  //   "duration": "Yearly",
+  //   "network": "MTN"
+  // }
 ]
