@@ -39,7 +39,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME 2",
       "planName": "500MB",
-      "amount": "315.00",
+      "amount": "305.00",
       // "amount": "132.00",
       "duration": "1Month",
     "vendor": "quickvtu"
@@ -66,7 +66,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME 2",
       "planName": "1GB",
-      "amount": "630.00",
+      "amount": "610.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -91,7 +91,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME 2",
       "planName": "2GB",
-      "amount": "1260.00",
+      "amount": "1220.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -118,7 +118,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME 2",
       "planName": "3GB",
-      "amount": "1890.00",
+      "amount": "1830.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -152,7 +152,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME 2",
       "planName": "10GB",
-      "amount": "6250.00",
+      "amount": "6100.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
