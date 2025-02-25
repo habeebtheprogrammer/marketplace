@@ -540,11 +540,11 @@ exports.dataplan = [
   
   
   
-exports.bilalsvtu =   [
+exports.bilalsvtu =  [
   {
     "planName": "500MB",
     "planId": "28",
-    "amount": "465.00",
+    "amount": "455.00",
     "planType": "GIFTING",
     "duration": "30 days",
     "network": "9MOBILE"
@@ -552,7 +552,7 @@ exports.bilalsvtu =   [
   {
     "planName": "500MB",
     "planId": "46",
-    "amount": "85.00",
+    "amount": "75.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "9MOBILE"
@@ -560,7 +560,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1GB",
     "planId": "47",
-    "amount": "167.00",
+    "amount": "147.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -568,7 +568,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1.1GB",
     "planId": "25",
-    "amount": "433.00",
+    "amount": "411.00",
     "planType": "SME",
     "duration": "30days",
     "network": "9MOBILE"
@@ -576,7 +576,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1.5GB",
     "planId": "27",
-    "amount": "925.00",
+    "amount": "895.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -584,7 +584,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "48",
-    "amount": "340.00",
+    "amount": "300.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -592,7 +592,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3GB",
     "planId": "49",
-    "amount": "510.00",
+    "amount": "450.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -600,7 +600,7 @@ exports.bilalsvtu =   [
   {
     "planName": "4GB",
     "planId": "50",
-    "amount": "780.00",
+    "amount": "700.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -608,7 +608,7 @@ exports.bilalsvtu =   [
   {
     "planName": "5GB",
     "planId": "51",
-    "amount": "978.00",
+    "amount": "876.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -616,7 +616,7 @@ exports.bilalsvtu =   [
   {
     "planName": "10GB",
     "planId": "52",
-    "amount": "1956.00",
+    "amount": "1752.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE"
@@ -624,7 +624,7 @@ exports.bilalsvtu =   [
   {
     "planName": "100MB",
     "planId": "45",
-    "amount": "103.00",
+    "amount": "101.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -632,7 +632,7 @@ exports.bilalsvtu =   [
   {
     "planName": "150MB",
     "planId": "67",
-    "amount": "73.00",
+    "amount": "71.00",
     "planType": "GIFTING PROMO",
     "duration": "1 day",
     "network": "AIRTEL"
@@ -640,7 +640,7 @@ exports.bilalsvtu =   [
   {
     "planName": "300MB",
     "planId": "44",
-    "amount": "209.00",
+    "amount": "203.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -648,7 +648,7 @@ exports.bilalsvtu =   [
   {
     "planName": "300MB",
     "planId": "68",
-    "amount": "139.00",
+    "amount": "133.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "AIRTEL"
@@ -656,7 +656,7 @@ exports.bilalsvtu =   [
   {
     "planName": "500MB",
     "planId": "7",
-    "amount": "287.00",
+    "amount": "277.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -664,7 +664,7 @@ exports.bilalsvtu =   [
   {
     "planName": "750MB",
     "planId": "53",
-    "amount": "501.00",
+    "amount": "487.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -672,7 +672,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1GB",
     "planId": "8",
-    "amount": "574.00",
+    "amount": "554.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -680,7 +680,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1GB",
     "planId": "69",
-    "amount": "320.00",
+    "amount": "300.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "AIRTEL"
@@ -688,7 +688,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1.5GB",
     "planId": "54",
-    "amount": "1045.00",
+    "amount": "1015.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -696,7 +696,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "9",
-    "amount": "1148.00",
+    "amount": "1108.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -704,7 +704,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "55",
-    "amount": "1260.00",
+    "amount": "1220.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -712,7 +712,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "70",
-    "amount": "620.00",
+    "amount": "580.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "AIRTEL"
@@ -720,7 +720,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3GB",
     "planId": "56",
-    "amount": "1590.00",
+    "amount": "1530.00",
     "planType": "GIFTING",
     "duration": "1500",
     "network": "AIRTEL"
@@ -728,7 +728,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3GB",
     "planId": "71",
-    "amount": "1155.00",
+    "amount": "1095.00",
     "planType": "GIFTING PROMO",
     "duration": "7 days",
     "network": "AIRTEL"
@@ -736,7 +736,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3GB",
     "planId": "75",
-    "amount": "906.00",
+    "amount": "846.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -744,7 +744,7 @@ exports.bilalsvtu =   [
   {
     "planName": "4.5GB",
     "planId": "57",
-    "amount": "2138.00",
+    "amount": "2046.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -752,7 +752,7 @@ exports.bilalsvtu =   [
   {
     "planName": "5GB",
     "planId": "10",
-    "amount": "2873.00",
+    "amount": "2771.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -760,7 +760,7 @@ exports.bilalsvtu =   [
   {
     "planName": "7GB",
     "planId": "72",
-    "amount": "2278.00",
+    "amount": "2136.00",
     "planType": "GIFTING PROMO",
     "duration": "7days",
     "network": "AIRTEL"
@@ -768,7 +768,7 @@ exports.bilalsvtu =   [
   {
     "planName": "10GB",
     "planId": "26",
-    "amount": "5746.00",
+    "amount": "5542.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -776,7 +776,7 @@ exports.bilalsvtu =   [
   {
     "planName": "10GB",
     "planId": "73",
-    "amount": "3376.00",
+    "amount": "3172.00",
     "planType": "GIFTING PROMO",
     "duration": "30days",
     "network": "AIRTEL"
@@ -784,7 +784,7 @@ exports.bilalsvtu =   [
   {
     "planName": "11GB",
     "planId": "58",
-    "amount": "4336.00",
+    "amount": "4112.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "AIRTEL"
@@ -792,7 +792,7 @@ exports.bilalsvtu =   [
   {
     "planName": "20GB",
     "planId": "74",
-    "amount": "4662.00",
+    "amount": "4254.00",
     "planType": "GIFTING PROMO",
     "duration": "30days",
     "network": "AIRTEL"
@@ -800,7 +800,7 @@ exports.bilalsvtu =   [
   {
     "planName": "200MB",
     "planId": "29",
-    "amount": "66.00",
+    "amount": "62.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -808,7 +808,7 @@ exports.bilalsvtu =   [
   {
     "planName": "500MB",
     "planId": "30",
-    "amount": "162.00",
+    "amount": "152.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "GLO"
@@ -816,7 +816,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1GB",
     "planId": "31",
-    "amount": "325.00",
+    "amount": "305.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "GLO"
@@ -824,7 +824,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1GB",
     "planId": "76",
-    "amount": "230.00",
+    "amount": "210.00",
     "planType": "GIFTING PROMO",
     "duration": "24hours",
     "network": "GLO"
@@ -832,7 +832,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1.5GB",
     "planId": "11",
-    "amount": "505.00",
+    "amount": "475.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -840,7 +840,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "32",
-    "amount": "600.00",
+    "amount": "560.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -848,7 +848,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "77",
-    "amount": "360.00",
+    "amount": "320.00",
     "planType": "GIFTING PROMO",
     "duration": "24hours",
     "network": "GLO"
@@ -856,7 +856,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2.9GB",
     "planId": "12",
-    "amount": "1027.00",
+    "amount": "969.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -864,7 +864,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3GB",
     "planId": "33",
-    "amount": "900.00",
+    "amount": "840.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -872,7 +872,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3.5GB",
     "planId": "78",
-    "amount": "605.00",
+    "amount": "535.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "GLO"
@@ -880,7 +880,7 @@ exports.bilalsvtu =   [
   {
     "planName": "4.1GB",
     "planId": "13",
-    "amount": "1413.00",
+    "amount": "1331.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -888,7 +888,7 @@ exports.bilalsvtu =   [
   {
     "planName": "5GB",
     "planId": "34",
-    "amount": "1488.00",
+    "amount": "1386.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -896,7 +896,7 @@ exports.bilalsvtu =   [
   {
     "planName": "5.8GB",
     "planId": "14",
-    "amount": "2027.00",
+    "amount": "1909.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -904,7 +904,7 @@ exports.bilalsvtu =   [
   {
     "planName": "10GB",
     "planId": "15",
-    "amount": "3336.00",
+    "amount": "3132.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO"
@@ -912,7 +912,7 @@ exports.bilalsvtu =   [
   {
     "planName": "10GB",
     "planId": "35",
-    "amount": "2976.00",
+    "amount": "2772.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days after redeeming",
     "network": "GLO"
@@ -920,7 +920,7 @@ exports.bilalsvtu =   [
   {
     "planName": "15GB",
     "planId": "79",
-    "amount": "2409.00",
+    "amount": "2103.00",
     "planType": "GIFTING PROMO",
     "duration": "7 days",
     "network": "GLO"
@@ -928,7 +928,7 @@ exports.bilalsvtu =   [
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "315.00",
+    "amount": "305.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN"
@@ -936,7 +936,7 @@ exports.bilalsvtu =   [
   {
     "planName": "1GB",
     "planId": "2",
-    "amount": "630.00",
+    "amount": "610.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN"
@@ -944,7 +944,7 @@ exports.bilalsvtu =   [
   {
     "planName": "2GB",
     "planId": "3",
-    "amount": "1260.00",
+    "amount": "1220.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN"
@@ -952,7 +952,7 @@ exports.bilalsvtu =   [
   {
     "planName": "3GB",
     "planId": "4",
-    "amount": "1890.00",
+    "amount": "1830.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN"
@@ -960,7 +960,7 @@ exports.bilalsvtu =   [
   {
     "planName": "7GB",
     "planId": "43",
-    "amount": "3213.00",
+    "amount": "3071.00",
     "planType": "GIFTING PROMO",
     "duration": "7days",
     "network": "MTN"
@@ -968,7 +968,7 @@ exports.bilalsvtu =   [
   {
     "planName": "10GB",
     "planId": "6",
-    "amount": "6306.00",
+    "amount": "6102.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN"

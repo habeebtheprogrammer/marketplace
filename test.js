@@ -620,21 +620,6 @@ function convertToMB(size) {
   
   function filterPlans(plans, network, excludePlanTypes) {
     return plans
-      .map(plan => {
-        const mbSize = convertToMB(plan.planName);
-        const hundreds = Math.floor(mbSize / 100);
-        const originalAmount = parseFloat(plan.amount.replace(',', ''));
-        const newAmount = originalAmount + hundreds;
-        
-        return {
-          planName: plan.planName,
-          planId: plan.planId,
-          amount: newAmount.toFixed(2),
-          planType: plan.planType,
-          duration: plan.duration,
-          network: plan.network
-        };
-      })
       .filter(plan => {
         // Keep plan if:
         // 1. It's not from the specified network, OR
