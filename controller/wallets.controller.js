@@ -345,7 +345,7 @@ exports.buyAirtime = async (req, res, next) => {
   var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
   try {
-    const vtc = await quickVTU('/api/topup', "POST", obj, vendor == 'quickvtu')
+    const vtc = await quickVTU('/api/topup', "POST", obj, 'quickvtu')
     console.log(vtc, obj)
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });

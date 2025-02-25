@@ -929,7 +929,7 @@ exports.bilalsvtu =  [
   {
     "planName": "10GB",
     "planId": "6",
-    "amount": "6102.00",
+    "amount": "6100.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
