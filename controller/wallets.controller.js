@@ -2,11 +2,11 @@ const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
 const { dataplan, detectNetwork, bilalsvtu } = require('../utils/vtu');
-const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode } = require('../utils/helpers');
+const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode, combineAndSortDataPlan } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
-const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
+// const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
 
 // Helper function to make authenticated requests to Monify API
 async function korraPay(endpoint, method, body = null, apikey) {
@@ -24,22 +24,12 @@ async function korraPay(endpoint, method, body = null, apikey) {
 
   const response = await fetch(url, options);
   return await response.json();
-}
-async function quickVTU(endpoint, method, body = null) {
-  // const url = `${MONIFY_BASE_URL}${endpoint}`;
-  const config = {
-    headers: {
-      Authorization: `Token ${process.env.QUICKVTU_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-  };
-  const result = await axios.post('https://quickvtu.com' + endpoint, JSON.stringify(body), config)
-  return result.data
-}
-async function quickVTU(endpoint, method, body = null) {
+} 
+
+async function quickVTU(endpoint, method, body = null, vendor) {
   // const url = `${MONIFY_BASE_URL}${endpoint}`;
   var result
-  if(vendor == 'QUICKVTU'){
+  if(vendor == 'quickvtu'){
     const config = {
       headers: {
         Authorization: `Token ${process.env.QUICKVTU_TOKEN}`,
@@ -235,14 +225,13 @@ exports.withdraw = async (req, res, next) => {
 }
 exports.fetchDataPlan = async (req, res, next) => {
   try {
-    res.json({ dataplan: vendor == "QUICKVTU" ? dataplan : bilalsvtu });
+    res.json({ dataplan: combineAndSortDataPlan( bilalsvtu, dataplan)});
   } catch (error) {
     console.error('Error creating wallet:', error);
     res.status(500).json({ error: 'Failed to create wallet' });
   }
 }
-
-
+ 
 exports.buyDataPlan = async (req, res, next) => {
   var wallet = await walletsService.getWallets({ userId: req.userId })
   if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
@@ -259,7 +248,7 @@ exports.buyDataPlan = async (req, res, next) => {
   }
   const transaction = await walletsService.saveTransactions(data)
 
-  var plan = vendor == 'QUICKVTU' ?  dataplan.find(d => d.planId == req.body.plan.planId) : bilalsvtu.find(d => d.planId == req.body.plan.planId);
+  var plan = req.body.plan.vendor == 'quickvtu' ?  dataplan.find(d => d.planId == req.body.plan.planId) : bilalsvtu.find(d => d.planId == req.body.plan.planId);
   var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
   var obj = {
     network: net,
@@ -274,7 +263,7 @@ exports.buyDataPlan = async (req, res, next) => {
   var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
   try {
-    const vtc = await quickVTU('/api/data', "POST", obj)
+    const vtc = await quickVTU('/api/data', "POST", obj, req.body.plan.vendor )
     console.log(vtc, obj, 'resp')
 
 
@@ -356,7 +345,7 @@ exports.buyAirtime = async (req, res, next) => {
   var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
 
   try {
-    const vtc = await quickVTU('/api/topup', "POST", obj)
+    const vtc = await quickVTU('/api/topup', "POST", obj, vendor == 'quickvtu')
     console.log(vtc, obj)
     if (vtc?.status == 'fail') {
       res.status(500).json({ errors: ["Transaction failed. please try again later"] });

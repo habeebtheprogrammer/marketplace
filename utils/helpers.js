@@ -280,3 +280,34 @@ exports.removeCountryCode = (phoneNumber, countryCode = "+234") => {
 
   return phoneNumber;
 }
+
+exports.combineAndSortDataPlan = (array1, array2) => {
+  // Combine the arrays
+  const combinedArray = [...array1, ...array2];
+
+  // Function to extract numeric value from plan name for sorting (converting to MB)
+  function extractSize(planName) {
+    const value = parseFloat(planName);
+    if (planName.includes('TB')) return value * 1024 * 1024;
+    if (planName.includes('GB')) return value * 1024;
+    if (planName.includes('MB')) return value;
+    return 0;
+  }
+
+  // Sort first by network then by data size in planName
+  return combinedArray.sort((a, b) => {
+    // Compare network names (case insensitive)
+    const networkA = a.network.toUpperCase();
+    const networkB = b.network.toUpperCase();
+    if (networkA < networkB) return -1;
+    if (networkA > networkB) return 1;
+
+    // If networks are the same, compare plan names based on data size
+    const planA = a.planName || a.plan_name || "";
+    const planB = b.planName || b.plan_name || "";
+    const sizeA = extractSize(planA);
+    const sizeB = extractSize(planB);
+    
+    return sizeA - sizeB;
+  });
+}

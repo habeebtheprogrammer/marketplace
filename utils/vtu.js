@@ -37,11 +37,12 @@ exports.dataplan = [
     {
       "planId": 4,
       "network": "MTN",
-      "planType": "SME",
+      "planType": "SME 2",
       "planName": "500MB",
-      "amount": "540.00",
+      "amount": "315.00",
       // "amount": "132.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 2,
@@ -63,10 +64,11 @@ exports.dataplan = [
     {
       "planId": 5,
       "network": "MTN",
-      "planType": "SME",
+      "planType": "SME 2",
       "planName": "1GB",
-      "amount": "610.00",
-      "duration": "1Month"
+      "amount": "630.00",
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 1,
@@ -87,10 +89,11 @@ exports.dataplan = [
     {
       "planId": 6,
       "network": "MTN",
-      "planType": "SME",
+      "planType": "SME 2",
       "planName": "2GB",
-      "amount": "1220.00",
-      "duration": "1Month"
+      "amount": "1260.00",
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 49,
@@ -113,10 +116,11 @@ exports.dataplan = [
     {
       "planId": 7,
       "network": "MTN",
-      "planType": "SME",
+      "planType": "SME 2",
       "planName": "3GB",
-      "amount": "1830.00",
-      "duration": "1Month"
+      "amount": "1890.00",
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
 
     // {
@@ -146,10 +150,11 @@ exports.dataplan = [
     {
       "planId": 9,
       "network": "MTN",
-      "planType": "SME",
+      "planType": "SME 2",
       "planName": "10GB",
-      "amount": "6102.00",
-      "duration": "1Month"
+      "amount": "6250.00",
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 18,
@@ -166,7 +171,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "200MB",
       "amount": "85.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 36,
@@ -175,7 +181,8 @@ exports.dataplan = [
       "planName": "500MB",
       // "amount": "75.00",
       "amount": "153.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 65,
@@ -183,7 +190,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "1GB",
       "amount": "220.00",
-      "duration": "1day"
+      "duration": "1day",
+    "vendor": "quickvtu"
     },
     {
       "planId": 37,
@@ -191,7 +199,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "295.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 24,
@@ -207,7 +216,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "580.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 66,
@@ -215,7 +225,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "2GB",
       "amount": "320.00",
-      "duration": "1day"
+      "duration": "1day",
+    "vendor": "quickvtu"
     },
     {
       "planId": 39,
@@ -223,7 +234,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "3GB",
       "amount": "865.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 67,
@@ -231,7 +243,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "3.5GB",
       "amount": "510.00",
-      "duration": "2days"
+      "duration": "2days",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 25,
@@ -256,7 +269,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "1445.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 27,
@@ -272,7 +286,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "2900.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
 
     {
@@ -281,7 +296,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "15GB",
       "amount": "2050.00",
-      "duration": "7days"
+      "duration": "7days",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 28,
@@ -298,7 +314,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "100MB",
       "amount": "160.00",
-      "duration": "7days"
+      "duration": "7days",
+    "vendor": "quickvtu"
     },
     {
       "planId": 59,
@@ -306,7 +323,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "150MB",
       "amount": "80.00",
-      "duration": "1day"
+      "duration": "1day",
+    "vendor": "quickvtu"
     },
     {
       "planId": 60,
@@ -314,7 +332,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "300MB",
       "amount": "140.00",
-      "duration": "2days"
+      "duration": "2days",
+    "vendor": "quickvtu"
     },
     {
       "planId": 31,
@@ -322,7 +341,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "300MB",
       "amount": "220.00",
-      "duration": "7days"
+      "duration": "7days",
+    "vendor": "quickvtu"
     },
     {
       "planId": 19,
@@ -331,7 +351,8 @@ exports.dataplan = [
       "planName": "500MB",
       "amount": "285.00",
       // "amount": "140.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 51,
@@ -339,7 +360,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "600MB",
       "amount": "235.00",
-      "duration": "2DAYS"
+      "duration": "2DAYS",
+    "vendor": "quickvtu"
     },
     {
       "planId": 20,
@@ -347,7 +369,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "560.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 61,
@@ -355,7 +378,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "1GB",
       "amount": "303.00",
-      "duration": "7days"
+      "duration": "7days",
+    "vendor": "quickvtu"
     },
     {
       "planId": 21,
@@ -363,7 +387,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "1120.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 58,
@@ -371,7 +396,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "2GB",
       "amount": "335.00",
-      "duration": "2Days"
+      "duration": "2Days",
+    "vendor": "quickvtu"
     },
     {
       "planId": 53,
@@ -379,7 +405,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "3GB",
       "amount": "535.00",
-      "duration": "7DAYS"
+      "duration": "7DAYS",
+    "vendor": "quickvtu"
     },
 
     {
@@ -388,7 +415,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "3GB",
       "amount": "1090.00",
-      "duration": "7days"
+      "duration": "7days",
+    "vendor": "quickvtu"
     },
     {
       "planId": 57,
@@ -396,7 +424,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "4GB",
       "amount": "1045.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 52,
@@ -404,7 +433,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "5GB",
       "amount": "1210.00",
-      "duration": "14DAYS"
+      "duration": "14DAYS",
+    "vendor": "quickvtu"
     },
     {
       "planId": 22,
@@ -412,7 +442,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "2770.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
 
     {
@@ -421,7 +452,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "7GB",
       "amount": "2125.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 54,
@@ -429,7 +461,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "7GB",
       "amount": "2300.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 23,
@@ -437,7 +470,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "5550.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 56,
@@ -445,7 +479,8 @@ exports.dataplan = [
       "planType": "GIFTING",
       "planName": "10GB",
       "amount": "3180.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 64,
@@ -453,7 +488,8 @@ exports.dataplan = [
       "planType": "SME",
       "planName": "10GB",
       "amount": "3120.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 42,
@@ -461,7 +497,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "1GB",
       "amount": "150.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     {
       "planId": 43,
@@ -469,7 +506,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "2GB",
       "amount": "290.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 29,
@@ -485,7 +523,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "3GB",
       "amount": "430.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
 
     // {
@@ -502,7 +541,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "4GB",
       "amount": "570.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 30,
@@ -518,7 +558,8 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "5GB",
       "amount": "710.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     },
     // {
     //   "planId": 33,
@@ -534,287 +575,320 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "10GB",
       "amount": "1420.00",
-      "duration": "1Month"
+      "duration": "1Month",
+    "vendor": "quickvtu"
     }
   ];
   
   
   
 exports.bilalsvtu =  [
-  {
-    "planName": "500MB",
-    "planId": "28",
-    "amount": "455.00",
-    "planType": "GIFTING",
-    "duration": "30 days",
-    "network": "9MOBILE",
-    "vendor": "bilalsvtu"
-  },
-  {
-    "planName": "500MB",
-    "planId": "46",
-    "amount": "75.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30 days",
-    "network": "9MOBILE",
-    "vendor": "bilalsvtu"
+  // {
+  //   "planName": "500MB",
+  //   "planId": "28",
+  //   "amount": "455.00",
+  //   "planType": "GIFTING",
+  //   "duration": "30 days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "500MB",
+  //   "planId": "46",
+  //   "amount": "75.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30 days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
 
-  },
-  {
-    "planName": "1GB",
-    "planId": "47",
-    "amount": "147.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "1.1GB",
-    "planId": "25",
-    "amount": "411.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "1.5GB",
-    "planId": "27",
-    "amount": "895.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "2GB",
-    "planId": "48",
-    "amount": "300.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "3GB",
-    "planId": "49",
-    "amount": "450.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "4GB",
-    "planId": "50",
-    "amount": "700.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "5GB",
-    "planId": "51",
-    "amount": "876.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "10GB",
-    "planId": "52",
-    "amount": "1752.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "9MOBILE"
-  },
-  {
-    "planName": "100MB",
-    "planId": "45",
-    "amount": "101.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "150MB",
-    "planId": "67",
-    "amount": "71.00",
-    "planType": "GIFTING PROMO",
-    "duration": "1 day",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "300MB",
-    "planId": "44",
-    "amount": "203.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "300MB",
-    "planId": "68",
-    "amount": "133.00",
-    "planType": "GIFTING PROMO",
-    "duration": "2 days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "500MB",
-    "planId": "7",
-    "amount": "277.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "1GB",
-    "planId": "8",
-    "amount": "554.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "1GB",
-    "planId": "69",
-    "amount": "300.00",
-    "planType": "GIFTING PROMO",
-    "duration": "2 days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "2GB",
-    "planId": "9",
-    "amount": "1108.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "2GB",
-    "planId": "70",
-    "amount": "580.00",
-    "planType": "GIFTING PROMO",
-    "duration": "2 days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "3GB",
-    "planId": "71",
-    "amount": "1095.00",
-    "planType": "GIFTING PROMO",
-    "duration": "7 days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "3GB",
-    "planId": "75",
-    "amount": "846.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "5GB",
-    "planId": "10",
-    "amount": "2771.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "7GB",
-    "planId": "72",
-    "amount": "2136.00",
-    "planType": "GIFTING PROMO",
-    "duration": "7days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "10GB",
-    "planId": "26",
-    "amount": "5542.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "10GB",
-    "planId": "73",
-    "amount": "3172.00",
-    "planType": "GIFTING PROMO",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "20GB",
-    "planId": "74",
-    "amount": "4254.00",
-    "planType": "GIFTING PROMO",
-    "duration": "30days",
-    "network": "AIRTEL"
-  },
-  {
-    "planName": "200MB",
-    "planId": "29",
-    "amount": "62.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "500MB",
-    "planId": "30",
-    "amount": "152.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30 days",
-    "network": "GLO"
-  },
-  {
-    "planName": "1GB",
-    "planId": "31",
-    "amount": "305.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30 days",
-    "network": "GLO"
-  },
-  {
-    "planName": "2GB",
-    "planId": "32",
-    "amount": "560.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "3GB",
-    "planId": "33",
-    "amount": "840.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "5GB",
-    "planId": "34",
-    "amount": "1386.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO"
-  },
-  {
-    "planName": "10GB",
-    "planId": "35",
-    "amount": "2772.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days after redeeming",
-    "network": "GLO"
-  },
+  // },
+  // {
+  //   "planName": "1GB",
+  //   "planId": "47",
+  //   "amount": "147.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "1.1GB",
+  //   "planId": "25",
+  //   "amount": "411.00",
+  //   "planType": "SME",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "1.5GB",
+  //   "planId": "27",
+  //   "amount": "895.00",
+  //   "planType": "GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "2GB",
+  //   "planId": "48",
+  //   "amount": "300.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "3GB",
+  //   "planId": "49",
+  //   "amount": "450.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "4GB",
+  //   "planId": "50",
+  //   "amount": "700.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "5GB",
+  //   "planId": "51",
+  //   "amount": "876.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "10GB",
+  //   "planId": "52",
+  //   "amount": "1752.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "9MOBILE",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "100MB",
+  //   "planId": "45",
+  //   "amount": "101.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "150MB",
+  //   "planId": "67",
+  //   "amount": "71.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "1 day",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "300MB",
+  //   "planId": "44",
+  //   "amount": "203.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "300MB",
+  //   "planId": "68",
+  //   "amount": "133.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "2 days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "500MB",
+  //   "planId": "7",
+  //   "amount": "277.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "1GB",
+  //   "planId": "8",
+  //   "amount": "554.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "1GB",
+  //   "planId": "69",
+  //   "amount": "300.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "2 days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "2GB",
+  //   "planId": "9",
+  //   "amount": "1108.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "2GB",
+  //   "planId": "70",
+  //   "amount": "580.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "2 days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "3GB",
+  //   "planId": "71",
+  //   "amount": "1095.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "7 days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "3GB",
+  //   "planId": "75",
+  //   "amount": "846.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "5GB",
+  //   "planId": "10",
+  //   "amount": "2771.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "7GB",
+  //   "planId": "72",
+  //   "amount": "2136.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "7days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "10GB",
+  //   "planId": "26",
+  //   "amount": "5542.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "10GB",
+  //   "planId": "73",
+  //   "amount": "3172.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "20GB",
+  //   "planId": "74",
+  //   "amount": "4254.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "30days",
+  //   "network": "AIRTEL",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "200MB",
+  //   "planId": "29",
+  //   "amount": "62.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "500MB",
+  //   "planId": "30",
+  //   "amount": "152.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30 days",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "1GB",
+  //   "planId": "31",
+  //   "amount": "305.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30 days",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "2GB",
+  //   "planId": "32",
+  //   "amount": "560.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "3GB",
+  //   "planId": "33",
+  //   "amount": "840.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "5GB",
+  //   "planId": "34",
+  //   "amount": "1386.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "10GB",
+  //   "planId": "35",
+  //   "amount": "2772.00",
+  //   "planType": "COOPERATE GIFTING",
+  //   "duration": "30days after redeeming",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
   {
     "planName": "500MB",
     "planId": "1",
     "amount": "305.00",
     "planType": "SME",
     "duration": "30days",
-    "network": "MTN"
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "1GB",
@@ -822,7 +896,8 @@ exports.bilalsvtu =  [
     "amount": "610.00",
     "planType": "SME",
     "duration": "30days",
-    "network": "MTN"
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "2GB",
@@ -830,7 +905,8 @@ exports.bilalsvtu =  [
     "amount": "1220.00",
     "planType": "SME",
     "duration": "30days",
-    "network": "MTN"
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "3GB",
@@ -838,7 +914,8 @@ exports.bilalsvtu =  [
     "amount": "1830.00",
     "planType": "SME",
     "duration": "30days",
-    "network": "MTN"
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "7GB",
@@ -846,7 +923,8 @@ exports.bilalsvtu =  [
     "amount": "3071.00",
     "planType": "GIFTING PROMO",
     "duration": "7days",
-    "network": "MTN"
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "10GB",
@@ -854,6 +932,7 @@ exports.bilalsvtu =  [
     "amount": "6102.00",
     "planType": "SME",
     "duration": "30days",
-    "network": "MTN"
+    "network": "MTN",
+    "vendor": "bilal"
   }
 ]
