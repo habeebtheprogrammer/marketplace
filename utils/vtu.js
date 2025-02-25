@@ -39,7 +39,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "500MB",
-      "amount": "140.00",
+      "amount": "540.00",
       // "amount": "132.00",
       "duration": "1Month"
     },
@@ -65,7 +65,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "1GB",
-      "amount": "269.00",
+      "amount": "610.00",
       "duration": "1Month"
     },
     // {
@@ -89,7 +89,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "2GB",
-      "amount": "528.00",
+      "amount": "1220.00",
       "duration": "1Month"
     },
     // {
@@ -115,7 +115,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "3GB",
-      "amount": "787.00",
+      "amount": "1830.00",
       "duration": "1Month"
     },
 
@@ -148,7 +148,7 @@ exports.dataplan = [
       "network": "MTN",
       "planType": "SME",
       "planName": "10GB",
-      "amount": "2610.00",
+      "amount": "6102.00",
       "duration": "1Month"
     },
     // {
@@ -547,7 +547,8 @@ exports.bilalsvtu =  [
     "amount": "455.00",
     "planType": "GIFTING",
     "duration": "30 days",
-    "network": "9MOBILE"
+    "network": "9MOBILE",
+    "vendor": "bilalsvtu"
   },
   {
     "planName": "500MB",
@@ -555,7 +556,9 @@ exports.bilalsvtu =  [
     "amount": "75.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
-    "network": "9MOBILE"
+    "network": "9MOBILE",
+    "vendor": "bilalsvtu"
+
   },
   {
     "planName": "1GB",
