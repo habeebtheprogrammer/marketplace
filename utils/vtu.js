@@ -311,9 +311,9 @@ exports.dataplan = [
     {
       "planId": 32,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "100MB",
-      "amount": "160.00",
+      "amount": "151.00",
       "duration": "7days",
     "vendor": "quickvtu"
     },
@@ -322,7 +322,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "SME",
       "planName": "150MB",
-      "amount": "80.00",
+      "amount": "71.00",
       "duration": "1day",
     "vendor": "quickvtu"
     },
@@ -331,23 +331,23 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "SME",
       "planName": "300MB",
-      "amount": "140.00",
+      "amount": "131.00",
       "duration": "2days",
     "vendor": "quickvtu"
     },
     {
       "planId": 31,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "300MB",
-      "amount": "220.00",
+      "amount": "203.00",
       "duration": "7days",
     "vendor": "quickvtu"
     },
     {
       "planId": 19,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "500MB",
       "amount": "285.00",
       // "amount": "140.00",
@@ -366,7 +366,7 @@ exports.dataplan = [
     {
       "planId": 20,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "1GB",
       "amount": "560.00",
       "duration": "1Month",
@@ -384,7 +384,7 @@ exports.dataplan = [
     {
       "planId": 21,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "2GB",
       "amount": "1120.00",
       "duration": "1Month",
@@ -395,7 +395,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "2GB",
-      "amount": "335.00",
+      "amount": "345.00",
       "duration": "2Days",
     "vendor": "quickvtu"
     },
@@ -404,7 +404,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "3GB",
-      "amount": "535.00",
+      "amount": "555.00",
       "duration": "7DAYS",
     "vendor": "quickvtu"
     },
@@ -414,7 +414,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "SME",
       "planName": "3GB",
-      "amount": "1090.00",
+      "amount": "1100.00",
       "duration": "7days",
     "vendor": "quickvtu"
     },
@@ -423,7 +423,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "4GB",
-      "amount": "1045.00",
+      "amount": "1065.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -432,16 +432,16 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "5GB",
-      "amount": "1210.00",
+      "amount": "1250.00",
       "duration": "14DAYS",
     "vendor": "quickvtu"
     },
     {
       "planId": 22,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "5GB",
-      "amount": "2770.00",
+      "amount": "2800.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -451,7 +451,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "SME",
       "planName": "7GB",
-      "amount": "2125.00",
+      "amount": "2145.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -460,16 +460,16 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "7GB",
-      "amount": "2300.00",
+      "amount": "2320.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
     {
       "planId": 23,
       "network": "AIRTEL",
-      "planType": "COOPERATE",
+      "planType": "COOPERATE 2",
       "planName": "10GB",
-      "amount": "5550.00",
+      "amount": "5600.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -478,7 +478,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "GIFTING",
       "planName": "10GB",
-      "amount": "3180.00",
+      "amount": "3230.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -487,7 +487,7 @@ exports.dataplan = [
       "network": "AIRTEL",
       "planType": "SME",
       "planName": "10GB",
-      "amount": "3120.00",
+      "amount": "3170.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
