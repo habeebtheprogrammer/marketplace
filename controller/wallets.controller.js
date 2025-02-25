@@ -6,7 +6,7 @@ const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEma
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
-const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
+const vendor = "BILALSDATAHUB"  //'QUICKVTU' or 'BILALSDATAHUB'
 
 // Helper function to make authenticated requests to Monify API
 async function korraPay(endpoint, method, body = null, apikey) {
