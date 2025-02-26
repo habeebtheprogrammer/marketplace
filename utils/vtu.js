@@ -688,8 +688,8 @@ exports.bilalsvtu =  [
     "planName": "200MB",
     "planId": "29",
     "amount": "62.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
+    "planType": "COOPERATE 2",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -697,7 +697,7 @@ exports.bilalsvtu =  [
     "planName": "500MB",
     "planId": "30",
     "amount": "152.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "COOPERATE 2",
     "duration": "30 days",
     "network": "GLO",
     "vendor": "bilal"
@@ -706,7 +706,7 @@ exports.bilalsvtu =  [
     "planName": "1GB",
     "planId": "31",
     "amount": "305.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "COOPERATE 2",
     "duration": "30 days",
     "network": "GLO",
     "vendor": "bilal"
@@ -715,8 +715,8 @@ exports.bilalsvtu =  [
     "planName": "2GB",
     "planId": "32",
     "amount": "560.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
+    "planType": "COOPERATE 2",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   }, 
@@ -724,8 +724,8 @@ exports.bilalsvtu =  [
     "planName": "3GB",
     "planId": "33",
     "amount": "840.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
+    "planType": "COOPERATE 2",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -734,7 +734,7 @@ exports.bilalsvtu =  [
     "planId": "13",
     "amount": "1331.00",
     "planType": "GIFTING",
-    "duration": "30days",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -742,35 +742,17 @@ exports.bilalsvtu =  [
     "planName": "5GB",
     "planId": "34",
     "amount": "1386.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
+    "planType": "COOPERATE 2",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
-  },
-  {
-    "planName": "5.8GB",
-    "planId": "14",
-    "amount": "1909.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "10GB",
-    "planId": "15",
-    "amount": "3132.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
+  },  
   {
     "planName": "10GB",
     "planId": "35",
     "amount": "2772.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days after redeeming",
+    "planType": "COOPERATE 2",
+    "duration": "1Month after redeeming",
     "network": "GLO",
     "vendor": "bilal"
   },
