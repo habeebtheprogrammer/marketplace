@@ -683,6 +683,97 @@ exports.bilalsvtu =  [
   //   "network": "AIRTEL",
   //   "vendor": "bilal"
   // },
+
+  {
+    "planName": "200MB",
+    "planId": "29",
+    "amount": "62.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "500MB",
+    "planId": "30",
+    "amount": "152.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30 days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1GB",
+    "planId": "31",
+    "amount": "305.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30 days",
+    "network": "GLO",
+    "vendor": "bilal"
+  }, 
+  {
+    "planName": "2GB",
+    "planId": "32",
+    "amount": "560.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  }, 
+  {
+    "planName": "3GB",
+    "planId": "33",
+    "amount": "840.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "4.1GB",
+    "planId": "13",
+    "amount": "1331.00",
+    "planType": "GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "5GB",
+    "planId": "34",
+    "amount": "1386.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "5.8GB",
+    "planId": "14",
+    "amount": "1909.00",
+    "planType": "GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "10GB",
+    "planId": "15",
+    "amount": "3132.00",
+    "planType": "GIFTING",
+    "duration": "30days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "10GB",
+    "planId": "35",
+    "amount": "2772.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days after redeeming",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
   {
     "planName": "150MB",
     "planId": "67",

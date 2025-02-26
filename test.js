@@ -653,7 +653,7 @@ function convertToMB(size) {
   const filteredPlans = filterPlans(
     filteredAirtel, 
     "GLO", 
-    ["GIFTING", "GIFTING PROMO"]
+    ["GIFTING PROMO"]
   );
   // Output the filtered results
   console.log(JSON.stringify(filteredPlans, null, 2));
