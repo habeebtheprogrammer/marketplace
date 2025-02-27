@@ -180,7 +180,7 @@ exports.dataplan = [
       "planType": "COOPERATE",
       "planName": "500MB",
       // "amount": "75.00",
-      "amount": "153.00",
+      "amount": "160.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -198,7 +198,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "1GB",
-      "amount": "305.00",
+      "amount": "325.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -215,7 +215,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "2GB",
-      "amount": "610.00",
+      "amount": "650.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -233,7 +233,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "3GB",
-      "amount": "915.00",
+      "amount": "975.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -268,7 +268,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "5GB",
-      "amount": "1525.00",
+      "amount": "1625.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
@@ -285,7 +285,7 @@ exports.dataplan = [
       "network": "GLO",
       "planType": "COOPERATE",
       "planName": "10GB",
-      "amount": "3050.00",
+      "amount": "3250.00",
       "duration": "1Month",
     "vendor": "quickvtu"
     },
