@@ -60,7 +60,7 @@ exports.dataplan = [
     "planType": "COOPERATE",
     "planName": "1GB",
     "amount": "375.00",
-    "duration": "1Month",
+    "duration": "1 Day",
     "vendor": "quickvtu"
 
   },
