@@ -588,7 +588,7 @@ exports.bilalsvtu =  [
   //   "planId": "28",
   //   "amount": "455.00",
   //   "planType": "GIFTING",
-  //   "duration": "30 days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
   // },
@@ -597,7 +597,7 @@ exports.bilalsvtu =  [
   //   "planId": "46",
   //   "amount": "75.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30 days",
+  //   "duration": "1Month",
   //   "network": "9MOBILE",
   //   "vendor": "bilal"
 
@@ -698,7 +698,7 @@ exports.bilalsvtu =  [
     "planId": "30",
     "amount": "152.00",
     "planType": "COOPERATE 2",
-    "duration": "30 days",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -707,7 +707,7 @@ exports.bilalsvtu =  [
     "planId": "31",
     "amount": "305.00",
     "planType": "COOPERATE 2",
-    "duration": "30 days",
+    "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   }, 
@@ -905,7 +905,7 @@ exports.bilalsvtu =  [
   //   "planId": "30",
   //   "amount": "152.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30 days",
+  //   "duration": "1Month",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -914,7 +914,7 @@ exports.bilalsvtu =  [
   //   "planId": "31",
   //   "amount": "305.00",
   //   "planType": "COOPERATE GIFTING",
-  //   "duration": "30 days",
+  //   "duration": "1Month",
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
@@ -993,7 +993,7 @@ exports.bilalsvtu =  [
   {
     "planName": "7GB",
     "planId": "43",
-    "amount": "3071.00",
+    "amount": "3070.00",
     "planType": "GIFTING PROMO",
     "duration": "7days",
     "network": "MTN",
