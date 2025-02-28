@@ -24,17 +24,7 @@ exports.detectNetwork = (phoneNumber) => {
 };
 
 exports.dataplan = [
-
-  // {
-  //   "planId": 10,
-  //   "network": "MTN",
-  //   "planType": "COOPERATE",
-  //   "planName": "500MB",
-  //   "amount": "280.00",
-  //   // "amount": "133.00",
-  //   "duration": "1Month",
-  //   "vendor": "quickvtu", 
-  // },
+ 
   {
     "planId": 4,
     "network": "MTN",
@@ -44,26 +34,17 @@ exports.dataplan = [
     // "amount": "132.00",
     "duration": "1Month",
     "vendor": "quickvtu"
-  },
+  }, 
   // {
-  //   "planId": 2,
+  //   "planId": 14,
   //   "network": "MTN",
-  //   "planType": "GIFTING",
+  //   "planType": "COOPERATE",
   //   "planName": "1GB",
-  //   "amount": "250.00",
-  //   "duration": "1Month"
+  //   "amount": "375.00",
+  //   "duration": "1 Day",
+  //   "vendor": "quickvtu"
+
   // },
-
-  {
-    "planId": 14,
-    "network": "MTN",
-    "planType": "COOPERATE",
-    "planName": "1GB",
-    "amount": "375.00",
-    "duration": "1 Day",
-    "vendor": "quickvtu"
-
-  },
   {
     "planId": 5,
     "network": "MTN",
@@ -72,33 +53,25 @@ exports.dataplan = [
     "amount": "620.00",
     "duration": "1Month",
     "vendor": "quickvtu",
-  },
+  }, 
   // {
-  //   "planId": 1,
+  //   "planId": 15,
   //   "network": "MTN",
-  //   "planType": "GIFTING",
-  //   "planName": "2GB",
-  //   "amount": "500.00",
-  //   "duration": "1Month"
+  //   "planType": "COOPERATE",
+  //   "planName": "1.5GB",
+  //   "amount": "430.00",
+  //   "duration": "1 Day",
+  //   "vendor": "quickvtu",
   // },
-  {
-    "planId": 15,
-    "network": "MTN",
-    "planType": "COOPERATE",
-    "planName": "1.5GB",
-    "amount": "430.00",
-    "duration": "1 Day",
-    "vendor": "quickvtu",
-  },
-  {
-    "planId": 16,
-    "network": "MTN",
-    "planType": "COOPERATE",
-    "planName": "1.5GB",
-    "amount": "1085.00",
-    "duration": "7 Days",
-    "vendor": "quickvtu",
-  },
+  // {
+  //   "planId": 16,
+  //   "network": "MTN",
+  //   "planType": "COOPERATE",
+  //   "planName": "1.5GB",
+  //   "amount": "1085.00",
+  //   "duration": "7 Days",
+  //   "vendor": "quickvtu",
+  // },
   {
     "planId": 6,
     "network": "MTN",
@@ -107,24 +80,7 @@ exports.dataplan = [
     "amount": "1240.00",
     "duration": "1Month",
     "vendor": "quickvtu"
-  },
-  // {
-  //   "planId": 49,
-  //   "network": "MTN",
-  //   "planType": "GIFTING",
-  //   "planName": "3GB",
-  //   "amount": "750.00",
-  //   "duration": "1Month"
-  // },
-
-  // {
-  //   "planId": 16,
-  //   "network": "MTN",
-  //   "planType": "COOPERATE",
-  //   "planName": "3GB",
-  //   "amount": "795.00",
-  //   "duration": "1Month"
-  // },
+  },  
 
   {
     "planId": 7,
@@ -134,42 +90,25 @@ exports.dataplan = [
     "amount": "1860.00",
     "duration": "1Month",
     "vendor": "quickvtu"
-  },
-
+  }, 
   // {
-  //   "planId": 50,
+  //   "planId": 17,
   //   "network": "MTN",
-  //   "planType": "GIFTING",
-  //   "planName": "5GB",
-  //   "amount": "1250.00",
-  //   "duration": "1Month"
+  //   "planType": "COOPERATE",
+  //   "planName": "3.2GB",
+  //   "amount": "1105.00",
+  //   "duration": "2 Days",
+  //   "vendor": "quickvtu"
   // },
-  {
-    "planId": 17,
-    "network": "MTN",
-    "planType": "COOPERATE",
-    "planName": "3.2GB",
-    "amount": "1105.00",
-    "duration": "2 Days",
-    "vendor": "quickvtu"
-  },
-  {
-    "planId": 18,
-    "network": "MTN",
-    "planType": "COOPERATE",
-    "planName": "5GB",
-    "amount": "1600.00",
-    "duration": "7 Days",
-    "vendor": "quickvtu"
-  },
   // {
-  //   "planId": 8,
+  //   "planId": 18,
   //   "network": "MTN",
-  //   "planType": "SME",
+  //   "planType": "COOPERATE",
   //   "planName": "5GB",
-  //   "amount": "1315.00",
-  //   "duration": "1Month"
-  // },
+  //   "amount": "1600.00",
+  //   "duration": "7 Days",
+  //   "vendor": "quickvtu"
+  // }, 
   {
     "planId": 9,
     "network": "MTN",
