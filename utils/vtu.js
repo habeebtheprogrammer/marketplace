@@ -745,6 +745,16 @@ exports.bilalsvtu = [
     "network": "GLO",
     "vendor": "bilal"
   },
+
+  {
+    "planName": "100MB",
+    "planId": "45",
+    "amount": "101.00",
+    "planType": "COOPERATE 2",
+    "duration": "1 Month",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
   {
     "planName": "150MB",
     "planId": "67",
@@ -775,7 +785,7 @@ exports.bilalsvtu = [
   {
     "planName": "500MB",
     "planId": "7",
-    "amount": "277.00",
+    "amount": "335.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "AIRTEL",
@@ -784,7 +794,7 @@ exports.bilalsvtu = [
   {
     "planName": "1GB",
     "planId": "8",
-    "amount": "554.00",
+    "amount": "670.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "AIRTEL",
@@ -802,7 +812,7 @@ exports.bilalsvtu = [
   {
     "planName": "2GB",
     "planId": "9",
-    "amount": "1108.00",
+    "amount": "1340.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "AIRTEL",
@@ -838,7 +848,7 @@ exports.bilalsvtu = [
   {
     "planName": "5GB",
     "planId": "10",
-    "amount": "2771.00",
+    "amount": "3350.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "AIRTEL",
@@ -856,7 +866,7 @@ exports.bilalsvtu = [
   {
     "planName": "10GB",
     "planId": "26",
-    "amount": "5542.00",
+    "amount": "6700.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "AIRTEL",
@@ -943,58 +953,58 @@ exports.bilalsvtu = [
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
-  // {
-  //   "planName": "500MB",
-  //   "planId": "1",
-  //   "amount": "305.00",
-  //   "planType": "SME 2",
-  //   "duration": "1Month",
-  //   "network": "MTN",
-  //   "vendor": "bilal"
-  // },
-  // {
-  //   "planName": "1GB",
-  //   "planId": "2",
-  //   "amount": "610.00",
-  //   "planType": "SME 2",
-  //   "duration": "1Month",
-  //   "network": "MTN",
-  //   "vendor": "bilal"
-  // },
-  // {
-  //   "planName": "2GB",
-  //   "planId": "3",
-  //   "amount": "1220.00",
-  //   "planType": "SME 2",
-  //   "duration": "1Month",
-  //   "network": "MTN",
-  //   "vendor": "bilal"
-  // },
-  // {
-  //   "planName": "3GB",
-  //   "planId": "4",
-  //   "amount": "1830.00",
-  //   "planType": "SME 2",
-  //   "duration": "1Month",
-  //   "network": "MTN",
-  //   "vendor": "bilal"
-  // },
-  // {
-  //   "planName": "7GB",
-  //   "planId": "43",
-  //   "amount": "3070.00",
-  //   "planType": "GIFTING PROMO",
-  //   "duration": "7days",
-  //   "network": "MTN",
-  //   "vendor": "bilal"
-  // },
-  // {
-  //   "planName": "10GB",
-  //   "planId": "6",
-  //   "amount": "6100.00",
-  //   "planType": "SME 2",
-  //   "duration": "1Month",
-  //   "network": "MTN",
-  //   "vendor": "bilal"
-  // }
+  {
+    "planName": "500MB",
+    "planId": "1",
+    "amount": "318.00",
+    "planType": "SME 2",
+    "duration": "1Month",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1GB",
+    "planId": "2",
+    "amount": "610.00",
+    "planType": "SME 2",
+    "duration": "1Month",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "2GB",
+    "planId": "3",
+    "amount": "1220.00",
+    "planType": "SME 2",
+    "duration": "1Month",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "3GB",
+    "planId": "4",
+    "amount": "1830.00",
+    "planType": "SME 2",
+    "duration": "1Month",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "7GB",
+    "planId": "43",
+    "amount": "3070.00",
+    "planType": "GIFTING PROMO",
+    "duration": "7days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "10GB",
+    "planId": "6",
+    "amount": "6100.00",
+    "planType": "SME 2",
+    "duration": "1Month",
+    "network": "MTN",
+    "vendor": "bilal"
+  }
 ]
