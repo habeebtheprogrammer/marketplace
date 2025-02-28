@@ -961,58 +961,58 @@ exports.bilalsvtu = [
   //   "network": "GLO",
   //   "vendor": "bilal"
   // },
-  {
-    "planName": "500MB",
-    "planId": "1",
-    "amount": "305.00",
-    "planType": "SME 2",
-    "duration": "1Month",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "1GB",
-    "planId": "2",
-    "amount": "610.00",
-    "planType": "SME 2",
-    "duration": "1Month",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "2GB",
-    "planId": "3",
-    "amount": "1220.00",
-    "planType": "SME 2",
-    "duration": "1Month",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "3GB",
-    "planId": "4",
-    "amount": "1830.00",
-    "planType": "SME 2",
-    "duration": "1Month",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "7GB",
-    "planId": "43",
-    "amount": "3070.00",
-    "planType": "GIFTING PROMO",
-    "duration": "7days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "10GB",
-    "planId": "6",
-    "amount": "6100.00",
-    "planType": "SME 2",
-    "duration": "1Month",
-    "network": "MTN",
-    "vendor": "bilal"
-  }
+  // {
+  //   "planName": "500MB",
+  //   "planId": "1",
+  //   "amount": "305.00",
+  //   "planType": "SME 2",
+  //   "duration": "1Month",
+  //   "network": "MTN",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "1GB",
+  //   "planId": "2",
+  //   "amount": "610.00",
+  //   "planType": "SME 2",
+  //   "duration": "1Month",
+  //   "network": "MTN",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "2GB",
+  //   "planId": "3",
+  //   "amount": "1220.00",
+  //   "planType": "SME 2",
+  //   "duration": "1Month",
+  //   "network": "MTN",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "3GB",
+  //   "planId": "4",
+  //   "amount": "1830.00",
+  //   "planType": "SME 2",
+  //   "duration": "1Month",
+  //   "network": "MTN",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "7GB",
+  //   "planId": "43",
+  //   "amount": "3070.00",
+  //   "planType": "GIFTING PROMO",
+  //   "duration": "7days",
+  //   "network": "MTN",
+  //   "vendor": "bilal"
+  // },
+  // {
+  //   "planName": "10GB",
+  //   "planId": "6",
+  //   "amount": "6100.00",
+  //   "planType": "SME 2",
+  //   "duration": "1Month",
+  //   "network": "MTN",
+  //   "vendor": "bilal"
+  // }
 ]
