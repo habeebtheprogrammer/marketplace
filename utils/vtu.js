@@ -720,7 +720,7 @@ exports.bilalsvtu = [
   {
     "planName": "200MB",
     "planId": "29",
-    "amount": "62.00",
+    "amount": "72.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "GLO",
@@ -729,7 +729,7 @@ exports.bilalsvtu = [
   {
     "planName": "500MB",
     "planId": "30",
-    "amount": "152.00",
+    "amount": "165.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "GLO",
@@ -738,7 +738,7 @@ exports.bilalsvtu = [
   {
     "planName": "1GB",
     "planId": "31",
-    "amount": "305.00",
+    "amount": "330.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "GLO",
@@ -747,7 +747,7 @@ exports.bilalsvtu = [
   {
     "planName": "2GB",
     "planId": "32",
-    "amount": "560.00",
+    "amount": "660.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "GLO",
@@ -756,25 +756,25 @@ exports.bilalsvtu = [
   {
     "planName": "3GB",
     "planId": "33",
-    "amount": "840.00",
+    "amount": "990.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "GLO",
     "vendor": "bilal"
   },
-  {
-    "planName": "4.1GB",
-    "planId": "13",
-    "amount": "1331.00",
-    "planType": "GIFTING",
-    "duration": "1Month",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
+  // {
+  //   "planName": "4.1GB",
+  //   "planId": "13",
+  //   "amount": "1331.00",
+  //   "planType": "GIFTING",
+  //   "duration": "1Month",
+  //   "network": "GLO",
+  //   "vendor": "bilal"
+  // },
   {
     "planName": "5GB",
     "planId": "34",
-    "amount": "1386.00",
+    "amount": "1650.00",
     "planType": "COOPERATE 2",
     "duration": "1Month",
     "network": "GLO",
@@ -783,7 +783,7 @@ exports.bilalsvtu = [
   {
     "planName": "10GB",
     "planId": "35",
-    "amount": "2772.00",
+    "amount": "3300.00",
     "planType": "COOPERATE 2",
     "duration": "1Month after redeeming",
     "network": "GLO",
@@ -1000,7 +1000,7 @@ exports.bilalsvtu = [
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "318.00",
+    "amount": "310.00",
     "planType": "SME 2",
     "duration": "1Month",
     "network": "MTN",
