@@ -73,6 +73,15 @@ exports.dataplan = [
     "vendor": "quickvtu",
   },
   {
+    "planId": 74,
+    "network": "MTN",
+    "planType": "GIFTING",
+    "planName": "1.5GB",
+    "amount": "415.00",
+    "duration": "1 Day",
+    "vendor": "quickvtu",
+  },
+  {
     "planId": 6,
     "network": "MTN",
     "planType": "SME",
@@ -80,8 +89,7 @@ exports.dataplan = [
     "amount": "1240.00",
     "duration": "1Month",
     "vendor": "quickvtu"
-  },  
-
+  },   
   {
     "planId": 7,
     "network": "MTN",
@@ -101,6 +109,24 @@ exports.dataplan = [
     "vendor": "quickvtu"
   },
   {
+    "planId": 75,
+    "network": "MTN",
+    "planType": "GIFTING",
+    "planName": "3.2GB",
+    "amount": "1032.00",
+    "duration": "2 Days",
+    "vendor": "quickvtu"
+  },
+  {
+    "planId": 76,
+    "network": "MTN",
+    "planType": "GIFTING",
+    "planName": "5GB",
+    "amount": "1545.00",
+    "duration": "7 Days",
+    "vendor": "quickvtu"
+  },
+  {
     "planId": 18,
     "network": "MTN",
     "planType": "COOPERATE",
@@ -110,6 +136,15 @@ exports.dataplan = [
     "vendor": "quickvtu"
   }, 
   {
+    "planId": 77,
+    "network": "MTN",
+    "planType": "GIFTING",
+    "planName": "7GB",
+    "amount": "3110.00",
+    "duration": "7 Days",
+    "vendor": "quickvtu"
+  },
+  {
     "planId": 9,
     "network": "MTN",
     "planType": "SME",
@@ -118,6 +153,15 @@ exports.dataplan = [
     "duration": "1Month",
     "vendor": "quickvtu"
   }, 
+  {
+    "planId": 77,
+    "network": "MTN",
+    "planType": "GIFTING",
+    "planName": "15GB",
+    "amount": "3650.00",
+    "duration": "1 Month",
+    "vendor": "quickvtu"
+  },
   {
     "planId": 36,
     "network": "GLO",
