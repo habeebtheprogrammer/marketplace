@@ -311,3 +311,19 @@ exports.combineAndSortDataPlan = (array1, array2) => {
     return sizeA - sizeB;
   });
 }
+
+exports.checkDaysMatch = (str) => {
+  const lowerStr = str.toLowerCase();
+  
+  if (lowerStr.includes('30day') || lowerStr.includes('30 days') || lowerStr.includes('30days')|| lowerStr.includes('1month')) {
+      return '1 Month';
+  }
+  
+  const match = lowerStr.match(/(\d+)\s*days?/);
+  
+  if (match) {
+      return `${match[1]} Day${match[1] > 1 ? 's' : ''}`;
+  } else console.log(str)
+  
+  return str; // or handle invalid cases
+}

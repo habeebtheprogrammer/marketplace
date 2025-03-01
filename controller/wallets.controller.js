@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
-const { dataplan, detectNetwork, bilalsvtu } = require('../utils/vtu');
+const dataplan = require("../dataplan.json")
+const {   detectNetwork } = require('../utils/vtu');
 const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode, combineAndSortDataPlan } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
@@ -225,7 +226,7 @@ exports.withdraw = async (req, res, next) => {
 }
 exports.fetchDataPlan = async (req, res, next) => {
   try {
-    res.json({ dataplan: combineAndSortDataPlan( bilalsvtu, dataplan)});
+    res.json({ dataplan });
   } catch (error) {
     console.error('Error creating wallet:', error);
     res.status(500).json({ error: 'Failed to create wallet' });
@@ -248,7 +249,7 @@ exports.buyDataPlan = async (req, res, next) => {
   }
   const transaction = await walletsService.saveTransactions(data)
 
-  var plan = req.body.plan.vendor == 'quickvtu' ?  dataplan.find(d => d.planId == req.body.plan.planId) : bilalsvtu.find(d => d.planId == req.body.plan.planId);
+  var plan =  dataplan.find(d => (d.planId == req.body.plan.planId && req.body.plan.vendor  == d.vendor))  
   var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
   var obj = {
     network: net,
