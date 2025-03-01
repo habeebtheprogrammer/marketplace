@@ -122,9 +122,9 @@ exports.fetch = async (req, res, next) => {
       if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email) ) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
 
-          await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
+          await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 50 } })
           const bonus1 = {
-            "amount": 25,
+            "amount": 50,
             "userId": user.docs[0]?.referredBy?._id,
             "reference": "Referral" + '--' + generateRandomNumber(10),
             "narration": "Referral bonus for new user",
@@ -134,8 +134,8 @@ exports.fetch = async (req, res, next) => {
           }
           await walletsService.saveTransactions(bonus1)
           sendNotification({
-            headings: { "en": `₦25 was credited to your wallet` },
-            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
+            headings: { "en": `₦50 was credited to your wallet` },
+            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦50 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
             include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
             url: 'gadgetsafrica://profile',
           })
@@ -288,7 +288,7 @@ exports.buyDataPlan = async (req, res, next) => {
       successResponse(res, transaction)
       sendNotification({
         headings: { "en": `Payment successful` },
-        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25` },
+        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -368,7 +368,7 @@ exports.buyAirtime = async (req, res, next) => {
       successResponse(res, transaction)
       sendNotification({
         headings: { "en": `Payment successful` },
-        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25` },
+        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -471,7 +471,7 @@ exports.webhook = async (req, res, next) => {
         await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amountPaid) } })
         sendNotification({
           headings: { "en": `₦${amountPaid} was credited to your wallet` },
-          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amountPaid}. Refer a friend to try our mobile app and earn ₦25.` },
+          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amountPaid}. Refer a friend to try our mobile app and earn ₦50.` },
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: 'gadgetsafrica://transactions',
         })
@@ -535,7 +535,7 @@ exports.flwhook = async (req, res, next) => {
           await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amount) } })
           sendNotification({
             headings: { "en": `₦${amount} was credited to your wallet` },
-            contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try our mobile app and earn ₦25.` },
+            contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try our mobile app and earn ₦50.` },
             include_subscription_ids: [user.docs[0].oneSignalId],
             url: 'gadgetsafrica://transactions',
           })
