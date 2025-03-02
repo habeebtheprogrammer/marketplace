@@ -139,7 +139,7 @@
     "planId": "59",
     "amount": "71.00",
     "planType": "SME",
-    "duration": "1 Day",
+    "duration": "1 Day. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -166,7 +166,7 @@
     "planId": "60",
     "amount": "133.00",
     "planType": "SME",
-    "duration": "2 Days",
+    "duration": "2 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -211,7 +211,7 @@
     "planId": "51",
     "amount": "231.00",
     "planType": "GIFTING",
-    "duration": "2 Days",
+    "duration": "2 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -229,7 +229,7 @@
     "planId": "61",
     "amount": "303.00",
     "planType": "SME",
-    "duration": "7 Days",
+    "duration": "7 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -238,7 +238,7 @@
     "planId": "70",
     "amount": "270.00",
     "planType": "GIFTING",
-    "duration": "7 Days",
+    "duration": "7 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -274,7 +274,7 @@
     "planId": "58",
     "amount": "345.00",
     "planType": "GIFTING",
-    "duration": "2 Days",
+    "duration": "2 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -301,7 +301,7 @@
     "planId": "53",
     "amount": "1060.00",
     "planType": "GIFTING",
-    "duration": "1 Month",
+    "duration": "1 Month. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -310,7 +310,7 @@
     "planId": "62",
     "amount": "1100.00",
     "planType": "SME",
-    "duration": "7 Days",
+    "duration": "7 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -346,7 +346,7 @@
     "planId": "52",
     "amount": "1281.00",
     "planType": "GIFTING",
-    "duration": "14 Days",
+    "duration": "14 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -355,7 +355,7 @@
     "planId": "69",
     "amount": "565.00",
     "planType": "GIFTING",
-    "duration": "2 Days",
+    "duration": "2 Days. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -364,7 +364,7 @@
     "planId": "71",
     "amount": "905.00",
     "planType": "GIFTING",
-    "duration": "1 Day",
+    "duration": "1 Day. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -382,7 +382,7 @@
     "planId": "54",
     "amount": "2151.00",
     "planType": "GIFTING",
-    "duration": "1 Month",
+    "duration": "1 Month. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -391,7 +391,7 @@
     "planId": "63",
     "amount": "2146.00",
     "planType": "SME",
-    "duration": "1 Month",
+    "duration": "1 Month. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -418,7 +418,7 @@
     "planId": "56",
     "amount": "3232.00",
     "planType": "GIFTING",
-    "duration": "1 Month",
+    "duration": "1 Month. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -427,7 +427,7 @@
     "planId": "64",
     "amount": "3172.00",
     "planType": "SME",
-    "duration": "1 Month",
+    "duration": "1 Month. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -454,7 +454,7 @@
     "planId": "72",
     "amount": "3612.00",
     "planType": "GIFTING",
-    "duration": "1 Month",
+    "duration": "1 Month. Don't buy if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
