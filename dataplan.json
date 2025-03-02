@@ -121,7 +121,7 @@
     "planId": "32",
     "amount": "151.00",
     "planType": "COOPERATE GIFTING",
-    "duration": "7 Days",
+    "duration": "1 Month",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -139,7 +139,7 @@
     "planId": "59",
     "amount": "71.00",
     "planType": "SME",
-    "duration": "1 Day. Don't buy if you owe Airtel",
+    "duration": "1 Day. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -157,7 +157,7 @@
     "planId": "31",
     "amount": "213.00",
     "planType": "COOPERATE GIFTING",
-    "duration": "7 Days",
+    "duration": "1 Month",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -166,7 +166,7 @@
     "planId": "60",
     "amount": "133.00",
     "planType": "SME",
-    "duration": "2 Days. Don't buy if you owe Airtel",
+    "duration": "2 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -191,7 +191,7 @@
   {
     "planName": "500MB",
     "planId": "19",
-    "amount": "338.00",
+    "amount": "318.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1 Month",
     "network": "AIRTEL",
@@ -211,14 +211,14 @@
     "planId": "51",
     "amount": "231.00",
     "planType": "GIFTING",
-    "duration": "2 Days. Don't buy if you owe Airtel",
+    "duration": "2 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
   {
     "planName": "1GB",
     "planId": "20",
-    "amount": "670.00",
+    "amount": "635.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1 Month",
     "network": "AIRTEL",
@@ -229,7 +229,7 @@
     "planId": "61",
     "amount": "303.00",
     "planType": "SME",
-    "duration": "7 Days. Don't buy if you owe Airtel",
+    "duration": "7 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -238,7 +238,7 @@
     "planId": "70",
     "amount": "270.00",
     "planType": "GIFTING",
-    "duration": "7 Days. Don't buy if you owe Airtel",
+    "duration": "7 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -263,7 +263,7 @@
   {
     "planName": "2GB",
     "planId": "21",
-    "amount": "1340.00",
+    "amount": "1270.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1 Month",
     "network": "AIRTEL",
@@ -274,7 +274,7 @@
     "planId": "58",
     "amount": "345.00",
     "planType": "GIFTING",
-    "duration": "2 Days. Don't buy if you owe Airtel",
+    "duration": "2 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -301,7 +301,7 @@
     "planId": "53",
     "amount": "1060.00",
     "planType": "GIFTING",
-    "duration": "1 Month. Don't buy if you owe Airtel",
+    "duration": "1 Month. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -310,7 +310,7 @@
     "planId": "62",
     "amount": "1100.00",
     "planType": "SME",
-    "duration": "7 Days. Don't buy if you owe Airtel",
+    "duration": "7 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -335,7 +335,7 @@
   {
     "planName": "5GB",
     "planId": "22",
-    "amount": "3351.00",
+    "amount": "3176.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1 Month",
     "network": "AIRTEL",
@@ -346,7 +346,7 @@
     "planId": "52",
     "amount": "1281.00",
     "planType": "GIFTING",
-    "duration": "14 Days. Don't buy if you owe Airtel",
+    "duration": "14 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -355,7 +355,7 @@
     "planId": "69",
     "amount": "565.00",
     "planType": "GIFTING",
-    "duration": "2 Days. Don't buy if you owe Airtel",
+    "duration": "2 Days. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -364,7 +364,7 @@
     "planId": "71",
     "amount": "905.00",
     "planType": "GIFTING",
-    "duration": "1 Day. Don't buy if you owe Airtel",
+    "duration": "1 Day. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -382,7 +382,7 @@
     "planId": "54",
     "amount": "2151.00",
     "planType": "GIFTING",
-    "duration": "1 Month. Don't buy if you owe Airtel",
+    "duration": "1 Month. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -391,7 +391,7 @@
     "planId": "63",
     "amount": "2146.00",
     "planType": "SME",
-    "duration": "1 Month. Don't buy if you owe Airtel",
+    "duration": "1 Month. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -407,7 +407,7 @@
   {
     "planName": "10GB",
     "planId": "23",
-    "amount": "6702.00",
+    "amount": "6352.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1 Month",
     "network": "AIRTEL",
@@ -418,7 +418,7 @@
     "planId": "56",
     "amount": "3232.00",
     "planType": "GIFTING",
-    "duration": "1 Month. Don't buy if you owe Airtel",
+    "duration": "1 Month. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -427,7 +427,7 @@
     "planId": "64",
     "amount": "3172.00",
     "planType": "SME",
-    "duration": "1 Month. Don't buy if you owe Airtel",
+    "duration": "1 Month. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -454,9 +454,18 @@
     "planId": "72",
     "amount": "3612.00",
     "planType": "GIFTING",
-    "duration": "1 Month. Don't buy if you owe Airtel",
+    "duration": "1 Month. Dont' buy this plan if you owe Airtel",
     "network": "AIRTEL",
     "vendor": "quickvtu"
+  },
+  {
+    "planName": "20GB",
+    "planId": "74",
+    "amount": "4254.00",
+    "planType": "GIFTING PROMO",
+    "duration": "1 Month",
+    "network": "AIRTEL",
+    "vendor": "bilal"
   },
   {
     "planName": "200MB",
@@ -659,7 +668,7 @@
   {
     "planName": "500MB",
     "planId": "4",
-    "amount": "311.00",
+    "amount": "305.00",
     "planType": "SME",
     "duration": "1 Month",
     "network": "MTN",
@@ -677,7 +686,7 @@
   {
     "planName": "1GB",
     "planId": "5",
-    "amount": "616.00",
+    "amount": "610.00",
     "planType": "SME",
     "duration": "1 Month",
     "network": "MTN",
@@ -722,7 +731,7 @@
   {
     "planName": "2GB",
     "planId": "6",
-    "amount": "1232.00",
+    "amount": "1220.00",
     "planType": "SME",
     "duration": "1 Month",
     "network": "MTN",
@@ -767,7 +776,7 @@
   {
     "planName": "3GB",
     "planId": "7",
-    "amount": "1848.00",
+    "amount": "1830.00",
     "planType": "SME",
     "duration": "1 Month",
     "network": "MTN",
@@ -875,7 +884,7 @@
   {
     "planName": "10GB",
     "planId": "9",
-    "amount": "6162.00",
+    "amount": "6102.00",
     "planType": "SME",
     "duration": "1 Month",
     "network": "MTN",

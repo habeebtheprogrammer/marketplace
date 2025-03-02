@@ -6,7 +6,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "4",
-            "amount": "306.00",
+            "amount": "300.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "606.00",
+            "amount": "600.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,212.00",
+            "amount": "1,200.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,818.00",
+            "amount": "1,800.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +38,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "9",
-            "amount": "6,060.00",
+            "amount": "6,000.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -94,7 +94,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "19",
-            "amount": "333.00",
+            "amount": "313.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "AIRTEL"
@@ -102,7 +102,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "20",
-            "amount": "660.00",
+            "amount": "625.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "AIRTEL"
@@ -110,7 +110,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "21",
-            "amount": "1,320.00",
+            "amount": "1,250.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "AIRTEL"
@@ -118,7 +118,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "22",
-            "amount": "3,300.00",
+            "amount": "3,125.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "AIRTEL"
@@ -126,7 +126,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "23",
-            "amount": "6,600.00",
+            "amount": "6,250.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "AIRTEL"
@@ -192,7 +192,7 @@ const unfilteredplans = {
             "plan_id": "31",
             "amount": "210.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "7days",
+            "plan_day": "30days",
             "network": "AIRTEL"
         },
         {
@@ -200,7 +200,7 @@ const unfilteredplans = {
             "plan_id": "32",
             "amount": "150.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "7days",
+            "plan_day": "30days",
             "network": "AIRTEL"
         },
         {
