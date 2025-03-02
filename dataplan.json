@@ -459,15 +459,6 @@
     "vendor": "quickvtu"
   },
   {
-    "planName": "20GB",
-    "planId": "74",
-    "amount": "4254.00",
-    "planType": "GIFTING PROMO",
-    "duration": "1 Month",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
     "planName": "200MB",
     "planId": "29",
     "amount": "72.00",
