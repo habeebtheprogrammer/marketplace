@@ -3,7 +3,7 @@
     "planName": "50MB",
     "planId": "50",
     "amount": "15.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -12,7 +12,7 @@
     "planName": "100MB",
     "planId": "100",
     "amount": "26.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -21,7 +21,7 @@
     "planName": "500MB",
     "planId": "500",
     "amount": "115.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -30,7 +30,7 @@
     "planName": "1GB",
     "planId": "1000",
     "amount": "210.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -39,7 +39,7 @@
     "planName": "2GB",
     "planId": "2000.01",
     "amount": "1270.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -48,7 +48,7 @@
     "planName": "5GB",
     "planId": "5000",
     "amount": "951.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -57,7 +57,7 @@
     "planName": "1.5GB",
     "planId": "1500.01",
     "amount": "1065.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -66,7 +66,7 @@
     "planName": "4.5GB",
     "planId": "4500.01",
     "amount": "2096.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -75,7 +75,7 @@
     "planName": "7GB",
     "planId": "3000.01",
     "amount": "1671.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "7 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -84,7 +84,7 @@
     "planName": "10GB",
     "planId": "10000",
     "amount": "1902.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -93,7 +93,7 @@
     "planName": "11GB",
     "planId": "11000.01",
     "amount": "4112.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -102,7 +102,7 @@
     "planName": "15GB",
     "planId": "15000.01",
     "amount": "5353.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -111,7 +111,7 @@
     "planName": "40GB",
     "planId": "40000.01",
     "amount": "10909.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -120,7 +120,7 @@
     "planName": "75GB",
     "planId": "75000.01",
     "amount": "16768.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "9mobile",
     "vendor": "mobilevtu"
@@ -246,7 +246,7 @@
     "planName": "8GB",
     "planId": "2999.02",
     "amount": "3281.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -255,7 +255,7 @@
     "planName": "10GB",
     "planId": "10000",
     "amount": "3102.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -264,7 +264,7 @@
     "planName": "15GB",
     "planId": "15000",
     "amount": "4153.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -273,7 +273,7 @@
     "planName": "20GB",
     "planId": "20000",
     "amount": "5204.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -282,7 +282,7 @@
     "planName": "40GB",
     "planId": "9999.00",
     "amount": "10509.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -291,7 +291,7 @@
     "planName": "75GB",
     "planId": "14999.00",
     "amount": "16768.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -300,7 +300,7 @@
     "planName": "110GB",
     "planId": "19999.02",
     "amount": "21626.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "Airtel",
     "vendor": "mobilevtu"
@@ -795,7 +795,7 @@
     "planName": "150MB",
     "planId": "150.00",
     "amount": "51.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -804,7 +804,7 @@
     "planName": "250MB",
     "planId": "250.00",
     "amount": "112.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -831,7 +831,7 @@
     "planName": "500MB",
     "planId": "500.0",
     "amount": "205.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -885,7 +885,7 @@
     "planName": "1GB",
     "planId": "1000.0",
     "amount": "330.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -939,7 +939,7 @@
     "planName": "2GB",
     "planId": "2000.0",
     "amount": "670.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -966,7 +966,7 @@
     "planName": "3GB",
     "planId": "3000.0",
     "amount": "1230.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1038,7 +1038,7 @@
     "planName": "5GB",
     "planId": "5000.0",
     "amount": "1551.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1092,7 +1092,7 @@
     "planName": "10GB",
     "planId": "10000.0",
     "amount": "3102.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1101,7 +1101,7 @@
     "planName": "13GB",
     "planId": "6000.02",
     "amount": "4133.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1128,7 +1128,7 @@
     "planName": "25GB",
     "planId": "25000.00",
     "amount": "7256.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1137,7 +1137,7 @@
     "planName": "27GB",
     "planId": "40000.01",
     "amount": "6776.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1146,7 +1146,7 @@
     "planName": "50GB",
     "planId": "50000.00",
     "amount": "14512.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1155,7 +1155,7 @@
     "planName": "75GB",
     "planId": "120000.01",
     "amount": "15868.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1164,7 +1164,7 @@
     "planName": "100GB",
     "planId": "100000.00",
     "amount": "28024.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"
@@ -1173,7 +1173,7 @@
     "planName": "120GB",
     "planId": "3000.06",
     "amount": "22788.00",
-    "planType": "Promo",
+    "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
     "network": "MTN",
     "vendor": "mobilevtu"

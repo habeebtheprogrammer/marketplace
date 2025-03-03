@@ -1480,7 +1480,7 @@ unfilteredplans.mobilevtu.map(plan => {
         planName: plan.label.replace(/[" "]/g, "") ,
         planId:  plan.plan,
         amount:  newAmount.toFixed(2) ,
-        planType: "Promo",
+        planType: "PROMO",
         duration: checkDaysMatch(plan.validity + ' Days. Could take a few min to arrive.') ,
         network:  plan.operator,
         vendor: 'mobilevtu'
