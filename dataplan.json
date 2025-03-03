@@ -774,16 +774,6 @@
     "network": "GLO",
     "vendor": "bilal"
   },
-
-  {
-    "planName": "150MB",
-    "planId": "150.00",
-    "amount": "51.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "MTN",
-    "vendor": "mobilevtu"
-  },
   {
     "planName": "250MB",
     "planId": "250.00",
