@@ -1497,9 +1497,10 @@ function convertToMB(size) {
 
 
 function parseDataSize(planName) {
-    const match = planName.match(/(\d+)(TB|GB|MB)/i);
+    const match = planName.match(/([\d.]+)(TB|GB|MB)/i); // Supports decimals
+
     if (!match) return 0;
-    let size = parseInt(match[1]);
+    let size = parseFloat(match[1]);
     if (match[2].toUpperCase() === 'TB') {
         size *= 1024 * 1024; // Convert TB to MB
     } else if (match[2].toUpperCase() === 'GB') {
