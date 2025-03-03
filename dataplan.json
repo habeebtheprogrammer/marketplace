@@ -548,15 +548,7 @@
     "network": "AIRTEL",
     "vendor": "mobilevtu"
   },
-  {
-    "planName": "20GB",
-    "planId": "74",
-    "amount": "4254.00",
-    "planType": "GIFTING PROMO",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
+  
   {
     "planName": "20GB",
     "planId": "20000",
@@ -782,15 +774,7 @@
     "network": "GLO",
     "vendor": "bilal"
   },
-  {
-    "planName": "15GB",
-    "planId": "79",
-    "amount": "2103.00",
-    "planType": "GIFTING PROMO",
-    "duration": "7 days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
+
   {
     "planName": "150MB",
     "planId": "150.00",
@@ -1106,24 +1090,7 @@
     "network": "MTN",
     "vendor": "mobilevtu"
   },
-  {
-    "planName": "15GB",
-    "planId": "78",
-    "amount": "3653.00",
-    "planType": "GIFTING",
-    "duration": "1month",
-    "network": "MTN",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "15GB",
-    "planId": "39",
-    "amount": "3653.00",
-    "planType": "GIFTING PROMO",
-    "duration": "30 days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
+
   {
     "planName": "25GB",
     "planId": "25000.00",
