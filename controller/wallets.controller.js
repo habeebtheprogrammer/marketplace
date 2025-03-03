@@ -54,7 +54,7 @@ async function quickVTU(endpoint, method, body = null, vendor) {
         "Request-Id": body["request-id"],
       },
     };
-    var operator = body.network == 1 ? 'MTN' : plan.network == 2 ? "Airtel"  : plan.network == 3 ? "Glo" : "9Mobile"
+    var operator = body.network == 1 ? 'MTN' : body.network == 2 ? "Airtel"  : body.network == 3 ? "Glo" : "9Mobile"
     console.log(config)
      result = await axios.post(`https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`, `operator=${operator}&type=data&value=${body.data_plan}&phone=${body.phone}`, config)
   }
