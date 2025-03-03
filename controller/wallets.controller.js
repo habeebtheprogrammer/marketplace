@@ -38,7 +38,7 @@ async function quickVTU(endpoint, method, body = null, vendor) {
       },
     };
      result = await axios.post('https://quickvtu.com' + endpoint, JSON.stringify(body), config)
-  } else {
+  } else  if(vendor == 'bilal') {
     const config = {
       headers: {
         Authorization: `Token ${process.env.BILALSHUB_TOKEN}`,
@@ -46,7 +46,19 @@ async function quickVTU(endpoint, method, body = null, vendor) {
       },
     };
      result = await axios.post('https://bilalsadasub.com' + endpoint, JSON.stringify(body), config)
+  } else {
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        "Api-Token": process.env.MOBILEVTU_API_TOKEN,
+        "Request-Id": body["request-id"],
+      },
+    };
+    var operator = body.network == 1 ? 'MTN' : plan.network == 2 ? "AIRTEL"  : plan.network == 3 ? "GLO" : "9MOBILE"
+    console.log(config)
+     result = await axios.post(`https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`, `operator=${operator}&type=data&value=${body.data_plan}&phone=${body.phone}`, config)
   }
+
   return result.data
 }
 
@@ -268,7 +280,7 @@ exports.buyDataPlan = async (req, res, next) => {
     console.log(vtc, obj, 'resp')
 
 
-    if (vtc?.status == 'fail') {
+    if (vtc?.status == 'fail' || vtc?.status == 'error' ) {
       res.status(500).json({ errors: ['Network failed. Try another plan'] });
       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
       await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
