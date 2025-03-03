@@ -1452,11 +1452,11 @@ var plans = unfilteredplans.quickvtu.map(plan => {
 })
 
 unfilteredplans.bilal.map(plan => {
-    const mbSize = convertToMB(plan.planName || plan.plan_name);
+    const mbSize = convertToMB(plan.plan_name);
     const hundreds = Math.floor(mbSize / 100);
-    const originalAmount = parseFloat(plan.amount);
+    const originalAmount = parseFloat(plan.amount.replace(",",""));
     const newAmount = originalAmount + hundreds;
-
+    console.log( newAmount.toFixed(2), originalAmount, plan.amount)
     plans.push({
         planName: plan.plan_name,
         planId: plan.plan_id,
