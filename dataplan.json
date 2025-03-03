@@ -5,7 +5,7 @@
     "amount": "15.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
@@ -14,115 +14,7 @@
     "amount": "26.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "500MB",
-    "planId": "500",
-    "amount": "115.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "1GB",
-    "planId": "1000",
-    "amount": "210.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "1.5GB",
-    "planId": "1500.01",
-    "amount": "1065.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "2GB",
-    "planId": "2000.01",
-    "amount": "1270.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "4.5GB",
-    "planId": "4500.01",
-    "amount": "2096.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "5GB",
-    "planId": "5000",
-    "amount": "951.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "7GB",
-    "planId": "3000.01",
-    "amount": "1671.00",
-    "planType": "PROMO",
-    "duration": "7 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "10000",
-    "amount": "1902.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "11GB",
-    "planId": "11000.01",
-    "amount": "4112.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "15GB",
-    "planId": "15000.01",
-    "amount": "5353.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "40GB",
-    "planId": "40000.01",
-    "amount": "10909.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "75GB",
-    "planId": "75000.01",
-    "amount": "16768.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "9mobile",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
@@ -144,6 +36,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "500MB",
+    "planId": "500",
+    "amount": "115.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "1GB",
     "planId": "42",
     "amount": "290.00",
@@ -162,6 +63,24 @@
     "vendor": "bilal"
   },
   {
+    "planName": "1GB",
+    "planId": "1000",
+    "amount": "210.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
+  },
+  {
+    "planName": "1.5GB",
+    "planId": "1500.01",
+    "amount": "1065.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "2GB",
     "planId": "43",
     "amount": "580.00",
@@ -178,6 +97,15 @@
     "duration": "30days",
     "network": "9MOBILE",
     "vendor": "bilal"
+  },
+  {
+    "planName": "2GB",
+    "planId": "2000.01",
+    "amount": "1270.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
   },
   {
     "planName": "3GB",
@@ -216,6 +144,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "4.5GB",
+    "planId": "4500.01",
+    "amount": "2096.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "5GB",
     "planId": "46",
     "amount": "1451.00",
@@ -234,6 +171,24 @@
     "vendor": "bilal"
   },
   {
+    "planName": "5GB",
+    "planId": "5000",
+    "amount": "951.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
+  },
+  {
+    "planName": "7GB",
+    "planId": "3000.01",
+    "amount": "1671.00",
+    "planType": "PROMO",
+    "duration": "7 days. could take a few min to arrive.",
+    "network": "9MOBILE",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "10GB",
     "planId": "52",
     "amount": "2852.00",
@@ -243,66 +198,48 @@
     "vendor": "bilal"
   },
   {
-    "planName": "8GB",
-    "planId": "2999.02",
-    "amount": "3281.00",
+    "planName": "10GB",
+    "planId": "10000",
+    "amount": "1902.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
-    "planName": "10GB",
-    "planId": "10000",
-    "amount": "3102.00",
+    "planName": "11GB",
+    "planId": "11000.01",
+    "amount": "4112.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
     "planName": "15GB",
-    "planId": "15000",
-    "amount": "4153.00",
+    "planId": "15000.01",
+    "amount": "5353.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "20GB",
-    "planId": "20000",
-    "amount": "5204.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
     "planName": "40GB",
-    "planId": "9999.00",
-    "amount": "10509.00",
+    "planId": "40000.01",
+    "amount": "10909.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
     "planName": "75GB",
-    "planId": "14999.00",
+    "planId": "75000.01",
     "amount": "16768.00",
     "planType": "PROMO",
     "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
-    "vendor": "mobilevtu"
-  },
-  {
-    "planName": "110GB",
-    "planId": "19999.02",
-    "amount": "21626.00",
-    "planType": "PROMO",
-    "duration": "30 days. could take a few min to arrive.",
-    "network": "Airtel",
+    "network": "9MOBILE",
     "vendor": "mobilevtu"
   },
   {
@@ -540,6 +477,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "8GB",
+    "planId": "2999.02",
+    "amount": "3281.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "10GB",
     "planId": "56",
     "amount": "3232.00",
@@ -576,6 +522,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "10GB",
+    "planId": "10000",
+    "amount": "3102.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "12GB",
     "planId": "72",
     "amount": "3612.00",
@@ -585,6 +540,15 @@
     "vendor": "quickvtu"
   },
   {
+    "planName": "15GB",
+    "planId": "15000",
+    "amount": "4153.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
+  },
+  {
     "planName": "20GB",
     "planId": "74",
     "amount": "4254.00",
@@ -592,6 +556,42 @@
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
+  },
+  {
+    "planName": "20GB",
+    "planId": "20000",
+    "amount": "5204.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
+  },
+  {
+    "planName": "40GB",
+    "planId": "9999.00",
+    "amount": "10509.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
+  },
+  {
+    "planName": "75GB",
+    "planId": "14999.00",
+    "amount": "16768.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
+  },
+  {
+    "planName": "110GB",
+    "planId": "19999.02",
+    "amount": "21626.00",
+    "planType": "PROMO",
+    "duration": "30 days. could take a few min to arrive.",
+    "network": "AIRTEL",
+    "vendor": "mobilevtu"
   },
   {
     "planName": "200MB",
