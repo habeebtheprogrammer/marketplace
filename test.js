@@ -512,7 +512,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "297.50",
+            "amount": "310.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -1100,7 +1100,15 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "2 days",
             "network": "GLO"
-        } 
+        },
+        {
+            "plan_name": "15GB",
+            "plan_id": "79",
+            "amount": "1,950.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "7 days",
+            "network": "GLO"
+        }
     ],
     // "mobilevtu": [
     //         {

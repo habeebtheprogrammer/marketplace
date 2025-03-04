@@ -585,6 +585,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "15GB",
+    "planId": "79",
+    "amount": "2103.00",
+    "planType": "GIFTING PROMO",
+    "duration": "7 days",
+    "network": "GLO",
+    "vendor": "bilal"
+  },
+  {
     "planName": "500MB",
     "planId": "4",
     "amount": "318.00",
@@ -596,7 +605,7 @@
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "302.50",
+    "amount": "315.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
