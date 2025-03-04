@@ -2,11 +2,11 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu": [
+    "quickvtu":  [
         {
             "plan_name": "500MB",
             "plan_id": "4",
-            "amount": "300.00",
+            "amount": "313.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "600.00",
+            "amount": "625.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,200.00",
+            "amount": "1,250.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,800.00",
+            "amount": "1,875.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +38,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "9",
-            "amount": "6,000.00",
+            "amount": "6,250.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -436,14 +436,6 @@ const unfilteredplans = {
             "network": "GLO"
         },
         {
-            "plan_name": "15GB",
-            "plan_id": "68",
-            "amount": "2,000.00",
-            "plan_type": "SME",
-            "plan_day": "7DAYS VALIDITY",
-            "network": "GLO"
-        },
-        {
             "plan_name": "2.5GB",
             "plan_id": "69",
             "amount": "540.00",
@@ -515,20 +507,12 @@ const unfilteredplans = {
             "plan_day": "7days Validity",
             "network": "MTN"
         },
-        {
-            "plan_name": "15GB",
-            "plan_id": "78",
-            "amount": "3,500.00",
-            "plan_type": "GIFTING",
-            "plan_day": "1Month",
-            "network": "MTN"
-        }
     ],
-    "bilal": [
+    "bilal":  [
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "297.00",
+            "amount": "297.50",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -536,7 +520,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "581.00",
+            "amount": "616.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -822,14 +806,6 @@ const unfilteredplans = {
             "network": "MTN"
         },
         {
-            "plan_name": "15GB",
-            "plan_id": "39",
-            "amount": "3,500.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "30 days",
-            "network": "MTN"
-        },
-        {
             "plan_name": "1TB",
             "plan_id": "40",
             "amount": "97,000.00",
@@ -1094,14 +1070,6 @@ const unfilteredplans = {
             "network": "AIRTEL"
         },
         {
-            "plan_name": "20GB",
-            "plan_id": "74",
-            "amount": "4,050.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "30days",
-            "network": "AIRTEL"
-        },
-        {
             "plan_name": "3GB",
             "plan_id": "75",
             "amount": "1,980.00",
@@ -1132,306 +1100,298 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "2 days",
             "network": "GLO"
-        },
-        {
-            "plan_name": "15GB",
-            "plan_id": "79",
-            "amount": "1,950.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "7 days",
-            "network": "GLO"
-        }
+        } 
     ],
-    "mobilevtu": [
-            {
-                "plan": "150.00",
-                "label": "150MB",
-                "validity": "30",
-                "price": "50",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "250.00",
-                "label": "250MB",
-                "validity": "30",
-                "price": "110",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "500.0",
-                "label": "500MB",
-                "validity": "30",
-                "price": "200",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "1000.0",
-                "label": "1GB ",
-                "validity": "30",
-                "price": "320",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "2000.0",
-                "label": "2GB",
-                "validity": "30",
-                "price": "650",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "3000.0",
-                "label": "3GB",
-                "validity": "30",
-                "price": "1200",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "5000.0",
-                "label": "5GB",
-                "validity": "30",
-                "price": "1500",
-                "operator": "MTN",
-                "currency": "NGN"
-            }, 
-            {
-                "plan": "10000.0",
-                "label": "10GB",
-                "validity": "30",
-                "price": "3000",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "6000.02",
-                "label": "13GB",
-                "validity": "30",
-                "price": "4000",
-                "operator": "MTN",
-                "currency": "NGN"
-            }, 
-            {
-                "plan": "40000.01",
-                "label": "27GB",
-                "validity": "30",
-                "price": "6500",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "25000.00",
-                "label": "25GB",
-                "validity": "30",
-                "price": "7000",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "50000.00",
-                "label": "50GB",
-                "validity": "30",
-                "price": "14000",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "120000.01",
-                "label": "75GB",
-                "validity": "30",
-                "price": "15100",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "3000.06",
-                "label": "120GB",
-                "validity": "30",
-                "price": "21560",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "100000.00",
-                "label": "100GB",
-                "validity": "30",
-                "price": "27000",
-                "operator": "MTN",
-                "currency": "NGN"
-            },
-            {
-                "plan": "50",
-                "label": "50MB",
-                "validity": "30",
-                "price": "15",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "100",
-                "label": "100 MB",
-                "validity": "30",
-                "price": "25",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "500",
-                "label": "500 MB",
-                "validity": "30",
-                "price": "110",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "1000",
-                "label": "1 GB",
-                "validity": "30",
-                "price": "200",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "5000",
-                "label": "5 GB",
-                "validity": "30",
-                "price": "900",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "1500.01",
-                "label": "1.5GB",
-                "validity": "30",
-                "price": "1050",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "2000.01",
-                "label": "2GB",
-                "validity": "30",
-                "price": "1250",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "3000.01",
-                "label": "7GB",
-                "validity": "7",
-                "price": "1600",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "10000",
-                "label": "10 GB",
-                "validity": "30",
-                "price": "1800",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "4500.01",
-                "label": "4.5GB",
-                "validity": "30",
-                "price": "2050",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "11000.01",
-                "label": "11GB",
-                "validity": "30",
-                "price": "4000",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "15000.01",
-                "label": "15GB",
-                "validity": "30",
-                "price": "5200",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "40000.01",
-                "label": "40GB",
-                "validity": "30",
-                "price": "10500",
-                "operator": "9mobile",
-                "currency": "NGN"
-            },
-            {
-                "plan": "75000.01",
-                "label": "75GB",
-                "validity": "30",
-                "price": "16000",
-                "operator": "9mobile",
-                "currency": "NGN"
-            }, 
-            {
-                "plan": "10000",
-                "label": "10GB",
-                "validity": "30",
-                "price": "3000",
-                "operator": "Airtel",
-                "currency": "NGN"
-            },
-            {
-                "plan": "2999.02",
-                "label": "8GB",
-                "validity": "30",
-                "price": "3200",
-                "operator": "Airtel",
-                "currency": "NGN"
-            },
-            {
-                "plan": "15000",
-                "label": "15GB",
-                "validity": "30",
-                "price": "4000",
-                "operator": "Airtel",
-                "currency": "NGN"
-            },
-            {
-                "plan": "20000",
-                "label": "20GB",
-                "validity": "30",
-                "price": "5000",
-                "operator": "Airtel",
-                "currency": "NGN"
-            },
-            {
-                "plan": "9999.00",
-                "label": "40GB",
-                "validity": "30",
-                "price": "10100",
-                "operator": "Airtel",
-                "currency": "NGN"
-            },
-            {
-                "plan": "14999.00",
-                "label": "75GB",
-                "validity": "30",
-                "price": "16000",
-                "operator": "Airtel",
-                "currency": "NGN"
-            },
-            {
-                "plan": "19999.02",
-                "label": "110GB",
-                "validity": "30",
-                "price": "20500",
-                "operator": "Airtel",
-                "currency": "NGN"
-            }, 
-        ]
+    // "mobilevtu": [
+    //         {
+    //             "plan": "150.00",
+    //             "label": "150MB",
+    //             "validity": "30",
+    //             "price": "50",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "250.00",
+    //             "label": "250MB",
+    //             "validity": "30",
+    //             "price": "110",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "500.0",
+    //             "label": "500MB",
+    //             "validity": "30",
+    //             "price": "200",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "1000.0",
+    //             "label": "1GB ",
+    //             "validity": "30",
+    //             "price": "320",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "2000.0",
+    //             "label": "2GB",
+    //             "validity": "30",
+    //             "price": "650",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "3000.0",
+    //             "label": "3GB",
+    //             "validity": "30",
+    //             "price": "1200",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "5000.0",
+    //             "label": "5GB",
+    //             "validity": "30",
+    //             "price": "1500",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         }, 
+    //         {
+    //             "plan": "10000.0",
+    //             "label": "10GB",
+    //             "validity": "30",
+    //             "price": "3000",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "6000.02",
+    //             "label": "13GB",
+    //             "validity": "30",
+    //             "price": "4000",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         }, 
+    //         {
+    //             "plan": "40000.01",
+    //             "label": "27GB",
+    //             "validity": "30",
+    //             "price": "6500",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "25000.00",
+    //             "label": "25GB",
+    //             "validity": "30",
+    //             "price": "7000",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "50000.00",
+    //             "label": "50GB",
+    //             "validity": "30",
+    //             "price": "14000",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "120000.01",
+    //             "label": "75GB",
+    //             "validity": "30",
+    //             "price": "15100",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "3000.06",
+    //             "label": "120GB",
+    //             "validity": "30",
+    //             "price": "21560",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "100000.00",
+    //             "label": "100GB",
+    //             "validity": "30",
+    //             "price": "27000",
+    //             "operator": "MTN",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "50",
+    //             "label": "50MB",
+    //             "validity": "30",
+    //             "price": "15",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "100",
+    //             "label": "100 MB",
+    //             "validity": "30",
+    //             "price": "25",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "500",
+    //             "label": "500 MB",
+    //             "validity": "30",
+    //             "price": "110",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "1000",
+    //             "label": "1 GB",
+    //             "validity": "30",
+    //             "price": "200",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "5000",
+    //             "label": "5 GB",
+    //             "validity": "30",
+    //             "price": "900",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "1500.01",
+    //             "label": "1.5GB",
+    //             "validity": "30",
+    //             "price": "1050",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "2000.01",
+    //             "label": "2GB",
+    //             "validity": "30",
+    //             "price": "1250",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "3000.01",
+    //             "label": "7GB",
+    //             "validity": "7",
+    //             "price": "1600",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "10000",
+    //             "label": "10 GB",
+    //             "validity": "30",
+    //             "price": "1800",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "4500.01",
+    //             "label": "4.5GB",
+    //             "validity": "30",
+    //             "price": "2050",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "11000.01",
+    //             "label": "11GB",
+    //             "validity": "30",
+    //             "price": "4000",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "15000.01",
+    //             "label": "15GB",
+    //             "validity": "30",
+    //             "price": "5200",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "40000.01",
+    //             "label": "40GB",
+    //             "validity": "30",
+    //             "price": "10500",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "75000.01",
+    //             "label": "75GB",
+    //             "validity": "30",
+    //             "price": "16000",
+    //             "operator": "9mobile",
+    //             "currency": "NGN"
+    //         }, 
+    //         {
+    //             "plan": "10000",
+    //             "label": "10GB",
+    //             "validity": "30",
+    //             "price": "3000",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "2999.02",
+    //             "label": "8GB",
+    //             "validity": "30",
+    //             "price": "3200",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "15000",
+    //             "label": "15GB",
+    //             "validity": "30",
+    //             "price": "4000",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "20000",
+    //             "label": "20GB",
+    //             "validity": "30",
+    //             "price": "5000",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "9999.00",
+    //             "label": "40GB",
+    //             "validity": "30",
+    //             "price": "10100",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "14999.00",
+    //             "label": "75GB",
+    //             "validity": "30",
+    //             "price": "16000",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         },
+    //         {
+    //             "plan": "19999.02",
+    //             "label": "110GB",
+    //             "validity": "30",
+    //             "price": "20500",
+    //             "operator": "Airtel",
+    //             "currency": "NGN"
+    //         }, 
+    //     ]
 }
 
 var plans = unfilteredplans.quickvtu.map(plan => {
@@ -1469,7 +1429,7 @@ unfilteredplans.bilal.map(plan => {
 })
 
 
-unfilteredplans.mobilevtu.map(plan => {
+unfilteredplans?.mobilevtu?.map(plan => {
 
     const mbSize = convertToMB(plan.label.replace(/[" "]/g, "") );
     const hundreds = Math.floor(mbSize / 100);
