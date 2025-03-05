@@ -130,7 +130,7 @@
     "planId": "59",
     "amount": "71.00",
     "planType": "SME",
-    "duration": "1day validity please don't buy this plan if you're owing airtel",
+    "duration": "1day validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -148,7 +148,7 @@
     "planId": "60",
     "amount": "133.00",
     "planType": "SME",
-    "duration": "2days validity please don't buy this plan if you're owing airtel",
+    "duration": "2days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -173,7 +173,7 @@
   {
     "planName": "500MB",
     "planId": "7",
-    "amount": "312.00",
+    "amount": "300.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -184,7 +184,7 @@
     "planId": "51",
     "amount": "231.00",
     "planType": "GIFTING",
-    "duration": "awoof 2days validity don't buy this plan if you're owing airtel money",
+    "duration": "awoof 2days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -193,7 +193,7 @@
     "planId": "61",
     "amount": "303.00",
     "planType": "SME",
-    "duration": "7days validity please don't buy this plan if you're owing airtel money",
+    "duration": "7days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -202,14 +202,14 @@
     "planId": "70",
     "amount": "270.00",
     "planType": "GIFTING",
-    "duration": "7days",
+    "duration": "7days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
   {
     "planName": "1GB",
     "planId": "8",
-    "amount": "625.00",
+    "amount": "600.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -229,14 +229,14 @@
     "planId": "58",
     "amount": "345.00",
     "planType": "GIFTING",
-    "duration": "awoof 2days validity please don't buy  this plan if you're owing airtel money",
+    "duration": "awoof 2days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
   {
     "planName": "2GB",
     "planId": "9",
-    "amount": "1340.00",
+    "amount": "1200.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -256,7 +256,7 @@
     "planId": "69",
     "amount": "565.00",
     "planType": "GIFTING",
-    "duration": "awoof 2days validity don't buy this plan if you're owing airtel",
+    "duration": "awoof 2days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -265,7 +265,7 @@
     "planId": "53",
     "amount": "1060.00",
     "planType": "GIFTING",
-    "duration": "awoof 7days validity please don't buy this plan if you're owing airtel money",
+    "duration": "awoof 7days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -274,7 +274,7 @@
     "planId": "62",
     "amount": "1100.00",
     "planType": "SME",
-    "duration": "7days validity please don't buy this plan if you're owing airtel money",
+    "duration": "7days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -290,7 +290,7 @@
   {
     "planName": "3GB",
     "planId": "75",
-    "amount": "2010.00",
+    "amount": "1800.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -301,7 +301,7 @@
     "planId": "71",
     "amount": "905.00",
     "planType": "GIFTING",
-    "duration": "1day vality",
+    "duration": "1day validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -310,14 +310,14 @@
     "planId": "52",
     "amount": "1281.00",
     "planType": "GIFTING",
-    "duration": "14days validity please don't buy this plan if you're owing airtel money",
+    "duration": "awoof 14days  validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
   {
     "planName": "5GB",
     "planId": "10",
-    "amount": "3351.00",
+    "amount": "3001.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -328,7 +328,7 @@
     "planId": "54",
     "amount": "2151.00",
     "planType": "GIFTING",
-    "duration": "awoof 30days validity please don't buy  this plan if you're owing airtel money",
+    "duration": "awoof 30days don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -337,7 +337,7 @@
     "planId": "63",
     "amount": "2146.00",
     "planType": "SME",
-    "duration": "30days validity please don't buy this plan if you're owing airtel money",
+    "duration": "30days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -355,7 +355,7 @@
     "planId": "56",
     "amount": "3232.00",
     "planType": "GIFTING",
-    "duration": "awoof 30days validity please don't buy  this plan if you're owing airtel money",
+    "duration": "awoof 30days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -364,14 +364,14 @@
     "planId": "64",
     "amount": "3172.00",
     "planType": "SME",
-    "duration": "30days validity please don't buy this plan if you're owing airtel",
+    "duration": "30days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
   {
     "planName": "10GB",
     "planId": "26",
-    "amount": "6702.00",
+    "amount": "6002.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -391,14 +391,23 @@
     "planId": "72",
     "amount": "3612.00",
     "planType": "GIFTING",
-    "duration": "awoof 30days validity don't buy this plan if you're owing airtel money",
+    "duration": "awoof 30days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
   {
+    "planName": "20GB",
+    "planId": "74",
+    "amount": "4254.00",
+    "planType": "GIFTING PROMO",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
     "planName": "200MB",
     "planId": "29",
-    "amount": "72.00",
+    "amount": "102.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO",
@@ -416,7 +425,7 @@
   {
     "planName": "500MB",
     "planId": "30",
-    "amount": "165.00",
+    "amount": "208.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "GLO",
@@ -434,7 +443,7 @@
   {
     "planName": "1GB",
     "planId": "31",
-    "amount": "330.00",
+    "amount": "415.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "GLO",
@@ -470,7 +479,7 @@
   {
     "planName": "2GB",
     "planId": "32",
-    "amount": "660.00",
+    "amount": "830.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO",
@@ -506,7 +515,7 @@
   {
     "planName": "3GB",
     "planId": "33",
-    "amount": "990.00",
+    "amount": "1245.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO",
@@ -542,7 +551,7 @@
   {
     "planName": "5GB",
     "planId": "34",
-    "amount": "1651.00",
+    "amount": "2076.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO",
@@ -578,18 +587,9 @@
   {
     "planName": "10GB",
     "planId": "35",
-    "amount": "3302.00",
+    "amount": "4152.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days after redeeming",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "15GB",
-    "planId": "79",
-    "amount": "2103.00",
-    "planType": "GIFTING PROMO",
-    "duration": "7 days",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -605,7 +605,7 @@
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "315.00",
+    "amount": "305.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -641,7 +641,7 @@
   {
     "planName": "1GB",
     "planId": "2",
-    "amount": "626.00",
+    "amount": "610.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
