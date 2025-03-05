@@ -407,7 +407,7 @@
   {
     "planName": "500MB",
     "planId": "36",
-    "amount": "162.50",
+    "amount": "213.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
     "network": "GLO",
@@ -817,5 +817,14 @@
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
+  },
+  {
+    "planName": "15GB",
+    "planId": "78",
+    "amount": "3653.00",
+    "planType": "GIFTING",
+    "duration": "1month",
+    "network": "MTN",
+    "vendor": "quickvtu"
   }
 ]
