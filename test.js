@@ -230,7 +230,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "37",
-            "amount": "315.00",
+            "amount": "415.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "GLO"
@@ -238,7 +238,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "38",
-            "amount": "630.00",
+            "amount": "830.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "GLO"
@@ -246,7 +246,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "39",
-            "amount": "945.00",
+            "amount": "1,245.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "GLO"
@@ -254,7 +254,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "40",
-            "amount": "1,575.00",
+            "amount": "2,075.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "GLO"
@@ -310,7 +310,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "47",
-            "amount": "3,150.00",
+            "amount": "4,150.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "1Month",
             "network": "GLO"
@@ -434,7 +434,7 @@ const unfilteredplans = {
             "plan_type": "SME",
             "plan_day": "2DAYS VALIDITY",
             "network": "GLO"
-        }, 
+        },
         {
             "plan_name": "2.5GB",
             "plan_id": "69",
@@ -506,7 +506,7 @@ const unfilteredplans = {
             "plan_type": "GIFTING",
             "plan_day": "7days Validity",
             "network": "MTN"
-        }, 
+        }
     ],
     "bilal":  [
         {
