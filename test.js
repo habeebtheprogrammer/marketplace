@@ -1510,6 +1510,8 @@ const filters = [
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'SME' },
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING PROMO' },
+    { vendor: 'bilal', network: 'GLO', planToRemove: 'GIFTING PROMO' },
+    { vendor: 'bilal', network: 'GLO', planToRemove: 'GIFTING' },
 ];
 
 const filteredPlans = removePlans(plans, filters);

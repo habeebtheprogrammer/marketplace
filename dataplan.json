@@ -441,24 +441,6 @@
     "vendor": "bilal"
   },
   {
-    "planName": "1GB",
-    "planId": "76",
-    "amount": "210.00",
-    "planType": "GIFTING PROMO",
-    "duration": "24hours",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "1.5GB",
-    "planId": "11",
-    "amount": "475.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
     "planName": "2GB",
     "planId": "38",
     "amount": "850.00",
@@ -472,24 +454,6 @@
     "planId": "32",
     "amount": "830.00",
     "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "2GB",
-    "planId": "77",
-    "amount": "320.00",
-    "planType": "GIFTING PROMO",
-    "duration": "24hours",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "2.9GB",
-    "planId": "12",
-    "amount": "969.00",
-    "planType": "GIFTING",
     "duration": "30days",
     "network": "GLO",
     "vendor": "bilal"
@@ -513,24 +477,6 @@
     "vendor": "bilal"
   },
   {
-    "planName": "3.5GB",
-    "planId": "78",
-    "amount": "535.00",
-    "planType": "GIFTING PROMO",
-    "duration": "2 days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "4.1GB",
-    "planId": "13",
-    "amount": "1331.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
     "planName": "5GB",
     "planId": "40",
     "amount": "2126.00",
@@ -549,15 +495,6 @@
     "vendor": "bilal"
   },
   {
-    "planName": "5.8GB",
-    "planId": "14",
-    "amount": "1909.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
-  },
-  {
     "planName": "10GB",
     "planId": "47",
     "amount": "4252.00",
@@ -565,15 +502,6 @@
     "duration": "1month",
     "network": "GLO",
     "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "15",
-    "amount": "3132.00",
-    "planType": "GIFTING",
-    "duration": "30days",
-    "network": "GLO",
-    "vendor": "bilal"
   },
   {
     "planName": "10GB",
@@ -817,14 +745,5 @@
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
-  },
-  {
-    "planName": "15GB",
-    "planId": "78",
-    "amount": "3653.00",
-    "planType": "GIFTING",
-    "duration": "1month",
-    "network": "MTN",
-    "vendor": "quickvtu"
   }
 ]
