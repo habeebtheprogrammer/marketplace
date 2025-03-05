@@ -512,7 +512,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "300.00",
+            "amount": "305.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -520,7 +520,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "600.00",
+            "amount": "605.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -528,7 +528,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "3",
-            "amount": "1,200.00",
+            "amount": "1,210.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -536,7 +536,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "4",
-            "amount": "1,800.00",
+            "amount": "1,815.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -544,7 +544,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "6",
-            "amount": "6,000.00",
+            "amount": "6,050.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -804,7 +804,7 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "1 day",
             "network": "MTN"
-        },
+        }, 
         {
             "plan_name": "1TB",
             "plan_id": "40",
@@ -1070,14 +1070,6 @@ const unfilteredplans = {
             "network": "AIRTEL"
         },
         {
-            "plan_name": "20GB",
-            "plan_id": "74",
-            "amount": "4,050.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "30days",
-            "network": "AIRTEL"
-        },
-        {
             "plan_name": "3GB",
             "plan_id": "75",
             "amount": "1,770.00",
@@ -1108,7 +1100,7 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "2 days",
             "network": "GLO"
-        }
+        }, 
     ],
     // "mobilevtu": [
     //         {

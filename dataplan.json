@@ -396,15 +396,6 @@
     "vendor": "quickvtu"
   },
   {
-    "planName": "20GB",
-    "planId": "74",
-    "amount": "4254.00",
-    "planType": "GIFTING PROMO",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
     "planName": "200MB",
     "planId": "29",
     "amount": "102.00",
@@ -434,7 +425,7 @@
   {
     "planName": "1GB",
     "planId": "37",
-    "amount": "325.00",
+    "amount": "425.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
     "network": "GLO",
@@ -470,7 +461,7 @@
   {
     "planName": "2GB",
     "planId": "38",
-    "amount": "650.00",
+    "amount": "850.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
     "network": "GLO",
@@ -506,7 +497,7 @@
   {
     "planName": "3GB",
     "planId": "39",
-    "amount": "975.00",
+    "amount": "1275.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
     "network": "GLO",
@@ -542,7 +533,7 @@
   {
     "planName": "5GB",
     "planId": "40",
-    "amount": "1626.00",
+    "amount": "2126.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
     "network": "GLO",
@@ -569,7 +560,7 @@
   {
     "planName": "10GB",
     "planId": "47",
-    "amount": "3252.00",
+    "amount": "4252.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
     "network": "GLO",
@@ -605,7 +596,7 @@
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "305.00",
+    "amount": "310.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -641,7 +632,7 @@
   {
     "planName": "1GB",
     "planId": "2",
-    "amount": "610.00",
+    "amount": "615.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -704,7 +695,7 @@
   {
     "planName": "2GB",
     "planId": "3",
-    "amount": "1220.00",
+    "amount": "1230.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -722,7 +713,7 @@
   {
     "planName": "3GB",
     "planId": "4",
-    "amount": "1830.00",
+    "amount": "1845.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -821,7 +812,7 @@
   {
     "planName": "10GB",
     "planId": "6",
-    "amount": "6102.00",
+    "amount": "6152.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
