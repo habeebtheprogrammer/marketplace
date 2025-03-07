@@ -2,7 +2,7 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu": [
+    "quickvtu":  [
         {
             "plan_name": "500MB",
             "plan_id": "4",
@@ -436,6 +436,14 @@ const unfilteredplans = {
             "network": "AIRTEL"
         },
         {
+            "plan_name": "12GB",
+            "plan_id": "72",
+            "amount": "3,490.00",
+            "plan_type": "GIFTING",
+            "plan_day": "Awoof 30days validity don't buy if owing",
+            "network": "AIRTEL"
+        },
+        {
             "plan_name": "1GB",
             "plan_id": "73",
             "amount": "650.00",
@@ -508,11 +516,11 @@ const unfilteredplans = {
             "network": "GLO"
         }
     ],
-    "bilal": [
+    "bilal":[
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "310.00",
+            "amount": "321.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -520,7 +528,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "615.00",
+            "amount": "642.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -528,7 +536,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "3",
-            "amount": "1,240.00",
+            "amount": "1,284.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -536,7 +544,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "4",
-            "amount": "1,860.00",
+            "amount": "1,926.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -544,7 +552,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "6",
-            "amount": "6,200.00",
+            "amount": "6,420.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -1092,7 +1100,7 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "2 days",
             "network": "GLO"
-        }
+        },
     ],
     // "mobilevtu": [
     //         {
