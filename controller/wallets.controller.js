@@ -98,7 +98,8 @@ exports.fetch = async (req, res, next) => {
     if (wallet.totalDocs == 0) {
       var user = await usersService.getUsers({ "$or": [{ _id: req.userId }, { email: "archive." + req.email }] })
       var checkForDevice = await usersService.getUsers({ deviceid: req.headers.deviceid })
- 
+      const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+      var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
       // if ((user.totalDocs == 1) && req.headers.deviceid && (checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId)) {
       //   wallet = await walletsService.createWallet({
       //     userId: req.userId,
@@ -148,7 +149,7 @@ exports.fetch = async (req, res, next) => {
           sendNotification({
             headings: { "en": `₦50 was credited to your wallet` },
             contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦50 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
-            include_subscription_ids: [user.docs[0].referredBy?.oneSignalId],
+            include_subscription_ids: [user.docs[0].referredBy?.oneSignalId, ...include_player_ids],
             url: 'gadgetsafrica://profile',
           })
         }
@@ -227,7 +228,7 @@ exports.withdraw = async (req, res, next) => {
     var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
     sendNotification({
       headings: { "en": `Withdrawal request.` },
-      contents: { "en": `Hi There, You have a new withdrawal request of N${req.body.amount}` },
+      contents: { "en": `Hi There, You have a new withdrawal request of N${req.body.amount} to acct: ${req.body.bankName}. acctNumb:${req.body.accountNumber} ` },
       include_subscription_ids: [...include_player_ids],
       url: 'gadgetsafrica://profile',
     })
