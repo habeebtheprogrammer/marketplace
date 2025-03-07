@@ -434,7 +434,7 @@
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "310.00",
+    "amount": "315.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -470,7 +470,7 @@
   {
     "planName": "1GB",
     "planId": "2",
-    "amount": "615.00",
+    "amount": "625.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -533,7 +533,7 @@
   {
     "planName": "2GB",
     "planId": "3",
-    "amount": "1230.00",
+    "amount": "1260.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -551,7 +551,7 @@
   {
     "planName": "3GB",
     "planId": "4",
-    "amount": "1845.00",
+    "amount": "1890.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -650,7 +650,7 @@
   {
     "planName": "10GB",
     "planId": "6",
-    "amount": "6152.00",
+    "amount": "6302.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",

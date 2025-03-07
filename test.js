@@ -412,30 +412,6 @@ const unfilteredplans = {
             "network": "AIRTEL"
         },
         {
-            "plan_name": "1GB",
-            "plan_id": "65",
-            "amount": "210.00",
-            "plan_type": "SME",
-            "plan_day": "1DAY VALIDITY",
-            "network": "GLO"
-        },
-        {
-            "plan_name": "2GB",
-            "plan_id": "66",
-            "amount": "310.00",
-            "plan_type": "SME",
-            "plan_day": "1DAY VALIDITY",
-            "network": "GLO"
-        },
-        {
-            "plan_name": "3.5GB",
-            "plan_id": "67",
-            "amount": "500.00",
-            "plan_type": "SME",
-            "plan_day": "2DAYS VALIDITY",
-            "network": "GLO"
-        },
-        {
             "plan_name": "2.5GB",
             "plan_id": "69",
             "amount": "540.00",
@@ -457,14 +433,6 @@ const unfilteredplans = {
             "amount": "870.00",
             "plan_type": "GIFTING",
             "plan_day": "1day validity don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "12GB",
-            "plan_id": "72",
-            "amount": "3,490.00",
-            "plan_type": "GIFTING",
-            "plan_day": "Awoof 30days validity don't buy if owing",
             "network": "AIRTEL"
         },
         {
@@ -507,6 +475,38 @@ const unfilteredplans = {
             "plan_day": "7days Validity",
             "network": "MTN"
         },
+        {
+            "plan_name": "750MB",
+            "plan_id": "79",
+            "amount": "205.00",
+            "plan_type": "SME",
+            "plan_day": "1day validty",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "1.5GB",
+            "plan_id": "80",
+            "amount": "305.00",
+            "plan_type": "SME",
+            "plan_day": "1day validty",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "2.5GB",
+            "plan_id": "81",
+            "amount": "495.00",
+            "plan_type": "SME",
+            "plan_day": "2days validity",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "10GB",
+            "plan_id": "82",
+            "amount": "1,980.00",
+            "plan_type": "SME",
+            "plan_day": "7days validity",
+            "network": "GLO"
+        }
     ],
     "bilal": [
         {
