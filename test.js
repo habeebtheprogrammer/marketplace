@@ -1497,7 +1497,7 @@ const filters = [
     { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
-    { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
+    // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'SME' },
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING' },

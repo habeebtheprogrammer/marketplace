@@ -144,6 +144,15 @@
     "vendor": "quickvtu"
   },
   {
+    "planName": "150MB",
+    "planId": "67",
+    "amount": "71.00",
+    "planType": "GIFTING PROMO",
+    "duration": "1 day",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
     "planName": "300MB",
     "planId": "31",
     "amount": "213.00",
@@ -167,6 +176,15 @@
     "amount": "203.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "300MB",
+    "planId": "68",
+    "amount": "133.00",
+    "planType": "GIFTING PROMO",
+    "duration": "2 days",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -234,6 +252,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "2GB",
+    "planId": "70",
+    "amount": "580.00",
+    "planType": "GIFTING PROMO",
+    "duration": "2 days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
     "planName": "3GB",
     "planId": "62",
     "amount": "1180.00",
@@ -241,6 +268,15 @@
     "duration": "7days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
+  },
+  {
+    "planName": "3GB",
+    "planId": "71",
+    "amount": "1095.00",
+    "planType": "GIFTING PROMO",
+    "duration": "7 days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
   },
   {
     "planName": "3GB",
@@ -279,6 +315,15 @@
     "vendor": "quickvtu"
   },
   {
+    "planName": "7GB",
+    "planId": "72",
+    "amount": "2136.00",
+    "planType": "GIFTING PROMO",
+    "duration": "7days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
     "planName": "10GB",
     "planId": "23",
     "amount": "6102.00",
@@ -301,6 +346,15 @@
     "planId": "26",
     "amount": "6002.00",
     "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "10GB",
+    "planId": "73",
+    "amount": "3172.00",
+    "planType": "GIFTING PROMO",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
