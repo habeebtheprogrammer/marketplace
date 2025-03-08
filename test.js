@@ -2,11 +2,11 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu":  [
+    "quickvtu": [
         {
             "plan_name": "500MB",
             "plan_id": "4",
-            "amount": "313.00",
+            "amount": "320.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "625.00",
+            "amount": "610.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,250.00",
+            "amount": "1,280.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,875.00",
+            "amount": "1,920.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +38,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "9",
-            "amount": "6,250.00",
+            "amount": "6,400.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -516,7 +516,7 @@ const unfilteredplans = {
             "network": "GLO"
         }
     ],
-    "bilal":[
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
@@ -1505,7 +1505,7 @@ const filters = [
     { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
-    { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
+    // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'SME' },
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING' },
@@ -1513,6 +1513,7 @@ const filters = [
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'GLO', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'GLO', planToRemove: 'GIFTING' },
+    { vendor: 'bilal', network: 'GLO', planToRemove: 'SME' },
 ];
 
 const filteredPlans = removePlans(plans, filters);
