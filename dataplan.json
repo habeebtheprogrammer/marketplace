@@ -216,15 +216,6 @@
     "vendor": "quickvtu"
   },
   {
-    "planName": "600MB",
-    "planId": "61",
-    "amount": "266.00",
-    "planType": "SME",
-    "duration": "2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
     "planName": "1GB",
     "planId": "20",
     "amount": "610.00",
