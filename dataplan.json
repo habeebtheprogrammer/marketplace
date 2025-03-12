@@ -207,29 +207,11 @@
     "vendor": "bilal"
   },
   {
-    "planName": "600MB",
-    "planId": "51",
-    "amount": "231.00",
-    "planType": "GIFTING",
-    "duration": "awoof 2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
     "planName": "1GB",
     "planId": "20",
     "amount": "610.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "1GB",
-    "planId": "70",
-    "amount": "270.00",
-    "planType": "GIFTING",
-    "duration": "7days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -253,15 +235,6 @@
   },
   {
     "planName": "2GB",
-    "planId": "58",
-    "amount": "345.00",
-    "planType": "GIFTING",
-    "duration": "awoof 2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "2GB",
     "planId": "9",
     "amount": "1200.00",
     "planType": "COOPERATE GIFTING",
@@ -277,24 +250,6 @@
     "duration": "2 days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "2.5GB",
-    "planId": "69",
-    "amount": "565.00",
-    "planType": "GIFTING",
-    "duration": "awoof 2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "3GB",
-    "planId": "53",
-    "amount": "1060.00",
-    "planType": "GIFTING",
-    "duration": "awoof 7days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "3GB",
@@ -324,29 +279,11 @@
     "vendor": "bilal"
   },
   {
-    "planName": "3.5GB",
-    "planId": "71",
-    "amount": "905.00",
-    "planType": "GIFTING",
-    "duration": "1day validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
     "planName": "5GB",
     "planId": "22",
     "amount": "3051.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "5GB",
-    "planId": "52",
-    "amount": "1281.00",
-    "planType": "GIFTING",
-    "duration": "awoof 14days  validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -358,15 +295,6 @@
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "7GB",
-    "planId": "54",
-    "amount": "2131.00",
-    "planType": "GIFTING",
-    "duration": "awoof 30days don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "7GB",
@@ -397,15 +325,6 @@
   },
   {
     "planName": "10GB",
-    "planId": "56",
-    "amount": "3202.00",
-    "planType": "GIFTING",
-    "duration": "awoof 30days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
     "planId": "64",
     "amount": "3252.00",
     "planType": "SME",
@@ -430,15 +349,6 @@
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "12GB",
-    "planId": "72",
-    "amount": "3582.00",
-    "planType": "GIFTING",
-    "duration": "awoof 30days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "200MB",
