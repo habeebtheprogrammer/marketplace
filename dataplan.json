@@ -477,6 +477,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "50MB",
+    "planId": "16",
+    "amount": "30.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
     "planName": "75MB",
     "planId": "83",
     "amount": "85.00",
@@ -484,6 +493,15 @@
     "duration": "1day validity",
     "network": "MTN",
     "vendor": "quickvtu"
+  },
+  {
+    "planName": "150MB",
+    "planId": "17",
+    "amount": "81.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "250MB",
@@ -495,11 +513,29 @@
     "vendor": "quickvtu"
   },
   {
+    "planName": "250MB",
+    "planId": "18",
+    "amount": "92.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
     "planName": "500MB",
     "planId": "1",
     "amount": "330.00",
     "planType": "SME",
     "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "500MB",
+    "planId": "19",
+    "amount": "138.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30 days",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -523,10 +559,28 @@
   },
   {
     "planName": "1GB",
+    "planId": "20",
+    "amount": "275.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30 days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1GB",
     "planId": "37",
     "amount": "360.00",
     "planType": "GIFTING PROMO",
     "duration": "24hours and 3 mins call",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1GB",
+    "planId": "61",
+    "amount": "350.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "1day and 3minutes call",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -558,6 +612,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "1.5GB",
+    "planId": "60",
+    "amount": "412.50",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
     "planName": "2GB",
     "planId": "87",
     "amount": "765.00",
@@ -571,6 +634,15 @@
     "planId": "3",
     "amount": "1320.00",
     "planType": "SME",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "2GB",
+    "planId": "21",
+    "amount": "550.00",
+    "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
@@ -612,6 +684,15 @@
     "vendor": "bilal"
   },
   {
+    "planName": "3GB",
+    "planId": "22",
+    "amount": "825.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30 days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
     "planName": "3.2GB",
     "planId": "90",
     "amount": "1022.00",
@@ -626,6 +707,15 @@
     "amount": "1032.00",
     "planType": "GIFTING PROMO",
     "duration": "48hours",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "4GB",
+    "planId": "59",
+    "amount": "1100.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -646,6 +736,15 @@
     "duration": "7days validity",
     "network": "MTN",
     "vendor": "quickvtu"
+  },
+  {
+    "planName": "5GB",
+    "planId": "23",
+    "amount": "1376.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
   },
   {
     "planName": "5GB",
@@ -697,6 +796,15 @@
     "planId": "6",
     "amount": "6602.00",
     "planType": "SME",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "10GB",
+    "planId": "24",
+    "amount": "2752.00",
+    "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
@@ -781,5 +889,23 @@
     "duration": "30days",
     "network": "MTN",
     "vendor": "quickvtu"
+  },
+  {
+    "planName": "400GB",
+    "planId": "62",
+    "amount": "53096.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "90 days plan",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1TB",
+    "planId": "40",
+    "amount": "107485.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "yearly",
+    "network": "MTN",
+    "vendor": "bilal"
   }
 ]
