@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "660.00",
+            "amount": "662.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,320.00",
+            "amount": "1,328.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,980.00",
+            "amount": "1,995.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +38,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "9",
-            "amount": "6,600.00",
+            "amount": "6,650.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -478,7 +478,7 @@ const unfilteredplans = {
         {
             "plan_name": "75MB",
             "plan_id": "83",
-            "amount": "85.00",
+            "amount": "72.75",
             "plan_type": "GIFTING",
             "plan_day": "1day Validity",
             "network": "MTN"
@@ -486,7 +486,7 @@ const unfilteredplans = {
         {
             "plan_name": "250MB",
             "plan_id": "84",
-            "amount": "270.00",
+            "amount": "242.50",
             "plan_type": "GIFTING",
             "plan_day": "1day validity",
             "network": "MTN"
@@ -494,7 +494,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "85",
-            "amount": "355.00",
+            "amount": "339.50",
             "plan_type": "GIFTING",
             "plan_day": "1day validity",
             "network": "MTN"
@@ -502,7 +502,7 @@ const unfilteredplans = {
         {
             "plan_name": "1.5GB",
             "plan_id": "86",
-            "amount": "395.00",
+            "amount": "388.00",
             "plan_type": "GIFTING",
             "plan_day": "1day validity",
             "network": "MTN"
@@ -510,7 +510,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "87",
-            "amount": "745.00",
+            "amount": "727.50",
             "plan_type": "GIFTING",
             "plan_day": "2days validity",
             "network": "MTN"
@@ -518,7 +518,7 @@ const unfilteredplans = {
         {
             "plan_name": "2.5GB",
             "plan_id": "88",
-            "amount": "770.00",
+            "amount": "727.50",
             "plan_type": "GIFTING",
             "plan_day": "1days validity",
             "network": "MTN"
@@ -526,7 +526,7 @@ const unfilteredplans = {
         {
             "plan_name": "2.5GB",
             "plan_id": "89",
-            "amount": "895.00",
+            "amount": "873.00",
             "plan_type": "GIFTING",
             "plan_day": "2days validity",
             "network": "MTN"
@@ -534,7 +534,7 @@ const unfilteredplans = {
         {
             "plan_name": "3.2GB",
             "plan_id": "90",
-            "amount": "990.00",
+            "amount": "970.00",
             "plan_type": "GIFTING",
             "plan_day": "2days validity",
             "network": "MTN"
@@ -542,7 +542,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "91",
-            "amount": "1,475.00",
+            "amount": "1,455.00",
             "plan_type": "GIFTING",
             "plan_day": "7days validity",
             "network": "MTN"
@@ -550,7 +550,7 @@ const unfilteredplans = {
         {
             "plan_name": "7GB",
             "plan_id": "92",
-            "amount": "2,960.00",
+            "amount": "2,910.00",
             "plan_type": "GIFTING",
             "plan_day": "7days validity",
             "network": "MTN"
@@ -558,7 +558,7 @@ const unfilteredplans = {
         {
             "plan_name": "8GB",
             "plan_id": "93",
-            "amount": "4,450.00",
+            "amount": "4,365.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -566,7 +566,7 @@ const unfilteredplans = {
         {
             "plan_name": "11GB",
             "plan_id": "94",
-            "amount": "4,930.00",
+            "amount": "4,850.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -574,7 +574,7 @@ const unfilteredplans = {
         {
             "plan_name": "15GB",
             "plan_id": "95",
-            "amount": "6,430.00",
+            "amount": "6,305.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -582,7 +582,7 @@ const unfilteredplans = {
         {
             "plan_name": "20GB",
             "plan_id": "96",
-            "amount": "7,410.00",
+            "amount": "7,275.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -590,7 +590,7 @@ const unfilteredplans = {
         {
             "plan_name": "25GB",
             "plan_id": "97",
-            "amount": "8,890.00",
+            "amount": "8,730.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -598,7 +598,7 @@ const unfilteredplans = {
         {
             "plan_name": "32GB",
             "plan_id": "98",
-            "amount": "10,850.00",
+            "amount": "10,670.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -606,7 +606,7 @@ const unfilteredplans = {
         {
             "plan_name": "75GB",
             "plan_id": "99",
-            "amount": "19,850.00",
+            "amount": "19,400.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -614,15 +614,7 @@ const unfilteredplans = {
         {
             "plan_name": "150GB",
             "plan_id": "100",
-            "amount": "34,800.00",
-            "plan_type": "GIFTING",
-            "plan_day": "30days validity",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "200GB",
-            "plan_id": "101",
-            "amount": "49,500.00",
+            "amount": "33,950.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -630,7 +622,7 @@ const unfilteredplans = {
         {
             "plan_name": "250GB",
             "plan_id": "102",
-            "amount": "54,500.00",
+            "amount": "53,350.00",
             "plan_type": "GIFTING",
             "plan_day": "30days",
             "network": "MTN"
@@ -638,7 +630,7 @@ const unfilteredplans = {
         {
             "plan_name": "1.2GB",
             "plan_id": "103",
-            "amount": "690.00",
+            "amount": "679.00",
             "plan_type": "GIFTING",
             "plan_day": "7days validity",
             "network": "MTN"
@@ -646,7 +638,7 @@ const unfilteredplans = {
         {
             "plan_name": "2.7GB",
             "plan_id": "104",
-            "amount": "1,900.00",
+            "amount": "1,940.00",
             "plan_type": "GIFTING",
             "plan_day": "30days",
             "network": "MTN"
@@ -654,7 +646,7 @@ const unfilteredplans = {
         {
             "plan_name": "4.25GB",
             "plan_id": "105",
-            "amount": "2,900.00",
+            "amount": "2,910.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -662,13 +654,13 @@ const unfilteredplans = {
         {
             "plan_name": "5.5GB",
             "plan_id": "106",
-            "amount": "3,460.00",
+            "amount": "3,395.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
         }
     ],
-    "bilal":  [
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",

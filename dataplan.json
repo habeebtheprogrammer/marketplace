@@ -479,7 +479,7 @@
   {
     "planName": "75MB",
     "planId": "83",
-    "amount": "85.00",
+    "amount": "72.75",
     "planType": "GIFTING",
     "duration": "1day validity",
     "network": "MTN",
@@ -488,7 +488,7 @@
   {
     "planName": "250MB",
     "planId": "84",
-    "amount": "272.00",
+    "amount": "244.50",
     "planType": "GIFTING",
     "duration": "1day validity",
     "network": "MTN",
@@ -506,7 +506,7 @@
   {
     "planName": "1GB",
     "planId": "5",
-    "amount": "670.00",
+    "amount": "672.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -515,7 +515,7 @@
   {
     "planName": "1GB",
     "planId": "85",
-    "amount": "365.00",
+    "amount": "349.50",
     "planType": "GIFTING",
     "duration": "1day validity",
     "network": "MTN",
@@ -533,7 +533,7 @@
   {
     "planName": "1.2GB",
     "planId": "103",
-    "amount": "702.00",
+    "amount": "691.00",
     "planType": "GIFTING",
     "duration": "7days validity",
     "network": "MTN",
@@ -542,7 +542,7 @@
   {
     "planName": "1.5GB",
     "planId": "86",
-    "amount": "410.00",
+    "amount": "403.00",
     "planType": "GIFTING",
     "duration": "1day validity",
     "network": "MTN",
@@ -560,7 +560,7 @@
   {
     "planName": "2GB",
     "planId": "6",
-    "amount": "1340.00",
+    "amount": "1348.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -569,7 +569,7 @@
   {
     "planName": "2GB",
     "planId": "87",
-    "amount": "765.00",
+    "amount": "747.50",
     "planType": "GIFTING",
     "duration": "2days validity",
     "network": "MTN",
@@ -578,7 +578,7 @@
   {
     "planName": "2.5GB",
     "planId": "88",
-    "amount": "795.00",
+    "amount": "752.50",
     "planType": "GIFTING",
     "duration": "1days validity",
     "network": "MTN",
@@ -587,7 +587,7 @@
   {
     "planName": "2.5GB",
     "planId": "89",
-    "amount": "920.00",
+    "amount": "898.00",
     "planType": "GIFTING",
     "duration": "2days validity",
     "network": "MTN",
@@ -596,7 +596,7 @@
   {
     "planName": "2.7GB",
     "planId": "104",
-    "amount": "1927.00",
+    "amount": "1967.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "MTN",
@@ -605,7 +605,7 @@
   {
     "planName": "3GB",
     "planId": "7",
-    "amount": "2010.00",
+    "amount": "2025.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -614,7 +614,7 @@
   {
     "planName": "3.2GB",
     "planId": "90",
-    "amount": "1022.00",
+    "amount": "1002.00",
     "planType": "GIFTING",
     "duration": "2days validity",
     "network": "MTN",
@@ -632,7 +632,7 @@
   {
     "planName": "4.25GB",
     "planId": "105",
-    "amount": "2943.00",
+    "amount": "2953.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -641,7 +641,7 @@
   {
     "planName": "5GB",
     "planId": "91",
-    "amount": "1526.00",
+    "amount": "1506.00",
     "planType": "GIFTING",
     "duration": "7days validity",
     "network": "MTN",
@@ -659,7 +659,7 @@
   {
     "planName": "5.5GB",
     "planId": "106",
-    "amount": "3516.00",
+    "amount": "3451.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -668,7 +668,7 @@
   {
     "planName": "7GB",
     "planId": "92",
-    "amount": "3031.00",
+    "amount": "2981.00",
     "planType": "GIFTING",
     "duration": "7days validity",
     "network": "MTN",
@@ -686,7 +686,7 @@
   {
     "planName": "8GB",
     "planId": "93",
-    "amount": "4531.00",
+    "amount": "4446.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -695,7 +695,7 @@
   {
     "planName": "10GB",
     "planId": "9",
-    "amount": "6702.00",
+    "amount": "6752.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -704,7 +704,7 @@
   {
     "planName": "11GB",
     "planId": "94",
-    "amount": "5042.00",
+    "amount": "4962.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -713,7 +713,7 @@
   {
     "planName": "15GB",
     "planId": "95",
-    "amount": "6583.00",
+    "amount": "6458.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -722,7 +722,7 @@
   {
     "planName": "20GB",
     "planId": "96",
-    "amount": "7614.00",
+    "amount": "7479.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -731,7 +731,7 @@
   {
     "planName": "25GB",
     "planId": "97",
-    "amount": "9146.00",
+    "amount": "8986.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -740,7 +740,7 @@
   {
     "planName": "32GB",
     "planId": "98",
-    "amount": "11177.00",
+    "amount": "10997.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -749,7 +749,7 @@
   {
     "planName": "75GB",
     "planId": "99",
-    "amount": "20618.00",
+    "amount": "20168.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -758,16 +758,7 @@
   {
     "planName": "150GB",
     "planId": "100",
-    "amount": "36336.00",
-    "planType": "GIFTING",
-    "duration": "30days validity",
-    "network": "MTN",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "200GB",
-    "planId": "101",
-    "amount": "51548.00",
+    "amount": "35486.00",
     "planType": "GIFTING",
     "duration": "30days validity",
     "network": "MTN",
@@ -776,7 +767,7 @@
   {
     "planName": "250GB",
     "planId": "102",
-    "amount": "57060.00",
+    "amount": "55910.00",
     "planType": "GIFTING",
     "duration": "30days",
     "network": "MTN",
