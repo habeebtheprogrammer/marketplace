@@ -1149,14 +1149,7 @@ const unfilteredplans = {
             "plan_day": "2 days",
             "network": "AIRTEL"
         },
-        {
-            "plan_name": "2GB",
-            "plan_id": "70",
-            "amount": "560.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "2 days",
-            "network": "AIRTEL"
-        },
+       
         {
             "plan_name": "3GB",
             "plan_id": "71",

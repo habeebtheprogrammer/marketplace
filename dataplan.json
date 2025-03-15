@@ -243,15 +243,6 @@
     "vendor": "bilal"
   },
   {
-    "planName": "2GB",
-    "planId": "70",
-    "amount": "580.00",
-    "planType": "GIFTING PROMO",
-    "duration": "2 days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
     "planName": "3GB",
     "planId": "62",
     "amount": "1180.00",
