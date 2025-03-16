@@ -6,7 +6,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "4",
-            "amount": "340.00",
+            "amount": "360.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "680.00",
+            "amount": "720.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,360.00",
+            "amount": "1,440.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "2,040.00",
+            "amount": "2,160.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +38,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "9",
-            "amount": "6,800.00",
+            "amount": "7,200.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -904,7 +904,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "36",
-            "amount": "1,500.00",
+            "amount": "1,455.00",
             "plan_type": "GIFTING PROMO",
             "plan_day": "7days",
             "network": "MTN"
@@ -912,7 +912,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "37",
-            "amount": "350.00",
+            "amount": "339.50",
             "plan_type": "GIFTING PROMO",
             "plan_day": "24hours and 3 mins call",
             "network": "MTN"
@@ -920,9 +920,17 @@ const unfilteredplans = {
         {
             "plan_name": "1.5GB",
             "plan_id": "38",
-            "amount": "400.00",
+            "amount": "388.00",
             "plan_type": "GIFTING PROMO",
             "plan_day": "1 day",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "15GB",
+            "plan_id": "39",
+            "amount": "6,305.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "30 days",
             "network": "MTN"
         },
         {
@@ -936,17 +944,17 @@ const unfilteredplans = {
         {
             "plan_name": "3.2GB",
             "plan_id": "42",
-            "amount": "1,000.00",
+            "amount": "970.00",
             "plan_type": "GIFTING PROMO",
             "plan_day": "48hours",
             "network": "MTN"
         },
         {
-            "plan_name": "7GB",
+            "plan_name": "8GB",
             "plan_id": "43",
-            "amount": "3,000.00",
+            "amount": "4,365.00",
             "plan_type": "GIFTING PROMO",
-            "plan_day": "7days",
+            "plan_day": "7days + 25 min call time",
             "network": "MTN"
         },
         {
@@ -1149,7 +1157,14 @@ const unfilteredplans = {
             "plan_day": "2 days",
             "network": "AIRTEL"
         },
-       
+        {
+            "plan_name": "2GB",
+            "plan_id": "70",
+            "amount": "560.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "2 days",
+            "network": "AIRTEL"
+        },
         {
             "plan_name": "3GB",
             "plan_id": "71",
@@ -1213,6 +1228,14 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "7 days",
             "network": "GLO"
+        },
+        {
+            "plan_name": "1.5GB",
+            "plan_id": "80",
+            "amount": "970.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "7 days + 5 mind call time",
+            "network": "MTN"
         }
     ],
     // "mobilevtu": [
