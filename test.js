@@ -6,7 +6,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "4",
-            "amount": "360.00",
+            "amount": "365.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -628,7 +628,7 @@ const unfilteredplans = {
             "network": "MTN"
         }
     ],
-    "bilal":   [
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
@@ -1634,7 +1634,7 @@ function removePlans(plans, filters) {
 
 const filters = [
     { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING' },
-    { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
+    // { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
     { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING PROMO' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'GIFTING' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'SME' },
