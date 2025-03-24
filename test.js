@@ -902,9 +902,9 @@ const unfilteredplans = {
             "network": "GLO"
         },
         {
-            "plan_name": "5GB",
+            "plan_name": "6GB",
             "plan_id": "36",
-            "amount": "1,455.00",
+            "amount": "2,450.00",
             "plan_type": "GIFTING PROMO",
             "plan_day": "7days",
             "network": "MTN"
@@ -912,9 +912,9 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "37",
-            "amount": "339.50",
+            "amount": "490.00",
             "plan_type": "GIFTING PROMO",
-            "plan_day": "24hours and 3 mins call",
+            "plan_day": "24hours and 1 mins call",
             "network": "MTN"
         },
         {
@@ -1235,6 +1235,174 @@ const unfilteredplans = {
             "amount": "970.00",
             "plan_type": "GIFTING PROMO",
             "plan_day": "7 days + 5 mind call time",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "81",
+            "amount": "784.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Weekly and call time",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "250GB",
+            "plan_id": "82",
+            "amount": "53,900.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "150GB",
+            "plan_id": "83",
+            "amount": "34,900.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "75GB",
+            "plan_id": "84",
+            "amount": "19,600.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "32GB",
+            "plan_id": "85",
+            "amount": "10,780.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "10780",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "35GB",
+            "plan_id": "86",
+            "amount": "6,860.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Postpaid monthly plan",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "15GB",
+            "plan_id": "87",
+            "amount": "6,370.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "30days and call time",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "11GB",
+            "plan_id": "88",
+            "amount": "4,900.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "11gb + call time monthly",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "2.7GB",
+            "plan_id": "89",
+            "amount": "1,960.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Monthly and call time",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "1.8GB",
+            "plan_id": "90",
+            "amount": "1,470.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Monthly and call time",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "3.2GB",
+            "plan_id": "91",
+            "amount": "980.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "2 days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "2.5GB",
+            "plan_id": "92",
+            "amount": "735.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Daily plan",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "250MB",
+            "plan_id": "93",
+            "amount": "196.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "24 hours",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "94",
+            "amount": "98.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Beta mix bundle max",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "120MB",
+            "plan_id": "95",
+            "amount": "98.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Daily",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "75MB",
+            "plan_id": "96",
+            "amount": "74.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Daily",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "0.5MB",
+            "plan_id": "97",
+            "amount": "49.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Beta mix mini",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "200GB",
+            "plan_id": "98",
+            "amount": "49,000.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "60 days plan",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "150GB",
+            "plan_id": "100",
+            "amount": "39,200.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "60 days plan",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "40GB",
+            "plan_id": "101",
+            "amount": "8,820.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Postpaid  2 monthly plan",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "90GB",
+            "plan_id": "102",
+            "amount": "24,500.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "60 days plan",
             "network": "MTN"
         }
     ],
