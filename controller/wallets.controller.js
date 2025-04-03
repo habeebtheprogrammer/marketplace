@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const axios = require("axios");
 const { usersService, walletsService } = require('../service');
 const dataplan = require("../dataplan.json")
-const {   detectNetwork } = require('../utils/vtu');
+const { detectNetwork } = require('../utils/vtu');
 const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode, combineAndSortDataPlan } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
@@ -25,27 +25,27 @@ async function korraPay(endpoint, method, body = null, apikey) {
 
   const response = await fetch(url, options);
   return await response.json();
-} 
+}
 
 async function quickVTU(endpoint, method, body = null, vendor) {
   // const url = `${MONIFY_BASE_URL}${endpoint}`;
   var result
-  if(vendor == 'quickvtu'){
+  if (vendor == 'quickvtu') {
     const config = {
       headers: {
         Authorization: `Token ${process.env.QUICKVTU_TOKEN}`,
         'Content-Type': 'application/json',
       },
     };
-     result = await axios.post('https://quickvtu.com' + endpoint, JSON.stringify(body), config)
-  } else  if(vendor == 'bilal') {
+    result = await axios.post('https://quickvtu.com' + endpoint, JSON.stringify(body), config)
+  } else if (vendor == 'bilal') {
     const config = {
       headers: {
         Authorization: `Token ${process.env.BILALSHUB_TOKEN}`,
         'Content-Type': 'application/json',
       },
     };
-     result = await axios.post('https://bilalsadasub.com' + endpoint, JSON.stringify(body), config)
+    result = await axios.post('https://bilalsadasub.com' + endpoint, JSON.stringify(body), config)
   } else {
     const config = {
       headers: {
@@ -54,9 +54,9 @@ async function quickVTU(endpoint, method, body = null, vendor) {
         "Request-Id": body["request-id"],
       },
     };
-    var operator = body.network == 1 ? 'MTN' : body.network == 2 ? "Airtel"  : body.network == 3 ? "Glo" : "9Mobile"
+    var operator = body.network == 1 ? 'MTN' : body.network == 2 ? "Airtel" : body.network == 3 ? "Glo" : "9Mobile"
     console.log(config)
-     result = await axios.post(`https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`, `operator=${operator}&type=data&value=${body.data_plan}&phone=${body.phone}`, config)
+    result = await axios.post(`https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`, `operator=${operator}&type=data&value=${body.data_plan}&phone=${body.phone}`, config)
   }
 
   return result.data
@@ -132,7 +132,7 @@ exports.fetch = async (req, res, next) => {
         balance: 0
       })
       console.log("is notable", req.email)
-      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email) ) {
+      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email)) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
 
           await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 50 } })
@@ -245,99 +245,206 @@ exports.fetchDataPlan = async (req, res, next) => {
     res.status(500).json({ error: 'Failed to create wallet' });
   }
 }
- 
+
 exports.buyDataPlan = async (req, res, next) => {
-  var wallet = await walletsService.getWallets({ userId: req.userId })
-  if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
-  var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
-  const ref = "Data_"  + generateRandomNumber(11)
-  const data = {
-    "amount": req.body.plan.amount,
-    "userId": req.userId,
-    "reference": ref,
-    "narration": "Data topup to " + req.body.phone,
-    "currency": "NGN",
-    "type": 'debit',
-    "status": "successful"
-  }
-  const transaction = await walletsService.saveTransactions(data)
-
-  var plan =  dataplan.find(d => (d.planId == req.body.plan.planId && req.body.plan.vendor  == d.vendor))  
-  var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
-  var obj = {
-    network: net,
-    data_plan: plan.planId,
-    phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
-    bypass: false,
-    'request-id': ref,
-  }
-  console.log(obj)
-
-  const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
-  var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
-
   try {
-    const vtc = await quickVTU('/api/data', "POST", obj, req.body.plan.vendor )
-    console.log(vtc, obj, 'resp')
+    var wallet = await walletsService.getWallets({ userId: req.userId })
+    if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
+    var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
+    const ref = "Data_" + generateRandomNumber(11)
+    const data = {
+      "amount": req.body.plan.amount,
+      "userId": req.userId,
+      "reference": ref,
+      "narration": "Data topup to " + req.body.phone,
+      "currency": "NGN",
+      "type": 'debit',
+      "status": "pending" // Changed to pending initially
+    }
+    const transaction = await walletsService.saveTransactions(data)
 
+    var plan = dataplan.find(d => (d.planId == req.body.plan.planId && req.body.plan.vendor == d.vendor))
+    var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
+    var obj = {
+      network: net,
+      data_plan: plan.planId,
+      phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
+      bypass: false,
+      'request-id': ref,
+    }
+    console.log(obj)
 
-    if (vtc?.status == 'fail' || vtc?.status == 'error' ) {
-      res.status(500).json({ errors: ['Network failed. Try another plan'] });
-      await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
-      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
-      await walletsService.saveTransactions({
-        ...data,
-        "reference": "Data_" +   generateRandomNumber(10),
-        "narration": "RVSL for Data topup ",
-        "status": 'successful', type: 'credit'
-      })
-      sendNotification({
-        headings: { "en": `Network issues. Try another plan` },
-        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
-        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-        url: 'gadgetsafrica://profile',
-      })
-    } else {
-      successResponse(res, transaction)
-      sendNotification({
-        headings: { "en": `Payment successful` },
-        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
-        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-        url: 'gadgetsafrica://profile',
-      })
+    const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+    var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
+
+    // Start time for retry window
+    const startTime = Date.now();
+    const retryWindow = 60 * 1000; // 60 seconds
+
+    // Function to attempt data purchase with retries
+    const attemptDataPurchase = async () => {
+      var newRef = "Data_" + generateRandomNumber(11)
+      try {
+        const vtc = await quickVTU('/api/data', "POST", { ...obj, "request-id": newRef }, req.body.plan.vendor)
+        console.log(vtc, obj, 'resp')
+
+        if (vtc?.status == 'fail' || vtc?.status == 'error') {
+          // Check if we're still within the retry window
+          if (Date.now() - startTime < retryWindow) {
+            console.log(`Retry attempt. Time elapsed: ${(Date.now() - startTime) / 1000}s`)
+            // Wait 3 seconds before retrying
+            setTimeout(attemptDataPurchase, 3000);
+          } else {
+            // Retry window exceeded, mark as failed
+            await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed', reference: newRef })
+            await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
+            await walletsService.saveTransactions({
+              ...data,
+              "reference": "Data_" + generateRandomNumber(10),
+              "narration": "RVSL for Data topup ",
+              "status": 'successful',
+              type: 'credit'
+            })
+            sendNotification({
+              headings: { "en": `Network issues. Try another plan` },
+              contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+              include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+              url: 'gadgetsafrica://profile',
+            })
+
+           
+          }
+        } else {
+          // Success case
+          await walletsService.updateTransactions({ _id: transaction._id }, { status: 'successful', reference: newRef })
+          // successResponse(res, transaction)
+          sendNotification({
+            headings: { "en": `Payment successful` },
+            contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
+            include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+            url: 'gadgetsafrica://profile',
+          })
+        }
+      } catch (error)  {
+            console.log(error)
+            if (error?.response?.data?.status == "fail") {
+              await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+              await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
+              await walletsService.saveTransactions({
+                ...data,
+                "reference": "Data" + '--' + generateRandomNumber(10),
+                "narration": "RVSL for Data topup ",
+                "status": 'successful', type: 'credit'
+              })
+              sendNotification({
+                headings: { "en": `Network issues. Try another plan` },
+                contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+                include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+                url: 'gadgetsafrica://profile',
+              })
+            }
+          }
     }
 
+    // Start the first attempt
+    attemptDataPurchase();
+    successResponse(res, transaction, "Your data purchase is being processed")
   } catch (error) {
-    console.log(error)
-    if (error?.response?.data?.status == "fail") {
-      res.status(500).json({ errors: ['Network failed. Try another plan'] });
-      await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
-      await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
-      await walletsService.saveTransactions({
-        ...data,
-        "reference": "Data" + '--' + generateRandomNumber(10),
-        "narration": "RVSL for Data topup ",
-        "status": 'successful', type: 'credit'
-      })
-      sendNotification({
-        headings: { "en": `Network issues. Try another plan` },
-        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
-        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-        url: 'gadgetsafrica://profile',
-      })
-    } else errorResponse(res, error, "Transaction failed due to network. please try again")
+    errorResponse(res, error, error.message || "An error occurred")
   }
 }
+// exports.buyDataPlan = async (req, res, next) => {
+//   var wallet = await walletsService.getWallets({ userId: req.userId })
+//   if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
+//   var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
+//   const ref = "Data_"  + generateRandomNumber(11)
+//   const data = {
+//     "amount": req.body.plan.amount,
+//     "userId": req.userId,
+//     "reference": ref,
+//     "narration": "Data topup to " + req.body.phone,
+//     "currency": "NGN",
+//     "type": 'debit',
+//     "status": "successful"
+//   }
+//   const transaction = await walletsService.saveTransactions(data)
+
+//   var plan =  dataplan.find(d => (d.planId == req.body.plan.planId && req.body.plan.vendor  == d.vendor))  
+//   var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
+//   var obj = {
+//     network: net,
+//     data_plan: plan.planId,
+//     phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
+//     bypass: false,
+//     'request-id': ref,
+//   }
+//   console.log(obj)
+
+//   const notUsers = await usersService.getUsers({ email: { $in: ['habibmail31@gmail.com'] } });
+//   var include_player_ids = notUsers.docs?.map?.(u => u.oneSignalId)
+
+//   try {
+//     const vtc = await quickVTU('/api/data', "POST", obj, req.body.plan.vendor )
+//     console.log(vtc, obj, 'resp')
+
+
+//     if (vtc?.status == 'fail' || vtc?.status == 'error' ) {
+//       res.status(500).json({ errors: ['Network failed. Try another plan'] });
+//       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+//       await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
+//       await walletsService.saveTransactions({
+//         ...data,
+//         "reference": "Data_" +   generateRandomNumber(10),
+//         "narration": "RVSL for Data topup ",
+//         "status": 'successful', type: 'credit'
+//       })
+//       sendNotification({
+//         headings: { "en": `Network issues. Try another plan` },
+//         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+//         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+//         url: 'gadgetsafrica://profile',
+//       })
+//     } else {
+//       successResponse(res, transaction)
+//       sendNotification({
+//         headings: { "en": `Payment successful` },
+//         contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
+//         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+//         url: 'gadgetsafrica://profile',
+//       })
+//     }
+
+//   } catch (error) {
+//     console.log(error)
+//     if (error?.response?.data?.status == "fail") {
+//       res.status(500).json({ errors: ['Network failed. Try another plan'] });
+//       await walletsService.updateTransactions({ _id: transaction._id }, { status: 'failed' })
+//       await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: +parseInt(req.body.plan.amount) } })
+//       await walletsService.saveTransactions({
+//         ...data,
+//         "reference": "Data" + '--' + generateRandomNumber(10),
+//         "narration": "RVSL for Data topup ",
+//         "status": 'successful', type: 'credit'
+//       })
+//       sendNotification({
+//         headings: { "en": `Network issues. Try another plan` },
+//         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+//         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+//         url: 'gadgetsafrica://profile',
+//       })
+//     } else errorResponse(res, error, "Transaction failed due to network. please try again")
+//   }
+// }
 
 exports.buyAirtime = async (req, res, next) => {
   var wallet = await walletsService.getWallets({ userId: req.userId })
   if (wallet.docs[0].balance < parseInt(req.body.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
   await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.amount) } })
-  const ref =  "Airtime_" +   + generateRandomNumber(11)
+  const ref = "Airtime_" + + generateRandomNumber(11)
   const data = {
     "amount": req.body.amount,
     "userId": req.userId,
-    "reference":ref,
+    "reference": ref,
     "narration": "Airtime topup to " + req.body.phone,
     "currency": "NGN",
     "type": 'debit',
@@ -528,38 +635,38 @@ exports.flwhook = async (req, res, next) => {
       // const res = await axios({ method: 'get', url: `https://api.flutterwave.com/v3/transactions/${id}/verify`, data: {}, headers, json: true });
       // const result = res && res.data;
       // if ((result.status == 'success' || result.status == 'successful') &&  result?.data?.meta?.type == 'funding') {
-        // var {bankname, originatoraccountnumber, } = result?.data?.meta
-        var user = await usersService.getUsers({ email: customer.email })
-        if (user.totalDocs) {
-          const data = {
-            "amount": amount,
-            "userId": user.docs[0]._id,
-            "reference": tx_ref,
-            "narration": "Wallet funding",
-            "destinationBankCode": "N/A",
-            "destinationBankName": "N/A",
-            "destinationAccountNumber": "N/A",
-            // "destinationAccountName": req.body.accountName,
-            "currency": "NGN",
-            "type": 'credit',
-            "status": "successful",
-          }
-          await walletsService.saveTransactions(data)
-          await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amount) } })
-          sendNotification({
-            headings: { "en": `₦${amount} was credited to your wallet` },
-            contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try our mobile app and earn ₦50.` },
-            include_subscription_ids: [user.docs[0].oneSignalId],
-            url: 'gadgetsafrica://transactions',
-          })
+      // var {bankname, originatoraccountnumber, } = result?.data?.meta
+      var user = await usersService.getUsers({ email: customer.email })
+      if (user.totalDocs) {
+        const data = {
+          "amount": amount,
+          "userId": user.docs[0]._id,
+          "reference": tx_ref,
+          "narration": "Wallet funding",
+          "destinationBankCode": "N/A",
+          "destinationBankName": "N/A",
+          "destinationAccountNumber": "N/A",
+          // "destinationAccountName": req.body.accountName,
+          "currency": "NGN",
+          "type": 'credit',
+          "status": "successful",
         }
-        res.status(200)
+        await walletsService.saveTransactions(data)
+        await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amount) } })
+        sendNotification({
+          headings: { "en": `₦${amount} was credited to your wallet` },
+          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try our mobile app and earn ₦50.` },
+          include_subscription_ids: [user.docs[0].oneSignalId],
+          url: 'gadgetsafrica://transactions',
+        })
+      }
+      res.status(200)
       // }
     } catch (error) {
       console.log(error)
-      
+
     }
-   
+
     // Update your database, send emails, etc.
   } else if (payload.event === "transfer.completed") {
     console.log("Transfer completed:", payload.data);
