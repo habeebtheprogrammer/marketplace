@@ -1,4 +1,4 @@
-const { cartsService, productsService } = require("../service")
+const { cartsService, productsService, promoService } = require("../service")
 const { excessQty } = require("../utils/constant")
 const { successResponse, errorResponse } = require("../utils/responder")
 
@@ -7,6 +7,17 @@ const { successResponse, errorResponse } = require("../utils/responder")
 exports.getCarts = async (req, res, next) => {
     try {
         const data = await cartsService.getCarts({ userId: req.userId })
+       
+            var promo = await promoService.getPromo({})
+            var obj = promo.toObject()
+            const applied = obj.rewards.applied.map(id => id.toString()).includes(req.userId);
+            const itemIndex =  data.docs.findIndex(item => item.productId?._id?.toString() ==  obj.rewards.productId._id?.toString())
+            console.log(itemIndex)
+            if(applied && itemIndex >= 0){
+                data.docs[itemIndex].productId.discounted_price = 0
+                console.log('discocunt')
+            }
+  
         successResponse(res, data)
     } catch (error) {
         console.log(error)
@@ -34,7 +45,6 @@ exports.updateCarts = async (req, res, next) => {
         const cartItem = await cartsService.getCarts( { _id: cartId })
         const product = cartItem.docs[0]?.productId
         const stock = size ? product?.size?.filter(s => s.title == size)[0]?.is_stock : product?.is_stock
-        console.log(stock, cartItem.docs[0].qty)
         if((qty > 0) && ((cartItem.docs[0].qty + qty) > (stock))){
             throw Error(excessQty)
         }
