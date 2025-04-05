@@ -446,7 +446,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "85",
-            "amount": "485.00",
+            "amount": "495.00",
             "plan_type": "GIFTING",
             "plan_day": "1day validity",
             "network": "MTN"
@@ -462,23 +462,15 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "87",
-            "amount": "727.50",
+            "amount": "740.00",
             "plan_type": "GIFTING",
             "plan_day": "2days validity",
             "network": "MTN"
         },
         {
             "plan_name": "2.5GB",
-            "plan_id": "88",
-            "amount": "727.50",
-            "plan_type": "GIFTING",
-            "plan_day": "1days validity",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "2.5GB",
             "plan_id": "89",
-            "amount": "873.00",
+            "amount": "877.00",
             "plan_type": "GIFTING",
             "plan_day": "2days validity",
             "network": "MTN"
@@ -494,7 +486,7 @@ const unfilteredplans = {
         {
             "plan_name": "6GB",
             "plan_id": "91",
-            "amount": "2,425.00",
+            "amount": "2,445.00",
             "plan_type": "GIFTING",
             "plan_day": "7days validity",
             "network": "MTN"
@@ -502,7 +494,7 @@ const unfilteredplans = {
         {
             "plan_name": "11GB",
             "plan_id": "92",
-            "amount": "3,395.00",
+            "amount": "3,420.00",
             "plan_type": "GIFTING",
             "plan_day": "7days validity",
             "network": "MTN"
@@ -510,7 +502,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "93",
-            "amount": "4,365.00",
+            "amount": "4,400.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days validity + 10mins",
             "network": "MTN"
@@ -582,23 +574,15 @@ const unfilteredplans = {
         {
             "plan_name": "1.2GB",
             "plan_id": "103",
-            "amount": "727.50",
+            "amount": "730.00",
             "plan_type": "GIFTING",
             "plan_day": "7days validity",
             "network": "MTN"
         },
         {
-            "plan_name": "2.7GB",
-            "plan_id": "104",
-            "amount": "1,940.00",
-            "plan_type": "GIFTING",
-            "plan_day": "30days",
-            "network": "MTN"
-        },
-        {
             "plan_name": "7GB",
             "plan_id": "107",
-            "amount": "3,395.00",
+            "amount": "3,410.00",
             "plan_type": "GIFTING",
             "plan_day": "30days validity",
             "network": "MTN"
@@ -622,7 +606,7 @@ const unfilteredplans = {
         {
             "plan_name": "110MB",
             "plan_id": "110",
-            "amount": "97.00",
+            "amount": "99.00",
             "plan_type": "GIFTING",
             "plan_day": "1day validity",
             "network": "MTN"
@@ -634,25 +618,57 @@ const unfilteredplans = {
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "60days validity",
             "network": "MTN"
-        },
-        {
-            "plan_name": "14.5GB",
-            "plan_id": "112",
-            "amount": "4,850.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "500MB",
-            "plan_id": "113",
-            "amount": "343.00",
-            "plan_type": "GIFTING",
-            "plan_day": "1day validity",
-            "network": "MTN"
         }
     ],
     "bilal": [
+        {
+            "plan_name": "500MB",
+            "plan_id": "1",
+            "amount": "450.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "2",
+            "amount": "900.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "2GB",
+            "plan_id": "3",
+            "amount": "1,900.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "3GB",
+            "plan_id": "4",
+            "amount": "2,700.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "5GB",
+            "plan_id": "5",
+            "amount": "4,500.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "10GB",
+            "plan_id": "6",
+            "amount": "9,000.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
         {
             "plan_name": "500MB",
             "plan_id": "7",
@@ -1118,14 +1134,6 @@ const unfilteredplans = {
             "network": "MTN"
         },
         {
-            "plan_name": "35GB",
-            "plan_id": "86",
-            "amount": "6,860.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "Postpaid monthly plan",
-            "network": "MTN"
-        },
-        {
             "plan_name": "15GB",
             "plan_id": "87",
             "amount": "6,370.00",
@@ -1187,22 +1195,6 @@ const unfilteredplans = {
             "amount": "49,000.00",
             "plan_type": "GIFTING PROMO",
             "plan_day": "60 days plan",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "150GB",
-            "plan_id": "100",
-            "amount": "39,200.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "60 days plan",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "40GB",
-            "plan_id": "101",
-            "amount": "8,820.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "Postpaid  2 monthly plan",
             "network": "MTN"
         },
         {
@@ -1347,6 +1339,38 @@ const unfilteredplans = {
             "amount": "2,940.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days + 15000 talk time.",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "500MB",
+            "plan_id": "122",
+            "amount": "350.00",
+            "plan_type": "SME",
+            "plan_day": "daily",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "12.5GB",
+            "plan_id": "123",
+            "amount": "5,390.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "14.5GB",
+            "plan_id": "124",
+            "amount": "4,900.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "65GB",
+            "plan_id": "125",
+            "amount": "15,680.00",
+            "plan_type": "SME",
+            "plan_day": "30days",
             "network": "MTN"
         }
     ],
