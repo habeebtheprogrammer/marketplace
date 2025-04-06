@@ -551,7 +551,7 @@
   {
     "planName": "75MB",
     "planId": "83",
-    "amount": "72.75",
+    "amount": "50",
     "planType": "GIFTING",
     "duration": "1day validity",
     "network": "MTN",
@@ -560,7 +560,7 @@
   {
     "planName": "75MB",
     "planId": "96",
-    "amount": "74.00",
+    "amount": "50.00",
     "planType": "GIFTING PROMO",
     "duration": "daily",
     "network": "MTN",
@@ -569,7 +569,7 @@
   {
     "planName": "110MB",
     "planId": "110",
-    "amount": "100.00",
+    "amount": "75.00",
     "planType": "GIFTING",
     "duration": "1day validity",
     "network": "MTN",
@@ -578,7 +578,7 @@
   {
     "planName": "110MB",
     "planId": "116",
-    "amount": "99.00",
+    "amount": "75.00",
     "planType": "SME",
     "duration": "24hours",
     "network": "MTN",
@@ -866,7 +866,7 @@
   {
     "planName": "3.2GB",
     "planId": "90",
-    "amount": "1002.00",
+    "amount": "1000.00",
     "planType": "GIFTING",
     "duration": "2days validity",
     "network": "MTN",
@@ -875,7 +875,7 @@
   {
     "planName": "3.2GB",
     "planId": "42",
-    "amount": "1002.00",
+    "amount": "1000.00",
     "planType": "GIFTING PROMO",
     "duration": "48hours",
     "network": "MTN",
@@ -884,7 +884,7 @@
   {
     "planName": "3.2GB",
     "planId": "91",
-    "amount": "1012.00",
+    "amount": "1000.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "MTN",
