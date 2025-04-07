@@ -4,7 +4,6 @@ require("dotenv").config();
 const connect = (app) => {
   try {
     var port = process.env.PORT || 4000;
-    console.log("DB_URL", process.env.DB_URL);
     mongoose.Promise = global.Promise;
     mongoose.connect(process.env.DB_URL);
 
