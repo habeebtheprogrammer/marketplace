@@ -3,6 +3,7 @@
 A robust Node.js/Express.js backend API for a marketplace platform that supports e-commerce, digital services, and user management.
 
 ## Table of Contents
+
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
@@ -98,6 +99,7 @@ ONESIGNAL_REST_API_KEY=your_onesignal_api_key
 ### Authentication Endpoints
 
 #### User Registration
+
 ```http
 POST /api/users/signup
 Content-Type: application/json
@@ -125,6 +127,7 @@ Response (200 OK):
 ```
 
 #### User Login
+
 ```http
 POST /api/users/signin
 Content-Type: application/json
@@ -148,6 +151,7 @@ Response (200 OK):
 ### Product Endpoints
 
 #### Create Product
+
 ```http
 POST /api/products
 Authorization: Bearer <token>
@@ -173,6 +177,7 @@ Response (201 Created):
 ```
 
 #### Get Products
+
 ```http
 GET /api/products?category=Electronics&minPrice=100&maxPrice=200
 Authorization: Bearer <token>
@@ -196,6 +201,7 @@ Response (200 OK):
 ### Order Endpoints
 
 #### Create Order
+
 ```http
 POST /api/orders
 Authorization: Bearer <token>
@@ -230,6 +236,7 @@ Response (201 Created):
 ### Wallet Endpoints
 
 #### Get Wallet Balance
+
 ```http
 GET /api/wallets
 Authorization: Bearer <token>
@@ -243,6 +250,7 @@ Response (200 OK):
 ```
 
 #### Withdraw Funds
+
 ```http
 POST /api/wallets/withdraw
 Authorization: Bearer <token>
@@ -269,6 +277,7 @@ Response (200 OK):
 ### Cart Endpoints
 
 #### Add to Cart
+
 ```http
 POST /api/carts
 Authorization: Bearer <token>
@@ -296,6 +305,7 @@ Response (201 Created):
 ### Common Response Formats
 
 #### Success Response
+
 ```json
 {
   "status": "success",
@@ -306,6 +316,7 @@ Response (201 Created):
 ```
 
 #### Error Response
+
 ```json
 {
   "status": "error",
@@ -343,6 +354,265 @@ Many endpoints support filtering using query parameters:
 GET /api/products?category=Electronics&minPrice=100&maxPrice=200&sort=price:asc
 ```
 
+## Wallet Functionality
+
+The marketplace platform includes a comprehensive wallet system that allows users to manage funds, make payments, and perform various financial transactions.
+
+### Wallet Features
+
+- **Balance Management**: Users can view their current wallet balance
+- **Fund Transfers**: Support for funding wallets via bank transfers
+- **Withdrawals**: Users can withdraw funds to their bank accounts
+- **Transaction History**: Detailed record of all wallet transactions
+- **Payment Processing**: Wallet can be used for in-app purchases
+- **Airtime & Data Purchases**: Direct purchase of mobile airtime and data plans
+- **Referral Bonuses**: Automatic crediting of referral bonuses to wallet
+
+### Wallet Endpoints
+
+#### Fetch Wallet Balance
+
+```http
+GET /api/wallets
+Authorization: Bearer <token>
+
+Response (200 OK):
+{
+  "balance": 1000.00,
+  "accounts": [
+    {
+      "accountName": "John Doe",
+      "accountNumber": "1234567890",
+      "bankName": "Example Bank"
+    }
+  ]
+}
+```
+
+#### Fetch Transaction History
+
+```http
+GET /api/wallets/transactions
+Authorization: Bearer <token>
+
+Response (200 OK):
+{
+  "docs": [
+    {
+      "amount": 500.00,
+      "reference": "TRX123456",
+      "narration": "Wallet funding",
+      "status": "successful",
+      "type": "credit",
+      "createdAt": "2024-04-06T12:00:00Z"
+    }
+  ],
+  "totalDocs": 1,
+  "limit": 30,
+  "page": 1
+}
+```
+
+#### Withdraw Funds
+
+```http
+POST /api/wallets/withdraw
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "amount": 500.00,
+  "bankCode": "044",
+  "bankName": "Access Bank",
+  "accountNumber": "1234567890",
+  "accountName": "John Doe",
+  "reference": "WD123456"
+}
+
+Response (200 OK):
+{
+  "status": "success",
+  "data": {
+    "amount": 500.00,
+    "reference": "WD123456--12345",
+    "narration": "Withdrawal to ******7890",
+    "status": "pending",
+    "type": "debit",
+    "createdAt": "2024-04-06T12:00:00Z"
+  }
+}
+```
+
+#### Fetch Available Data Plans
+
+```http
+GET /api/wallets/fetchDataPlan
+Authorization: Bearer <token>
+
+Response (200 OK):
+{
+  "dataplan": [
+    {
+      "planId": "MTN-1GB",
+      "planName": "1GB",
+      "network": "MTN",
+      "planType": "Daily",
+      "amount": 100.00,
+      "vendor": "quickvtu"
+    }
+  ]
+}
+```
+
+#### Purchase Data Plan
+
+```http
+POST /api/wallets/buyDataPlan
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "plan": {
+    "planId": "MTN-1GB",
+    "amount": 100.00,
+    "planName": "1GB",
+    "network": "MTN",
+    "planType": "Daily",
+    "vendor": "quickvtu"
+  },
+  "phone": "08012345678"
+}
+
+Response (200 OK):
+{
+  "status": "success",
+  "data": {
+    "amount": 100.00,
+    "reference": "Data_12345678901",
+    "narration": "Data topup to 08012345678",
+    "status": "pending",
+    "type": "debit",
+    "createdAt": "2024-04-06T12:00:00Z"
+  },
+  "message": "Your data purchase is being processed"
+}
+```
+
+#### Purchase Airtime
+
+```http
+POST /api/wallets/buyAirtime
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "amount": 100.00,
+  "phone": "08012345678"
+}
+
+Response (200 OK):
+{
+  "status": "success",
+  "data": {
+    "amount": 100.00,
+    "reference": "Airtime_12345678901",
+    "narration": "Airtime topup to 08012345678",
+    "status": "successful",
+    "type": "debit",
+    "createdAt": "2024-04-06T12:00:00Z"
+  }
+}
+```
+
+#### Fetch Banks List
+
+```http
+GET /api/wallets/fetchBanks
+Authorization: Bearer <token>
+
+Response (200 OK):
+{
+  "status": "success",
+  "data": [
+    {
+      "bankCode": "044",
+      "bankName": "Access Bank"
+    }
+  ]
+}
+```
+
+#### Verify Bank Account
+
+```http
+POST /api/wallets/verifyBank
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "bankCode": "044",
+  "accountNumber": "1234567890"
+}
+
+Response (200 OK):
+{
+  "status": "success",
+  "data": {
+    "accountName": "John Doe",
+    "accountNumber": "1234567890",
+    "bankCode": "044"
+  }
+}
+```
+
+### Wallet Webhooks
+
+The system supports webhooks for payment processing:
+
+#### Monnify Webhook
+
+```http
+POST /api/wallets/monnify-hoook
+Content-Type: application/json
+
+{
+  "eventType": "SUCCESSFUL_TRANSACTION",
+  "eventData": {
+    "settlementAmount": 1000.00,
+    "product": {
+      "type": "RESERVED_ACCOUNT",
+      "reference": "user_id"
+    },
+    "amountPaid": 1000.00,
+    "transactionReference": "TRX123456",
+    "destinationAccountInformation": {
+      "bankCode": "044",
+      "bankName": "Access Bank",
+      "accountNumber": "1234567890"
+    }
+  }
+}
+```
+
+#### Flutterwave Webhook
+
+```http
+POST /api/wallets/f-hoook
+Content-Type: application/json
+
+{
+  "event": "charge.completed",
+  "data": {
+    "status": "successful",
+    "customer": {
+      "email": "john@example.com"
+    },
+    "amount": 1000.00,
+    "tx_ref": "TRX123456"
+  }
+}
+```
+
 ## Project Structure
 
 ```
@@ -359,7 +629,7 @@ marketplace/
 └── package.json     # Project dependencies
 ```
 
-## Authentication
+## Authentication Middleware
 
 The API uses JWT (JSON Web Tokens) for authentication. Most endpoints require a valid JWT token in the Authorization header:
 
@@ -400,4 +670,3 @@ Common HTTP status codes:
 ## License
 
 This project is licensed under the MIT License.
-
