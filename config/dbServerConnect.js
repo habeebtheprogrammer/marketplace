@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const connect = app => {
+const connect = (app) => {
   try {
-    var port = process.env.PORT || 4000
-console.log(process.env.DB_URL)
+    var port = process.env.PORT || 4000;
+    console.log("DB_URL", process.env.DB_URL);
     mongoose.Promise = global.Promise;
-    mongoose.connect(process.env.DB_URL)
+    mongoose.connect(process.env.DB_URL);
 
     // When successfully connected
     mongoose.connection.on("connected", function () {
@@ -13,9 +14,8 @@ console.log(process.env.DB_URL)
     });
 
     app.listen(port, () => console.log(`Server running on port ${port}`));
-
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 module.exports = connect;
