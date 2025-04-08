@@ -343,8 +343,8 @@ exports.buyDataPlan = async (req, res, next) => {
             }
             await walletsService.saveTransactions(cashback)
             sendNotification({
-              headings: { "en": `₦${bonus} Bonus was credited to your wallet` },
-              contents: { "en": `Congratulations ${req?.firstName}! You just earned ₦${bonus} cashback bonus. Refer a friend to join 360gadgetsafrica to earn referral bonus.` },
+              headings: { "en": `You've unlocked ₦${bonus} cashback` },
+              contents: { "en": `Congratulations ${req?.firstName}! You just earned ₦${bonus} cashback bonus. Refer a friend to join 360gadgetsafrica to earn more bonus.` },
               include_subscription_ids: [req.oneSignalId, ...include_player_ids],
               url: 'gadgetsafrica://profile',
             })
