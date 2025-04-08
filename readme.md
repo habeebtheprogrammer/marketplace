@@ -613,6 +613,248 @@ Content-Type: application/json
 }
 ```
 
+## User Management
+
+The marketplace platform includes a comprehensive user management system that handles authentication, account management, and user verification.
+
+### User Features
+
+- **Authentication**: Multiple sign-in methods including email/password, Google, and Apple
+- **Account Management**: Create, update, and delete user accounts
+- **User Verification**: Email verification with OTP
+- **Referral System**: Users can refer others and earn rewards
+- **User Types**: Support for different user types (user, vendor, superuser)
+- **Location Tracking**: Track user location and device information
+- **Admin Controls**: Admin-specific user management functions
+
+### User Endpoints
+
+#### User Registration
+
+```http
+POST /api/users/signup
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "password": "securePassword123",
+  "referralCode": "ABC123" // Optional
+}
+
+Response (200 OK):
+{
+  "user": {
+    "id": "user_id",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "referralCode": "JOHN1234",
+    "verificationCode": "12345"
+  },
+  "token": "jwt_token"
+}
+```
+
+#### User Login
+
+```http
+POST /api/users/signin
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
+
+Response (200 OK):
+{
+  "user": {
+    "id": "user_id",
+    "firstName": "John",
+    "email": "john@example.com"
+  },
+  "token": "jwt_token"
+}
+```
+
+#### Get User Account
+
+```http
+GET /api/users/account
+Authorization: Bearer <token>
+
+Response (200 OK):
+{
+  "id": "user_id",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "referralCode": "JOHN1234",
+  "referrals": 5,
+  "userType": "user",
+  "location": {
+    "latitude": "40.7128",
+    "longitude": "-74.0060",
+    "city": "New York",
+    "lastseen": "2024-04-06T12:00:00Z"
+  }
+}
+```
+
+#### Update User Account
+
+```http
+PATCH /api/users/account
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "firstName": "Johnny",
+  "lastName": "Doe",
+  "password": "newPassword123" // Optional
+}
+
+Response (200 OK):
+{
+  "id": "user_id",
+  "firstName": "Johnny",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "updatedAt": "2024-04-06T12:00:00Z"
+}
+```
+
+#### Send OTP Email
+
+```http
+POST /api/users/sendOtp
+Content-Type: application/json
+
+{
+  "email": "john@example.com"
+}
+
+Response (200 OK):
+{
+  "success": true
+}
+```
+
+#### Verify OTP
+
+```http
+POST /api/users/verifyOtp
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "otp": "12345"
+}
+
+Response (200 OK):
+{
+  "verified": true
+}
+```
+
+#### Refresh Token
+
+```http
+GET /api/users/refreshToken
+Authorization: Bearer <token>
+
+Response (200 OK):
+{
+  "user": {
+    "id": "user_id",
+    "firstName": "John",
+    "email": "john@example.com"
+  },
+  "token": "new_jwt_token"
+}
+```
+
+#### Get User Delivery Information
+
+```http
+GET /api/users/delivery
+
+Response (200 OK):
+{
+  "deliveryInfo": {
+    // Delivery information
+  }
+}
+```
+
+#### Admin: Get All Users
+
+```http
+GET /api/users
+Authorization: Bearer <token> // Admin token required
+
+Response (200 OK):
+{
+  "docs": [
+    {
+      "id": "user_id",
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john@example.com",
+      "userType": "user",
+      "referrals": 5
+    }
+  ],
+  "totalDocs": 100,
+  "limit": 10,
+  "page": 1
+}
+```
+
+#### Admin: Delete User
+
+```http
+DELETE /api/users/delete/:user_id
+Authorization: Bearer <token> // Admin token required
+
+Response (200 OK):
+{
+  "id": "user_id",
+  "archive": true,
+  "updatedAt": "2024-04-06T12:00:00Z"
+}
+```
+
+### User Model
+
+The user model includes the following fields:
+
+- **email**: Unique email address (required)
+- **oneSignalId**: ID for push notifications
+- **userType**: Type of user (user, vendor, superuser)
+- **firstName**: User's first name (required)
+- **lastName**: User's last name (required)
+- **password**: Hashed password (required)
+- **archive**: Soft delete flag
+- **vendorId**: Reference to vendor (if applicable)
+- **referredBy**: Reference to referring user
+- **referralCode**: Unique code for referrals
+- **referrals**: Count of successful referrals
+- **verificationCode**: Code for email verification
+- **deviceid**: Device identifier
+- **location**: User location and device information
+  - latitude
+  - longitude
+  - city
+  - platform
+  - buildnumber
+  - buildversion
+  - model
+  - deviceid
+  - lastseen
+
 ## Project Structure
 
 ```
