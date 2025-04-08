@@ -338,7 +338,7 @@ exports.buyDataPlan = async (req, res, next) => {
               })
               sendNotification({
                 headings: { "en": `Network issues. Try another plan` },
-                contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+                contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
                 include_subscription_ids: [req.oneSignalId, ...include_player_ids],
                 url: 'gadgetsafrica://profile',
               })
@@ -400,7 +400,7 @@ exports.buyDataPlan = async (req, res, next) => {
 //       })
 //       sendNotification({
 //         headings: { "en": `Network issues. Try another plan` },
-//         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+//         contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
 //         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
 //         url: 'gadgetsafrica://profile',
 //       })
@@ -428,7 +428,7 @@ exports.buyDataPlan = async (req, res, next) => {
 //       })
 //       sendNotification({
 //         headings: { "en": `Network issues. Try another plan` },
-//         contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+//         contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
 //         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
 //         url: 'gadgetsafrica://profile',
 //       })
@@ -480,7 +480,7 @@ exports.buyAirtime = async (req, res, next) => {
       })
       sendNotification({
         headings: { "en": `Network challanges` },
-        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges caused by the service provider. Please try again later.` },
+        contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges caused by the service provider. Please try again later.` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -507,7 +507,7 @@ exports.buyAirtime = async (req, res, next) => {
       })
       sendNotification({
         headings: { "en": `Network challanges` },
-        contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges caused by the service provider. Please try again later.` },
+        contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges caused by the service provider. Please try again later.` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -675,4 +675,203 @@ exports.flwhook = async (req, res, next) => {
   // Send a response to acknowledge receipt
   res.status(200).json({ message: "Webhook received successfully" });
 }
+
+// Admin Functions
+exports.manualRefund = async (req, res, next) => {
+  try {
+    const { transactionId, reason } = req.body;
+    
+    // Fetch the failed transaction
+    const transaction = await walletsService.fetchTransactions({ _id: transactionId });
+    if (!transaction || transaction.totalDocs === 0) {
+      throw new Error('Transaction not found');
+    }
+
+    const failedTransaction = transaction.docs[0];
+    
+    // Refund the amount back to wallet
+    await walletsService.updateWallet(
+      { userId: failedTransaction.userId }, 
+      { $inc: { balance: +parseInt(failedTransaction.amount) } }
+    );
+    
+    // Create a reversal transaction
+    const refundTransaction = {
+      "amount": failedTransaction.amount,
+      "userId": failedTransaction.userId,
+      "reference": "MANUAL_REFUND_" + generateRandomNumber(10),
+      "narration": `Manual refund: ${reason || 'No reason provided'}`,
+      "currency": "NGN",
+      "type": 'credit',
+      "status": "successful",
+      "originalTransactionId": transactionId
+    };
+    
+    await walletsService.saveTransactions(refundTransaction);
+    
+    // Update original transaction status
+    await walletsService.updateTransactions(
+      { _id: transactionId },
+      { status: 'refunded', refundReason: reason }
+    );
+
+    successResponse(res, { message: 'Refund processed successfully', refundTransaction });
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
+
+exports.retryTransaction = async (req, res, next) => {
+  try {
+    const { transactionId } = req.body;
+    
+    // Fetch the failed transaction
+    const transaction = await walletsService.fetchTransactions({ _id: transactionId });
+    if (!transaction || transaction.totalDocs === 0) {
+      throw new Error('Transaction not found');
+    }
+
+    const failedTransaction = transaction.docs[0];
+    
+    // Check if transaction is eligible for retry
+    if (failedTransaction.status !== 'failed') {
+      throw new Error('Only failed transactions can be retried');
+    }
+
+    // Retry logic based on transaction type
+    if (failedTransaction.narration.includes('Data topup')) {
+      // Retry data purchase
+      const plan = dataplan.find(d => d.planId === failedTransaction.planId);
+      const retryRequest = {
+        plan,
+        phone: failedTransaction.phone,
+        vendor: failedTransaction.vendor
+      };
+      
+      // Call the original buyDataPlan function with the retry request
+      await this.buyDataPlan({ body: retryRequest, userId: failedTransaction.userId }, res);
+    } else if (failedTransaction.narration.includes('Airtime topup')) {
+      // Retry airtime purchase
+      const retryRequest = {
+        amount: failedTransaction.amount,
+        phone: failedTransaction.phone
+      };
+      
+      // Call the original buyAirtime function with the retry request
+      await this.buyAirtime({ body: retryRequest, userId: failedTransaction.userId }, res);
+    } else {
+      throw new Error('Transaction type not supported for retry');
+    }
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
+
+exports.adminFetchTransactions = async (req, res, next) => {
+  try {
+    const { 
+      page = 1, 
+      limit = 50, 
+      status, 
+      type, 
+      startDate, 
+      endDate,
+      userId,
+      search
+    } = req.query;
+
+    const filter = {};
+    
+    if (status) filter.status = status;
+    if (type) filter.type = type;
+    if (userId) filter.userId = userId;
+    if (startDate && endDate) {
+      filter.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      };
+    }
+    if (search) {
+      filter.$or = [
+        { reference: { $regex: search, $options: 'i' } },
+        { narration: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort: { createdAt: -1 },
+      populate: ['userId']
+    };
+
+    const transactions = await walletsService.fetchTransactions(filter, options);
+    successResponse(res, transactions);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
+
+exports.adminFetchWallets = async (req, res, next) => {
+  try {
+    const { 
+      page = 1, 
+      limit = 50, 
+      minBalance, 
+      maxBalance,
+      search
+    } = req.query;
+
+    const filter = {};
+    
+    if (minBalance !== undefined || maxBalance !== undefined) {
+      filter.balance = {};
+      if (minBalance !== undefined) filter.balance.$gte = parseFloat(minBalance);
+      if (maxBalance !== undefined) filter.balance.$lte = parseFloat(maxBalance);
+    }
+    
+    if (search) {
+      filter.$or = [
+        { 'userId.email': { $regex: search, $options: 'i' } },
+        { 'userId.firstName': { $regex: search, $options: 'i' } },
+        { 'userId.lastName': { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort: { balance: -1 },
+      populate: ['userId']
+    };
+
+    const wallets = await walletsService.getWallets(filter, options);
+    successResponse(res, wallets);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
+
+exports.adminUpdateTransaction = async (req, res, next) => {
+  try {
+    const { transactionId, updates } = req.body;
+    
+    // Validate updates
+    const allowedUpdates = ['status', 'narration', 'fee'];
+    const isValidUpdate = Object.keys(updates).every(key => allowedUpdates.includes(key));
+    
+    if (!isValidUpdate) {
+      throw new Error('Invalid update fields');
+    }
+
+    const updatedTransaction = await walletsService.updateTransactions(
+      { _id: transactionId },
+      updates
+    );
+
+    successResponse(res, updatedTransaction);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
 

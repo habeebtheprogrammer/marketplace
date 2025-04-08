@@ -1,6 +1,6 @@
 var express = require('express');
 const { walletsController } = require('../controller');
-const { checkAuth } = require('../utils/authMiddleware');
+const { checkAuth, adminAccessOnly } = require('../utils/authMiddleware');
 const { vendorsCreationValidator } = require('../utils/validator');
 var router = express.Router();
 
@@ -15,5 +15,12 @@ router.get('/transactions', checkAuth, walletsController.fetchTransactions);
 router.post('/withdraw', checkAuth, walletsController.withdraw);
 router.post('/monnify-hoook', walletsController.webhook);
 router.post('/f-hoook', walletsController.flwhook);
+
+// Admin routes
+router.post('/admin/manual-refund', checkAuth, adminAccessOnly, walletsController.manualRefund);
+router.post('/admin/retry-transaction', checkAuth, adminAccessOnly, walletsController.retryTransaction);
+router.get('/admin/transactions', checkAuth, adminAccessOnly, walletsController.adminFetchTransactions);
+router.get('/admin/wallets', checkAuth, adminAccessOnly, walletsController.adminFetchWallets);
+router.post('/admin/update-transaction', checkAuth, adminAccessOnly, walletsController.adminUpdateTransaction);
 
 module.exports = router;
