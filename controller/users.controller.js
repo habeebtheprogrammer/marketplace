@@ -172,3 +172,16 @@ exports.getUserDelivery = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
+
+exports.getUserById = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const user = await usersService.getUserById(userId);
+        if (!user) {
+            return errorResponse(res, { message: "User not found" });
+        }
+        successResponse(res, user);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}

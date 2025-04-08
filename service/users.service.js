@@ -2,7 +2,10 @@ const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
 
 exports.getUsers = async (filters = {}) => {
-    const data = await Users.paginate(filters,  {
+    const { page = 1, limit = 10, ...otherFilters } = filters;
+    const data = await Users.paginate(otherFilters, {
+        page: parseInt(page),
+        limit: parseInt(limit),
         populate: [
             {
                 path: "vendorId",
@@ -28,4 +31,17 @@ exports.updateUsers = async (param, obj) => {
 exports.getUserDelivery = async () => {
     const data = await Delivery.find({})
     return data
+}
+
+exports.getUserById = async (userId) => {
+    const user = await Users.findById(userId).populate([
+        {
+            path: "vendorId",
+        },
+        {
+            path: "referredBy",
+            select: ["firstName", 'oneSignalId',"_id"],
+        }
+    ]);
+    return user;
 }
