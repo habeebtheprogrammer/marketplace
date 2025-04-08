@@ -45,3 +45,8 @@ exports.bulkUpdate = async (param, obj) => {
     const data = await Products.updateMany(param, obj)
     return data
 }
+
+exports.deleteProduct = async (id) => {
+    const data = await Products.findByIdAndDelete(id);
+    return data;
+}

@@ -155,11 +155,11 @@ exports.checkAvailability = async (req, res, next) => {
         var product = await RequestsModel.create({
             productId: _id, variant, userId: req.userId, vendorId
         })
-        const text = `${req.firstName || "A new customer"} is inquiring about the availability of the ${title} ${variant}. Could you please confirm if it’s in stock?`
+        const text = `${req.firstName || "A new customer"} is inquiring about the availability of the ${title} ${variant}. Could you please confirm if it's in stock?`
 
         sendNotification({
             // headings: { "en": `Crypto Gains Got You Feeling Rich?` },
-            // contents: { "en": `If you haven’t spent it, did it even happen? Time to turn those digital coins into real tech toys at 360GadgetsAfrica!` },
+            // contents: { "en": `If you haven't spent it, did it even happen? Time to turn those digital coins into real tech toys at 360GadgetsAfrica!` },
             // include_subscription_ids:   include_player_ids,
             // url: '360gadgetsfrica://product-description?slug=' + product?.productId?.slug
             headings: { "en": `You have a new request` },
@@ -236,7 +236,6 @@ exports.fetchAvailabilityRequests = async (req, res, next) => {
 
 exports.bulkUpdate = async (req, res, next) => {
     try {
-        // Handle image uploads
         const data = await productsService.bulkUpdate(
             // {categoryId: '65b14b7105f8b5c69b5ab4e3'}, // Exclude the specific ID
             // { vendorId:  '66927af6eb322a27f7c6902c' }, // Exclude the specific ID
@@ -249,5 +248,16 @@ exports.bulkUpdate = async (req, res, next) => {
     } catch (error) {
         console.log(error)
         errorResponse(res, error)
+    }
+}
+
+exports.deleteProduct = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const data = await productsService.deleteProduct(id);
+        successResponse(res, data);
+    } catch (error) {
+        console.log(error);
+        errorResponse(res, error);
     }
 }

@@ -14,5 +14,6 @@ router.post('/pushimgs',  productsController.uploadImages);
 router.post('/availability-requests', checkAuth, productsController.checkAvailability);
 router.get('/availability-requests', checkAuth, productsController.fetchAvailabilityRequests);
 router.patch('/availability-requests', checkAuth, productsController.updateAvailability);
+router.delete('/:id', checkAuth, productsController.deleteProduct);
 
 module.exports = router;
