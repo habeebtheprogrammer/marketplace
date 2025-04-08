@@ -327,3 +327,21 @@ exports.checkDaysMatch = (str) => {
   
   return lowerStr; // or handle invalid cases
 }
+
+exports.convertToMegabytes = (dataString) => {
+  const unitsToMB = {
+    B: 1 / (1024 * 1024),
+    KB: 1 / 1024,
+    MB: 1,
+    GB: 1024,
+    TB: 1024 * 1024,
+  };
+
+  const match = dataString.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
+  if (!match) return null;
+
+  const value = parseFloat(match[1]);
+  const unit = match[2].toUpperCase();
+
+  return value * unitsToMB[unit];
+}

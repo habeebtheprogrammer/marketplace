@@ -23,6 +23,15 @@ var transactionsSchema = mongoose.Schema({
     type: String,
     required: [true, 'Narration is required']
   },
+  planType:{
+    type: String,
+  },
+  network:{
+    type: String,
+  },
+  dataAmount:{
+    type: Number,
+  },
   destinationBankCode:{
     type: String,
   },

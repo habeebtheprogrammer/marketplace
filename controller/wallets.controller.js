@@ -3,7 +3,7 @@ const axios = require("axios");
 const { usersService, walletsService } = require('../service');
 const dataplan = require("../dataplan.json")
 const { detectNetwork } = require('../utils/vtu');
-const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode, combineAndSortDataPlan } = require('../utils/helpers');
+const { generateRandomNumber, verifyMonnifySignature, calculateFee, isNotableEmail, removeCountryCode, combineAndSortDataPlan, convertToMegabytes } = require('../utils/helpers');
 const { successResponse, errorResponse } = require('../utils/responder');
 const { sendNotification } = require('../utils/onesignal');
 
@@ -148,7 +148,7 @@ exports.fetch = async (req, res, next) => {
           await walletsService.saveTransactions(bonus1)
           sendNotification({
             headings: { "en": `₦25 was credited to your wallet` },
-            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! Your just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
+            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
             include_subscription_ids: [user.docs[0].referredBy?.oneSignalId, ...include_player_ids],
             url: 'gadgetsafrica://profile',
           })
@@ -252,6 +252,10 @@ exports.buyDataPlan = async (req, res, next) => {
     if (wallet.docs[0].balance < parseInt(req.body.plan.amount) || wallet.totalDocs == 0) throw new Error("Insufficient balance. please fund your wallet");
     var wall = await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: -parseInt(req.body.plan.amount) } })
     const ref = "Data_" + generateRandomNumber(11)
+
+    var plan = dataplan.find(d => (d.planId == req.body.plan.planId && req.body.plan.vendor == d.vendor))
+    var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
+
     const data = {
       "amount": req.body.plan.amount,
       "userId": req.userId,
@@ -259,12 +263,13 @@ exports.buyDataPlan = async (req, res, next) => {
       "narration": "Data topup to " + req.body.phone,
       "currency": "NGN",
       "type": 'debit',
+      "network": plan.network,
+      "planType": plan.planType,
+      "dataAmount": convertToMegabytes(plan.planName),
       "status": "pending" // Changed to pending initially
     }
     const transaction = await walletsService.saveTransactions(data)
 
-    var plan = dataplan.find(d => (d.planId == req.body.plan.planId && req.body.plan.vendor == d.vendor))
-    var net = plan.network == 'MTN' ? 1 : plan.network == "AIRTEL" ? 2 : plan.network == "GLO" ? 3 : 4
     var obj = {
       network: net,
       data_plan: plan.planId,
@@ -279,7 +284,7 @@ exports.buyDataPlan = async (req, res, next) => {
 
     // Start time for retry window
     const startTime = Date.now();
-    const retryWindow = 60 * 1000; // 60 seconds
+    const retryWindow = 120 * 1000; // 60 seconds
 
     // Function to attempt data purchase with retries
     const attemptDataPurchase = async () => {
@@ -312,7 +317,7 @@ exports.buyDataPlan = async (req, res, next) => {
               url: 'gadgetsafrica://profile',
             })
 
-           
+
           }
         } else {
           // Success case
@@ -338,7 +343,7 @@ exports.buyDataPlan = async (req, res, next) => {
               })
               sendNotification({
                 headings: { "en": `Network issues. Try another plan` },
-                contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+                contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
                 include_subscription_ids: [req.oneSignalId, ...include_player_ids],
                 url: 'gadgetsafrica://profile',
               })
