@@ -36,4 +36,14 @@ exports.getCategories = async (req, res, next) => {
     } catch (error) {
         errorResponse(res, error)
     }
+}
+
+exports.deleteCategory = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const data = await categoriesService.deleteCategory(id);
+        successResponse(res, data);
+    } catch (error) {
+        errorResponse(res, error);
+    }
 } 
