@@ -10,6 +10,7 @@ router.get('/refreshToken', checkAuth, usersController.refreshToken);
 router.get('/delivery', usersController.getUserDelivery);
 router.get('/:userId', checkAuth, adminAccessOnly, usersController.getUserById);
 router.patch('/account', checkAuth, usersController.updateUser);
+router.patch('/account/:userId', checkAuth, adminAccessOnly, usersController.updateUserById);
 router.post('/signin', googleAuth, appleSignin, signinInputValidator,  usersController.signin);
 router.post('/signup', signupInputValidator, usersController.createUser);
 router.post('/sendOtp', usersController.sendOtpEmail);

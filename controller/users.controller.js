@@ -185,3 +185,33 @@ exports.getUserById = async (req, res, next) => {
         errorResponse(res, error);
     }
 }
+
+exports.updateUserById = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        var updateObj = {};
+        
+        // Only include fields that are provided in the request
+        Object.keys(req.body).forEach(key => {
+            if (req.body[key]) {
+                updateObj[key] = req.body[key];
+            }
+        });
+        
+        // If password is provided, hash it
+        if (updateObj.password) {
+            const hash = await bcrypt.hash(updateObj.password, 10);
+            updateObj.password = hash;
+        }
+        
+        const data = await usersService.updateUsers({ _id: userId }, updateObj);
+        
+        if (!data) {
+            return errorResponse(res, { message: "User not found" });
+        }
+        
+        successResponse(res, data);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
