@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node app.js",
-    "dev": "NODE_ENV=development node app.js"
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "dependencies": {
     "@onesignal/node-onesignal": "^5.0.0-alpha-01",
@@ -23,7 +23,6 @@
     "google-auth-library": "^9.11.0",
     "helmet": "^7.1.0",
     "http-errors": "~1.6.3",
-    "next": "^15.1.6",
     "i": "^0.3.7",
     "jade": "~1.11.0",
     "jsonwebtoken": "^9.0.2",
@@ -31,10 +30,14 @@
     "mongoose": "^8.1.0",
     "mongoose-paginate-v2": "^1.8.0",
     "morgan": "~1.9.1",
+    "next": "^15.1.6",
     "nodemailer": "^6.9.8",
     "npm": "^10.8.2",
     "serve-favicon": "^2.5.0",
     "sitemap": "^8.0.0",
     "validatorjs": "^3.22.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
