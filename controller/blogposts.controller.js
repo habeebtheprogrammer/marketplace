@@ -57,14 +57,13 @@ exports.getBlogposts = async (req, res, next) => {
 }
 
 exports.deleteBlogposts = async (req, res, next) => {
-    console.log("req.body: ", req.body);
     try {
         const { id } = req.body;
         if (!id) {
             return errorResponse(res, { message: 'Blog post ID is required' }, 400);
         }
-        
-        const data = await blogpostsService.deleteBlogposts({ id });
+
+        const data = await blogpostsService.deleteBlogposts(id);
         successResponse(res, data);
     } catch (error) {
         console.error('Error deleting blog post:', error);
