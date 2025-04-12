@@ -5,7 +5,8 @@ var router = express.Router();
 
 // router.get('/bulkUpdate', productsController.bulkUpdate);
 router.get('/', blogpostsController.getBlogposts);
-router.post('/',  blogpostsController.createBlogposts);
+router.post('/', checkAuth, blogpostsController.createBlogposts);
 router.patch('/', checkAuth, blogpostsController.updateBlogposts);
+router.delete('/', checkAuth, blogpostsController.deleteBlogposts);
 
 module.exports = router;

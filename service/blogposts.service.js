@@ -25,4 +25,9 @@ exports.updateBlogposts = async (param, obj) => {
     const data = await Blogposts.findOneAndUpdate(param, obj, { new: true })
     return data
 }
+
+exports.deleteBlogposts = async (id) => {
+    const data = await Blogposts.findOneAndDelete(id)
+    return data
+}
  
