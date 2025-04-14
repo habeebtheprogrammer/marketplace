@@ -694,15 +694,6 @@
   },
   {
     "planName": "3GB",
-    "planId": "4",
-    "amount": "2730.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "3GB",
     "planId": "111",
     "amount": "2130.00",
     "planType": "GIFTING",
@@ -765,15 +756,6 @@
     "vendor": "quickvtu"
   },
   {
-    "planName": "5GB",
-    "planId": "5",
-    "amount": "4551.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
     "planName": "6GB",
     "planId": "91",
     "amount": "2506.00",
@@ -826,15 +808,6 @@
     "duration": "30days validity + 10mins",
     "network": "MTN",
     "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "6",
-    "amount": "9102.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
   },
   {
     "planName": "11GB",
