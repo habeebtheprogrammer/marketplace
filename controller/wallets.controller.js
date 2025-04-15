@@ -284,7 +284,7 @@ exports.buyDataPlan = async (req, res, next) => {
 
     // Start time for retry window
     const startTime = Date.now();
-    const retryWindow = 120 * 1000; // 60 seconds
+    const retryWindow = 300 * 1000; // 60 seconds
 
     // Function to attempt data purchase with retries
     const attemptDataPurchase = async () => {
@@ -325,7 +325,7 @@ exports.buyDataPlan = async (req, res, next) => {
           // successResponse(res, transaction)
           sendNotification({
             headings: { "en": `Payment successful` },
-            contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
+            contents: { "en": `Congratulations ${req.firstName}! You have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25` },
             include_subscription_ids: [req.oneSignalId, ...include_player_ids],
             url: 'gadgetsafrica://profile',
           })
@@ -493,7 +493,7 @@ exports.buyAirtime = async (req, res, next) => {
       successResponse(res, transaction)
       sendNotification({
         headings: { "en": `Payment successful` },
-        contents: { "en": `Congratulations ${req.firstName}! Your have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦50` },
+        contents: { "en": `Congratulations ${req.firstName}! You have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25` },
         include_subscription_ids: [req.oneSignalId, ...include_player_ids],
         url: 'gadgetsafrica://profile',
       })
@@ -596,7 +596,7 @@ exports.webhook = async (req, res, next) => {
         await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amountPaid) } })
         sendNotification({
           headings: { "en": `₦${amountPaid} was credited to your wallet` },
-          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amountPaid}. Refer a friend to try our mobile app and earn ₦50.` },
+          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amountPaid}. Refer a friend to try our mobile app and earn ₦25.` },
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: 'gadgetsafrica://transactions',
         })
@@ -660,7 +660,7 @@ exports.flwhook = async (req, res, next) => {
         await walletsService.updateWallet({ userId: user.docs[0]._id }, { $inc: { balance: parseInt(amount) } })
         sendNotification({
           headings: { "en": `₦${amount} was credited to your wallet` },
-          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try our mobile app and earn ₦50.` },
+          contents: { "en": `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amount}. Refer a friend to try our mobile app and earn ₦25.` },
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: 'gadgetsafrica://transactions',
         })
