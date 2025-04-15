@@ -22,5 +22,6 @@ router.post('/admin/retry-transaction', checkAuth, adminAccessOnly, walletsContr
 router.get('/admin/transactions', checkAuth, adminAccessOnly, walletsController.adminFetchTransactions);
 router.get('/admin/wallets', checkAuth, adminAccessOnly, walletsController.adminFetchWallets);
 router.post('/admin/update-transaction', checkAuth, adminAccessOnly, walletsController.adminUpdateTransaction);
+router.get('/admin/dashboard', checkAuth, adminAccessOnly, walletsController.getDashboardData);
 
 module.exports = router;

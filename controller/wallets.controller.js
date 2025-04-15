@@ -343,7 +343,7 @@ exports.buyDataPlan = async (req, res, next) => {
               })
               sendNotification({
                 headings: { "en": `Network issues. Try another plan` },
-                contents: { "en": `Hi ${req.firstName}, we’re currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
+                contents: { "en": `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.` },
                 include_subscription_ids: [req.oneSignalId, ...include_player_ids],
                 url: 'gadgetsafrica://profile',
               })
@@ -875,6 +875,72 @@ exports.adminUpdateTransaction = async (req, res, next) => {
     );
 
     successResponse(res, updatedTransaction);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
+
+exports.getDashboardData = async (req, res, next) => {
+  try {
+    // Get today's date range
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // Fetch today's data transactions
+    const dataTransactions = await walletsService.fetchTransactions({
+      createdAt: { $gte: today, $lt: tomorrow },
+      narration: { $regex: 'Data topup', $options: 'i' }
+    });
+
+    // Calculate total data sold and profit
+    const totalDataSold = dataTransactions.docs.reduce((sum, transaction) => {
+      return sum + (transaction.status === 'successful' ? transaction.amount : 0);
+    }, 0);
+
+    const totalProfit = totalDataSold * 10; // 10 times the total data sold
+
+    // Get total successful and failed transactions
+    const successfulTransactions = await walletsService.fetchTransactions({
+      createdAt: { $gte: today, $lt: tomorrow },
+      status: 'successful'
+    });
+
+    const failedTransactions = await walletsService.fetchTransactions({
+      createdAt: { $gte: today, $lt: tomorrow },
+      status: 'failed'
+    });
+
+    // Get recent transactions
+    const recentTransactions = await walletsService.fetchTransactions(
+      {},
+      { 
+        sort: { createdAt: -1 },
+        limit: 5,
+        populate: ['userId']
+      }
+    );
+
+    // Get recent users
+    const recentUsers = await usersService.getUsers(
+      {},
+      {
+        sort: { createdAt: -1 },
+        limit: 5
+      }
+    );
+
+    successResponse(res, {
+      stats: {
+        totalDataSold,
+        totalProfit,
+        successfulTransactions: successfulTransactions.totalDocs,
+        failedTransactions: failedTransactions.totalDocs
+      },
+      recentTransactions: recentTransactions.docs,
+      recentUsers: recentUsers.docs
+    });
   } catch (error) {
     errorResponse(res, error);
   }
