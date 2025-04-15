@@ -2,11 +2,11 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu":  [
+    "quickvtu": [
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "670.00",
+            "amount": "830.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,340.00",
+            "amount": "1,660.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "2,010.00",
+            "amount": "2,490.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "8",
-            "amount": "3,350.00",
+            "amount": "4,150.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -430,7 +430,7 @@ const unfilteredplans = {
         {
             "plan_name": "75MB",
             "plan_id": "83",
-            "amount": "73.50",
+            "amount": "75.00",
             "plan_type": "GIFTING",
             "plan_day": "1day Validity",
             "network": "MTN"
@@ -473,6 +473,14 @@ const unfilteredplans = {
             "amount": "883.00",
             "plan_type": "GIFTING",
             "plan_day": "1days validity",
+            "network": "MTN"
+        },
+        {
+            "plan_name": "2.5GB",
+            "plan_id": "89",
+            "amount": "877.00",
+            "plan_type": "GIFTING",
+            "plan_day": "2days validity",
             "network": "MTN"
         },
         {
@@ -652,7 +660,7 @@ const unfilteredplans = {
             "network": "MTN"
         }
     ],
-    "bilal": [
+    "bilal":[
         {
             "plan_name": "500MB",
             "plan_id": "7",
@@ -1777,12 +1785,12 @@ const filters = [
     { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'GIFTING' },
     { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'quickvtu', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
-    { vendor: 'quickvtu', network: 'MTN', planToRemove: 'SME' },
+    // { vendor: 'quickvtu', network: 'MTN', planToRemove: 'SME' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'SME' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
-    { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
+    // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'SME' },
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING' },
