@@ -684,26 +684,38 @@ exports.flwhook = async (req, res, next) => {
 // Admin Functions
 exports.manualRefund = async (req, res, next) => {
   try {
-    const { transactionId, reason } = req.body;
+    const { transactionId, reason, amount } = req.body;
+
+    if (!transactionId) {
+      throw new Error('Transaction ID is required');
+    }
     
-    // Fetch the failed transaction
+    // Fetch the transaction
     const transaction = await walletsService.fetchTransactions({ _id: transactionId });
     if (!transaction || transaction.totalDocs === 0) {
       throw new Error('Transaction not found');
     }
 
-    const failedTransaction = transaction.docs[0];
+    const originalTransaction = transaction.docs[0];
+    
+    // Validate transaction status
+    if (originalTransaction.status === 'refunded') {
+      throw new Error('Transaction has already been refunded');
+    }
+
+    // Determine refund amount
+    const refundAmount = amount || originalTransaction.amount;
     
     // Refund the amount back to wallet
     await walletsService.updateWallet(
-      { userId: failedTransaction.userId }, 
-      { $inc: { balance: +parseInt(failedTransaction.amount) } }
+      { userId: originalTransaction.userId }, 
+      { $inc: { balance: +parseInt(refundAmount) } }
     );
     
     // Create a reversal transaction
     const refundTransaction = {
-      "amount": failedTransaction.amount,
-      "userId": failedTransaction.userId,
+      "amount": refundAmount,
+      "userId": originalTransaction.userId,
       "reference": "MANUAL_REFUND_" + generateRandomNumber(10),
       "narration": `Manual refund: ${reason || 'No reason provided'}`,
       "currency": "NGN",
@@ -717,7 +729,11 @@ exports.manualRefund = async (req, res, next) => {
     // Update original transaction status
     await walletsService.updateTransactions(
       { _id: transactionId },
-      { status: 'refunded', refundReason: reason }
+      { 
+        status: 'refunded', 
+        refundReason: reason,
+        refundAmount: refundAmount
+      }
     );
 
     successResponse(res, { message: 'Refund processed successfully', refundTransaction });
