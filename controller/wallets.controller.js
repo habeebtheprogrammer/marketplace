@@ -332,7 +332,7 @@ exports.buyDataPlan = async (req, res, next) => {
           })
           if (convertToMegabytes(plan.planName) >= 1024) {
             const bonus = (convertToMegabytes(plan.planName)/ 1024) * 20
-            await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: bonus } })
+            await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: Math.floor(bonus) } })
             const cashback = {
               "amount": bonus,
               "userId": req.userId,
@@ -356,7 +356,7 @@ exports.buyDataPlan = async (req, res, next) => {
               console.log('same device. cannot credit bonus',  req.headers.deviceid )
             } else {
               const refbonus = (convertToMegabytes(plan.planName)/ 1024) * 30
-              await walletsService.updateWallet({ userId: req.referredBy }, { $inc: { balance: refbonus } })
+              await walletsService.updateWallet({ userId: req.referredBy }, { $inc: { balance: Math.floor(refbonus) } })
               const referralbonus = {
                 "amount": refbonus,
                 "userId": req.referredBy,
