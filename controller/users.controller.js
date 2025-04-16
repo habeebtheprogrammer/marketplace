@@ -172,3 +172,12 @@ exports.getUserDelivery = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
+
+exports.getReferrals = async (req, res, next) => {
+    try {
+        const data = await usersService.getUsers({referredBy: req.userId})
+        successResponse(res, data)
+    } catch (error) {
+        errorResponse(res, error)
+    }
+}
