@@ -3,6 +3,7 @@ const Delivery = require("../model/delivery.model")
 
 exports.getUsers = async (filters = {}) => {
     const data = await Users.paginate(filters,  {
+        sort: {_id: -1}},
         populate: [
             {
                 path: "vendorId",
