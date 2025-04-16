@@ -1778,7 +1778,7 @@ function removePlans(plans, filters) {
 
 const filters = [
     { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING' },
-    // { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
+    { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
     { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING PROMO' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'GIFTING' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'SME' },

@@ -20,6 +20,7 @@ exports.checkAuth = (req, res, next) => {
     req.firstName = data.firstName;
     req.lastName = data.lastName;
     req.userType = data.userType;
+    req.referredBy = data.referredBy;
     req.email = data.email;
     req.oneSignalId = oneSignalId
     if(data.verificationCode && req.originalUrl != '/api/users/refreshToken'){

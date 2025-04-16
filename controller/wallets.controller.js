@@ -135,23 +135,24 @@ exports.fetch = async (req, res, next) => {
       if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email)) {
         if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
 
-          await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
-          const bonus1 = {
-            "amount": 25,
-            "userId": user.docs[0]?.referredBy?._id,
-            "reference": "Referral" + '--' + generateRandomNumber(10),
-            "narration": "Referral bonus for new user",
-            "currency": "NGN",
-            "type": 'credit',
-            "status": "successful"
-          }
-          await walletsService.saveTransactions(bonus1)
-          sendNotification({
-            headings: { "en": `₦25 was credited to your wallet` },
-            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
-            include_subscription_ids: [user.docs[0].referredBy?.oneSignalId, ...include_player_ids],
-            url: 'gadgetsafrica://profile',
-          })
+          // await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
+          // const bonus1 = {
+          //   "amount": 25,
+          //   "userId": user.docs[0]?.referredBy?._id,
+          //   "reference": "Referral" + '--' + generateRandomNumber(10),
+          //   "narration": "Referral bonus for new user",
+          //   "currency": "NGN",
+          //   "type": 'credit',
+          //   "status": "successful"
+          // }
+          // await walletsService.saveTransactions(bonus1)
+          // sendNotification({
+          //   headings: { "en": `₦25 was credited to your wallet` },
+          //   contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
+          //   include_subscription_ids: [user.docs[0].referredBy?.oneSignalId, ...include_player_ids],
+          //   url: 'gadgetsafrica://profile',
+          // })
+
         }
 
       } else if (req.headers.deviceid && user.docs[0].deviceid == '') {
@@ -348,6 +349,32 @@ exports.buyDataPlan = async (req, res, next) => {
               include_subscription_ids: [req.oneSignalId, ...include_player_ids],
               url: 'gadgetsafrica://profile',
             })
+          }
+          if(req.referredBy) {
+            const refUser = await usersService.getUsers({_id: req.referredBy})
+            if(refUser?.docs[0]?.deviceid == req.headers.deviceid){
+              console.log('same device. cannot credit bonus',  req.headers.deviceid )
+            } else {
+              const refbonus = (convertToMegabytes(plan.planName)/ 1024) * 30
+              await walletsService.updateWallet({ userId: req.referredBy }, { $inc: { balance: refbonus } })
+              const referralbonus = {
+                "amount": refbonus,
+                "userId": req.referredBy,
+                "reference": "Ref-Bonus" + '--' + generateRandomNumber(10),
+                "narration": "Referral bonus for data purchase",
+                "currency": "NGN",
+                "type": 'credit',
+                "status": "successful"
+              }
+              await walletsService.saveTransactions(referralbonus)
+              sendNotification({
+                headings: { "en": `You've unlocked ₦${refbonus} referral bonus` },
+                contents: { "en": `Congratulations ${refUser.docs[0].firstName}! You just earned ₦${refbonus} referral bonus. Refer more people to join 360gadgetsafrica to earn more bonus.` },
+                include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+                url: 'gadgetsafrica://profile',
+              })
+            }
+           
           }
 
         }
