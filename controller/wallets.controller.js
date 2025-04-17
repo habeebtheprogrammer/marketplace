@@ -285,7 +285,7 @@ exports.buyDataPlan = async (req, res, next) => {
 
     // Start time for retry window
     const startTime = Date.now();
-    const retryWindow = 300 * 1000; // 60 seconds
+    const retryWindow = 60 * 1000; // 60 seconds
 
     // Function to attempt data purchase with retries
     const attemptDataPurchase = async () => {
