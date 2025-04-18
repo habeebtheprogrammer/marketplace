@@ -256,7 +256,7 @@
     "planId": "61",
     "amount": "380.00",
     "planType": "SME",
-    "duration": "3days validity don't buy if owing",
+    "duration": "3days(social bundle) validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -292,7 +292,7 @@
     "planId": "107",
     "amount": "360.00",
     "planType": "GIFTING PROMO",
-    "duration": "3 days",
+    "duration": "3 days (social bundle)",
     "network": "AIRTEL",
     "vendor": "bilal"
   },

@@ -264,7 +264,7 @@ const unfilteredplans = {
             "plan_id": "61",
             "amount": "370.00",
             "plan_type": "SME",
-            "plan_day": "3days validity don't buy if owing",
+            "plan_day": "3days(Social bundle) validity don't buy if owing",
             "network": "AIRTEL"
         },
         {
@@ -1330,7 +1330,7 @@ const unfilteredplans = {
             "plan_id": "107",
             "amount": "350.00",
             "plan_type": "GIFTING PROMO",
-            "plan_day": "3 days",
+            "plan_day": "3 days (Social bundle)",
             "network": "AIRTEL"
         },
         {
