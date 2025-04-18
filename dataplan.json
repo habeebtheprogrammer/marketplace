@@ -866,7 +866,7 @@
   {
     "planName": "1GB",
     "planId": "5",
-    "amount": "840.00",
+    "amount": "780.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -983,7 +983,7 @@
   {
     "planName": "2GB",
     "planId": "6",
-    "amount": "1680.00",
+    "amount": "1560.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -1055,7 +1055,7 @@
   {
     "planName": "3GB",
     "planId": "7",
-    "amount": "2520.00",
+    "amount": "2340.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -1127,7 +1127,7 @@
   {
     "planName": "5GB",
     "planId": "8",
-    "amount": "4201.00",
+    "amount": "3901.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
