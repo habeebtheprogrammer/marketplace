@@ -129,7 +129,7 @@
     "planName": "100MB",
     "planId": "45",
     "amount": "101.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
@@ -192,7 +192,7 @@
     "planName": "300MB",
     "planId": "44",
     "amount": "303.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
@@ -219,8 +219,17 @@
     "planName": "500MB",
     "planId": "7",
     "amount": "498.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "7days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "500MB",
+    "planId": "53",
+    "amount": "430.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -264,8 +273,17 @@
     "planName": "1GB",
     "planId": "8",
     "amount": "810.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "7days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1GB",
+    "planId": "54",
+    "amount": "860.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -309,6 +327,15 @@
     "planName": "2GB",
     "planId": "9",
     "amount": "1520.00",
+    "planType": "SME",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "2GB",
+    "planId": "55",
+    "amount": "1720.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -372,6 +399,15 @@
     "planName": "4GB",
     "planId": "10",
     "amount": "2565.00",
+    "planType": "SME",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "5GB",
+    "planId": "56",
+    "amount": "4301.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -444,6 +480,15 @@
     "planName": "10GB",
     "planId": "26",
     "amount": "4102.00",
+    "planType": "SME",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "10GB",
+    "planId": "57",
+    "amount": "8602.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "AIRTEL",
@@ -489,7 +534,7 @@
     "planName": "18GB",
     "planId": "75",
     "amount": "6184.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
@@ -507,7 +552,7 @@
     "planName": "25GB",
     "planId": "74",
     "amount": "8256.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
@@ -543,7 +588,7 @@
     "planName": "1TB",
     "planId": "126",
     "amount": "206485.00",
-    "planType": "COOPERATE GIFTING",
+    "planType": "SME",
     "duration": "1 year",
     "network": "AIRTEL",
     "vendor": "bilal"
@@ -750,7 +795,7 @@
     "planName": "110MB",
     "planId": "116",
     "amount": "99.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "24hours",
     "network": "MTN",
     "vendor": "bilal"
@@ -793,9 +838,18 @@
   },
   {
     "planName": "500MB",
+    "planId": "1",
+    "amount": "455.00",
+    "planType": "SME",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "500MB",
     "planId": "117",
     "amount": "495.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "7days",
     "network": "MTN",
     "vendor": "bilal"
@@ -804,7 +858,7 @@
     "planName": "500MB",
     "planId": "122",
     "amount": "355.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "daily",
     "network": "MTN",
     "vendor": "bilal"
@@ -829,6 +883,15 @@
   },
   {
     "planName": "1GB",
+    "planId": "2",
+    "amount": "910.00",
+    "planType": "SME",
+    "duration": "30days",
+    "network": "MTN",
+    "vendor": "bilal"
+  },
+  {
+    "planName": "1GB",
     "planId": "37",
     "amount": "500.00",
     "planType": "GIFTING PROMO",
@@ -840,7 +903,7 @@
     "planName": "1GB",
     "planId": "81",
     "amount": "794.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "weekly and call time",
     "network": "MTN",
     "vendor": "bilal"
@@ -851,15 +914,6 @@
     "amount": "108.00",
     "planType": "GIFTING PROMO",
     "duration": "beta mix bundle max",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "1GB",
-    "planId": "109",
-    "amount": "710.00",
-    "planType": "GIFTING",
-    "duration": "7 days",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -946,10 +1000,10 @@
   },
   {
     "planName": "2GB",
-    "planId": "110",
-    "amount": "1420.00",
-    "planType": "GIFTING",
-    "duration": "7days",
+    "planId": "3",
+    "amount": "1920.00",
+    "planType": "SME",
+    "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -957,7 +1011,7 @@
     "planName": "2GB",
     "planId": "114",
     "amount": "1490.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days + call 2m",
     "network": "MTN",
     "vendor": "bilal"
@@ -993,7 +1047,7 @@
     "planName": "2.7GB",
     "planId": "115",
     "amount": "1987.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days + 2 mins",
     "network": "MTN",
     "vendor": "bilal"
@@ -1009,10 +1063,10 @@
   },
   {
     "planName": "3GB",
-    "planId": "111",
-    "amount": "2130.00",
-    "planType": "GIFTING",
-    "duration": "7 days",
+    "planId": "4",
+    "amount": "2730.00",
+    "planType": "SME",
+    "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
   },
@@ -1056,7 +1110,7 @@
     "planName": "3.5GB",
     "planId": "104",
     "amount": "2485.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days + 2gb night",
     "network": "MTN",
     "vendor": "bilal"
@@ -1101,7 +1155,7 @@
     "planName": "6GB",
     "planId": "36",
     "amount": "2511.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "7days",
     "network": "MTN",
     "vendor": "bilal"
@@ -1119,7 +1173,7 @@
     "planName": "7GB",
     "planId": "103",
     "amount": "3501.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
@@ -1164,7 +1218,7 @@
     "planName": "11GB",
     "planId": "112",
     "amount": "3542.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "7 days",
     "network": "MTN",
     "vendor": "bilal"
@@ -1182,7 +1236,7 @@
     "planName": "12.5GB",
     "planId": "88",
     "amount": "5518.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "11gb + call time monthly",
     "network": "MTN",
     "vendor": "bilal"
@@ -1191,7 +1245,7 @@
     "planName": "12.5GB",
     "planId": "123",
     "amount": "5518.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
@@ -1200,7 +1254,7 @@
     "planName": "14.5GB",
     "planId": "124",
     "amount": "5048.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
@@ -1281,7 +1335,7 @@
     "planName": "65GB",
     "planId": "125",
     "amount": "16345.00",
-    "planType": "SME",
+    "planType": "GIFTING",
     "duration": "30days",
     "network": "MTN",
     "vendor": "bilal"
