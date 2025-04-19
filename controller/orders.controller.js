@@ -18,6 +18,17 @@ exports.getOrders = async (req, res, next) => {
     }
 }
 
+exports.getAdminOrders = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const data = await ordersService.getAllOrders(page, limit);
+        successResponse(res, data);
+    } catch (error) {
+        console.log(error);
+        errorResponse(res, error);
+    }
+}
 
 exports.addOrders = async (req, res, next) => {
     try {
@@ -130,7 +141,7 @@ exports.webhook = async (req, res, next) => {
         res.sendStatus(200)
           // Continue with the request functionality
         } else {
-          // Don’t do anything, the request is not from us.
+          // Don't do anything, the request is not from us.
         }
     } catch (error) {
         console.log(error)

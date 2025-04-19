@@ -13,6 +13,28 @@ exports.getOrders = async (filters = {}) => {
     return data
 }
 
+exports.getAllOrders = async (page = 1, limit = 10) => {
+    const data = await Orders.paginate({}, {
+        populate: [
+            {
+                path: "orderedProducts",
+                populate: {
+                    path: "productId",
+                    select: ["title", 'images']
+                }
+            },
+            {
+                path: "userId",
+                select: ["firstName", "lastName", "email"]
+            }
+        ],
+        sort: {_id: -1},
+        page,
+        limit
+    })
+    return data
+}
+
 exports.addOrders = async (param) => {
   console.log(param)
     const data =  (await Orders.create(param)).populate( {
