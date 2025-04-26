@@ -118,15 +118,6 @@
   },
   {
     "planName": "100MB",
-    "planId": "32",
-    "amount": "151.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "100MB",
     "planId": "45",
     "amount": "101.00",
     "planType": "SME",
@@ -153,38 +144,11 @@
     "vendor": "bilal"
   },
   {
-    "planName": "200MB",
-    "planId": "125",
-    "amount": "232.00",
-    "planType": "GIFTING",
-    "duration": "2days",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "300MB",
-    "planId": "31",
-    "amount": "213.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
     "planName": "300MB",
     "planId": "60",
     "amount": "143.00",
     "planType": "SME",
     "duration": "2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "300MB",
-    "planId": "126",
-    "amount": "308.00",
-    "planType": "GIFTING",
-    "duration": "2days",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -208,28 +172,10 @@
   },
   {
     "planName": "500MB",
-    "planId": "127",
-    "amount": "515.00",
-    "planType": "GIFTING",
-    "duration": "7days validity",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "500MB",
     "planId": "7",
     "amount": "498.00",
     "planType": "SME",
     "duration": "7days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "500MB",
-    "planId": "53",
-    "amount": "430.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -245,7 +191,7 @@
   {
     "planName": "600MB",
     "planId": "106",
-    "amount": "266.00",
+    "amount": "236.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "AIRTEL",
@@ -256,16 +202,7 @@
     "planId": "61",
     "amount": "380.00",
     "planType": "SME",
-    "duration": "3days(social bundle) validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "1GB",
-    "planId": "128",
-    "amount": "800.00",
-    "planType": "GIFTING",
-    "duration": "7days validity",
+    "duration": "3days validity social bundles, don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -280,30 +217,21 @@
   },
   {
     "planName": "1GB",
-    "planId": "54",
-    "amount": "860.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
+    "planId": "69",
+    "amount": "330.00",
+    "planType": "GIFTING PROMO",
+    "duration": "2 days",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
   {
     "planName": "1GB",
     "planId": "107",
-    "amount": "360.00",
+    "amount": "330.00",
     "planType": "GIFTING PROMO",
-    "duration": "3 days (social bundle)",
+    "duration": "3 days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "1.5GB",
-    "planId": "129",
-    "amount": "1025.00",
-    "planType": "GIFTING",
-    "duration": "(7days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "2GB",
@@ -311,15 +239,6 @@
     "amount": "590.00",
     "planType": "SME",
     "duration": "awoof 2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "2GB",
-    "planId": "114",
-    "amount": "1520.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -334,17 +253,8 @@
   },
   {
     "planName": "2GB",
-    "planId": "55",
-    "amount": "1720.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "2GB",
     "planId": "70",
-    "amount": "675.00",
+    "amount": "650.00",
     "planType": "GIFTING PROMO",
     "duration": "2 days",
     "network": "AIRTEL",
@@ -361,39 +271,12 @@
   },
   {
     "planName": "3GB",
-    "planId": "115",
-    "amount": "2020.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "3GB",
     "planId": "71",
     "amount": "1095.00",
     "planType": "GIFTING PROMO",
     "duration": "7 days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "3.5GB",
-    "planId": "130",
-    "amount": "1535.00",
-    "planType": "GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "4GB",
-    "planId": "116",
-    "amount": "2530.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "4GB",
@@ -403,24 +286,6 @@
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "5GB",
-    "planId": "56",
-    "amount": "4301.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "6GB",
-    "planId": "131",
-    "amount": "2541.00",
-    "planType": "GIFTING",
-    "duration": "(7days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "7GB",
@@ -441,38 +306,11 @@
     "vendor": "bilal"
   },
   {
-    "planName": "8GB",
-    "planId": "117",
-    "amount": "3061.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
     "planName": "10GB",
     "planId": "64",
     "amount": "3252.00",
     "planType": "SME",
     "duration": "30days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "118",
-    "amount": "4082.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "132",
-    "amount": "3082.00",
-    "planType": "GIFTING",
-    "duration": "(7days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -487,48 +325,12 @@
   },
   {
     "planName": "10GB",
-    "planId": "57",
-    "amount": "8602.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "30days",
-    "network": "AIRTEL",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "10GB",
     "planId": "73",
     "amount": "3172.00",
     "planType": "GIFTING PROMO",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "13GB",
-    "planId": "119",
-    "amount": "5083.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "18GB",
-    "planId": "120",
-    "amount": "6134.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "18GB",
-    "planId": "133",
-    "amount": "5134.00",
-    "planType": "GIFTING",
-    "duration": "(7days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "18GB",
@@ -541,48 +343,12 @@
   },
   {
     "planName": "25GB",
-    "planId": "121",
-    "amount": "8206.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "25GB",
     "planId": "74",
     "amount": "8256.00",
     "planType": "SME",
     "duration": "30days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "35GB",
-    "planId": "122",
-    "amount": "10308.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "60GB",
-    "planId": "123",
-    "amount": "15514.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "100GB",
-    "planId": "124",
-    "amount": "20874.00",
-    "planType": "COOPERATE GIFTING",
-    "duration": "(30days + 2gb youtube night + 200mb for yt,  ig & tiktock)",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "1TB",
@@ -623,7 +389,7 @@
   {
     "planName": "500MB",
     "planId": "30",
-    "amount": "215.00",
+    "amount": "205.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "GLO",
@@ -650,7 +416,7 @@
   {
     "planName": "1GB",
     "planId": "31",
-    "amount": "430.00",
+    "amount": "410.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "GLO",
@@ -677,7 +443,7 @@
   {
     "planName": "2GB",
     "planId": "32",
-    "amount": "830.00",
+    "amount": "820.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "GLO",
