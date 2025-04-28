@@ -118,6 +118,24 @@
   },
   {
     "planName": "100MB",
+    "planId": "32",
+    "amount": "151.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "100MB",
+    "planId": "120",
+    "amount": "151.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days validity",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "100MB",
     "planId": "45",
     "amount": "101.00",
     "planType": "SME",
@@ -145,10 +163,28 @@
   },
   {
     "planName": "300MB",
+    "planId": "31",
+    "amount": "213.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "300MB",
     "planId": "60",
     "amount": "143.00",
     "planType": "SME",
     "duration": "2days validity don't buy if owing",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "300MB",
+    "planId": "119",
+    "amount": "323.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days validity",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -169,6 +205,15 @@
     "duration": "2 days",
     "network": "AIRTEL",
     "vendor": "bilal"
+  },
+  {
+    "planName": "500MB",
+    "planId": "114",
+    "amount": "505.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "7days validity",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
   },
   {
     "planName": "500MB",
@@ -203,6 +248,15 @@
     "amount": "380.00",
     "planType": "SME",
     "duration": "3days validity social bundles, don't buy if owing",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "1GB",
+    "planId": "115",
+    "amount": "805.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "7days validity",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -244,6 +298,15 @@
   },
   {
     "planName": "2GB",
+    "planId": "116",
+    "amount": "1510.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days validity",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "2GB",
     "planId": "9",
     "amount": "1520.00",
     "planType": "SME",
@@ -280,6 +343,15 @@
   },
   {
     "planName": "4GB",
+    "planId": "117",
+    "amount": "2520.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days validity",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "4GB",
     "planId": "10",
     "amount": "2565.00",
     "planType": "SME",
@@ -311,6 +383,15 @@
     "amount": "3252.00",
     "planType": "SME",
     "duration": "30days validity don't buy if owing",
+    "network": "AIRTEL",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "10GB",
+    "planId": "118",
+    "amount": "4042.00",
+    "planType": "COOPERATE GIFTING",
+    "duration": "30days validity",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
@@ -604,15 +685,6 @@
   },
   {
     "planName": "500MB",
-    "planId": "1",
-    "amount": "455.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "500MB",
     "planId": "117",
     "amount": "495.00",
     "planType": "GIFTING",
@@ -646,15 +718,6 @@
     "duration": "1day validity",
     "network": "MTN",
     "vendor": "quickvtu"
-  },
-  {
-    "planName": "1GB",
-    "planId": "2",
-    "amount": "910.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
   },
   {
     "planName": "1GB",
@@ -766,15 +829,6 @@
   },
   {
     "planName": "2GB",
-    "planId": "3",
-    "amount": "1920.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
-    "planName": "2GB",
     "planId": "114",
     "amount": "1490.00",
     "planType": "GIFTING",
@@ -826,15 +880,6 @@
     "duration": "1month",
     "network": "MTN",
     "vendor": "quickvtu"
-  },
-  {
-    "planName": "3GB",
-    "planId": "4",
-    "amount": "2730.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
   },
   {
     "planName": "3.2GB",
@@ -900,15 +945,6 @@
     "vendor": "quickvtu"
   },
   {
-    "planName": "5GB",
-    "planId": "5",
-    "amount": "4551.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
-  },
-  {
     "planName": "6GB",
     "planId": "91",
     "amount": "2506.00",
@@ -961,15 +997,6 @@
     "duration": "30days validity + 10mins",
     "network": "MTN",
     "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "6",
-    "amount": "9102.00",
-    "planType": "SME",
-    "duration": "30days",
-    "network": "MTN",
-    "vendor": "bilal"
   },
   {
     "planName": "11GB",
