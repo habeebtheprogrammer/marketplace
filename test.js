@@ -2,7 +2,7 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu": [
+    "quickvtu":  [
         {
             "plan_name": "1GB",
             "plan_id": "5",
@@ -548,163 +548,59 @@ const unfilteredplans = {
             "network": "MTN"
         },
         {
-            "plan_name": "2GB",
-            "plan_id": "114",
-            "amount": "1,500.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "3GB",
-            "plan_id": "115",
-            "amount": "1,990.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "4GB",
-            "plan_id": "116",
-            "amount": "2,490.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "8GB",
-            "plan_id": "117",
-            "amount": "2,980.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "10GB",
-            "plan_id": "118",
-            "amount": "3,980.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "13GB",
-            "plan_id": "119",
-            "amount": "4,950.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "18GB",
-            "plan_id": "120",
-            "amount": "5,950.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "25GB",
-            "plan_id": "121",
-            "amount": "7,950.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "35GB",
-            "plan_id": "122",
-            "amount": "9,950.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "60GB",
-            "plan_id": "123",
-            "amount": "14,900.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "100GB",
-            "plan_id": "124",
-            "amount": "19,850.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "200MB",
-            "plan_id": "125",
-            "amount": "230.00",
-            "plan_type": "GIFTING",
-            "plan_day": "2days",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "300MB",
-            "plan_id": "126",
-            "amount": "305.00",
-            "plan_type": "GIFTING",
-            "plan_day": "2days",
-            "network": "AIRTEL"
-        },
-        {
             "plan_name": "500MB",
-            "plan_id": "127",
-            "amount": "510.00",
-            "plan_type": "GIFTING",
+            "plan_id": "114",
+            "amount": "500.00",
+            "plan_type": "COOPERATE GIFTING",
             "plan_day": "7days validity",
             "network": "AIRTEL"
         },
         {
             "plan_name": "1GB",
-            "plan_id": "128",
-            "amount": "790.00",
-            "plan_type": "GIFTING",
+            "plan_id": "115",
+            "amount": "795.00",
+            "plan_type": "COOPERATE GIFTING",
             "plan_day": "7days validity",
             "network": "AIRTEL"
         },
         {
-            "plan_name": "1.5GB",
-            "plan_id": "129",
-            "amount": "1,010.00",
-            "plan_type": "GIFTING",
-            "plan_day": "(7days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
+            "plan_name": "2GB",
+            "plan_id": "116",
+            "amount": "1,490.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
             "network": "AIRTEL"
         },
         {
-            "plan_name": "3.5GB",
-            "plan_id": "130",
-            "amount": "1,500.00",
-            "plan_type": "GIFTING",
-            "plan_day": "(30days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "6GB",
-            "plan_id": "131",
+            "plan_name": "4GB",
+            "plan_id": "117",
             "amount": "2,480.00",
-            "plan_type": "GIFTING",
-            "plan_day": "(7days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
             "network": "AIRTEL"
         },
         {
             "plan_name": "10GB",
-            "plan_id": "132",
-            "amount": "2,980.00",
-            "plan_type": "GIFTING",
-            "plan_day": "(7days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
+            "plan_id": "118",
+            "amount": "3,940.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
             "network": "AIRTEL"
         },
         {
-            "plan_name": "18GB",
-            "plan_id": "133",
-            "amount": "4,950.00",
-            "plan_type": "GIFTING",
-            "plan_day": "(7days + 2GB YouTube Night + 200MB for YT,  IG & TikTock)",
+            "plan_name": "300MB",
+            "plan_id": "119",
+            "amount": "320.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "100MB",
+            "plan_id": "120",
+            "amount": "150.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
             "network": "AIRTEL"
         }
     ],
