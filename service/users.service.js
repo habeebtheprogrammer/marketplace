@@ -2,10 +2,8 @@ const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
 
 exports.getUsers = async (filters = {}) => {
-    const { page = 1, limit = 10, ...otherFilters } = filters;
-    const data = await Users.paginate(otherFilters, {
-        page: parseInt(page),
-        limit: parseInt(limit),
+    const data = await Users.paginate(filters,  {
+        sort: {_id: -1},
         populate: [
             {
                 path: "vendorId",
