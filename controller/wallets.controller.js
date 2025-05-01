@@ -1115,6 +1115,7 @@ exports.getDashboardData = async (req, res, next) => {
     }, 0);
 
     const totalProfit = (totalDataSold/1024) * 10; // 10 times the total data sold
+    const totalDataSoldGB = (totalDataSold / 1024).toFixed(2); // Convert to GB
 
     // Get total successful and failed transactions
     const successfulTransactions = await walletsService.fetchTransactions({
@@ -1146,7 +1147,7 @@ exports.getDashboardData = async (req, res, next) => {
 
     successResponse(res, {
       stats: {
-        totalDataSold,
+        totalDataSold: totalDataSoldGB,
         totalProfit,
         successfulTransactions: successfulTransactions.totalDocs,
         failedTransactions: failedTransactions.totalDocs,
