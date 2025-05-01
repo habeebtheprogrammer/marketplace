@@ -1108,7 +1108,6 @@ exports.getDashboardData = async (req, res, next) => {
 
     // Calculate total data sold and profit
     const totalDataSold = dataTransactions.reduce((sum, transaction) => {
-      console.log("Data amount Sum: ",sum + ((transaction.type === "debit" && transaction.status === "successful")  ? transaction.dataAmount : 0), transaction);
       return (
         sum + ((transaction.type === "debit" && transaction.status === "successful")  ? transaction.dataAmount : 0)
       );

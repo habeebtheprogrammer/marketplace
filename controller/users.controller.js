@@ -145,7 +145,8 @@ exports.refreshToken = async (req, res, next) => {
 }
 exports.getUsers = async (req, res, next) => {
     try {
-        const data = await usersService.getUsers({ "archive": false, ...req.query })
+        const data = await usersService.getUsers()
+        // console.log(data);
         successResponse(res, data)
     } catch (error) {
         errorResponse(res, error)
