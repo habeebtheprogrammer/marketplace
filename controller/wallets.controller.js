@@ -264,6 +264,28 @@ exports.fetchTransactions = async (req, res, next) => {
   }
 };
 
+exports.fetchUserTransactions = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { page = 1, limit = 30 } = req.query;
+    
+    const options = {
+      sort: { _id: -1 },
+      limit: parseInt(limit),
+      page: parseInt(page),
+    };
+    
+    const transactions = await walletsService.fetchTransactions(
+      { userId }, 
+      options
+    );
+    
+    successResponse(res, transactions);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
+
 exports.withdraw = async (req, res, next) => {
   try {
     const fee = req.body.fee || calculateFee(1.7, req.body.amount);
