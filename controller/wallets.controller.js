@@ -16,6 +16,7 @@ const { successResponse, errorResponse } = require("../utils/responder");
 const { sendNotification } = require("../utils/onesignal");
 const Wallet = require("../model/wallets.model");
 const Transactions = require("../model/transactions.model");
+const mongoose = require("mongoose");
 
 // const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
 
@@ -268,18 +269,23 @@ exports.fetchUserTransactions = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const { page = 1, limit = 30 } = req.query;
-    
+
+    // Validate userId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error("Invalid user ID format");
+    }
+
     const options = {
       sort: { _id: -1 },
       limit: parseInt(limit),
       page: parseInt(page),
     };
-    
+
     const transactions = await walletsService.fetchTransactions(
-      { userId }, 
+      { userId },
       options
     );
-    
+
     successResponse(res, transactions);
   } catch (error) {
     errorResponse(res, error);
@@ -1001,6 +1007,7 @@ exports.retryTransaction = async (req, res, next) => {
 };
 
 exports.adminFetchTransactions = async (req, res, next) => {
+  console.log("Fetching transactions for admin...");
   try {
     const {
       page = 1,
@@ -1122,20 +1129,23 @@ exports.getDashboardData = async (req, res, next) => {
         createdAt: { $gte: today, $lt: tomorrow },
         narration: { $regex: "Data topup", $options: "i" },
         status: "successful",
-      })
+      });
       return transactions;
-    }
+    };
 
     const dataTransactions = await fetchTransactions();
 
     // Calculate total data sold and profit
     const totalDataSold = dataTransactions.reduce((sum, transaction) => {
       return (
-        sum + ((transaction.type === "debit" && transaction.status === "successful")  ? transaction.dataAmount : 0)
+        sum +
+        (transaction.type === "debit" && transaction.status === "successful"
+          ? transaction.dataAmount
+          : 0)
       );
     }, 0);
 
-    const totalProfit = (totalDataSold/1024) * 10; // 10 times the total data sold
+    const totalProfit = (totalDataSold / 1024) * 10; // 10 times the total data sold
     const totalDataSoldGB = (totalDataSold / 1024).toFixed(2); // Convert to GB
 
     // Get total successful and failed transactions
@@ -1160,9 +1170,7 @@ exports.getDashboardData = async (req, res, next) => {
     );
 
     // Get recent users
-    const recentUsers = await usersService.getUsers(
-      {}
-    );
+    const recentUsers = await usersService.getUsers({});
 
     // console.log("Recent users", recentUsers);
 

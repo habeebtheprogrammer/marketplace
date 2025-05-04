@@ -12,7 +12,6 @@ router.post('/buyAirtime', checkAuth, walletsController.buyAirtime);
 router.get('/fetchBanks', checkAuth, walletsController.fetchBanks);
 router.post('/verifyBank', checkAuth, walletsController.verifyBank);
 router.get('/transactions', checkAuth, walletsController.fetchTransactions);
-router.get('/:userId/transactions', walletsController.fetchUserTransactions);
 router.post('/withdraw', checkAuth, walletsController.withdraw);
 router.post('/monnify-hoook', walletsController.webhook);
 router.post('/f-hoook', walletsController.flwhook);
@@ -24,5 +23,8 @@ router.get('/admin/transactions', checkAuth, adminAccessOnly, walletsController.
 router.get('/admin/wallets', checkAuth, adminAccessOnly, walletsController.adminFetchWallets);
 router.post('/admin/update-transaction', checkAuth, adminAccessOnly, walletsController.adminUpdateTransaction);
 router.get('/admin/dashboard', checkAuth, adminAccessOnly, walletsController.getDashboardData);
+
+
+router.get('/:userId/transactions', walletsController.fetchUserTransactions);
 
 module.exports = router;
