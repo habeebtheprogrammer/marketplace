@@ -472,7 +472,7 @@ const unfilteredplans = {
             "plan_id": "114",
             "amount": "615.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity",
+            "plan_day": "30days validity. Arrives in 15-20min",
             "network": "MTN"
         },
         {
@@ -480,7 +480,7 @@ const unfilteredplans = {
             "plan_id": "115",
             "amount": "1,265.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. 15min Before delivery",
+            "plan_day": "30days validity. Arrives in 15-20min",
             "network": "MTN"
         },
         {
@@ -488,7 +488,7 @@ const unfilteredplans = {
             "plan_id": "116",
             "amount": "1,615.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. 15min Before delivery",
+            "plan_day": "30days validity. Arrives in 15-20min",
             "network": "MTN"
         },
         {
@@ -496,7 +496,7 @@ const unfilteredplans = {
             "plan_id": "117",
             "amount": "2,730.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. 15min Before delivery",
+            "plan_day": "30days validity. Arrives in 15-20min",
             "network": "MTN"
         }
     ],
@@ -739,14 +739,6 @@ const unfilteredplans = {
             "amount": "4,365.00",
             "plan_type": "GIFTING",
             "plan_day": "30days",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "3.2GB",
-            "plan_id": "42",
-            "amount": "970.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "48hours",
             "network": "MTN"
         },
         {
