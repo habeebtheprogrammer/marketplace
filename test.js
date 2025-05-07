@@ -500,7 +500,7 @@ const unfilteredplans = {
             "network": "MTN"
         }
     ],
-    "bilal": [
+    "bilal":   [
         {
             "plan_name": "1GB",
             "plan_id": "2",
