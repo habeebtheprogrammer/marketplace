@@ -92,22 +92,6 @@ const unfilteredplans = {
             "network": "9MOBILE"
         },
         {
-            "plan_name": "300MB",
-            "plan_id": "31",
-            "amount": "210.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "100MB",
-            "plan_id": "32",
-            "amount": "150.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days",
-            "network": "AIRTEL"
-        },
-        {
             "plan_name": "1.5GB",
             "plan_id": "33",
             "amount": "900.00",
@@ -470,37 +454,109 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "114",
-            "amount": "615.00",
+            "amount": "600.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. Arrives in 15-20min",
+            "plan_day": "30days validity",
             "network": "MTN"
         },
         {
             "plan_name": "2GB",
             "plan_id": "115",
-            "amount": "1,265.00",
+            "amount": "1,250.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. Arrives in 15-20min",
+            "plan_day": "30days validity 15min Before delivery",
             "network": "MTN"
         },
         {
             "plan_name": "3GB",
             "plan_id": "116",
-            "amount": "1,615.00",
+            "amount": "1,600.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. Arrives in 15-20min",
+            "plan_day": "30days validity 15min Before delivery",
             "network": "MTN"
         },
         {
             "plan_name": "5GB",
             "plan_id": "117",
-            "amount": "2,730.00",
+            "amount": "2,700.00",
             "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days validity. Arrives in 15-20min",
+            "plan_day": "30days validity 15min Before delivery",
             "network": "MTN"
+        },
+        {
+            "plan_name": "200MB",
+            "plan_id": "118",
+            "amount": "210.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "2 days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "300MB",
+            "plan_id": "119",
+            "amount": "305.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "2days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "500MB",
+            "plan_id": "120",
+            "amount": "510.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "7days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "121",
+            "amount": "810.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "7days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "2GB",
+            "plan_id": "122",
+            "amount": "1,510.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "3GB",
+            "plan_id": "123",
+            "amount": "1,990.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "4GB",
+            "plan_id": "124",
+            "amount": "2,500.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "2550",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "8GB",
+            "plan_id": "125",
+            "amount": "3,050.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "10GB",
+            "plan_id": "126",
+            "amount": "4,000.00",
+            "plan_type": "COOPERATE GIFTING",
+            "plan_day": "30days validity",
+            "network": "AIRTEL"
         }
     ],
-    "bilal":   [
+    "bilal":  [
         {
             "plan_name": "1GB",
             "plan_id": "2",
@@ -878,6 +934,14 @@ const unfilteredplans = {
             "network": "AIRTEL"
         },
         {
+            "plan_name": "300MB",
+            "plan_id": "68",
+            "amount": "130.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "2 days",
+            "network": "AIRTEL"
+        },
+        {
             "plan_name": "1GB",
             "plan_id": "69",
             "amount": "320.00",
@@ -1116,6 +1180,14 @@ const unfilteredplans = {
             "plan_type": "GIFTING",
             "plan_day": "30days + 2gb night",
             "network": "MTN"
+        },
+        {
+            "plan_name": "600MB",
+            "plan_id": "106",
+            "amount": "230.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "2 days",
+            "network": "AIRTEL"
         },
         {
             "plan_name": "1GB",
