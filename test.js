@@ -556,7 +556,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal":  [
+    "bilal": [
         {
             "plan_name": "1GB",
             "plan_id": "2",
@@ -1607,10 +1607,10 @@ const filters = [
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'GIFTING' },
     // { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'SME' },
     { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'GIFTING' },
-    { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
-    // { vendor: 'quickvtu', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
+    // { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
+    { vendor: 'quickvtu', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'quickvtu', network: 'MTN', planToRemove: 'SME' },
-    // { vendor: 'bilal', network: 'MTN', planToRemove: 'SME' },
+    { vendor: 'bilal', network: 'MTN', planToRemove: 'SME' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
