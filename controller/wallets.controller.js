@@ -1188,3 +1188,21 @@ exports.getDashboardData = async (req, res, next) => {
     errorResponse(res, error);
   }
 };
+
+// Admin get wallet balance of a particular user
+exports.adminGetWalletBalance = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    // Fetch the wallet balance for the specified user
+    const wallet = await walletsService.getWallets({ userId });
+
+    if (!wallet || wallet.totalDocs === 0) {
+      throw new Error("Wallet not found for the specified user");
+    }
+
+    successResponse(res, wallet.docs[0]);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};

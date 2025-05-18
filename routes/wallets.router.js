@@ -17,6 +17,7 @@ router.post('/monnify-hoook', walletsController.webhook);
 router.post('/f-hoook', walletsController.flwhook);
 
 // Admin routes
+router.get('/admin/wallet-balance/:userId', checkAuth, adminAccessOnly, walletsController.adminGetWalletBalance);
 router.post('/admin/manual-refund', checkAuth, adminAccessOnly, walletsController.manualRefund);
 router.post('/admin/retry-transaction', checkAuth, adminAccessOnly, walletsController.retryTransaction);
 router.get('/admin/transactions', checkAuth, adminAccessOnly, walletsController.adminFetchTransactions);
