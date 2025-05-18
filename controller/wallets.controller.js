@@ -268,7 +268,7 @@ exports.fetchTransactions = async (req, res, next) => {
 exports.fetchUserTransactions = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const { page = 1, limit = 30 } = req.query;
+    const { page = 1, limit = 30, type = "all" } = req.query;
 
     // Validate userId is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -281,8 +281,14 @@ exports.fetchUserTransactions = async (req, res, next) => {
       page: parseInt(page),
     };
 
+    // Build filter for transaction type
+    let filter = { userId };
+    if (type === "debit" || type === "credit") {
+      filter.type = type;
+    }
+
     const transactions = await walletsService.fetchTransactions(
-      { userId },
+      filter,
       options
     );
 
