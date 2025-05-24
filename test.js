@@ -2,11 +2,11 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu": [
+    "quickvtu":[
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "650.00",
+            "amount": "630.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,280.00",
+            "amount": "1,260.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,930.00",
+            "amount": "1,890.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "8",
-            "amount": "3,000.00",
+            "amount": "3,150.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -556,19 +556,19 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal": [
+    "bilal":  [
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "750.00",
+            "amount": "700.00",
             "plan_type": "SME",
-            "plan_day": "30days",
+            "plan_day": "7days",
             "network": "MTN"
         },
         {
             "plan_name": "2GB",
             "plan_id": "3",
-            "amount": "1,450.00",
+            "amount": "1,400.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -1608,9 +1608,9 @@ const filters = [
     // { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'SME' },
     { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'GIFTING' },
     // { vendor: 'quickvtu', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
-    { vendor: 'quickvtu', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
+    // { vendor: 'quickvtu', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'quickvtu', network: 'MTN', planToRemove: 'SME' },
-    { vendor: 'bilal', network: 'MTN', planToRemove: 'SME' },
+    // { vendor: 'bilal', network: 'MTN', planToRemove: 'SME' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
