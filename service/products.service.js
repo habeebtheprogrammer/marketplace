@@ -53,21 +53,21 @@ exports.bulkUpdate = async (param, obj) => {
 };
 
 exports.deleteProduct = async (id) => {
-  const data = await Products.findByIdAndDelete(id);
+  const data = await Products.findByIdAndUpdate(id, { archive: true });
   return data;
 };
 
 exports.getProductById = async (id) => {
   const data = await Products.findById(id).populate([
     {
-        path: "categoryId",
-        select: "title",
+      path: "categoryId",
+      select: "title",
     },
     {
-        path: "vendorId",
-        select: "title"
-    }
-]);
+      path: "vendorId",
+      select: "title",
+    },
+  ]);
   if (!data) {
     throw new Error("Product not found");
   }

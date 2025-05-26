@@ -16,7 +16,7 @@ exports.updateCategories = async (param, obj) => {
 };
 
 exports.deleteCategory = async (id) => {
-  const data = await Categories.findByIdAndDelete(id);
+  const data = await Categories.findByIdAndUpdate(id, {archive: true});
   return data;
 };
 
