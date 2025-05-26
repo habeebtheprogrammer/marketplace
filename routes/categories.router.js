@@ -9,4 +9,7 @@ router.post('/', checkAuth, vendorsAccessOnly, categoryCreationValidator, catego
 router.patch('/', checkAuth, vendorsAccessOnly, updateValidator, categoriesController.updateCategories);
 router.delete('/:id', checkAuth, vendorsAccessOnly, categoriesController.deleteCategory);
 
+router.get('/:id', categoriesController.getCategoryById);
+router.patch('/:id', checkAuth, vendorsAccessOnly, categoryCreationValidator, categoriesController.updateCategory);
+
 module.exports = router;
