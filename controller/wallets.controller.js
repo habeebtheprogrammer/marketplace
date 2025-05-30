@@ -1013,51 +1013,44 @@ exports.retryTransaction = async (req, res, next) => {
 };
 
 exports.adminFetchTransactions = async (req, res, next) => {
-  console.log("Fetching transactions for admin...");
   try {
-    const {
-      page = 1,
-      limit = 50,
-      status,
-      type,
-      startDate,
-      endDate,
-      userId,
-      search,
-    } = req.query;
-
+    // Get filters from query params
+    const { page = 1, limit = 30, type, status, search } = req.query;
     const filter = {};
-
-    if (status) filter.status = status;
-    if (type) filter.type = type;
-    if (userId) filter.userId = userId;
-    if (startDate && endDate) {
-      filter.createdAt = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate),
-      };
+    if (type && type !== 'All') {
+      filter.type = type;
+    }
+    if (status && status !== 'All') {
+      filter.status = status;
     }
     if (search) {
+      // Search by reference, narration, or user fields
       filter.$or = [
-        { reference: { $regex: search, $options: "i" } },
-        { narration: { $regex: search, $options: "i" } },
+        { reference: { $regex: search, $options: 'i' } },
+        { narration: { $regex: search, $options: 'i' } },
       ];
     }
-
-    const options = {
+    // Fetch with pagination and filters
+    const transactions = await walletsService.fetchTransactions(filter, {
       page: parseInt(page),
       limit: parseInt(limit),
-      sort: { createdAt: -1 },
-      populate: ["userId"],
-    };
-
-    const transactions = await walletsService.fetchTransactions(
-      filter,
-      options
-    );
-    successResponse(res, transactions);
+      sort: { _id: -1 },
+      populate: [
+        { path: 'userId', select: 'firstName lastName email' }
+      ]
+    });
+    // Map userId to user for frontend compatibility
+    transactions.docs = transactions.docs.map((t) => {
+      const user = t.userId ? {
+        firstName: t.userId.firstName,
+        lastName: t.userId.lastName,
+        email: t.userId.email
+      } : undefined;
+      return { ...t.toObject(), user };
+    });
+    res.json({ data: transactions });
   } catch (error) {
-    errorResponse(res, error);
+    errorResponse(res, error, 'Failed to fetch transactions');
   }
 };
 
