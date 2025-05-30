@@ -9,5 +9,6 @@ router.get('/admin', checkAuth, adminAccessOnly, ordersController.getAdminOrders
 router.post('/', checkAuth, ordersController.addOrders);
 router.patch('/', checkAuth, updateOrdersValidator, ordersController.updateOrders);
 router.post('/webhook', ordersController.webhook);
+router.get('/:id', checkAuth, adminAccessOnly, ordersController.getOrderById);
 
 module.exports = router;

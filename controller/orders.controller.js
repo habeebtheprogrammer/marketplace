@@ -148,3 +148,14 @@ exports.webhook = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
+
+exports.getOrderById = async (req, res, next) => {
+    try {
+        const orderId = req.params.id;
+        const data = await ordersService.getOrders({ _id: orderId });
+        if (!data.docs || !data.docs.length) return errorResponse(res, { message: 'Order not found' });
+        successResponse(res, data.docs[0]);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
