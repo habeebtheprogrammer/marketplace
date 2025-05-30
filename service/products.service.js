@@ -9,6 +9,10 @@ exports.getProducts = async ({ query = {}, options = {} }) => {
         select: "title",
       },
       {
+        path: "vendorId",
+        select: "title",
+      },
+      {
         path: "comments.creatorId",
         select: ["firstName", "lastName"],
       },
