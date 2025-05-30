@@ -11,7 +11,6 @@ const { createToken, sendSignupMail, isAppleRelayEmail } = require("./helpers");
 exports.checkAuth = (req, res, next) => {
   var token = req.header("authorization");
   var oneSignalId = req.header("onesignalid");
-  console.log(req.header("authorization"), oneSignalId);
   try {
     if (token) {
       token = token.split(" ")[1];
