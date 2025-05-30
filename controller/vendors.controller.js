@@ -52,3 +52,31 @@ exports.getVendorAccount = async (req, res, next) => {
         errorResponse(res, error)
     }
 }
+
+exports.updateVendorById = async (req, res, next) => {
+    try {
+        const vendorId = req.params.id;
+        const updateObj = {};
+        Object.keys(req.body).forEach(key => {
+            if (req.body[key] !== undefined) {
+                updateObj[key] = req.body[key];
+            }
+        });
+        const data = await vendorsService.updateVendors({ _id: vendorId }, updateObj);
+        if (!data) return errorResponse(res, { message: 'Vendor not found' });
+        successResponse(res, data);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
+
+exports.getVendorById = async (req, res, next) => {
+    try {
+        const vendorId = req.params.id;
+        const data = await vendorsService.getVendors({ _id: vendorId });
+        if (!data.docs || !data.docs.length) return errorResponse(res, { message: 'Vendor not found' });
+        successResponse(res, data.docs[0]);
+    } catch (error) {
+        errorResponse(res, error);
+    }
+}
