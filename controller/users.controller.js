@@ -267,3 +267,33 @@ exports.updateUserById = async (req, res, next) => {
     errorResponse(res, error);
   }
 };
+
+// Get users referred by a particular user
+exports.getReferredUsers = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // Find users where referredBy matches userId
+    const users = await Users.find({ referredBy: userId })
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(limitNumber);
+    console.log(JSON.stringify(users, null, 2));
+    const total = await Users.countDocuments({ referredBy: userId });
+
+    const result = {
+      users,
+      total,
+      page: pageNumber,
+      totalPages: Math.ceil(total / limitNumber),
+      limit: limitNumber,
+    };
+    successResponse(res, result);
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
