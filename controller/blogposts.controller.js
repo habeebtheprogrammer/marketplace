@@ -4,10 +4,16 @@ const { successResponse, errorResponse } = require("../utils/responder")
 
 exports.createBlogposts = async (req, res, next) => {
     try {
+        // Set author from token
+        const authorId = req.userId;
+        if (!authorId) {
+            return errorResponse(res, { message: 'Author not found in token' }, 400);
+        }
         const data = await blogpostsService.createBlogposts({
-            ...req.body, slug: slugify(req.body.title ) + '-' + generateRandomNumber(5)
-        })
-        
+            ...req.body,
+            author: authorId,
+            slug: slugify(req.body.title) + '-' + generateRandomNumber(5)
+        });
         successResponse(res, data)
     } catch (error) {
         console.log(error)
