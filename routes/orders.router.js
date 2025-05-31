@@ -10,5 +10,7 @@ router.post('/', checkAuth, ordersController.addOrders);
 router.patch('/', checkAuth, updateOrdersValidator, ordersController.updateOrders);
 router.post('/webhook', ordersController.webhook);
 router.get('/:id', checkAuth, adminAccessOnly, ordersController.getOrderById);
+// Admin: Update order status and notify user
+router.patch('/status/:id', checkAuth, adminAccessOnly, ordersController.updateOrderStatus);
 
 module.exports = router;

@@ -159,3 +159,35 @@ exports.getOrderById = async (req, res, next) => {
         errorResponse(res, error);
     }
 }
+
+exports.updateOrderStatus = async (req, res, next) => {
+    try {
+        const orderId = req.params.id;
+        const { status } = req.body;
+        if (!['shipped', 'delivered'].includes(status)) {
+            return errorResponse(res, 'Invalid status. Only "shipped" or "delivered" allowed.');
+        }
+        // Update order status
+        const order = await ordersService.updateOrders({ _id: orderId }, { status });
+        if (!order) return errorResponse(res, 'Order not found');
+
+        // Get user info for notification
+        const user = await getUsers({ _id: order.userId });
+        const userDoc = user?.docs?.[0];
+        if (userDoc && userDoc.oneSignalId) {
+            let notifMsg = status === 'shipped' ?
+                `Your order has been shipped! Track with ID: ${order.trackingId}` :
+                `Your order has been delivered! Thank you for shopping with us.`;
+            await sendNotification({
+                headings: { en: 'Order Update' },
+                contents: { en: notifMsg },
+                include_subscription_ids: [userDoc.oneSignalId],
+                url: 'gadgetsafrica://orders/' + orderId,
+            });
+        }
+        successResponse(res, order);
+    } catch (error) {
+        console.log(error);
+        errorResponse(res, error);
+    }
+}
