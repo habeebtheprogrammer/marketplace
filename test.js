@@ -6,7 +6,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "630.00",
+            "amount": "620.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,260.00",
+            "amount": "1,240.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,890.00",
+            "amount": "1,860.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "8",
-            "amount": "3,150.00",
+            "amount": "3,100.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -556,11 +556,11 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal":  [
+    "bilal": [
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "700.00",
+            "amount": "650.00",
             "plan_type": "SME",
             "plan_day": "7days",
             "network": "MTN"
