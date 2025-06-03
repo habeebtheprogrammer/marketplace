@@ -929,7 +929,7 @@ exports.manualRefund = async (req, res, next) => {
     const refundTransaction = {
       amount: refundAmount,
       userId: originalTransaction.userId,
-      reference: "MANUAL_REFUND_" + generateRandomNumber(10),
+      reference: "REVERSAL_" + generateRandomNumber(10),
       narration: `Manual refund: ${reason || "No reason provided"}`,
       currency: "NGN",
       type: "credit",
