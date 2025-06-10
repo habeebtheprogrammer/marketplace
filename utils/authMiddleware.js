@@ -13,30 +13,22 @@ exports.checkAuth = (req, res, next) => {
   var oneSignalId = req.header("onesignalid");
   try {
     if (token) {
-      token = token.split(" ")[1];
-      var data = jwt.verify(token, process.env.JWT_SECRET);
-      req.userId = data._id;
-      req.firstName = data.firstName;
-      req.lastName = data.lastName;
-      req.userType = data.userType;
-      req.email = data.email;
-      req.oneSignalId = oneSignalId;
-      if (
-        data.verificationCode &&
-        req.originalUrl != "/api/users/refreshToken"
-      ) {
-        throw Error("Please verify your account");
-      }
-      next();
-      if (
-        (oneSignalId && !data.oneSignalId) ||
-        (oneSignalId && oneSignalId != data.oneSignalId)
-      ) {
-        usersService
-          .updateUsers({ _id: data._id }, { oneSignalId })
-          .then((suc) => console.log("onesignal update"));
-      }
-    } else throw Error("an error has occured");
+      token = token.split(" ")[1]
+    var data = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = data._id;
+    req.firstName = data.firstName;
+    req.lastName = data.lastName;
+    req.userType = data.userType;
+    req.email = data.email;
+    req.oneSignalId = oneSignalId
+    if(data.verificationCode && req.originalUrl != '/api/users/refreshToken'){
+      throw Error("Please verify your account")
+    }
+    next();
+    if(oneSignalId && !data.oneSignalId || (oneSignalId && (oneSignalId != data.oneSignalId))){
+      usersService.updateUsers({_id: data._id}, {oneSignalId}).then((suc => console.log('onesignal update')))
+    }
+    } else throw Error("an error has occured")
   } catch (error) {
     errorResponse(
       res,

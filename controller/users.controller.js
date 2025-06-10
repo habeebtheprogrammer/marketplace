@@ -217,83 +217,10 @@ exports.deleteUsers = async (req, res, next) => {
 };
 
 exports.getUserDelivery = async (req, res, next) => {
-  try {
-    const data = await usersService.getUserDelivery({});
-    successResponse(res, data);
-  } catch (error) {
-    errorResponse(res, error);
-  }
-};
-
-exports.getUserById = async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const user = await usersService.getUserById(userId);
-    if (!user) {
-      return errorResponse(res, { message: "User not found" });
+    try {
+        const data = await usersService.getUserDelivery({})
+        successResponse(res, data)
+    } catch (error) {
+        errorResponse(res, error)
     }
-    successResponse(res, user);
-  } catch (error) {
-    errorResponse(res, error);
-  }
-};
-
-exports.updateUserById = async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    var updateObj = {};
-
-    // Only include fields that are provided in the request
-    Object.keys(req.body).forEach((key) => {
-      if (req.body[key]) {
-        updateObj[key] = req.body[key];
-      }
-    });
-
-    // If password is provided, hash it
-    if (updateObj.password) {
-      const hash = await bcrypt.hash(updateObj.password, 10);
-      updateObj.password = hash;
-    }
-
-    const data = await usersService.updateUsers({ _id: userId }, updateObj);
-
-    if (!data) {
-      return errorResponse(res, { message: "User not found" });
-    }
-
-    successResponse(res, data);
-  } catch (error) {
-    errorResponse(res, error);
-  }
-};
-
-// Get users referred by a particular user
-exports.getReferredUsers = async (req, res, next) => {
-  try {
-    const { userId } = req.params;
-    const { page = 1, limit = 10 } = req.query;
-    const pageNumber = parseInt(page);
-    const limitNumber = parseInt(limit);
-    const skip = (pageNumber - 1) * limitNumber;
-
-    // Find users where referredBy matches userId
-    const users = await Users.find({ referredBy: userId })
-      .sort({ _id: -1 })
-      .skip(skip)
-      .limit(limitNumber);
-    console.log(JSON.stringify(users, null, 2));
-    const total = await Users.countDocuments({ referredBy: userId });
-
-    const result = {
-      users,
-      total,
-      page: pageNumber,
-      totalPages: Math.ceil(total / limitNumber),
-      limit: limitNumber,
-    };
-    successResponse(res, result);
-  } catch (error) {
-    errorResponse(res, error);
-  }
-};
+}

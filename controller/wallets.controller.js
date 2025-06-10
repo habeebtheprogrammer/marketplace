@@ -169,44 +169,29 @@ exports.fetch = async (req, res, next) => {
       // }
       wallet = await walletsService.createWallet({
         userId: req.userId,
-        balance: 0,
-      });
-      console.log("is notable", req.email);
-      if (
-        checkForDevice.totalDocs == 1 &&
-        checkForDevice.docs[0]._id == req.userId &&
-        isNotableEmail(req.email)
-      ) {
-        if (
-          user.docs[0].referredBy?._id &&
-          user.docs[0].verificationCode == "" &&
-          user.totalDocs == 1
-        ) {
-          await walletsService.updateWallet(
-            { userId: user.docs[0].referredBy?._id },
-            { $inc: { balance: 25 } }
-          );
+        balance: 0
+      })
+      console.log("is notable", req.email)
+      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email)) {
+        if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
+
+          await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
           const bonus1 = {
-            amount: 25,
-            userId: user.docs[0]?.referredBy?._id,
-            reference: "Referral" + "--" + generateRandomNumber(10),
-            narration: "Referral bonus for new user",
-            currency: "NGN",
-            type: "credit",
-            status: "successful",
-          };
-          await walletsService.saveTransactions(bonus1);
+            "amount": 25,
+            "userId": user.docs[0]?.referredBy?._id,
+            "reference": "Referral" + '--' + generateRandomNumber(10),
+            "narration": "Referral bonus for new user",
+            "currency": "NGN",
+            "type": 'credit',
+            "status": "successful"
+          }
+          await walletsService.saveTransactions(bonus1)
           sendNotification({
-            headings: { en: `₦25 was credited to your wallet` },
-            contents: {
-              en: `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.`,
-            },
-            include_subscription_ids: [
-              user.docs[0].referredBy?.oneSignalId,
-              ...include_player_ids,
-            ],
-            url: "gadgetsafrica://profile",
-          });
+            headings: { "en": `₦25 was credited to your wallet` },
+            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
+            include_subscription_ids: [user.docs[0].referredBy?.oneSignalId, ...include_player_ids],
+            url: 'gadgetsafrica://profile',
+          })
         }
       } else if (req.headers.deviceid && user.docs[0].deviceid == "") {
         await usersService.updateUsers(
@@ -240,8 +225,8 @@ exports.fetch = async (req, res, next) => {
       var accounts = result.responseBody.accounts?.map((account) => ({
         accountName: result.responseBody.accountName,
         accountNumber: account.accountNumber,
-        bankName: account.bankName,
-      }));
+        bankName: account.bankName
+      }))
     }
     res.json({
       balance: wallet.totalDocs == 1 ? wallet?.docs[0]?.balance : 0,
@@ -407,7 +392,7 @@ exports.buyDataPlan = async (req, res, next) => {
 
     // Start time for retry window
     const startTime = Date.now();
-    const retryWindow = 300 * 1000; // 60 seconds
+    const retryWindow = 60 * 1000; // 60 seconds
 
     // Function to attempt data purchase with retries
     const attemptDataPurchase = async () => {
@@ -471,8 +456,29 @@ exports.buyDataPlan = async (req, res, next) => {
               en: `Congratulations ${req.firstName}! You have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25`,
             },
             include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-            url: "gadgetsafrica://profile",
-          });
+            url: 'gadgetsafrica://profile',
+          })
+          if (convertToMegabytes(plan.planName) >= 1024) {
+            const bonus = (convertToMegabytes(plan.planName)/ 1024) * 20
+            await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: bonus } })
+            const cashback = {
+              "amount": bonus,
+              "userId": req.userId,
+              "reference": "Cashback" + '--' + generateRandomNumber(10),
+              "narration": "Cashback bonus for data purchase",
+              "currency": "NGN",
+              "type": 'credit',
+              "status": "successful"
+            }
+            await walletsService.saveTransactions(cashback)
+            sendNotification({
+              headings: { "en": `You've unlocked ₦${bonus} cashback` },
+              contents: { "en": `Congratulations ${req?.firstName}! You just earned ₦${bonus} cashback bonus. Refer a friend to join 360gadgetsafrica to earn more bonus.` },
+              include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+              url: 'gadgetsafrica://profile',
+            })
+          }
+
         }
       } catch (error) {
         console.log(error);

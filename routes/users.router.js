@@ -16,6 +16,7 @@ router.post('/signin', googleAuth, appleSignin, signinInputValidator,  usersCont
 router.post('/signup', signupInputValidator, usersController.createUser);
 router.post('/sendOtp', usersController.sendOtpEmail);
 router.post('/verifyOtp', usersController.verifyOtp);
+router.get('/getReferrals', usersController.getReferrals);
 router.delete('/delete/:_id', checkAuth, adminAccessOnly, usersController.deleteUsers);
 
 module.exports = router;
