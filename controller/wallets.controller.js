@@ -169,29 +169,44 @@ exports.fetch = async (req, res, next) => {
       // }
       wallet = await walletsService.createWallet({
         userId: req.userId,
-        balance: 0
-      })
-      console.log("is notable", req.email)
-      if ((checkForDevice.totalDocs == 1 && checkForDevice.docs[0]._id == req.userId) && isNotableEmail(req.email)) {
-        if (user.docs[0].referredBy?._id && user.docs[0].verificationCode == '' && user.totalDocs == 1) {
-
-          await walletsService.updateWallet({ userId: user.docs[0].referredBy?._id }, { $inc: { balance: 25 } })
+        balance: 0,
+      });
+      console.log("is notable", req.email);
+      if (
+        checkForDevice.totalDocs == 1 &&
+        checkForDevice.docs[0]._id == req.userId &&
+        isNotableEmail(req.email)
+      ) {
+        if (
+          user.docs[0].referredBy?._id &&
+          user.docs[0].verificationCode == "" &&
+          user.totalDocs == 1
+        ) {
+          await walletsService.updateWallet(
+            { userId: user.docs[0].referredBy?._id },
+            { $inc: { balance: 25 } }
+          );
           const bonus1 = {
-            "amount": 25,
-            "userId": user.docs[0]?.referredBy?._id,
-            "reference": "Referral" + '--' + generateRandomNumber(10),
-            "narration": "Referral bonus for new user",
-            "currency": "NGN",
-            "type": 'credit',
-            "status": "successful"
-          }
-          await walletsService.saveTransactions(bonus1)
+            amount: 25,
+            userId: user.docs[0]?.referredBy?._id,
+            reference: "Referral" + "--" + generateRandomNumber(10),
+            narration: "Referral bonus for new user",
+            currency: "NGN",
+            type: "credit",
+            status: "successful",
+          };
+          await walletsService.saveTransactions(bonus1);
           sendNotification({
-            headings: { "en": `₦25 was credited to your wallet` },
-            contents: { "en": `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.` },
-            include_subscription_ids: [user.docs[0].referredBy?.oneSignalId, ...include_player_ids],
-            url: 'gadgetsafrica://profile',
-          })
+            headings: { en: `₦25 was credited to your wallet` },
+            contents: {
+              en: `Congratulations ${user.docs[0].referredBy?.firstName}! You just earned ₦25 on referral bonus. Refer more friends to download 360gadgetsafrica to earn more.`,
+            },
+            include_subscription_ids: [
+              user.docs[0].referredBy?.oneSignalId,
+              ...include_player_ids,
+            ],
+            url: "gadgetsafrica://profile",
+          });
         }
       } else if (req.headers.deviceid && user.docs[0].deviceid == "") {
         await usersService.updateUsers(
@@ -225,8 +240,8 @@ exports.fetch = async (req, res, next) => {
       var accounts = result.responseBody.accounts?.map((account) => ({
         accountName: result.responseBody.accountName,
         accountNumber: account.accountNumber,
-        bankName: account.bankName
-      }))
+        bankName: account.bankName,
+      }));
     }
     res.json({
       balance: wallet.totalDocs == 1 ? wallet?.docs[0]?.balance : 0,
@@ -456,29 +471,36 @@ exports.buyDataPlan = async (req, res, next) => {
               en: `Congratulations ${req.firstName}! You have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25`,
             },
             include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-            url: 'gadgetsafrica://profile',
-          })
+            url: "gadgetsafrica://profile",
+          });
           if (convertToMegabytes(plan.planName) >= 1024) {
-            const bonus = (convertToMegabytes(plan.planName)/ 1024) * 20
-            await walletsService.updateWallet({ userId: req.userId }, { $inc: { balance: bonus } })
+            const bonus = (convertToMegabytes(plan.planName) / 1024) * 20;
+            await walletsService.updateWallet(
+              { userId: req.userId },
+              { $inc: { balance: bonus } }
+            );
             const cashback = {
-              "amount": bonus,
-              "userId": req.userId,
-              "reference": "Cashback" + '--' + generateRandomNumber(10),
-              "narration": "Cashback bonus for data purchase",
-              "currency": "NGN",
-              "type": 'credit',
-              "status": "successful"
-            }
-            await walletsService.saveTransactions(cashback)
+              amount: bonus,
+              userId: req.userId,
+              reference: "Cashback" + "--" + generateRandomNumber(10),
+              narration: "Cashback bonus for data purchase",
+              currency: "NGN",
+              type: "credit",
+              status: "successful",
+            };
+            await walletsService.saveTransactions(cashback);
             sendNotification({
-              headings: { "en": `You've unlocked ₦${bonus} cashback` },
-              contents: { "en": `Congratulations ${req?.firstName}! You just earned ₦${bonus} cashback bonus. Refer a friend to join 360gadgetsafrica to earn more bonus.` },
-              include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-              url: 'gadgetsafrica://profile',
-            })
+              headings: { en: `You've unlocked ₦${bonus} cashback` },
+              contents: {
+                en: `Congratulations ${req?.firstName}! You just earned ₦${bonus} cashback bonus. Refer a friend to join 360gadgetsafrica to earn more bonus.`,
+              },
+              include_subscription_ids: [
+                req.oneSignalId,
+                ...include_player_ids,
+              ],
+              url: "gadgetsafrica://profile",
+            });
           }
-
         }
       } catch (error) {
         console.log(error);
@@ -1013,17 +1035,17 @@ exports.adminFetchTransactions = async (req, res, next) => {
     // Get filters from query params
     const { page = 1, limit = 30, type, status, search } = req.query;
     const filter = {};
-    if (type && type !== 'All') {
+    if (type && type !== "All") {
       filter.type = type;
     }
-    if (status && status !== 'All') {
+    if (status && status !== "All") {
       filter.status = status;
     }
     if (search) {
       // Search by reference, narration, or user fields
       filter.$or = [
-        { reference: { $regex: search, $options: 'i' } },
-        { narration: { $regex: search, $options: 'i' } },
+        { reference: { $regex: search, $options: "i" } },
+        { narration: { $regex: search, $options: "i" } },
       ];
     }
     // Fetch with pagination and filters
@@ -1031,22 +1053,22 @@ exports.adminFetchTransactions = async (req, res, next) => {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: { _id: -1 },
-      populate: [
-        { path: 'userId', select: 'firstName lastName email' }
-      ]
+      populate: [{ path: "userId", select: "firstName lastName email" }],
     });
     // Map userId to user for frontend compatibility
     transactions.docs = transactions.docs.map((t) => {
-      const user = t.userId ? {
-        firstName: t.userId.firstName,
-        lastName: t.userId.lastName,
-        email: t.userId.email
-      } : undefined;
+      const user = t.userId
+        ? {
+            firstName: t.userId.firstName,
+            lastName: t.userId.lastName,
+            email: t.userId.email,
+          }
+        : undefined;
       return { ...t.toObject(), user };
     });
     res.json({ data: transactions });
   } catch (error) {
-    errorResponse(res, error, 'Failed to fetch transactions');
+    errorResponse(res, error, "Failed to fetch transactions");
   }
 };
 
