@@ -945,16 +945,6 @@ exports.manualRefund = async (req, res, next) => {
 
     await walletsService.saveTransactions(refundTransaction);
 
-    // Update original transaction status
-    await walletsService.updateTransactions(
-      { _id: transactionId },
-      {
-        status: "refunded",
-        refundReason: reason,
-        refundAmount: refundAmount,
-      }
-    );
-
     successResponse(res, {
       message: "Refund processed successfully",
       refundTransaction,
