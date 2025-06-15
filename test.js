@@ -2,15 +2,7 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu": [
-        {
-            "plan_name": "500MB",
-            "plan_id": "4",
-            "amount": "390.00",
-            "plan_type": "SME",
-            "plan_day": "1Month",
-            "network": "MTN"
-        },
+    "quickvtu":[
         {
             "plan_name": "1GB",
             "plan_id": "5",
@@ -22,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,240.00",
+            "amount": "1,200.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -572,7 +564,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal":  [
+    "bilal":   [
         {
             "plan_name": "500MB",
             "plan_id": "1",
