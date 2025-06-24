@@ -578,7 +578,7 @@ const unfilteredplans = {
             "plan_id": "2",
             "amount": "650.00",
             "plan_type": "SME",
-            "plan_day": "7days",
+            "plan_day": "30 days",
             "network": "MTN"
         },
         {
@@ -586,7 +586,7 @@ const unfilteredplans = {
             "plan_id": "3",
             "amount": "1,400.00",
             "plan_type": "SME",
-            "plan_day": "30days",
+            "plan_day": "Monthly",
             "network": "MTN"
         },
         {
@@ -1484,6 +1484,14 @@ const unfilteredplans = {
             "plan_type": "GIFTING",
             "plan_day": "30days",
             "network": "AIRTEL"
+        },
+        {
+            "plan_name": "470MB",
+            "plan_id": "149",
+            "amount": "196.00",
+            "plan_type": "GIFTING PROMO",
+            "plan_day": "Weekly all social",
+            "network": "MTN"
         }
     ],
     // "mobilevtu": [ 
