@@ -6,7 +6,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "600.00",
+            "amount": "630.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,200.00",
+            "amount": "1,260.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,900.00",
+            "amount": "1,890.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "8",
-            "amount": "3,100.00",
+            "amount": "3,150.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -303,14 +303,6 @@ const unfilteredplans = {
             "plan_name": "230MB",
             "plan_id": "84",
             "amount": "200.00",
-            "plan_type": "GIFTING",
-            "plan_day": "1day validity",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "1GB",
-            "plan_id": "85",
-            "amount": "490.00",
             "plan_type": "GIFTING",
             "plan_day": "1day validity",
             "network": "MTN"
@@ -1500,9 +1492,10 @@ const unfilteredplans = {
 
 var plans = unfilteredplans.quickvtu.map(plan => {
     const mbSize = convertToMB(plan.plan_name);
-    const hundreds = Math.floor(mbSize / 100);
+    const hundreds = Math.floor(mbSize / 50);
     const originalAmount = parseFloat(plan.amount.replace(',', ''));
     const newAmount = originalAmount + hundreds;
+    console.log( newAmount.toFixed(2) , originalAmount, plan.amount)
 
     return {
         planName: plan.plan_name,
@@ -1517,10 +1510,9 @@ var plans = unfilteredplans.quickvtu.map(plan => {
 
 unfilteredplans.bilal.map(plan => {
     const mbSize = convertToMB(plan.plan_name);
-    const hundreds = Math.floor(mbSize / 100);
+    const hundreds = Math.floor(mbSize / 50);
     const originalAmount = parseFloat(plan.amount.replace(",",""));
     const newAmount = originalAmount + hundreds;
-    console.log( newAmount.toFixed(2), originalAmount, plan.amount)
     plans.push({
         planName: plan.plan_name,
         planId: plan.plan_id,
