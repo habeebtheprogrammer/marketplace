@@ -556,7 +556,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal":   [
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
@@ -1605,7 +1605,7 @@ const filters = [
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'SME' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
-    { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING PROMO' },
+    // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING PROMO' },
     // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING' },
