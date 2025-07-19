@@ -810,7 +810,7 @@ exports.webhook = async (req, res, next) => {
 
       if (user.totalDocs) {
         const data = {
-          amount: amountPaid,
+          amount: settlementAmount,
           userId: user.docs[0]._id,
           reference: transactionReference,
           narration: "Wallet funding",
@@ -825,12 +825,12 @@ exports.webhook = async (req, res, next) => {
         await walletsService.saveTransactions(data);
         await walletsService.updateWallet(
           { userId: user.docs[0]._id },
-          { $inc: { balance: parseInt(amountPaid) } }
+          { $inc: { balance: parseInt(settlementAmount) } }
         );
         sendNotification({
-          headings: { en: `₦${amountPaid} was credited to your wallet` },
+          headings: { en: `₦${settlementAmount} was credited to your wallet` },
           contents: {
-            en: `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${amountPaid}. Refer a friend to try our mobile app and earn ₦25.`,
+            en: `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${settlementAmount}. Refer a friend to try our mobile app and earn ₦25.`,
           },
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: "gadgetsafrica://transactions",
