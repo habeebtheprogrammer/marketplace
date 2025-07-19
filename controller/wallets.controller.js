@@ -240,7 +240,7 @@ exports.fetch = async (req, res, next) => {
       var accounts = result.responseBody.accounts?.map((account) => ({
         accountName: result.responseBody.accountName,
         accountNumber: account.accountNumber,
-        bankName: account.bankName,
+        bankName: account.bankName + " (1.5% fee)",
       }));
     }
     res.json({
