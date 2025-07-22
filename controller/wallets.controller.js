@@ -830,7 +830,7 @@ exports.webhook = async (req, res, next) => {
         sendNotification({
           headings: { en: `₦${Math.round(settlementAmount)} was credited to your wallet` },
           contents: {
-            en: `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${Math.round(settlementAmount)}. Refer a friend to try our mobile app and earn ₦25.`,
+            en: `Congratulations ${user.docs[0].firstName}! You have successfully funded your wallet with ₦${Math.round(settlementAmount)}. Refer a friend to try our mobile app and earn ₦30 bonus per GB Your Referral buys.`,
           },
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: "gadgetsafrica://transactions",
