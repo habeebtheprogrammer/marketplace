@@ -70,7 +70,7 @@ router.delete('/remove', checkAuth, couponController.removeActiveCoupon);
 router.post(
   '/',
   checkAuth,
-  adminAccessOnly,
+  // adminAccessOnly,
   [
     body('code')
       .trim()
@@ -103,7 +103,6 @@ router.post(
 router.get(
   '/',
   checkAuth,
-  adminAccessOnly,
   couponController.getAllCoupons
 );
 
@@ -113,7 +112,7 @@ router.get(
 router.get(
   '/:id',
   checkAuth,
-  adminAccessOnly,
+  // adminAccessOnly,
   couponController.getCouponById
 );
 

@@ -12,6 +12,9 @@ const addressSchema = new Schema(
     deliveryType: {
       type: String,
     },
+    city: {
+      type: String,
+    },
     street: {
       type: String,
       required: [true, 'Street is required']

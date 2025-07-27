@@ -116,14 +116,13 @@ exports.getActiveCoupon = async (req, res) => {
       isActive: true 
     }).populate('coupon');
 
-    if (!activeCoupon) {
+if (!activeCoupon) {
       return res.status(200).json({ 
         success: true, 
         data: null,
         message: 'No active coupon found'
       });
     }
-
     res.status(200).json({
       success: true,
       data: activeCoupon

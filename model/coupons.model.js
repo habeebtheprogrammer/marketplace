@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const couponPlanSchema = new Schema({
   planId: { type: String, required: true },
@@ -113,6 +114,7 @@ couponSchema.methods.markAsUsed = async function(userId) {
   return this.save();
 };
 
+couponSchema.plugin(mongoosePaginate);
 const Coupon = mongoose.model('coupons', couponSchema);
 
 module.exports = Coupon;
