@@ -16,6 +16,7 @@ const { successResponse, errorResponse } = require("../utils/responder");
 const { sendNotification } = require("../utils/onesignal");
 const Wallet = require("../model/wallets.model");
 const Transactions = require("../model/transactions.model");
+const AppliedCoupon = require("../model/appliedCoupons.model");
 const mongoose = require("mongoose");
 
 // const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
@@ -352,16 +353,56 @@ exports.fetchDataPlan = async (req, res, next) => {
 
 exports.buyDataPlan = async (req, res, next) => {
   try {
+    // Check for active coupon and calculate discount
+    let discountAmount = 0;
+    let finalAmount = parseInt(req.body.plan.amount);
+    const activeCoupon = await AppliedCoupon.findOne({ 
+      user: req.userId, 
+      isActive: true 
+    }).populate('coupon');
+
+    // Apply coupon discount if valid
+    if (activeCoupon && activeCoupon.coupon) {
+      const coupon = activeCoupon.coupon;
+      const now = new Date();
+      
+      // Check if coupon is still valid
+      if (now >= new Date(coupon.validFrom) && now <= new Date(coupon.expiresAt) && 
+          (!coupon.maxUses || coupon.usedCount < coupon.maxUses)) {
+        
+        if (coupon.discountType === 'percentage') {
+          discountAmount = (finalAmount * coupon.discountValue) / 100;
+          // Apply max discount if specified
+          if (coupon.maxDiscount && discountAmount > coupon.maxDiscount) {
+            discountAmount = coupon.maxDiscount;
+          }
+        } else {
+          // Fixed amount discount
+          discountAmount = coupon.discountValue;
+        }
+        
+        // Ensure discount doesn't make amount negative
+        if (discountAmount > finalAmount) {
+          discountAmount = finalAmount;
+        }
+        
+        finalAmount = finalAmount - discountAmount;
+        
+      }
+    }
+
+    // Check wallet balance against final amount after discount
     var wallet = await walletsService.getWallets({ userId: req.userId });
-    if (
-      wallet.docs[0].balance < parseInt(req.body.plan.amount) ||
-      wallet.totalDocs == 0
-    )
-      throw new Error("Insufficient balance. please fund your wallet");
+    if (wallet.docs[0].balance < finalAmount || wallet.totalDocs == 0) {
+      throw new Error("Insufficient balance. Please fund your wallet");
+    }
+      
+    // Deduct final amount from wallet
     var wall = await walletsService.updateWallet(
       { userId: req.userId },
-      { $inc: { balance: -parseInt(req.body.plan.amount) } }
+      { $inc: { balance: -finalAmount } }
     );
+    
     const ref = "Data_" + generateRandomNumber(11);
 
     var plan = dataplan.find(
@@ -378,16 +419,19 @@ exports.buyDataPlan = async (req, res, next) => {
         : 4;
 
     const data = {
-      amount: req.body.plan.amount,
+      amount: finalAmount,
+      originalAmount: req.body.plan.amount, // Store original amount
+      discountApplied: discountAmount > 0 ? discountAmount : 0,
+      couponUsed: discountAmount > 0 ? activeCoupon?.coupon?.code : null,
       userId: req.userId,
       reference: ref,
-      narration: "Data topup to " + req.body.phone,
+      narration: "Data topup to " + req.body.phone + (discountAmount > 0 ? ` (₦${discountAmount} discount applied)` : ''),
       currency: "NGN",
       type: "debit",
       network: plan.network,
       planType: plan.planType,
       dataAmount: convertToMegabytes(plan.planName),
-      status: "pending", // Changed to pending initially
+      status: "pending",
     };
     const transaction = await walletsService.saveTransactions(data);
 
@@ -464,6 +508,18 @@ exports.buyDataPlan = async (req, res, next) => {
             { _id: transaction._id },
             { status: "successful", reference: newRef }
           );
+          
+          // Mark coupon as inactive if one was used
+          if (activeCoupon && activeCoupon.coupon) {
+            await AppliedCoupon.findOneAndUpdate(
+              { user: req.userId, isActive: true },
+              { isActive: false },
+              { new: true }
+            );
+          // Mark coupon as used
+          await activeCoupon.coupon.markAsUsed(req.userId);
+          }
+          
           // successResponse(res, transaction)
           sendNotification({
             headings: { en: `Payment successful` },

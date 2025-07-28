@@ -19,6 +19,14 @@ var transactionsSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
+  discountApplied:{
+    type: Number,
+    default: 0
+  },
+  couponUsed:{
+    type: String,
+    default: null
+  },
   narration: {
     type: String,
     required: [true, 'Narration is required']
