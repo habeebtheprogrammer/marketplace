@@ -225,7 +225,7 @@ exports.applyCoupon = async (req, res) => {
     });
 
     await appliedCoupon.save();
-    await coupon.markAsUsed(userId);
+    // await coupon.markAsUsed(userId);
 
     const populatedCoupon = await AppliedCoupon
       .findById(appliedCoupon._id)

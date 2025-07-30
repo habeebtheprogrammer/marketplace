@@ -17,6 +17,7 @@ const { sendNotification } = require("../utils/onesignal");
 const Wallet = require("../model/wallets.model");
 const Transactions = require("../model/transactions.model");
 const AppliedCoupon = require("../model/appliedCoupons.model");
+const Coupon = require("../model/coupons.model");
 const mongoose = require("mongoose");
 
 // const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
@@ -78,10 +79,10 @@ async function quickVTU(endpoint, method, body = null, vendor) {
       body.network == 1
         ? "MTN"
         : body.network == 2
-        ? "Airtel"
-        : body.network == 3
-        ? "Glo"
-        : "9Mobile";
+          ? "Airtel"
+          : body.network == 3
+            ? "Glo"
+            : "9Mobile";
     console.log(config);
     result = await axios.post(
       `https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`,
@@ -355,21 +356,35 @@ exports.buyDataPlan = async (req, res, next) => {
   try {
     // Check for active coupon and calculate discount
     let discountAmount = 0;
+    var isValidPlan = false;
     let finalAmount = parseInt(req.body.plan.amount);
-    const activeCoupon = await AppliedCoupon.findOne({ 
-      user: req.userId, 
-      isActive: true 
+    const activeCoupon = await AppliedCoupon.findOne({
+      user: req.userId,
+      isActive: true
     }).populate('coupon');
 
     // Apply coupon discount if valid
     if (activeCoupon && activeCoupon.coupon) {
       const coupon = activeCoupon.coupon;
       const now = new Date();
-      
+
+
+      const purchasedPlan = req.body.plan;
+
+      // Check if coupon has any plan restrictions
+      if (coupon.validForPlans && coupon.validForPlans.length > 0) {
+        // Check if purchased plan matches any of the validForPlans
+        isValidPlan = coupon.validForPlans.some(validPlan => {
+          return validPlan.planId === purchasedPlan.planId &&
+            validPlan.network === purchasedPlan.network &&
+            validPlan.vendor === purchasedPlan.vendor;
+        });
+      }
+
       // Check if coupon is still valid
-      if (now >= new Date(coupon.validFrom) && now <= new Date(coupon.expiresAt) && 
-          (!coupon.maxUses || coupon.usedCount < coupon.maxUses)) {
-        
+      if (now >= new Date(coupon.validFrom) && now <= new Date(coupon.expiresAt) &&
+        (!coupon.maxUses || coupon.usedCount < coupon.maxUses) && isValidPlan) {
+
         if (coupon.discountType === 'percentage') {
           discountAmount = (finalAmount * coupon.discountValue) / 100;
           // Apply max discount if specified
@@ -380,14 +395,20 @@ exports.buyDataPlan = async (req, res, next) => {
           // Fixed amount discount
           discountAmount = coupon.discountValue;
         }
-        
+
         // Ensure discount doesn't make amount negative
         if (discountAmount > finalAmount) {
           discountAmount = finalAmount;
         }
-        
+
         finalAmount = finalAmount - discountAmount;
-        
+
+        // Mark coupon as used and inactive
+        await AppliedCoupon.findOneAndUpdate(
+          { user: req.userId, isActive: true },
+          { isActive: false },
+          { new: true }
+        );
       }
     }
 
@@ -396,13 +417,13 @@ exports.buyDataPlan = async (req, res, next) => {
     if (wallet.docs[0].balance < finalAmount || wallet.totalDocs == 0) {
       throw new Error("Insufficient balance. Please fund your wallet");
     }
-      
+
     // Deduct final amount from wallet
     var wall = await walletsService.updateWallet(
       { userId: req.userId },
       { $inc: { balance: -finalAmount } }
     );
-    
+
     const ref = "Data_" + generateRandomNumber(11);
 
     var plan = dataplan.find(
@@ -413,10 +434,10 @@ exports.buyDataPlan = async (req, res, next) => {
       plan.network == "MTN"
         ? 1
         : plan.network == "AIRTEL"
-        ? 2
-        : plan.network == "GLO"
-        ? 3
-        : 4;
+          ? 2
+          : plan.network == "GLO"
+            ? 3
+            : 4;
 
     const data = {
       amount: finalAmount,
@@ -508,18 +529,8 @@ exports.buyDataPlan = async (req, res, next) => {
             { _id: transaction._id },
             { status: "successful", reference: newRef }
           );
-          
-          // Mark coupon as inactive if one was used
-          if (activeCoupon && activeCoupon.coupon) {
-            await AppliedCoupon.findOneAndUpdate(
-              { user: req.userId, isActive: true },
-              { isActive: false },
-              { new: true }
-            );
-          // Mark coupon as used
-          await activeCoupon.coupon.markAsUsed(req.userId);
-          }
-          
+
+
           // successResponse(res, transaction)
           sendNotification({
             headings: { en: `Payment successful` },
@@ -556,6 +567,10 @@ exports.buyDataPlan = async (req, res, next) => {
               ],
               url: "gadgetsafrica://profile",
             });
+          }
+
+          if(isValidPlan){
+            await Coupon.markAsUsed(req.userId);
           }
         }
       } catch (error) {
@@ -705,10 +720,10 @@ exports.buyAirtime = async (req, res, next) => {
     provider == "MTN"
       ? 1
       : provider == "AIRTEL"
-      ? 2
-      : provider == "GLO"
-      ? 3
-      : 4;
+        ? 2
+        : provider == "GLO"
+          ? 3
+          : 4;
   var obj = {
     network: net,
     phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
@@ -1115,10 +1130,10 @@ exports.adminFetchTransactions = async (req, res, next) => {
     transactions.docs = transactions.docs.map((t) => {
       const user = t.userId
         ? {
-            firstName: t.userId.firstName,
-            lastName: t.userId.lastName,
-            email: t.userId.email,
-          }
+          firstName: t.userId.firstName,
+          lastName: t.userId.lastName,
+          email: t.userId.email,
+        }
         : undefined;
       return { ...t.toObject(), user };
     });

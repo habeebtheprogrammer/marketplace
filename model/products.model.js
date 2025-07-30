@@ -57,6 +57,9 @@ const productsSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    warranty: {
+      type: String,
+    },
     images: [{
       type: String, required: [true, 'An image is required']
     }],
@@ -84,7 +87,7 @@ const productsSchema = new Schema(
         description: String,
         images: [String],
         rating: Number,
-        creatorId:  { 
+        creatorId: {
           type: mongoose.SchemaTypes.ObjectId,
           ref: "users"
         }
@@ -95,7 +98,7 @@ const productsSchema = new Schema(
 );
 
 // exports.productsSchema = productsSchema;
-productsSchema.index({ title: 'text' }); 
+productsSchema.index({ title: 'text' });
 productsSchema.plugin(mongoosePaginate);
 
 const Products = mongoose.model("products", productsSchema);

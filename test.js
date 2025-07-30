@@ -4,17 +4,9 @@ const fs = require('fs');
 const unfilteredplans = {
     "quickvtu": [
         {
-            "plan_name": "500MB",
-            "plan_id": "4",
-            "amount": "400.00",
-            "plan_type": "SME",
-            "plan_day": "1Month",
-            "network": "MTN"
-        },
-        {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "610.00",
+            "amount": "600.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,220.00",
+            "amount": "1,200.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,830.00",
+            "amount": "1,800.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "8",
-            "amount": "3,050.00",
+            "amount": "3,000.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -564,7 +556,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal":[
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
@@ -576,7 +568,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "650.00",
+            "amount": "620.00",
             "plan_type": "SME",
             "plan_day": "30 days",
             "network": "MTN"
@@ -624,7 +616,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "8",
-            "amount": "800.00",
+            "amount": "784.00",
             "plan_type": "SME",
             "plan_day": "7days",
             "network": "AIRTEL"
@@ -840,7 +832,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "46",
-            "amount": "137.00",
+            "amount": "180.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30 days",
             "network": "9MOBILE"
@@ -848,7 +840,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "47",
-            "amount": "275.00",
+            "amount": "360.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days",
             "network": "9MOBILE"
@@ -856,7 +848,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "48",
-            "amount": "550.00",
+            "amount": "720.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days",
             "network": "9MOBILE"
@@ -864,7 +856,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "49",
-            "amount": "825.00",
+            "amount": "1,080.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days",
             "network": "9MOBILE"
@@ -872,7 +864,7 @@ const unfilteredplans = {
         {
             "plan_name": "4GB",
             "plan_id": "50",
-            "amount": "1,100.00",
+            "amount": "1,440.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days",
             "network": "9MOBILE"

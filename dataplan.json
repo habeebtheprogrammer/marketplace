@@ -11,7 +11,7 @@
   {
     "planName": "500MB",
     "planId": "46",
-    "amount": "147.00",
+    "amount": "190.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "9MOBILE",
@@ -29,7 +29,7 @@
   {
     "planName": "1GB",
     "planId": "47",
-    "amount": "295.00",
+    "amount": "380.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE",
@@ -65,7 +65,7 @@
   {
     "planName": "2GB",
     "planId": "48",
-    "amount": "590.00",
+    "amount": "760.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE",
@@ -83,7 +83,7 @@
   {
     "planName": "3GB",
     "planId": "49",
-    "amount": "886.00",
+    "amount": "1141.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE",
@@ -101,7 +101,7 @@
   {
     "planName": "4GB",
     "planId": "50",
-    "amount": "1181.00",
+    "amount": "1521.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "9MOBILE",
@@ -254,7 +254,7 @@
   {
     "planName": "1GB",
     "planId": "8",
-    "amount": "820.00",
+    "amount": "804.00",
     "planType": "SME",
     "duration": "7days",
     "network": "AIRTEL",
@@ -649,15 +649,6 @@
   },
   {
     "planName": "500MB",
-    "planId": "4",
-    "amount": "410.00",
-    "planType": "SME",
-    "duration": "1month",
-    "network": "MTN",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "500MB",
     "planId": "113",
     "amount": "500.00",
     "planType": "GIFTING",
@@ -704,7 +695,7 @@
   {
     "planName": "1GB",
     "planId": "5",
-    "amount": "630.00",
+    "amount": "620.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -713,7 +704,7 @@
   {
     "planName": "1GB",
     "planId": "2",
-    "amount": "670.00",
+    "amount": "640.00",
     "planType": "SME",
     "duration": "30 days",
     "network": "MTN",
@@ -812,7 +803,7 @@
   {
     "planName": "2GB",
     "planId": "6",
-    "amount": "1260.00",
+    "amount": "1240.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -902,7 +893,7 @@
   {
     "planName": "3GB",
     "planId": "7",
-    "amount": "1891.00",
+    "amount": "1861.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
@@ -974,7 +965,7 @@
   {
     "planName": "5GB",
     "planId": "8",
-    "amount": "3152.00",
+    "amount": "3102.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",
