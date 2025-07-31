@@ -50,6 +50,7 @@ exports.googleAuth = async (req, res, next) => {
         audience: [
           process.env.GOOGLE_CLIENT_ID,
           process.env.GOOGLE_CLIENT_ID_2,
+          process.env.GOOGLE_CLIENT_ID_3,
         ],
       });
       //  const ticket = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {headers: {
