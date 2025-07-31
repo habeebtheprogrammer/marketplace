@@ -58,6 +58,7 @@ const couponSchema = new Schema(
     validForPlans: [couponPlanSchema],
     usedBy: [{
       user: { type: Schema.Types.ObjectId, ref: 'users' },
+      deviceId: { type: String },
       usedAt: { type: Date, default: Date.now }
     }],
     isActive: {
@@ -76,8 +77,8 @@ const couponSchema = new Schema(
 couponSchema.index({ code: 1, isActive: 1 });
 couponSchema.index({ expiresAt: 1 });
 
-// Method to check if coupon is valid for a user
-couponSchema.methods.isValid = function(userId) {
+// Method to check if coupon is valid for a user and device
+couponSchema.methods.isValid = function(userId, deviceId) {
   const now = new Date();
   
   // Check basic validity
@@ -98,13 +99,21 @@ couponSchema.methods.isValid = function(userId) {
     return { isValid: false, message: 'You have already used this coupon' };
   }
 
+  // Check if device has already used this coupon
+  if (deviceId && this.usedBy.some(usage => usage.deviceId === deviceId)) {
+    return { isValid: false, message: 'This coupon has already been used on this device' };
+  }
+
   return { isValid: true, message: 'Coupon is valid' };
 };
 
 // Method to mark coupon as used
-couponSchema.methods.markAsUsed = async function(userId) {
+couponSchema.methods.markAsUsed = async function(userId, deviceId) {
   this.usedCount += 1;
-  this.usedBy.push({ user: userId });
+  this.usedBy.push({ 
+    user: userId,
+    deviceId: deviceId || null
+  });
   
   // Deactivate if max uses reached
   if (this.maxUses && this.usedCount >= this.maxUses) {

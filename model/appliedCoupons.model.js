@@ -12,6 +12,10 @@ const appliedCouponSchema = new Schema({
     ref: 'coupons',
     required: true
   },
+  deviceId: {
+    type: String,
+    default: null
+  },
   isActive: {
     type: Boolean,
     default: true
@@ -23,6 +27,7 @@ const appliedCouponSchema = new Schema({
 // Index for faster queries
 appliedCouponSchema.index({ user: 1, isActive: 1 });
 appliedCouponSchema.index({ user: 1, coupon: 1 }, { unique: true });
+appliedCouponSchema.index({ deviceId: 1, coupon: 1 });
 
 // Method to deactivate all other active coupons for the user
 appliedCouponSchema.statics.deactivateOtherCoupons = async function(userId, currentCouponId) {

@@ -167,43 +167,54 @@ exports.getCouponHistory = async (req, res) => {
 exports.applyCoupon = async (req, res) => {
   try {
     const { code } = req.body;
-    const userId = req.userId; // Using req.userId from auth middleware
+    const userId = req.userId;
+    const deviceId = req.headers.deviceid;
 
     if (!code) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: 'Coupon code is required',
-        code: 'CODE_REQUIRED'
+        message: 'Coupon code is required'
       });
     }
 
-    // Find the coupon by code
-    const coupon = await Coupon.findOne({ code: code.toUpperCase().trim(), isActive: true });
-    
+    // Find the coupon
+    const coupon = await Coupon.findOne({ 
+      code: code.toUpperCase(),
+      isActive: true,
+      expiresAt: { $gt: new Date() }
+    });
+
     if (!coupon) {
       return res.status(404).json({
         success: false,
-        message: 'Invalid coupon code',
-        code: 'INVALID_COUPON'
+        message: 'Invalid or expired coupon'
       });
     }
 
-    // Check if coupon is already applied
+    // Check if user already has an active coupon
     const existingCoupon = await AppliedCoupon.findOne({
       user: userId,
-      coupon: coupon._id,
       isActive: true
-    });
+    }).populate('coupon');
 
     if (existingCoupon) {
+      // If same coupon is being reapplied, just return success
+      if (existingCoupon.coupon.code === coupon.code) {
+        return res.status(200).json({
+          success: true,
+          message: 'Coupon is already applied',
+          data: existingCoupon
+        });
+      }
+      
       return res.status(400).json({
         success: false,
-        message: 'This coupon is already applied'
+        message: 'You already have an active coupon'
       });
     }
 
-    // Check if coupon is valid
-    const validation = await coupon.isValid(userId);
+    // Check if coupon is valid for this user and device
+    const validation = await coupon.isValid(userId, deviceId);
     if (!validation.isValid) {
       return res.status(400).json({ 
         success: false,
@@ -214,18 +225,21 @@ exports.applyCoupon = async (req, res) => {
     // Deactivate any other active coupons for this user
     await AppliedCoupon.updateMany(
       { user: userId, isActive: true },
-      { isActive: false }
+      { $set: { isActive: false }}
     );
 
-    // Create new applied coupon record
+    // Mark coupon as used with device ID
+    await coupon.markAsUsed(userId, deviceId);
+
+    // Create new applied coupon record with device info
     const appliedCoupon = new AppliedCoupon({
       user: userId,
       coupon: coupon._id,
+      deviceId: deviceId || null,
       isActive: true
     });
 
     await appliedCoupon.save();
-    // await coupon.markAsUsed(userId);
 
     const populatedCoupon = await AppliedCoupon
       .findById(appliedCoupon._id)
