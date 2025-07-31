@@ -301,6 +301,7 @@ exports.getReferredUsers = async (req, res, next) => {
 exports.getReferrals = async (req, res, next) => {
   try {
     const data = await usersService.getUsers({ referredBy: req.userId });
+    console.log(JSON.stringify(data, null, 2))
     successResponse(res, data);
   } catch (error) {
     errorResponse(res, error);

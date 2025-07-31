@@ -123,15 +123,17 @@ exports.getProducts = async (req, res, next) => {
 exports.uploadImages = async (req, res, next) => {
   try {
     // Handle image uploads
+    console.log(req.files, 'received files')
     const images = [];
     if (req.files && req.files.images) {
       const files = Array.isArray(req.files.images)
         ? req.files.images
         : [req.files.images];
-
+      console.log('reading file')
       // Save each file and add the file path or URL to images array
       for (const key in files) {
         const fileContent = fs.readFileSync(files[key].tempFilePath);
+        console.log('uploading file')
         s3.upload({
           Bucket: s3Bucket,
           Key: "images/" + files[key].name,

@@ -15,7 +15,6 @@ exports.successResponse = (res, payload = {}, message = 'Success', statusCode = 
 };
 
 exports.errorResponse = (res, error, message = errMesg, statusCode = HttpStatusCode.InternalServerError) => {
-
   var errorData = []
   if (error?.name == 'ValidationError') {
     Object.keys(error?.errors).forEach(i => errorData.push(error.errors[i].message))
