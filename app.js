@@ -13,14 +13,20 @@ const helmet = require("helmet");
 
 var routes = require('./routes'); 
 const { createSiteMap } = require('./utils/sitemap');
-console.log(process.env.NODE_ENV)
+ 
 var app = express();
 // app.use(favicon(path.join(__dirname, '/build', 'favicon.ico')));
 
 app.use(fileUpload({
   useTempFiles: true,
   responseOnLimit: true,
-  tempFileDir: '/tmp/'
+  tempFileDir: '/tmp/',
+  debug: true,
+  abortOnLimit: true,
+  responseOnLimit: 'File size limit has been reached.', // Send a response if limit is hit
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 20MB limit
+  }
 }));
 app.use(bodyParser.json());
 app.use(cors());

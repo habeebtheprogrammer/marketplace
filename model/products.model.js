@@ -60,6 +60,9 @@ const productsSchema = new Schema(
     warranty: {
       type: String,
     },
+    videoUrl: {
+      type: String,
+    },
     images: [{
       type: String, required: [true, 'An image is required']
     }],
