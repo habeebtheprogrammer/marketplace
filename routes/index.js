@@ -13,7 +13,9 @@ const promoRouter = require('./promo.router');
 const walletsRouter = require('./wallets.router');
 const blogpostsRouter = require('./blogposts.router');
 const couponsRouter = require('./coupons.routes');
+const emailRouter = require('./email.routes');
 
+router.use("/emails", emailRouter);
 router.use("/users", usersRouter)
 router.use("/vendors", vendorsRouter)
 router.use("/products", productsRouter)

@@ -21,7 +21,7 @@ app.use(fileUpload({
   useTempFiles: true,
   responseOnLimit: true,
   tempFileDir: '/tmp/',
-  debug: true,
+  // debug: true,
   abortOnLimit: true,
   responseOnLimit: 'File size limit has been reached.', // Send a response if limit is hit
   limits: {
