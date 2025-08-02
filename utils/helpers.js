@@ -102,13 +102,13 @@ exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
     });
 };
 
-exports.sendOrderConfirmationEmail = ({email, order, address, deliveryMethod}) => {
+exports.sendOrderConfirmationEmail = ({email, order, address}) => {
   emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to:  email,
       subject: "Order Confirmation - 360gadgetsafrica",
-      html:  emailTemplates.orderConfirmation({order,address, deliveryMethod})
+      html:  emailTemplates.orderConfirmation({order,address})
     })
     .then((suc) => {
       console.log(suc);

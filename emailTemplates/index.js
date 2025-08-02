@@ -621,7 +621,7 @@ module.exports = {
 
 </html>`
     },
-    orderConfirmation: function ({ order, address, pickup, deliveryMethod }) {
+    orderConfirmation: function ({ order, address, pickup }) {
         return `<!DOCTYPE html>
     <html lang="en">
     
@@ -747,7 +747,7 @@ module.exports = {
     
     </html> `
     },
-    newOrder: function ({ order, address, pickup }) {
+    newOrder: function ({ order, address, pickup, deliveryMethod }) {
         return `<!DOCTYPE html>
     <html lang="en">
     
