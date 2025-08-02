@@ -15,7 +15,7 @@ const ordersSchema = new Schema(
       default: "new order",
       enum: { values: ['awaiting payment', 'new order', 'delivered', 'cancelled', 'in transit'], message: '{VALUE} is not supported for userType field.' }
     },
-    trackingId:  {
+    trackingId: {
       type: String,
       required: [true, 'trackingId is required']
     },
@@ -35,11 +35,11 @@ const ordersSchema = new Schema(
           required: [true, 'productId is required']
         },
         size: String,
-        price:  {
+        price: {
           type: Number,
           required: [true, 'price is required']
         },
-        trackingId:  {
+        trackingId: {
           type: String,
           required: [true, 'trackingId is required']
         },
@@ -59,8 +59,15 @@ const ordersSchema = new Schema(
         type: String,
         required: [true, 'deliveryAddress.phone is required']
       },
-    }, 
-
+    },
+    deliveryMethod: {
+      deliveryType: {
+        type: String,
+      },
+      amount: {
+        type: Number,
+      },
+    }
   },
   { timestamps: true }
 );

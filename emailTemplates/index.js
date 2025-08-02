@@ -621,7 +621,7 @@ module.exports = {
 
 </html>`
     },
-    orderConfirmation: function ({ order, address, pickup }) {
+    orderConfirmation: function ({ order, address, pickup, deliveryMethod }) {
         return `<!DOCTYPE html>
     <html lang="en">
     
@@ -858,7 +858,7 @@ module.exports = {
                 <p>${pickup ? "Pickup " : "Shipping "} Address: </p>
                 <p>${address?.name}, ${address?.street},</p>
                 <p>${address?.state}, ${address.phone}.</p>
-                <p>${address.deliveryType}</p>
+                <p>${deliveryMethod.deliveryType}</p>
                 <br />
 
                 <p>Support team,</p>

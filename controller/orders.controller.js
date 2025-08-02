@@ -32,7 +32,7 @@ exports.getAdminOrders = async (req, res, next) => {
 
 exports.addOrders = async (req, res, next) => {
     try {
-        const { amountPaid, flutterwave, orderedProducts, deliveryAddress } = req.body
+        const { amountPaid, flutterwave, orderedProducts, deliveryAddress, deliveryMethod } = req.body
 
         var wallet = await walletsService.getWallets({ userId: req.userId })
         if(wallet.docs[0].balance < parseInt(amountPaid) || wallet.totalDocs == 0 ) throw new Error("Insufficient balance. please fund your wallet");
@@ -50,7 +50,7 @@ exports.addOrders = async (req, res, next) => {
             orders.push(item)
             // productIds.push(p.productId._id)
         })
-        const data = await ordersService.addOrders({ userId: req.userId, trackingId, amountPaid, flutterwave, orderedProducts: orders, deliveryAddress, 
+        const data = await ordersService.addOrders({ userId: req.userId, trackingId, amountPaid, flutterwave, orderedProducts: orders, deliveryAddress, deliveryMethod,
             status:  'new order'
          })
         const emptyCarts = await cartsService.clearCarts({ userId: req.userId })
@@ -61,8 +61,8 @@ exports.addOrders = async (req, res, next) => {
         //send emails
         var user = await getUsers({_id: req.userId})
         var addr = deliveryAddress
-        sendOrderConfirmationEmail({email: user.docs[0]?.email, order: orderedProducts, address: addr, pickup: flutterwave.tx_ref == flutterwave.transaction_id})
-        sendOrdersEmail({ order: orderedProducts,  pickup: flutterwave.tx_ref == flutterwave.transaction_id, address: addr})
+        sendOrderConfirmationEmail({email: user.docs[0]?.email, order: orderedProducts, address: addr, pickup: deliveryMethod?.deliveryType})
+        sendOrdersEmail({ order: orderedProducts,  pickup: deliveryMethod?.deliveryType, address: addr, deliveryMethod})
         await walletsService.updateWallet({ userId: req.userId }, {$inc: {balance:  -parseInt(amountPaid)}})
         const wallData = {
           "amount": amountPaid,

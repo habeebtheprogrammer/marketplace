@@ -86,13 +86,13 @@ exports.sendErrorEmail = (error) => {
     });
 };
 
-exports.sendOrdersEmail = ({order,address, pickup}) => {
+exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
   emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
       subject: "You have a new order",
-      html:  emailTemplates.newOrder({order, address, pickup})
+      html:  emailTemplates.newOrder({order, address, pickup, deliveryMethod})
     })
     .then((suc) => {
       console.log(suc);
@@ -102,13 +102,13 @@ exports.sendOrdersEmail = ({order,address, pickup}) => {
     });
 };
 
-exports.sendOrderConfirmationEmail = ({email, order, address}) => {
+exports.sendOrderConfirmationEmail = ({email, order, address, deliveryMethod}) => {
   emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to:  email,
       subject: "Order Confirmation - 360gadgetsafrica",
-      html:  emailTemplates.orderConfirmation({order,address})
+      html:  emailTemplates.orderConfirmation({order,address, deliveryMethod})
     })
     .then((suc) => {
       console.log(suc);
