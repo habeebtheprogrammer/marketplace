@@ -88,7 +88,7 @@ exports.getProducts = async (req, res, next) => {
         : sort == "lowToHigh"
         ? { sort: { ...searchSortObj, original_price: 1 , videoUrl: 1} }
         : sort == "latest" ?   { sort: { videoUrl: -1} } : 
-        { sort: { ...searchSortObj,  videoUrl: -1 } };
+        { sort: { ...searchSortObj,  videoUrl: -1 , _id: -1} };
 
     if (title) sort.sort.score = { $meta: "textScore" };
     const options = {
