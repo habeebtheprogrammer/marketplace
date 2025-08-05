@@ -693,6 +693,7 @@ exports.buyDataPlan = async (req, res, next) => {
 // }
 
 exports.buyAirtime = async (req, res, next) => {
+  if(req.body.amount > 500) throw new Error("The maximum amount is ₦500.")
   var wallet = await walletsService.getWallets({ userId: req.userId });
   if (
     wallet.docs[0].balance < parseInt(req.body.amount) ||
