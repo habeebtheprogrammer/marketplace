@@ -693,127 +693,164 @@ exports.buyDataPlan = async (req, res, next) => {
 // }
 
 exports.buyAirtime = async (req, res, next) => {
-  if(req.body.amount > 500) throw new Error("The maximum amount is ₦500.")
-  var wallet = await walletsService.getWallets({ userId: req.userId });
-  if (
-    wallet.docs[0].balance < parseInt(req.body.amount) ||
-    wallet.totalDocs == 0
-  )
-    throw new Error("Insufficient balance. please fund your wallet");
-  await walletsService.updateWallet(
-    { userId: req.userId },
-    { $inc: { balance: -parseInt(req.body.amount) } }
-  );
-  const ref = "Airtime_" + +generateRandomNumber(11);
-  const data = {
-    amount: req.body.amount,
-    userId: req.userId,
-    reference: ref,
-    narration: "Airtime topup to " + req.body.phone,
-    currency: "NGN",
-    type: "debit",
-    status: "successful",
-  };
-  const transaction = await walletsService.saveTransactions(data);
-
-  const provider = detectNetwork(req.body.phone);
-  var net =
-    provider == "MTN"
-      ? 1
-      : provider == "AIRTEL"
-        ? 2
-        : provider == "GLO"
-          ? 3
-          : 4;
-  var obj = {
-    network: net,
-    phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
-    amount: req.body.amount,
-    bypass: false,
-    plan_type: "VTU",
-    "request-id": ref,
-  };
-  const notUsers = await usersService.getUsers({
-    email: { $in: ["habibmail31@gmail.com"] },
-  });
-  var include_player_ids = notUsers.docs?.map?.((u) => u.oneSignalId);
-
   try {
-    const vtc = await quickVTU("/api/topup", "POST", obj, "quickvtu");
-    console.log(vtc, obj);
-    if (vtc?.status == "fail") {
-      res
-        .status(500)
-        .json({ errors: ["Transaction failed. please try again later"] });
-      await walletsService.updateTransactions(
-        { _id: transaction._id },
-        { status: "failed" }
-      );
-      await walletsService.updateWallet(
-        { userId: req.userId },
-        { $inc: { balance: +parseInt(req.body.amount) } }
-      );
-      await walletsService.saveTransactions({
-        ...data,
-        reference: "Airtime" + "--" + generateRandomNumber(10),
-        narration: "RVSL for Airtime topup ",
-        status: "successful",
-        type: "credit",
-      });
-      sendNotification({
-        headings: { en: `Network challanges` },
-        contents: {
-          en: `Hi ${req.firstName}, we're currently experiencing some network challenges caused by the service provider. Please try again later.`,
-        },
-        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-        url: "gadgetsafrica://profile",
-      });
-    } else {
-      successResponse(res, transaction);
-      sendNotification({
-        headings: { en: `Payment successful` },
-        contents: {
-          en: `Congratulations ${req.firstName}! You have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25`,
-        },
-        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
-        url: "gadgetsafrica://profile",
-      });
+    // Validate amount
+    if (parseInt(req.body.amount) > 500) {
+      return errorResponse(res, null, "The maximum amount is ₦500.", 400);
     }
-  } catch (error) {
-    console.log(error?.response?.data);
-    if (error?.response?.data?.status == "fail") {
-      res
-        .status(500)
-        .json({ errors: ["Transaction failed. please try again later"] });
-      await walletsService.updateTransactions(
-        { _id: transaction._id },
-        { status: "failed" }
-      );
-      await walletsService.updateWallet(
-        { userId: req.userId },
-        { $inc: { balance: +parseInt(req.body.amount) } }
-      );
-      await walletsService.saveTransactions({
-        ...data,
-        reference: "Airtime" + "--" + generateRandomNumber(10),
-        narration: "RVSL for Airtime topup ",
-        status: "successful",
-        type: "credit",
-      });
+    
+    // Check wallet balance
+    const wallet = await walletsService.getWallets({ userId: req.userId });
+    if (wallet.totalDocs === 0 || wallet.docs[0].balance < parseInt(req.body.amount)) {
+      return errorResponse(res, null, "Insufficient balance. Please fund your wallet", 400);
+    }
+    
+    // Deduct from wallet
+    await walletsService.updateWallet(
+      { userId: req.userId },
+      { $inc: { balance: -parseInt(req.body.amount) } }
+    );
+    
+    const ref = `Airtime_${generateRandomNumber(11)}`;
+    const data = {
+      amount: req.body.amount,
+      userId: req.userId,
+      reference: ref,
+      narration: `Airtime topup to ${req.body.phone}`,
+      currency: "NGN",
+      type: "debit",
+      status: "successful",
+    };
+    
+    // Save transaction
+    await walletsService.saveTransactions(data);
+
+    // Determine network provider
+    const provider = detectNetwork(req.body.phone);
+    const net = provider === "MTN" ? 1 : 
+               provider === "AIRTEL" ? 2 : 
+               provider === "GLO" ? 3 : 4;
+               
+    const obj = {
+      network: net,
+      phone: removeCountryCode(req.body.phone.replace(/\s+/g, "")),
+      amount: req.body.amount,
+      bypass: false,
+      plan_type: "VTU",
+      "request-id": ref,
+    };
+    
+    // Get admin users for notification
+    const notUsers = await usersService.getUsers({
+      email: { $in: ["habibmail31@gmail.com"] },
+    });
+    const includePlayerIds = notUsers.docs?.map?.((u) => u.oneSignalId);
+
+    // Process airtime purchase
+    try {
+      const vtc = await quickVTU("/api/topup", "POST", obj, "quickvtu");
+      console.log('VTU Response:', vtc, 'Request:', obj);
+      
+      if (vtc?.status === "fail") {
+        // Update transaction status to failed
+        await walletsService.updateTransactions(
+          { reference: ref },
+          { status: "failed" }
+        );
+        
+        // Refund user's wallet
+        await walletsService.updateWallet(
+          { userId: req.userId },
+          { $inc: { balance: +parseInt(req.body.amount) } }
+        );
+        
+        // Create reversal transaction
+        await walletsService.saveTransactions({
+          ...data,
+          reference: `Airtime_Reversal_${generateRandomNumber(10)}`,
+          narration: "Reversal for failed airtime topup",
+          status: "successful",
+          type: "credit",
+        });
+        
+        // Send failure notification
+        sendNotification({
+          headings: { en: "Transaction Failed" },
+          contents: {
+            en: `Hi ${req.firstName}, we couldn't process your airtime purchase. Your account has been refunded.`,
+          },
+          include_subscription_ids: [req.oneSignalId, ...(includePlayerIds || [])],
+          url: "gadgetsafrica://profile",
+        });
+        
+        return errorResponse(res, null, "Transaction failed. Please try again later.", 400);
+      }
+      
+      // If we get here, the transaction was successful
+      successResponse(res, { message: "Airtime purchase successful", reference: ref });
+      
+      // Send success notification
       sendNotification({
-        headings: { en: `Network challanges` },
+        headings: { en: "Payment Successful" },
         contents: {
-          en: `Hi ${req.firstName}, we're currently experiencing some network challenges caused by the service provider. Please try again later.`,
+          en: `Congratulations ${req.firstName}! You have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}.`,
         },
-        include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+        include_subscription_ids: [req.oneSignalId, ...(includePlayerIds || [])],
         url: "gadgetsafrica://profile",
       });
-    } else
+      
+    } catch (error) {
+      console.error('Error processing airtime purchase:', error);
+      
+      try {
+        // Update transaction status to failed
+        await walletsService.updateTransactions(
+          { reference: ref },
+          { status: "failed" }
+        );
+        
+        // Refund user's wallet
+        await walletsService.updateWallet(
+          { userId: req.userId },
+          { $inc: { balance: +parseInt(req.body.amount) } }
+        );
+        
+        // Create reversal transaction
+        await walletsService.saveTransactions({
+          ...data,
+          reference: `Airtime_Reversal_${generateRandomNumber(10)}`,
+          narration: "Reversal for failed airtime topup",
+          status: "successful",
+          type: "credit",
+        });
+        
+        // Send error notification
+        sendNotification({
+          headings: { en: "Transaction Error" },
+          contents: {
+            en: `Hi ${req.firstName}, there was an error processing your airtime purchase. Your account has been refunded.`,
+          },
+          include_subscription_ids: [req.oneSignalId, ...(includePlayerIds || [])],
+          url: "gadgetsafrica://profile",
+        });
+      } catch (dbError) {
+        console.error('Error handling transaction failure:', dbError);
+        // Log to error tracking service if available
+      }
+      
       errorResponse(
         res,
         error,
-        "Transaction failed due to network. please try again"
+        "Transaction failed due to a network error. Please try again later."
       );
+    }
+  } catch (error) {
+    console.error('Error in buyAirtime:', error);
+    errorResponse(
+      res,
+      error,
+      "An unexpected error occurred while processing your request. Please try again later."
+    );
   }
 };
 exports.fetchBanks = async (req, res, next) => {
