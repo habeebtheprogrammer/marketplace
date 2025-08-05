@@ -787,8 +787,7 @@ exports.buyAirtime = async (req, res, next) => {
       }
       
       // If we get here, the transaction was successful
-      successResponse(res, { message: "Airtime purchase successful", reference: ref });
-      
+      successResponse(res, transaction);
       // Send success notification
       sendNotification({
         headings: { en: "Payment Successful" },
