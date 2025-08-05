@@ -723,7 +723,7 @@ exports.buyAirtime = async (req, res, next) => {
     };
     
     // Save transaction
-    await walletsService.saveTransactions(data);
+    const transaction = await walletsService.saveTransactions(data);
 
     // Determine network provider
     const provider = detectNetwork(req.body.phone);
