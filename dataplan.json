@@ -382,7 +382,7 @@
     "planId": "75",
     "amount": "6368.00",
     "planType": "SME",
-    "duration": "30days",
+    "duration": "7 days",
     "network": "AIRTEL",
     "vendor": "bilal"
   },
@@ -631,6 +631,15 @@
   },
   {
     "planName": "500MB",
+    "planId": "4",
+    "amount": "410.00",
+    "planType": "SME",
+    "duration": "1month",
+    "network": "MTN",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "500MB",
     "planId": "140",
     "amount": "500.00",
     "planType": "GIFTING",
@@ -686,7 +695,7 @@
   {
     "planName": "1GB",
     "planId": "5",
-    "amount": "620.00",
+    "amount": "610.00",
     "planType": "SME",
     "duration": "1month",
     "network": "MTN",

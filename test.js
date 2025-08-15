@@ -4,9 +4,17 @@ const fs = require('fs');
 const unfilteredplans = {
     "quickvtu": [
         {
+            "plan_name": "500MB",
+            "plan_id": "4",
+            "amount": "400.00",
+            "plan_type": "SME",
+            "plan_day": "1Month",
+            "network": "MTN"
+        },
+        {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "600.00",
+            "amount": "590.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -540,7 +548,7 @@ const unfilteredplans = {
             "network": "MTN"
         }
     ],
-    "bilal":[
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
@@ -954,7 +962,7 @@ const unfilteredplans = {
             "plan_id": "75",
             "amount": "6,000.00",
             "plan_type": "SME",
-            "plan_day": "30days",
+            "plan_day": "7 days",
             "network": "AIRTEL"
         },
         {

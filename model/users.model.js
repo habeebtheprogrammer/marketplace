@@ -11,6 +11,10 @@ const usersSchema = new Schema(
       required: [true, 'Email is required']
     },
     oneSignalId: String,
+    phoneNumber: [{
+      type: String,
+      unique: true,
+    }],
     userType: {
       type: String,
       default: "user",

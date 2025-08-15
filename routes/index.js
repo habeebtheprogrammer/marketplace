@@ -14,6 +14,7 @@ const walletsRouter = require('./wallets.router');
 const blogpostsRouter = require('./blogposts.router');
 const couponsRouter = require('./coupons.routes');
 const emailRouter = require('./email.routes');
+const ussdRoutes = require('./ussd.router');
 
 router.use("/emails", emailRouter);
 router.use("/users", usersRouter)
@@ -29,5 +30,6 @@ router.use("/promo", promoRouter)
 router.use("/wallets", walletsRouter)
 router.use("/blog", blogpostsRouter)
 router.use("/coupons", couponsRouter)
+router.use("/ussd", ussdRoutes); // USSD endpoint for Africa's Talking
 
 module.exports = router
