@@ -31,7 +31,7 @@ const ussdTransactionSchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    enum: ['pending', 'completed', 'failed', 'cancelled'],
+    enum: ['pending', 'successful', 'failed', 'cancelled'],
     default: 'pending' 
   },
   userId: { 

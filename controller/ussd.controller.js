@@ -6,6 +6,8 @@ const Users = require('../model/users.model');
 const Transactions = require('../model/transactions.model');
 const USSDTransaction = require('../model/ussdTransaction.model');
 const mongoose = require('mongoose');
+const axios = require('axios');
+const { removeCountryCode } = require('../utils/helpers');
 // Helper function to detect network from phone number
 function detectNetwork(phoneNumber) {
   const mtnPrefixes = ['0803', '0806', '0703', '0706', '0813', '0816', '0810', '0814', '0903', '0906'];
@@ -79,7 +81,7 @@ exports.handleUssd = async (req, res) => {
     if (step === 1) {
       if (choice === '1') {
         // Emergency Airtime
-        return res.send(sendUssdResponse('Emergency Airtime\n1. N100 airtime'));
+        return res.send(sendUssdResponse('Emergency Airtime\n1. N50 airtime'));
       } else if (choice === '2') {
         // Emergency Data - Show available data plans under N120
         const affordablePlans = dataplan
@@ -96,24 +98,11 @@ exports.handleUssd = async (req, res) => {
     
     if (step === 2) {
       if (choice === '1') {
-        // Process airtime selection
-        const amount = parseInt(userInput[1]);
-        if (isNaN(amount) || amount <= 0) {
-          return res.send(sendUssdResponse('Invalid amount. Please enter a valid number.'));
-        }
-        
-        // Validate amount based on user's tier
-        const userTier = calculateUserTier(user);
-        const maxAmount = getMaxAmountForTier(userTier);
-        
-        if (amount > maxAmount) {
-          return res.send(sendUssdResponse(`Amount exceeds your limit of N${maxAmount}. Please enter a lower amount.`));
-        }
-        
-        const confirmMessage = `You are about to buy N${amount} airtime for ${cleanPhone} (${network}).\n1. Confirm\n2. Cancel`;
+        // Process airtime selection - just show confirmation
+        const amount = 50; 
         
         try {
-          // Store transaction data in MongoDB
+          // Store transaction data in MongoDB for confirmation
           const transactionData = {
             sessionId: req.body.sessionId,
             type: 'airtime',
@@ -130,9 +119,13 @@ exports.handleUssd = async (req, res) => {
             { upsert: true, new: true }
           );
           
-          console.log('Transaction data saved to MongoDB:', { sessionId: req.body.sessionId });
-          return res.send(sendUssdResponse(confirmMessage));
-          
+          // Show confirmation message
+          return res.send(sendUssdResponse(
+            `Confirm purchase of N${amount} airtime for ${cleanPhone} (${network}):\n` +
+            '1. Confirm\n' +
+            '2. Cancel',
+            false
+          ));
         } catch (error) {
           console.error('Error saving transaction to MongoDB:', error);
           return res.send(sendUssdResponse('An error occurred. Please try again.'));
@@ -216,66 +209,146 @@ exports.handleUssd = async (req, res) => {
           try {
             // Process based on transaction type
             if (transaction.type === 'airtime') {
-              // Add to loan balance
+              const ref = `Airtime_${Math.floor(10000000000 + Math.random() * 90000000000)}`;
+          
+              // Prepare VTU request
+              const net = transaction.network === "MTN" ? 1 : 
+                         transaction.network === "AIRTEL" ? 2 : 
+                         transaction.network === "GLO" ? 3 : 4;
+                         
+              const vtuRequest = {
+                network: net,
+                phone: removeCountryCode(transaction.phoneNumber.replace(/\s+/g, "")),
+                amount: transaction.amount,
+                bypass: false,
+                plan_type: "VTU",
+                "request-id": ref,
+              };
+              
+              // Process airtime purchase
+              const vtc = await quickVTU("/api/topup", "POST", vtuRequest, "quickvtu");
+              console.log('VTU Response:', vtc, 'Request:', vtuRequest);
+              
+              if (vtc?.status === "fail") {
+                throw new Error(vtc.message || 'Airtime purchase failed. Please try again later');
+              }
               wallet.loanBalance += transaction.amount;
               await wallet.save();
-              
               // Create transaction record
-              const tx = new Transactions({
-                userId: user._id,
+              const txData = {
                 amount: transaction.amount,
-                reference: `Airtime_${Date.now()}`,
-                narration: `Emergency airtime purchase on ${transaction.phoneNumber}`,
-                planType: 'AIRTIME',
+                userId: transaction.userId,
+                reference: ref,
+                narration: `Airtime topup to ${transaction.phoneNumber}`,
+                currency: "NGN",
+                type: "debit",
+                status: "successful",
                 network: transaction.network,
-                status: 'successful',
-                type: "Debit"
-              });
-              await tx.save();
+                vendorResponse: vtc
+              };
               
-              // Update transaction status
-              transaction.status = 'completed';
+              // Save transaction using the same service as wallet controller
+              await walletsService.saveTransactions(txData);
+              
+              // Update USSD transaction status
+              transaction.status = 'successful';
+              transaction.reference = ref;
               await transaction.save();
               
-              return res.send(sendUssdResponse('Your airtime purchase was successful! Thank you for using our service.', true));
+              return res.send(sendUssdResponse(
+                `Success! You have purchased N${transaction.amount} airtime for ${transaction.phoneNumber}. Thank you for using our service.`,
+                true
+              ));
+              
               
             } else if (transaction.type === 'data') {
-              // Add to loan balance
-              wallet.loanBalance += transaction.amount;
-              await wallet.save();
+              // Process data plan purchase with quickVTU
+              const ref = `USSD_DATA_${Date.now()}`;
+              const net = 
+                transaction.network === 'MTN' ? 1 :
+                transaction.network === 'AIRTEL' ? 2 :
+                transaction.network === 'GLO' ? 3 : 4;
               
-              // Create transaction record
-              const tx = new Transactions({
-                userId: user._id,
-                amount: transaction.amount,
-                reference: `DATA_${Date.now()}`,
-                narration: `Emergency data purchase (${transaction.plan}) on ${transaction.phoneNumber}`,
-                planType: 'DATA',
-                dataPlan: transaction.plan,
-                network: transaction.network,
-                status: 'successful',
-                type: "debit"
-              });
-              await tx.save();
+              // Find the plan details
+              const plan = dataplan.find(p => p.planName === transaction.plan);
+              if (!plan) throw new Error('Plan not found');
               
-              // Update transaction status
-              transaction.status = 'completed';
-              await transaction.save();
+              // Prepare request object for quickVTU
+              const obj = {
+                network: net,
+                data_plan: plan.planId,
+                phone: removeCountryCode(transaction.phoneNumber.replace(/\s+/g, "")),
+
+                bypass: false,
+                'request-id': ref,
+              };
               
-              return res.send(sendUssdResponse(`Your ${transaction.plan} data plan has been activated! Thank you for using our service.`, true));
+              // Call quickVTU
+              const vtc = await quickVTU(
+                "/api/data",
+                "POST",
+                obj,
+                plan.vendor || 'quickvtu' // Default to quickvtu if vendor not specified
+              );
+              
+              console.log('quickVTU response:', vtc);
+              
+              if (vtc?.status === 'success' || vtc?.status === 'successful') {
+                // Deduct from wallet
+                wallet.loanBalance += transaction.amount;
+                await wallet.save();
+                
+                // Create transaction record matching wallet controller pattern
+                const txData = {
+                  amount: transaction.amount,
+                  userId: user._id,
+                  reference: ref,
+                  narration: `Data topup to ${transaction.phoneNumber}`,
+                  currency: "NGN",
+                  type: "debit",
+                  status: "successful",
+                  network: transaction.network,
+                  planType: 'DATA',
+                  dataPlan: transaction.plan,
+                  dataAmount: transaction.plan.split(' ')[0], // Extract data amount from plan name
+                  vendorResponse: vtc
+                };
+                
+                // Save transaction using the same service as wallet controller
+                await walletsService.saveTransactions(txData);
+                
+                // Update USSD transaction status
+                transaction.status = 'successful';
+                transaction.reference = ref;
+                await transaction.save();
+                
+                return res.send(sendUssdResponse(
+                  `Your ${transaction.plan} data plan has been activated! ` +
+                  `Ref: ${ref}. Thank you for using our service.`,
+                  true
+                ));
+              } else {
+                // Check for specific error message from vendor
+                const errorMessage = vtc?.message || vtc?.response?.data?.message || 'Purchase failed';
+                console.error('VTU Error:', errorMessage, 'Response:', JSON.stringify(vtc, null, 2));
+                throw new Error(errorMessage);
+              }
             }
             
           } catch (error) {
-            // Update transaction status to failed
-            transaction.status = 'failed';
-            try {
-              await transaction.save();
-            } catch (saveError) {
-              console.error('Error updating transaction status to failed:', saveError);
-            }
-            
             console.error('Error processing transaction:', error);
-            return res.send(sendUssdResponse('An error occurred while processing your transaction. Please try again.', true));
+            
+            // Mark the current transaction as failed
+            transaction.status = 'failed';
+            await transaction.save().catch(saveError => {
+              console.error('Error saving failed transaction:', saveError);
+            });
+            
+            // On transaction failure, go back to step 0 (main menu) with the exact initial prompt format
+            return res.send(sendUssdResponse(
+              `Transaction failed: ${error.message || 'Unknown error'}\n\n`,
+              false
+            ));
           }
           
         } else if (confirmChoice === '2') {
@@ -303,3 +376,79 @@ exports.handleUssd = async (req, res) => {
     return res.send(sendUssdResponse('An error occurred. Please try again later.', true));
   }
 };
+
+// Helper function to call VTU service
+async function quickVTU(endpoint, method, body = null, vendor = 'quickvtu') {
+  let result;
+  
+  try {
+    if (vendor === 'quickvtu') {
+      const config = {
+        headers: {
+          Authorization: `Token ${process.env.QUICKVTU_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      };
+      result = await axios.post(
+        "https://quickvtu.com" + endpoint,
+        JSON.stringify(body),
+        config
+      );
+    } else if (vendor === 'bilal') {
+      const config = {
+        headers: {
+          Authorization: `Token ${process.env.BILALSHUB_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      };
+      result = await axios.post(
+        "https://bilalsadasub.com" + endpoint,
+        JSON.stringify(body),
+        config
+      );
+    } else {
+      // Fallback to mobilevtu
+      const config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Api-Token": process.env.MOBILEVTU_API_TOKEN,
+          "Request-Id": body["request-id"],
+        },
+      };
+      const operator =
+        body.network === 1 ? "MTN" :
+        body.network === 2 ? "Airtel" :
+        body.network === 3 ? "Glo" : "9Mobile";
+        
+      if (endpoint === '/api/data') {
+        result = await axios.post(
+          `https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`,
+          `operator=${operator}&type=data&value=${body.data_plan}&phone=${body.phone}`,
+          config
+        );
+      } else if (endpoint === '/api/airtime') {
+        result = await axios.post(
+          `https://api.mobilevtu.com/v1/${process.env.MOBILEVTU_API_KEY}/topup`,
+          `operator=${operator}&type=airtime&amount=${body.amount}&phone=${body.phone}`,
+          config
+        );
+      }
+    }
+    
+    return result.data;
+  } catch (error) {
+    console.error('quickVTU API Error:', {
+      endpoint,
+      vendor,
+      error: error.response?.data || error.message,
+      status: error.response?.status
+    });
+    
+    // Return a consistent error format
+    return {
+      status: 'error',
+      message: error.response?.data?.message || 'VTU service unavailable',
+      vendorResponse: error.response?.data || error.message
+    };
+  }
+}

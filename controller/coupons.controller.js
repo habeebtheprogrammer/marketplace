@@ -179,7 +179,7 @@ exports.applyCoupon = async (req, res) => {
 
     // Find the coupon
     const coupon = await Coupon.findOne({ 
-      code: code.toUpperCase(),
+      code: code.toUpperCase().trim(),
       isActive: true,
       expiresAt: { $gt: new Date() }
     });
