@@ -76,7 +76,7 @@ exports.updateUser = async (req, res, next) => {
       }
     });
     if (updateObj.password) {
-      const hash = await bcrypt.hash(password, 10);
+      const hash = await bcrypt.hash(updateObj.password, 10);
       updateObj.password = hash;
     }
     const data = await usersService.updateUsers({ _id: req.userId }, updateObj);

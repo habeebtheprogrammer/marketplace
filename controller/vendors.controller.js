@@ -70,10 +70,10 @@ exports.updateVendorById = async (req, res, next) => {
     }
 }
 
-exports.getVendorById = async (req, res, next) => {
+exports.getVendorBySlug = async (req, res, next) => {
     try {
-        const vendorId = req.params.id;
-        const data = await vendorsService.getVendors({ _id: vendorId });
+        const vendorSlug = req.params.slug;
+        const data = await vendorsService.getVendors({ slug: vendorSlug });
         if (!data.docs || !data.docs.length) return errorResponse(res, { message: 'Vendor not found' });
         successResponse(res, data.docs[0]);
     } catch (error) {

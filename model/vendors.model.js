@@ -27,6 +27,11 @@ const vendorsSchema = new Schema(
       type: Number,
       default: 0
     },
+
+    phone: {
+      type: String,
+    },
+    videos: [String],
     // openingDays: {
     //   type: Array,
     //   default: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
@@ -47,6 +52,14 @@ const vendorsSchema = new Schema(
       city: {
         type: String,
         required: [true, 'Address city is required']
+      },
+      state: {
+        type: String,
+        required: [true, 'Address state is required']
+      },
+      address: {
+        type: String,
+        required: [true, 'Full Address is required']
       },
     },
     archive: {
