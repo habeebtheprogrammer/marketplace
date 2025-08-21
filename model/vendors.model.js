@@ -31,7 +31,7 @@ const vendorsSchema = new Schema(
     phone: {
       type: String,
     },
-    videos: [String],
+    videos: [{url: String, thumbnail: String}],
     // openingDays: {
     //   type: Array,
     //   default: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
