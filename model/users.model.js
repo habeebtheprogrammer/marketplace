@@ -28,6 +28,9 @@ const usersSchema = new Schema(
       type: String,
       required: [true, 'Last name is required']
     },
+    avatar: {
+      type: String,
+    },
     password: {
       type: String,
       required: [true, 'Password is required']

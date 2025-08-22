@@ -12,6 +12,11 @@ const PostSchema = new  Schema({
     type: String,
     required: [true, 'Slug is required']
   },
+
+  excerpt: {
+    type: String,
+    required: [true, 'Excerpt is required']
+  },
   content: {
     type: String,
     required: true
