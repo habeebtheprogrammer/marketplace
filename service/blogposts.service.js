@@ -5,7 +5,7 @@ exports.getBlogPosts = async ({ query = {}, options = {} }) => {
     populate: [
       {
         path: "author",
-        select: ["firstName", "lastName"],
+        select: ["firstName", "lastName", "avatar"],
       },
     ],
     ...options,
