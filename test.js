@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "590.00",
+            "amount": "550.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,200.00",
+            "amount": "1,100.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,800.00",
+            "amount": "1,650.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -38,7 +38,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "8",
-            "amount": "3,000.00",
+            "amount": "2,750.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -552,7 +552,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "420.00",
+            "amount": "380.00",
             "plan_type": "SME",
             "plan_day": "30days to 7days",
             "network": "MTN"
@@ -568,7 +568,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "3",
-            "amount": "1,400.00",
+            "amount": "1,240.00",
             "plan_type": "SME",
             "plan_day": "Monthly",
             "network": "MTN"
@@ -1476,6 +1476,94 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "Weekly all social",
             "network": "MTN"
+        },
+        {
+            "plan_name": "500MB",
+            "plan_id": "150",
+            "amount": "190.00",
+            "plan_type": "SME",
+            "plan_day": "14 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "151",
+            "amount": "300.00",
+            "plan_type": "SME",
+            "plan_day": "14 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "152",
+            "amount": "260.00",
+            "plan_type": "SME",
+            "plan_day": "3 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "153",
+            "amount": "280.00",
+            "plan_type": "SME",
+            "plan_day": "7 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "3GB",
+            "plan_id": "154",
+            "amount": "730.00",
+            "plan_type": "SME",
+            "plan_day": "3 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "3GB",
+            "plan_id": "155",
+            "amount": "850.00",
+            "plan_type": "SME",
+            "plan_day": "7days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "3GB",
+            "plan_id": "156",
+            "amount": "1,000.00",
+            "plan_type": "SME",
+            "plan_day": "14 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "5GB",
+            "plan_id": "157",
+            "amount": "1,240.00",
+            "plan_type": "SME",
+            "plan_day": "3days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "5GB",
+            "plan_id": "158",
+            "amount": "1,440.00",
+            "plan_type": "SME",
+            "plan_day": "7 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "5GB",
+            "plan_id": "159",
+            "amount": "1,480.00",
+            "plan_type": "SME",
+            "plan_day": "14 days",
+            "network": "GLO"
+        },
+        {
+            "plan_name": "10GB",
+            "plan_id": "160",
+            "amount": "2,950.00",
+            "plan_type": "SME",
+            "plan_day": "14 days",
+            "network": "GLO"
         }
     ],
     // "mobilevtu": [ 
@@ -1586,7 +1674,7 @@ function removePlans(plans, filters) {
 
 const filters = [
     { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING' },
-    { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
+    // { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
     // { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING PROMO' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'GIFTING' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'SME' },
@@ -1607,7 +1695,7 @@ const filters = [
     { vendor: 'bilal', network: '9MOBILE', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'GLO', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'GLO', planToRemove: 'GIFTING' },
-    { vendor: 'bilal', network: 'GLO', planToRemove: 'SME' },
+    // { vendor: 'bilal', network: 'GLO', planToRemove: 'SME' },
 ];
 
 const filteredPlans = removePlans(plans, filters);

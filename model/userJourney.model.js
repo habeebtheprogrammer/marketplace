@@ -15,7 +15,7 @@ const userJourneyStepSchema = new Schema({
   type: { 
     type: String, 
     enum: { 
-      values: ['email', 'sms'], 
+      values: ['email', 'push'], 
       message: '{VALUE} is not supported for step type' 
     },
     default: 'email'
@@ -37,7 +37,7 @@ const userJourneyStepSchema = new Schema({
 }, { timestamps: true });
 
 const userJourneySchema = new Schema({
-  user: { 
+  userId: { 
     type: Schema.Types.ObjectId, 
     ref: 'User',
     required: [true, 'User ID is required']

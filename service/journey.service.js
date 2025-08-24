@@ -1,7 +1,5 @@
 const JourneyTemplate = require("../model/journeyTemplate.model");
 const UserJourney = require("../model/userJourney.model");
-const { errorResponse } = require("../utils/responder");
-const logger = require("../utils/logger");
 
 /**
  * Start a new journey for a user
@@ -25,7 +23,7 @@ exports.startJourney = async ({ userId, journeyName, metadata = {} }) => {
 
     // Check for existing active journey of this type
     const existingJourney = await UserJourney.findOne({
-      user: userId,
+      userId,
       journeyName,
       active: true
     });
@@ -53,7 +51,7 @@ exports.startJourney = async ({ userId, journeyName, metadata = {} }) => {
 
     return await userJourney.save();
   } catch (error) {
-    logger.error('Error starting journey:', error);
+    console.log('Error starting journey:', error);
     throw error;
   }
 };
@@ -113,7 +111,7 @@ exports.processPendingSteps = async (batchSize = 100) => {
       await this.processJourneySteps(journey);
       results.succeeded++;
     } catch (error) {
-      logger.error(`Error processing journey ${journey._id}:`, error);
+      console.log(`Error processing journey ${journey._id}:`, error);
       results.failed++;
     }
     results.processed++;
@@ -141,7 +139,7 @@ exports.processJourneySteps = async (journey) => {
     try {
       // TODO: Implement actual email/sms sending logic
       // This is a placeholder - replace with your actual email/sms service
-      logger.info(`Sending ${step.type} to user ${journey.user} using template ${step.template}`);
+      console.log(`Sending ${step.type} to user ${journey.userId} using template ${step.template}`);
       
       bulkOps.push({
         updateOne: {
@@ -156,7 +154,7 @@ exports.processJourneySteps = async (journey) => {
         }
       });
     } catch (error) {
-      logger.error(`Error processing step ${step._id}:`, error);
+      console.log(`Error processing step ${step._id}:`, error);
       bulkOps.push({
         updateOne: {
           filter: { _id: journey._id, 'steps._id': step._id },
