@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const JourneyTemplate = require('../model/journeyTemplate.model');
 
 // Connect to MongoDB
-const MONGODB_URI = "mongodb+srv://super:devcon@gadgets.ok1dnqs.mongodb.net/" || 'mongodb://localhost:27017/marketplace';
+const MONGODB_URI = process.env.DB_URL || 'mongodb://localhost:27017/marketplace';
 
 async function connectDB() {
   try {
