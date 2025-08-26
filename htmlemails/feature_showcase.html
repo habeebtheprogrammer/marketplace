@@ -16,7 +16,34 @@
         }
          
          
-
+        .reviews-container {
+      padding: 0 20px 40px 20px;
+    }
+    .review-card {
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+    }
+    .review-avatar {
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+    .review-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .customer-name {
+      font-weight: bold;
+      font-size: 16px;
+      color: #0f172a;
+    }
+    .review-text {
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.5;
+    } 
     @media screen and (max-width: 600px) {
       .container {
         width: 100% !important;
@@ -40,6 +67,15 @@
       .img-col {
         width: 20% !important;
       }
+         .stack-column,
+      .stack-column td {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+      .review-card {
+        margin-bottom: 16px !important;
+      }
     }
   </style>
 </head>
@@ -52,7 +88,7 @@
           <tr>
             <td class="mobile-padding" style="padding:40px 40px 30px 40px; text-align:center;">
               <h1 style="margin:0; font-size:30px; font-weight:700; color:#292929; line-height:1.2; font-family:'Playfair Display', Georgia, serif;">
-                Trends Today
+                 Get to know our Customers
               </h1>
             </td>
           </tr>
@@ -70,38 +106,73 @@
           <tr>
             <td class="mobile-padding" style="padding:30px 40px 20px 40px;">
               <h2 style="margin:0; font-size:16px; font-weight:600; color:#292929; text-transform:uppercase; letter-spacing:0.5px;">
-                Today's Highlights
+                Our Customers Love Us
               </h2>
             </td>
           </tr>
 
-          <tr>
-            <td class="mobile-padding" style="padding:0 40px 30px 40px;">
-              <table role="presentation" class="force-row" width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td class="force-cell text-col" style="vertical-align:top; padding-right:20px;">
-                    <h3 style="margin:0 0 12px 0; font-size:18px; font-weight:700; color:#292929; line-height:1.3;">
-                      <a href="#" style="color:#292929; text-decoration:none;">
-                        Future-Proof Careers in the Age of AI: What You Should Learn in 2026
-                      </a>
-                    </h3>
-                    <p style="margin:0 0 16px 0; font-size:14px; color:#757575; line-height:1.5;">
-                      What if I told you that by this time next year, you...
-                    </p>
-                    <p style="margin:0; font-size:13px; color:#757575;">
-                      ⭐ 3 min read
-                    </p>
-                  </td>
-
-                  <td class="force-cell img-col" style="vertical-align:top;">
-                    <a href="#" style="display:block;">
-                      <img src="https://terra01.s3.amazonaws.com/images/images%20%283%29.jpeg" alt="Street signs showing directions" width="100" height="90" style="width:100%; max-width:160px; border-radius:4px; display:block;">
-                    </a>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr> 
+              <!-- Reviews Section -->
+              <tr>
+                <td class="reviews-container">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr class="stack-column">
+                      <!-- Review 1 -->
+                      <td width="48%" style="padding: 10px;" class="stack-column">
+                        <div class="review-card">
+                          <div class="review-header">
+                            <img src="https://terra01.s3.amazonaws.com/images/KHAALID.jpeg" width="40" height="40" alt="Avatar" class="review-avatar">
+                            <span class="customer-name">Khaalid S.</span>
+                          </div>
+                          <p class="review-text">
+                            “I've had seamless transactions since I've downloaded the app. Also, the funding and withdrawal is seemless too. It's a very easy to use app with a user experience and a beautiful UI. I recommend”
+                          </p>
+                        </div>
+                      </td>
+        
+                      <!-- Review 2 -->
+                      <td width="48%" style="padding: 10px;" class="stack-column">
+                        <div class="review-card">
+                          <div class="review-header">
+                            <img src="https://terra01.s3.amazonaws.com/images/1734540460807.jpeg" width="40" height="40" alt="Avatar" class="review-avatar">
+                            <span class="customer-name">Abdullateef R.</span>
+                          </div>
+                          <p class="review-text">
+                            “It's amazing how I get cashbacks for data and airtime purchases, to think it is also an awoof package. WOW!!!”
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+        
+                    <tr class="stack-column">
+                      <!-- Review 3 -->
+                      <td width="48%" style="padding: 10px;" class="stack-column">
+                        <div class="review-card">
+                          <div class="review-header">
+                            <img src="https://terra01.s3.amazonaws.com/images/serifdeen-soleye.jpg" width="40" height="40" alt="Avatar" class="review-avatar">
+                            <span class="customer-name">Sheriff S.</span>
+                          </div>
+                          <p class="review-text">
+                            “I really do love this app it has a unique user interface which by the way is very easy to navigate through it also offers very fast transfer services. The cheap data feature it just awesome”
+                          </p>
+                        </div>
+                      </td>
+        
+                      <!-- Review 4 -->
+                      <td width="48%" style="padding: 10px;" class="stack-column">
+                        <div class="review-card">
+                          <div class="review-header">
+                            <img src="https://terra01.s3.amazonaws.com/images/PHOTO-2025-08-20-12-05-12.jpg" width="40" height="40" alt="Avatar" class="review-avatar">
+                            <span class="customer-name">Abdulgafar A.</span>
+                          </div>
+                          <p class="review-text">
+                            "My favorite thing about the app asides the sleekness and comfortable user experience is the prompt notifications about possible downtimes and the speed of service restoration"
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
           <tr>
       <td align="center" bgcolor="#ffffff" style="padding: 0px 40px 10px; " >
         <p style="border:1px solid #000; border-radius:6px; padding:12px 28px;">

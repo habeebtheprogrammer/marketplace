@@ -19,10 +19,10 @@ const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
   host:  process.env.SMTP_HOST,
   port: "587",
-  tls: {
-      ciphers: "SSLv3",
-      rejectUnauthorized: false,
-  },
+  // tls: {
+  //     ciphers: "SSLv3",
+  //     rejectUnauthorized: false,
+  // },
   auth: {
     user:  process.env.SMTP_EMAIL, // generated ethereal user
     pass:  process.env.SMTP_PASSWORD, // generated ethereal password
@@ -42,7 +42,7 @@ exports.sendSignupMail = (email) => {
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,
-      subject: "Welcome to 360 Gadgets Africa – Your Ultimate Tech Destination!",
+      subject: "Welcome to 360gadgetsafrica! Connect with reliable sellers across Nigeria",
       html: emailTemplates.welcome_email(),
     })
     .then((suc) => {
