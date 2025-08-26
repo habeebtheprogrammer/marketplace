@@ -39,7 +39,7 @@ const userJourneyStepSchema = new Schema({
 const userJourneySchema = new Schema({
   userId: { 
     type: Schema.Types.ObjectId, 
-    ref: 'User',
+    ref: 'users',
     required: [true, 'User ID is required']
   },
   templateId: { 
@@ -72,7 +72,7 @@ const userJourneySchema = new Schema({
 }, { timestamps: true });
 
 // Indexes for better query performance
-userJourneySchema.index({ user: 1, active: 1 });
+userJourneySchema.index({ userId: 1, active: 1 });
 userJourneySchema.index({ 'steps.status': 1, 'steps.scheduledAt': 1 });
 userJourneySchema.plugin(mongoosePaginate);
 

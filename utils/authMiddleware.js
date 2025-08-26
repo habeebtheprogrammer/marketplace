@@ -30,6 +30,7 @@ exports.checkAuth = (req, res, next) => {
     }
     } else throw Error("an error has occured")
   } catch (error) {
+    console.log(error)
     errorResponse(
       res,
       error,

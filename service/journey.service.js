@@ -42,7 +42,7 @@ exports.startJourney = async ({ userId, journeyName, metadata = {} }) => {
       }));
 
     const userJourney = new UserJourney({
-      user: userId,
+      userId,
       templateId: template._id,
       journeyName,
       steps,
@@ -69,10 +69,11 @@ exports.getUserJourneys = async ({ userId, query = {} }) => {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),
     sort: { createdAt: -1 },
-    populate: ['templateId', 'user']
+    populate: ['templateId', 'userId']
   };
+  console.log(userId, options)
 
-  return await UserJourney.paginate({ user: userId }, options);
+  return await UserJourney.paginate({ userId: userId }, options);
 };
 
 /**
@@ -92,7 +93,7 @@ exports.processPendingSteps = async (batchSize = 100) => {
     {
       $group: {
         _id: '$_id',
-        user: { $first: '$user' },
+        userId: { $first: '$userId' },
         journeyName: { $first: '$journeyName' },
         steps: { $push: '$steps' },
         metadata: { $first: '$metadata' }
@@ -251,7 +252,7 @@ exports.handlePurchase = async (userId, order) => {
   // Complete any active cart abandonment journeys
   await UserJourney.updateMany(
     { 
-      user: userId, 
+      userId: userId, 
       journeyName: 'cart',
       active: true 
     },

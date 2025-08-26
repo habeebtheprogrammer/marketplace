@@ -9,16 +9,15 @@ const { successResponse, errorResponse } = require("../utils/responder");
 exports.startJourney = async (req, res) => {
   try {
     const { journeyName, metadata = {} } = req.body;
-    const userId = req.userId || req.body.userId;
+    const userId =  req.body.userId;
     
     if (!userId || !journeyName) {
       return errorResponse(res, new Error('userId and journeyName are required'), 400);
     }
-
     const journey = await journeyService.startJourney({
       userId,
       journeyName,
-      metadata: { ...metadata, initiatedBy: req.userId }
+      metadata: { ...metadata, initiatedBy: userId }
     });
 
     successResponse(res, journey);
@@ -34,18 +33,16 @@ exports.startJourney = async (req, res) => {
  */
 exports.getUserJourneys = async (req, res) => {
   try {
-    const userId = req.userId || req.query.userId;
+    const userId = req.query.userId;
     if (!userId) {
       return errorResponse(res, new Error('User ID is required'), 400);
     }
-
     const data = await journeyService.getUserJourneys({
       userId,
-      query: req.query
+      // query: req.query
     });
-
     successResponse(res, data);
-  } catch (error) {
+  } catch (error) {console.log(error)
     errorResponse(res, error);
   }
 };

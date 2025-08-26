@@ -43,7 +43,7 @@ const journeyTemplateSchema = new Schema({
   },
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'users' 
   }
 }, { timestamps: true });
 

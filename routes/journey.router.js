@@ -1,8 +1,8 @@
-const express = require('express');
+var express = require('express');
 const { journeyController } = require('../controller');
 const { checkAuth, adminAccessOnly } = require('../utils/authMiddleware');
 
-const router = express.Router();
+var router = express.Router();
 
 // User routes
 router.get('/user/journeys', checkAuth, journeyController.getUserJourneys);
