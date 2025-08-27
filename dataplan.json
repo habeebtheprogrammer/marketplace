@@ -454,7 +454,7 @@
     "planId": "150",
     "amount": "200.00",
     "planType": "SME",
-    "duration": "14 days",
+    "duration": "14 days ,night plan",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -490,7 +490,7 @@
     "planId": "151",
     "amount": "320.00",
     "planType": "SME",
-    "duration": "14 days",
+    "duration": "14 days ,night plan",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -589,7 +589,7 @@
     "planId": "156",
     "amount": "1061.00",
     "planType": "SME",
-    "duration": "14 days",
+    "duration": "14 days night plan",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -634,7 +634,7 @@
     "planId": "159",
     "amount": "1582.00",
     "planType": "SME",
-    "duration": "14 days",
+    "duration": "14 days night plan",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -670,7 +670,7 @@
     "planId": "160",
     "amount": "3154.00",
     "planType": "SME",
-    "duration": "14 days",
+    "duration": "14 days night plan",
     "network": "GLO",
     "vendor": "bilal"
   },
@@ -794,7 +794,7 @@
   {
     "planName": "500MB",
     "planId": "1",
-    "amount": "390.00",
+    "amount": "420.00",
     "planType": "SME",
     "duration": "30days to 7days",
     "network": "MTN",
@@ -857,7 +857,7 @@
   {
     "planName": "1GB",
     "planId": "2",
-    "amount": "640.00",
+    "amount": "620.00",
     "planType": "SME",
     "duration": "30 days",
     "network": "MTN",
@@ -983,7 +983,7 @@
   {
     "planName": "2GB",
     "planId": "3",
-    "amount": "1280.00",
+    "amount": "1240.00",
     "planType": "SME",
     "duration": "monthly",
     "network": "MTN",
@@ -1055,7 +1055,7 @@
   {
     "planName": "3GB",
     "planId": "4",
-    "amount": "2261.00",
+    "amount": "1861.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -1109,7 +1109,7 @@
   {
     "planName": "5GB",
     "planId": "5",
-    "amount": "4602.00",
+    "amount": "3102.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",
@@ -1181,7 +1181,7 @@
   {
     "planName": "10GB",
     "planId": "6",
-    "amount": "9204.00",
+    "amount": "6204.00",
     "planType": "SME",
     "duration": "30days",
     "network": "MTN",

@@ -552,7 +552,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "380.00",
+            "amount": "410.00",
             "plan_type": "SME",
             "plan_day": "30days to 7days",
             "network": "MTN"
@@ -560,7 +560,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "620.00",
+            "amount": "600.00",
             "plan_type": "SME",
             "plan_day": "30 days",
             "network": "MTN"
@@ -568,7 +568,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "3",
-            "amount": "1,240.00",
+            "amount": "1,200.00",
             "plan_type": "SME",
             "plan_day": "Monthly",
             "network": "MTN"
@@ -576,7 +576,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "4",
-            "amount": "2,200.00",
+            "amount": "1,800.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -584,7 +584,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "5",
-            "amount": "4,500.00",
+            "amount": "3,000.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -592,7 +592,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "6",
-            "amount": "9,000.00",
+            "amount": "6,000.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -1482,7 +1482,7 @@ const unfilteredplans = {
             "plan_id": "150",
             "amount": "190.00",
             "plan_type": "SME",
-            "plan_day": "14 days",
+            "plan_day": "14 days ,Night plan",
             "network": "GLO"
         },
         {
@@ -1490,7 +1490,7 @@ const unfilteredplans = {
             "plan_id": "151",
             "amount": "300.00",
             "plan_type": "SME",
-            "plan_day": "14 days",
+            "plan_day": "14 days ,Night plan",
             "network": "GLO"
         },
         {
@@ -1530,7 +1530,7 @@ const unfilteredplans = {
             "plan_id": "156",
             "amount": "1,000.00",
             "plan_type": "SME",
-            "plan_day": "14 days",
+            "plan_day": "14 days night plan",
             "network": "GLO"
         },
         {
@@ -1554,7 +1554,7 @@ const unfilteredplans = {
             "plan_id": "159",
             "amount": "1,480.00",
             "plan_type": "SME",
-            "plan_day": "14 days",
+            "plan_day": "14 days Night plan",
             "network": "GLO"
         },
         {
@@ -1562,7 +1562,7 @@ const unfilteredplans = {
             "plan_id": "160",
             "amount": "2,950.00",
             "plan_type": "SME",
-            "plan_day": "14 days",
+            "plan_day": "14 days night plan",
             "network": "GLO"
         }
     ],
