@@ -2,7 +2,8 @@ require('dotenv').config({ path: `.env.production.local` });
 const mongoose = require('mongoose');
 const dbServerConnect = require("./config/dbServerConnect");
 const express = require('express');
-const worker = require('./workers/journey.worker');
+const journeyWorker = require('./workers/journey.worker');
+const blogWorker = require('./workers/blog.worker');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -48,16 +49,20 @@ app.use('/api', routes);
 
 app.get('*', (req, res) => res.send("Hello world"));
 
-// Start the worker when the database connection is established
+// Start workers when the database connection is established
 mongoose.connection.once('connected', () => {
-  worker.start();
-  console.log('Journey worker started');
+  journeyWorker.start();
+  blogWorker.start();
+  console.log('Workers started');
 });
 
 // Handle process termination
 process.on('SIGINT', async () => {
-  console.log('Shutting down worker...');
-  await worker.stop();
+  console.log('Shutting down workers...');
+  await Promise.all([
+    journeyWorker.stop(),
+    blogWorker.stop()
+  ].map(p => p.catch(console.error)));
   process.exit(0);
 });
 

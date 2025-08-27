@@ -1,4 +1,13 @@
 const moment = require("moment")
+
+const calculateReadTime = (text, wordsPerMinute = 200) => {
+  if (!text) return "0 min read";
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  return `${minutes} min read`;
+}
+
 module.exports = {
     welcome_email: function () {
         return ` <!DOCTYPE html>
@@ -89,7 +98,7 @@ ul.social {
           <tr>
             <td class="mobile-padding" style="padding:30px 40px 20px 40px;">
               <h2 style="margin:0; font-size:16px; font-weight:600; color:#292929; text-transform:uppercase; letter-spacing:0.5px;">
-                Our Value Proposition
+                Our Value Proposition:
               </h2>
             </td>
           </tr>
@@ -820,7 +829,7 @@ ul.social {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trends Today</title>
+  <title>Trends Today.</title>
   <style>
       body, table, td, p, a, li, blockquote {
             -webkit-text-size-adjust: 100%;
@@ -905,7 +914,7 @@ ul.social {
           <tr>
             <td class="mobile-padding" style="padding:40px 40px 30px 40px; text-align:center;">
               <h1 style="margin:0; font-size:30px; font-weight:700; color:#292929; line-height:1.2; font-family:'Playfair Display', Georgia, serif;">
-                 Get to know our Customers
+                 Get to know our Customers.
               </h1>
             </td>
           </tr>
@@ -923,7 +932,7 @@ ul.social {
           <tr>
             <td class="mobile-padding" style="padding:30px 40px 20px 40px;">
               <h2 style="margin:0; font-size:16px; font-weight:600; color:#292929; text-transform:uppercase; letter-spacing:0.5px;">
-                Why Our Customers Love Us
+                Why Our Customers Love Us:
               </h2>
             </td>
           </tr>
@@ -1056,14 +1065,14 @@ ul.social {
         
          `
     },
-    posts: function ({ posts }) {
+    daily_blog_digest: function ({ user, posts, date  }) {
         return `
         <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trends Today</title>
+  <title>Trends Today.</title>
   <style>
     @media screen and (max-width: 600px) {
       .container {
@@ -1100,7 +1109,7 @@ ul.social {
           <tr>
             <td class="mobile-padding" style="padding:40px 40px 30px 40px; text-align:center;">
               <h1 style="margin:0; font-size:30px; font-weight:700; color:#292929; line-height:1.2; font-family:'Playfair Display', Georgia, serif;">
-                Trends Today
+                Trends Today.
               </h1>
             </td>
           </tr>
@@ -1118,7 +1127,7 @@ ul.social {
           <tr>
             <td class="mobile-padding" style="padding:30px 40px 20px 40px;">
               <h2 style="margin:0; font-size:16px; font-weight:600; color:#292929; text-transform:uppercase; letter-spacing:0.5px;">
-                Today's Highlights
+                Today's Highlights: 
               </h2>
             </td>
           </tr>
@@ -1138,30 +1147,43 @@ ul.social {
                       ${blog.excerpt}
                     </p>
                     <p style="margin:0; font-size:13px; color:#757575;">
-                      ⭐ ${blog.reading_time || "5"} min read
+                      ⭐ ${calculateReadTime(blog.content)} 
                     </p>
                   </td>
 
                   <td class="force-cell img-col" style="vertical-align:top;">
                     <a href="#" style="display:block;">
-                      <img src="${blog.image}" alt="${blog.title}" width="100" height="90" style="width:100%; max-width:160px; border-radius:4px; display:block;">
+                      <img src="${blog.coverImage}" alt="${blog.title}" width="100" height="90" style="width:100%; max-width:160px; border-radius:4px; display:block;">
                     </a>
                   </td>
                 </tr>
               </table>
             </td>
           </tr> 
-          `;
+          `
         })}
           <tr>
-      <td align="center" bgcolor="#ffffff" style="padding: 0px 40px 10px; " >
-        <p style="border:1px solid #000; border-radius:6px; padding:12px 28px;">
-            <a href="https://gadgetsafrica.com/blog" target="_blank" 
-           style="font-size:16px; font-weight:600; text-decoration:none; color:#000; display:inline-block; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-          Explore More
-        </a>
-        </p>
-      </td>
+            <td align="center" bgcolor="#ffffff" style="padding: 0px 40px 10px; " >
+              <p style="border:1px solid #000; border-radius:6px; padding:12px 28px;">
+                  <a href="https://gadgetsafrica.com/blog" target="_blank" 
+                style="font-size:16px; font-weight:600; text-decoration:none; color:#000; display:inline-block; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+                Explore More
+              </a>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+             <td class="mobile-padding" style="padding: 30px;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffd93d; border-radius: 6px;">
+                      <tr>
+                          <td style="padding: 20px; text-align: center;">
+                              <p style="margin: 0; font-size: 12px; color: #e91e63; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">NEED HELP?</p>
+                              <h2 class="mobile-h2" style="margin: 0; font-size: 18px; font-weight: bold; color: #292929; line-height: 1.2;">If you have any questions, reply to this email our team is always ready to help.</h2>
+                          </td>
+                      </tr>
+                  </table>
+              </td>
           </tr>
           <tr >
             <td valign="middle" width="100%" style="padding: 20px 30px 0px; border-top: 1px solid #e0e0e0; background-color: #f8f9fa;">

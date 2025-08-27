@@ -4,7 +4,7 @@ const { journeyService } = require('../service');
 class JourneyWorker {
   constructor() {
     this.job = null;
-    this.schedule = '*/2 * * * *'; // Every 15 minutes by default
+    this.schedule = '0 * * * *'; // Every 1 hour by default
     this.batchSize = 100;
   }
 
