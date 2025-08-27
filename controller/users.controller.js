@@ -63,6 +63,7 @@ exports.createUser = async (req, res, next) => {
     !isAppleRelayEmail(user.email) && sendSignupMail(user.email);
     if (user.verificationCode) sendOtpCode(user.email, user.verificationCode);
   } catch (error) {
+    console.log(error)
     errorResponse(res, error);
   }
 };
