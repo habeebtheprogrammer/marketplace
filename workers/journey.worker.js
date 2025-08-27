@@ -1,11 +1,10 @@
 const cron = require('node-cron');
 const { journeyService } = require('../service');
-const logger = require('../utils/logger');
 
 class JourneyWorker {
   constructor() {
     this.job = null;
-    this.schedule = '*/15 * * * *'; // Every 15 minutes by default
+    this.schedule = '*/2 * * * *'; // Every 15 minutes by default
     this.batchSize = 100;
   }
 
@@ -16,22 +15,22 @@ class JourneyWorker {
    */
   start(schedule, batchSize) {
     if (this.job) {
-      logger.warn('Journey worker is already running');
+      console.log('Journey worker is already running');
       return;
     }
 
     if (schedule) this.schedule = schedule;
     if (batchSize) this.batchSize = batchSize;
     
-    logger.info(`Starting journey worker with schedule: ${this.schedule}`);
+    console.log(`Starting journey worker with schedule: ${this.schedule}`);
     
     this.job = cron.schedule(this.schedule, async () => {
       try {
-        logger.debug('Running journey processing job');
+        console.log('Running journey processing job');
         const results = await journeyService.processPendingSteps(this.batchSize);
-        logger.info(`Processed ${results.processed} journey steps (${results.succeeded} succeeded, ${results.failed} failed)`);
+        console.log(`Processed ${results.processed} journey steps (${results.succeeded} succeeded, ${results.failed} failed)`);
       } catch (error) {
-        logger.error('Error in journey processing job:', error);
+        console.log('Error in journey processing job:', error);
       }
     }, {
       scheduled: true,
@@ -47,11 +46,11 @@ class JourneyWorker {
    */
   async runImmediately() {
     try {
-      logger.debug('Running initial journey processing');
+      console.log('Running initial journey processing');
       const results = await journeyService.processPendingSteps(this.batchSize);
-      logger.info(`Initial run: Processed ${results.processed} journey steps`);
+      console.log(`Initial run: Processed ${results.processed} journey steps`);
     } catch (error) {
-      logger.error('Error in initial journey processing:', error);
+      console.log('Error in initial journey processing:', error);
     }
   }
 
@@ -62,7 +61,7 @@ class JourneyWorker {
     if (this.job) {
       this.job.stop();
       this.job = null;
-      logger.info('Journey worker stopped');
+      console.log('Journey worker stopped');
     }
   }
 

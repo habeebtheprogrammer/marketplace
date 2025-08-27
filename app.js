@@ -1,6 +1,8 @@
-require('dotenv').config({ path: `.env.production.local` })
-var dbServerConnect = require("./config/dbServerConnect");
-var express = require('express');
+require('dotenv').config({ path: `.env.production.local` });
+const mongoose = require('mongoose');
+const dbServerConnect = require("./config/dbServerConnect");
+const express = require('express');
+const worker = require('./workers/journey.worker');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -45,6 +47,19 @@ app.get('/robots.txt', createSiteMap)
 app.use('/api', routes);
 
 app.get('*', (req, res) => res.send("Hello world"));
+
+// Start the worker when the database connection is established
+mongoose.connection.once('connected', () => {
+  worker.start();
+  console.log('Journey worker started');
+});
+
+// Handle process termination
+process.on('SIGINT', async () => {
+  console.log('Shutting down worker...');
+  await worker.stop();
+  process.exit(0);
+});
 
 // app.get('*', (req, res) =>  res.json({error: "path not found"}))
 

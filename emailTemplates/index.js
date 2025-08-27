@@ -645,6 +645,174 @@ ul.social {
 
       `
     },
+    cart_reminder: function({cartItems}){
+        return `
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> You left something behind</title>
+  <style>
+      body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+         
+         
+
+    @media screen and (max-width: 600px) {
+      .container {
+        width: 100% !important;
+        border-radius: 0 !important;
+      }
+      .mobile-padding {
+        padding: 20px !important;
+      }
+      .force-row {
+        display: table !important;
+        width: 100% !important;
+      }
+      .force-cell {
+        display: table-cell !important;
+        width: 100% !important;
+        vertical-align: top !important;
+      }
+      .text-col {
+        width: 80% !important;
+      }
+      .img-col {
+        width: 20% !important;
+      }
+    }
+  </style>
+</head>
+<body style="margin:0; padding:0; background-color:#f8f9fa; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f8f9fa;">
+    <tr>
+      <td align="center" style="padding:40px 20px;">
+        
+        <table role="presentation" class="container" width="600" border="0" cellspacing="0" cellpadding="0" style="max-width:600px; background-color:#ffffff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+          <tr>
+            <td class="mobile-padding" style="padding:40px 40px 30px 40px; text-align:center;">
+              <h1 style="margin:0; font-size:30px; font-weight:700; color:#292929; line-height:1.2; font-family:'Playfair Display', Georgia, serif;">
+                 You left something behind
+              </h1>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:0 40px;">
+              <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td style="border-bottom:1px solid #e6e6e6;"></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="mobile-padding" style="padding:30px 40px 20px 40px;">
+              <h2 style="margin:0; font-size:16px; font-weight:600; color:#292929; text-transform:uppercase; letter-spacing:0.5px;">
+                Your cart is waiting – Don’t miss out!
+              </h2>
+            </td>
+          </tr>
+
+          ${cartItems.map((item) => ` <tr>
+            <td style="padding: 0 32px 24px 32px;" class="mobile-padding">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td width="80" style="vertical-align: top; padding-right: 16px;">
+                            <img src=${item.productId?.images?.[0]} alt=${item.productId?.title} class="product-image" style="width: 80px; height: 80px; border-radius: 8px; object-fit: cover;" />
+                        </td>
+                        <td style="vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td>
+                                        <h3 class="product-title" style="margin: 0 0 8px 0; font-size: 16px; font-weight: 600; color: #1a1a1a; line-height: 1.3;">${item.productId?.title}</h3>
+                                        <p style="margin: 0; font-size: 14px; color: #666666;">
+                                            <span style="text-decoration: line-through; color: #999999;">₦${item.productId?.original_price}</span>
+                                            <span class="price-text" style="font-weight: 600; color: #1a1a1a; margin-left: 8px;">₦${item.productId?.discounted_price}</span>
+                                        </p>
+                                    </td>
+                                    
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>`)}
+         
+          <tr>
+      <td align="center" bgcolor="#ffffff" style="padding: 0px 40px 10px; " >
+        <p style="border:1px solid #000; border-radius:6px; padding:12px 28px;">
+            <a href="https://360gadgetsafrica.com/cart" target="_blank" 
+           style="font-size:16px; font-weight:600; text-decoration:none; color:#000; display:inline-block; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+          CHECKOUT
+        </a>
+        </p>
+      </td>
+          </tr>
+          <tr>
+            <td class="mobile-padding" style="padding: 30px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffd93d; border-radius: 6px;">
+                    <tr>
+                        <td style="padding: 20px; text-align: center;">
+                            <p style="margin: 0; font-size: 12px; color: #e91e63; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">NEED HELP?</p>
+                            <h2 class="mobile-h2" style="margin: 0; font-size: 18px; font-weight: bold; color: #292929; line-height: 1.2;">If you have any questions, reply to this email our team is always ready to help.</h2>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+          <tr >
+            <td valign="middle" width="100%" style="padding: 20px 30px 0px; border-top: 1px solid #e0e0e0; background-color: #f8f9fa;">
+                <ul  style="padding: 0;">
+                    <li style="display: inline-block; margin-right: 10px;">   <a href="https://apps.apple.com/app/360gadgetsafrica/id6736353137?platform=iphone" target="_blank">
+                        <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1731154161/ntsv2brfd8lboncvjavk.png"
+                             alt="Download on the App Store"
+                             style="width: 100px;" />
+                      </a>
+                    </li>
+                    <li style="display: inline-block; margin-right: 10px;"> <a href="https://play.google.com/store/apps/details?id=com.gadgetsafrica.gadgetsafrica" target="_blank">
+                        <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1731153650/ibfyv6toskeeikywuuv5.webp" 
+                             alt="Download on Google Play"
+                             style="width: 100px;" />
+                      </a>
+                    </li> 
+                </ul>
+            </td>
+        </tr>
+        <tr >
+            <td style="padding: 20px 30px;background-color: #f8f9fa; ">
+                
+                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.4;">
+                    © 2025 Team 360 Ventures RC 7927753. All rights reserved
+                </p>
+                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
+                    At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                </p>
+                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
+                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
+                    style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+            </td>
+        </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+
+        `
+    },
     reviews: function () {
         return `
         <!DOCTYPE html>
@@ -755,7 +923,7 @@ ul.social {
           <tr>
             <td class="mobile-padding" style="padding:30px 40px 20px 40px;">
               <h2 style="margin:0; font-size:16px; font-weight:600; color:#292929; text-transform:uppercase; letter-spacing:0.5px;">
-                Our Customers Love Us
+                Why Our Customers Love Us
               </h2>
             </td>
           </tr>
@@ -811,7 +979,7 @@ ul.social {
                         <div class="review-card">
                           <div class="review-header">
                             <img src="https://terra01.s3.amazonaws.com/images/PHOTO-2025-08-20-12-05-12.jpg" width="40" height="40" alt="Avatar" class="review-avatar">
-                            <span class="customer-name">Abdulgafar A.</span>
+                            <span class="customer-name">Abdulgafar S.</span>
                           </div>
                           <p class="review-text">
                             "My favorite thing about the app asides the sleekness and comfortable user experience is the prompt notifications about possible downtimes and the speed of service restoration"

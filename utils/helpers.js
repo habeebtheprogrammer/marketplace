@@ -15,14 +15,14 @@ exports.s3 = new AWS.S3({
 });
 
 
-const emailTransporter = nodemailer.createTransport({
+exports.emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
   host:  process.env.SMTP_HOST,
   port: "587",
-  // tls: {
-  //     ciphers: "SSLv3",
-  //     rejectUnauthorized: false,
-  // },
+  tls: {
+      ciphers: "SSLv3",
+      rejectUnauthorized: false,
+  },
   auth: {
     user:  process.env.SMTP_EMAIL, // generated ethereal user
     pass:  process.env.SMTP_PASSWORD, // generated ethereal password
@@ -38,7 +38,7 @@ exports.createToken = (data) => {
 };
 
 exports.sendSignupMail = (email) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,
@@ -53,9 +53,8 @@ exports.sendSignupMail = (email) => {
     });
 };
 
-
 exports.sendOtpCode = (email, code) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,
@@ -71,7 +70,7 @@ exports.sendOtpCode = (email, code) => {
 };
 
 exports.sendErrorEmail = (error) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: 'habibmail31@gmail.com',
@@ -87,7 +86,7 @@ exports.sendErrorEmail = (error) => {
 };
 
 exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
@@ -103,7 +102,7 @@ exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
 };
 
 exports.sendOrderConfirmationEmail = ({email, order, address}) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to:  email,
@@ -118,7 +117,7 @@ exports.sendOrderConfirmationEmail = ({email, order, address}) => {
     });
 };
 exports.sendSwapEmail = (order) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: 'support@360gadgetsafrica.com',
@@ -134,7 +133,7 @@ exports.sendSwapEmail = (order) => {
     });
 };
 exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) => {
-  emailTransporter
+  this.emailTransporter
     .sendMail({
       from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,

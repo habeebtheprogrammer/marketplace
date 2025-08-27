@@ -12,6 +12,8 @@ const userJourneyStepSchema = new Schema({
     type: String, 
     required: [true, 'Template name is required']
   },
+  subject: String,
+  description: String,
   type: { 
     type: String, 
     enum: { 
