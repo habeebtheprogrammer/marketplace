@@ -21,6 +21,7 @@ exports.addToCarts = async (param) => {
         }
       })
       try {
+        console.log(param, 'adding cart abandoment')
         handleCartAbandonment(param?.userId, [param])
       } catch (error) {
         console.log(error)
