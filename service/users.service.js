@@ -1,6 +1,7 @@
 const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
-const { journeyService } = require('../service');
+const { journeyService } = require('./index');
+
 
 
 exports.getUsers = async (filters = {}) => {
