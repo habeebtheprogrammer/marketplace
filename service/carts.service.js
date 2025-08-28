@@ -1,5 +1,5 @@
 const Carts = require("../model/carts.model")
-const { journeyService } = require('./index');
+const { journeyService } = require('.');
 
 exports.getCarts = async (filters = {}) => {
     const data = await Carts.paginate(filters, {populate: [

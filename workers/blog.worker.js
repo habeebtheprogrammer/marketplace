@@ -111,7 +111,7 @@ class BlogWorker {
     console.log('Starting blog worker with schedule:', this.schedule);
     
     // Initial run
-    this.processDailyBlogDigest().catch(console.error);
+    // this.processDailyBlogDigest().catch(console.error);
     
     // Schedule daily job
     this.job = cron.schedule(this.schedule, () => {

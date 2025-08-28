@@ -11,7 +11,7 @@ const { getUsers } = require("./users.service");
 /**
  * Helper: Render email content from template + metadata
  */
-async function renderEmailContent(templateName, userId) {
+const renderEmailContent = async (templateName, userId) => {
   const templateFn = emailTemplates[templateName];
   console.log(templateName, userId, 'about to render email content')
   if (!templateFn) return "";
@@ -30,7 +30,7 @@ async function renderEmailContent(templateName, userId) {
 /**
  * Start a new journey for a user
  */
-exports.startJourney = async ({ userId, journeyName, metadata = {} }) => {
+const startJourney = async ({ userId, journeyName, metadata = {} }) => {
   const template = await JourneyTemplate.findOne({ name: journeyName, active: true });
   if (!template) throw new Error(`No active ${journeyName} journey template found`);
 
@@ -59,7 +59,7 @@ exports.startJourney = async ({ userId, journeyName, metadata = {} }) => {
 /**
  * Get active journeys for a user
  */
-exports.getUserJourneys = async ({ userId, query = {} }) => {
+const getUserJourneys = async ({ userId, query = {} }) => {
   const { page = 1, limit = 10 } = query;
   return UserJourney.paginate(
     { userId },
@@ -75,7 +75,7 @@ exports.getUserJourneys = async ({ userId, query = {} }) => {
 /**
  * Process pending journey steps
  */
-exports.processPendingSteps = async (batchSize = 100) => {
+const processPendingSteps = async (batchSize = 100) => {
   const now = new Date();
 
   const journeys = await UserJourney.find({
@@ -105,7 +105,7 @@ exports.processPendingSteps = async (batchSize = 100) => {
 /**
  * Process steps for a single journey
  */
-exports.processJourneySteps = async (journey) => {
+const processJourneySteps = async (journey) => {
   const bulkOps = [];
   const now = new Date();
   let allStepsCompleted = true;
@@ -173,25 +173,25 @@ exports.processJourneySteps = async (journey) => {
   /**
    * Complete a journey
    */
-  exports.completeJourney = (journeyId) =>
+  const completeJourney = (journeyId) =>
     UserJourney.findByIdAndUpdate(journeyId, { active: false, completedAt: new Date() }, { new: true });
 
   /**
    * Event handlers
    */
-  exports.handleUserSignup = (userId) =>
-    this.startJourney({ userId, journeyName: "signup", metadata: { triggeredBy: "user_signup" } });
+  const handleUserSignup = (userId) =>
+    startJourney({ userId, journeyName: "signup", metadata: { triggeredBy: "user_signup" } });
 
-  exports.handleCartAbandonment = (userId, cartItems = []) => {
+  const handleCartAbandonment = (userId, cartItems = []) => {
     if (!cartItems.length) return null;
-    return this.startJourney({
+    return startJourney({
       userId,
       journeyName: "cart",
       metadata: { triggeredBy: "cart_abandonment", cartItems }
     });
   };
 
-  exports.handlePurchase = async (userId, order) => {
+  const handlePurchase = async (userId, order) => {
     // Close active cart journeys
     await UserJourney.updateMany(
       { userId, journeyName: "cart", active: true },
@@ -199,9 +199,21 @@ exports.processJourneySteps = async (journey) => {
     );
 
     // Start post-purchase journey
-    return this.startJourney({
+    return startJourney({
       userId,
       journeyName: "post_purchase",
       metadata: { triggeredBy: "purchase_complete", orderId: order._id, amount: order.totalAmount }
     });
   };
+
+module.exports = {
+  renderEmailContent,
+  startJourney,
+  getUserJourneys,
+  processPendingSteps,
+  processJourneySteps,
+  completeJourney,
+  handleUserSignup,
+  handleCartAbandonment,
+  handlePurchase
+};

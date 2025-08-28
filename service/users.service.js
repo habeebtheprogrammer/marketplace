@@ -1,6 +1,6 @@
 const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
-const { journeyService } = require('./index');
+const { journeyService } = require('.');
 
 
 
