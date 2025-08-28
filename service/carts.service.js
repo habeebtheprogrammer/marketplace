@@ -1,5 +1,5 @@
 const Carts = require("../model/carts.model")
-
+const { handleCartAbandonment } = require("./journey.service")
 exports.getCarts = async (filters = {}) => {
     const data = await Carts.paginate(filters, {populate: [
         {
