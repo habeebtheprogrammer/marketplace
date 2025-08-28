@@ -1,5 +1,5 @@
 const Carts = require("../model/carts.model")
-const { handleCartAbandonment } = require("./journey.service")
+
 exports.getCarts = async (filters = {}) => {
     const data = await Carts.paginate(filters, {populate: [
         {
@@ -13,7 +13,7 @@ exports.getCarts = async (filters = {}) => {
 }
 
 exports.addToCarts = async (param) => {
-    const data =  await Carts.create(param).populate( {
+    const data =  (await Carts.create(param)).populate( {
         path: "productId",
         populate: {
           path: "vendorId",
@@ -21,12 +21,11 @@ exports.addToCarts = async (param) => {
         }
       })
       try {
-        handleCartAbandonment(data?.userId, [{_id: data._id, productId: data.productId, qty: data.qty, size: data.size}])
+        handleCartAbandonment(param?.userId, [param])
       } catch (error) {
         console.log(error)
       }
     return data
-     
 }
 
 exports.updateCarts = async (params, obj) => {
