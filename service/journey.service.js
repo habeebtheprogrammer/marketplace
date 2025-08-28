@@ -117,11 +117,11 @@ const processJourneySteps = async (journey) => {
     }
 
     try {
-      const html = await renderEmailContent(step.template, journey.userId);
+      const html = await renderEmailContent(step.template, journey.userId?._id);
       if (!html) continue;
       await emailTransporter.sendMail({
         from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
-        to: journey.userId.email,
+        to: journey.userId?.email,
         subject: step.subject || "Update from 360GadgetsAfrica",
         html
       });
@@ -145,7 +145,7 @@ const processJourneySteps = async (journey) => {
       allStepsCompleted = false;
     }
     try {
-      const user = await getUsers({ _id: journey.userId });
+      const user = await getUsers({ _id: journey.userId?._id });
       const oneSignalId = user.docs[0].oneSignalId
       sendNotification({
         headings: { "en": step.subject },
