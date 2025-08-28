@@ -1,5 +1,6 @@
 const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
+const { handleUserSignup } = require("./journey.service")
 
 exports.getUsers = async (filters = {}) => {
     const data = await Users.paginate(filters,  {
@@ -17,7 +18,12 @@ exports.getUsers = async (filters = {}) => {
 }
 
 exports.createUser = async (param) => {
-    const data = await (await Users.create(param)).toObject()
+    const data = await Users.create(param)
+    try {
+     handleUserSignup(data?._id)
+    } catch (error) {
+        console.log(error)
+    }
     return data
 }
 

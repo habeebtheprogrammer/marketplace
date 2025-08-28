@@ -3,6 +3,7 @@ const { getBlogPosts } = require('../service/blogposts.service');
 const { getUsers } = require('../service/users.service');
 const { emailTransporter } = require('../utils/helpers');
 const emailTemplates = require('../emailTemplates');
+const { sendNotification } = require('../utils/onesignal');
 
 class BlogWorker {
   constructor() {
@@ -58,6 +59,25 @@ class BlogWorker {
         }
         // Send emails in parallel
         const sendPromises = users.docs.map(user => {
+          try {
+            sendNotification({
+              headings: { "en": posts?.docs?.[0]?.title },
+              contents: { "en": `${posts?.docs?.[0]?.excerpt}` },
+              include_subscription_ids: [user?.oneSignalId], 
+              url:  `https://360gadgetsafrica.com/blog/${posts?.docs?.[0]?.slug}`,
+              buttons: [
+                {
+                  action: 'view',
+                  text: 'Read More',
+                  icon: 'https://res.cloudinary.com/dnltxw2jt/image/upload/v1738234994/logo_fvvotl.png',
+                }
+              ],
+              big_picture: posts?.docs?.[0]?.coverImage,
+            })
+          } catch (error) {
+            console.log(error)
+          }
+
           return emailTransporter.sendMail({
             from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
             to: user.email,
@@ -65,7 +85,7 @@ class BlogWorker {
             html: emailTemplates.daily_blog_digest({posts: posts.docs})
           });
         });
-
+    
         await Promise.all(sendPromises);
         totalSent += users.docs.length;
         console.log(`Sent ${users.docs.length} emails in batch ${page}`);
@@ -91,7 +111,7 @@ class BlogWorker {
     console.log('Starting blog worker with schedule:', this.schedule);
     
     // Initial run
-    // this.processDailyBlogDigest().catch(console.error);
+    this.processDailyBlogDigest().catch(console.error);
     
     // Schedule daily job
     this.job = cron.schedule(this.schedule, () => {
