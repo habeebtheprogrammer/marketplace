@@ -1,9 +1,12 @@
 const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
-const { journeyService } = require('.');
+const journeyService = require('./journey.service');
 
-
-
+/**
+ * Get all users
+ * @param {Object} filters - filters for users
+ * @returns {Promise<Object>} users data
+ */
 exports.getUsers = async (filters = {}) => {
     const data = await Users.paginate(filters,  {
         sort: {_id: -1},

@@ -90,7 +90,7 @@ const processPendingSteps = async (batchSize = 100) => {
 
   for (const journey of journeys) {
     try {
-      await this.processJourneySteps(journey);
+      await processJourneySteps(journey);
       results.succeeded++;
     } catch (err) {
       console.error(`Error processing journey ${journey._id}:`, err);
@@ -206,7 +206,8 @@ const processJourneySteps = async (journey) => {
     });
   };
 
-module.exports = {
+// Export all functions as methods of an object
+const journeyService = {
   renderEmailContent,
   startJourney,
   getUserJourneys,
@@ -217,3 +218,5 @@ module.exports = {
   handleCartAbandonment,
   handlePurchase
 };
+
+module.exports = journeyService;
