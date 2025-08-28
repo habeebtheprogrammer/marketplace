@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { usersService } = require("../service");
+const { usersService, journeyService } = require("../service");
 const constant = require("./constant");
 const bcrypt = require("bcryptjs");
 const { errorResponse, successResponse } = require("./responder");
@@ -77,7 +77,8 @@ exports.googleAuth = async (req, res, next) => {
         });
         var token = createToken(JSON.stringify(user));
         successResponse(res, { user, token });
-        !isAppleRelayEmail(email) && sendSignupMail(email);
+        !isAppleRelayEmail(email) && journeyService.handleUserSignup(user?._id)
+
       } else {
         var token = createToken(JSON.stringify(user.docs[0]));
         successResponse(res, { user: user.docs[0], token });

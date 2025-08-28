@@ -1,5 +1,4 @@
 const Carts = require("../model/carts.model")
-const journeyService = require('./journey.service');
 
 exports.getCarts = async (filters = {}) => {
     const data = await Carts.paginate(filters, {populate: [
@@ -20,13 +19,7 @@ exports.addToCarts = async (param) => {
           path: "vendorId",
           select: "title"
         }
-      })
-      try {
-        console.log('adding cart abandonment')
-        journeyService.handleCartAbandonment(param?.userId, [param])
-      } catch (error) {
-        console.log(error)
-      }
+      }) 
     return data
 }
 

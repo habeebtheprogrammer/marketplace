@@ -1,12 +1,7 @@
 const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
 const journeyService = require('./journey.service');
-
-/**
- * Get all users
- * @param {Object} filters - filters for users
- * @returns {Promise<Object>} users data
- */
+ 
 exports.getUsers = async (filters = {}) => {
     const data = await Users.paginate(filters,  {
         sort: {_id: -1},
@@ -24,11 +19,6 @@ exports.getUsers = async (filters = {}) => {
 
 exports.createUser = async (param) => {
     const data = await Users.create(param)
-    try {
-        journeyService.handleUserSignup(data?._id)
-    } catch (error) {
-        console.log(error)
-    }
     return data
 }
 

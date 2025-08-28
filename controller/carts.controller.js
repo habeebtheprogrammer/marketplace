@@ -1,4 +1,4 @@
-const { cartsService, productsService, promoService } = require("../service")
+const { cartsService, productsService, promoService, journeyService } = require("../service")
 const { excessQty } = require("../utils/constant")
 const { successResponse, errorResponse } = require("../utils/responder")
 
@@ -32,6 +32,8 @@ exports.addToCarts = async (req, res, next) => {
         console.log(req.body)
         const data = await cartsService.addToCarts({ productId, userId: req.userId, size })
         successResponse(res, data)
+        journeyService.handleCartAbandonment(req.userId, [{productId, userId: req.userId, size}])
+
     } catch (error) {
         console.log(error)
         errorResponse(res, error)

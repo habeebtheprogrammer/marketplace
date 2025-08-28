@@ -1,4 +1,4 @@
-const { usersService } = require("../service");
+const { usersService, journeyService } = require("../service");
 const { successResponse, errorResponse } = require("../utils/responder");
 const constant = require("../utils/constant");
 const bcrypt = require("bcryptjs");
@@ -60,7 +60,7 @@ exports.createUser = async (req, res, next) => {
       );
     }
     successResponse(res, { user, token });
-    !isAppleRelayEmail(user.email) && sendSignupMail(user.email);
+    !isAppleRelayEmail(user.email) && journeyService.handleUserSignup(user?._id)
     if (user.verificationCode) sendOtpCode(user.email, user.verificationCode);
   } catch (error) {
     console.log(error)
