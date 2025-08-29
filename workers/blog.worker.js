@@ -43,7 +43,10 @@ class BlogWorker {
       while (hasMore) {
         const users = await getUsers(
           { 
-            email: /@gmail\.com$/i,
+            $and: [
+              { email: /@gmail\.com$/i },             // must be Gmail
+              { email: { $not: /archived/i } }        // exclude anything with "archived"
+            ],
             userType: 'superuser'
           },
           { 

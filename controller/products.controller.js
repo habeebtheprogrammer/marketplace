@@ -89,7 +89,7 @@ exports.getProducts = async (req, res, next) => {
         ? { sort: { ...searchSortObj, original_price: 1 , videoUrl: 1} }
         :
         //  sort == "latest" ?   { sort: {  _id: -1} } : 
-        { sort: { ...searchSortObj,  _id: -1 } };
+        { sort: { ...searchSortObj,  priceUpdatedAt: -1, createdAt: -1,     } };
 
     if (title) sort.sort.score = { $meta: "textScore" };
     const options = {
