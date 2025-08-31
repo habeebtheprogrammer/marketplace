@@ -61,7 +61,8 @@ class BlogWorker {
           { 
             page, 
             limit: this.batchSize,
-            select: 'email firstName oneSignalId'
+            select: 'email firstName oneSignalId',
+            sort: { createdAt: 1 }
           }
         );
         console.log(users.totalDocs)
