@@ -1139,7 +1139,7 @@ ul.social {
                 <tr>
                   <td class="force-cell text-col" style="vertical-align:top; padding-right:20px;">
                     <h3 style="margin:0 0 12px 0; font-size:18px; font-weight:700; color:#292929; line-height:1.3;">
-                      <a href="https://gadgetsafrica.com/blog/${blog.slug}" style="color:#292929; text-decoration:none;">
+                      <a href="https://360gadgetsafrica.com/blog/${blog.slug}" style="color:#292929; text-decoration:none;">
                         ${blog.title}
                       </a>
                     </h3>
@@ -1165,7 +1165,7 @@ ul.social {
           <tr>
             <td align="center" bgcolor="#ffffff" style="padding: 0px 40px 10px; " >
               <p style="border:1px solid #000; border-radius:6px; padding:12px 28px;">
-                  <a href="https://gadgetsafrica.com/blog" target="_blank" 
+                  <a href="https://360gadgetsafrica.com/blog" target="_blank" 
                 style="font-size:16px; font-weight:600; text-decoration:none; color:#000; display:inline-block; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
                 Explore More
               </a>
