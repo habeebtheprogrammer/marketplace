@@ -220,54 +220,6 @@ const unfilteredplans = {
             "network": "GLO"
         },
         {
-            "plan_name": "150MB",
-            "plan_id": "59",
-            "amount": "75.00",
-            "plan_type": "SME",
-            "plan_day": "1day validity don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "300MB",
-            "plan_id": "60",
-            "amount": "140.00",
-            "plan_type": "SME",
-            "plan_day": "2days validity don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "1GB",
-            "plan_id": "61",
-            "amount": "370.00",
-            "plan_type": "SME",
-            "plan_day": "3days validity social bundles, don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "2GB",
-            "plan_id": "62",
-            "amount": "580.00",
-            "plan_type": "SME",
-            "plan_day": "2days validity don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "7GB",
-            "plan_id": "63",
-            "amount": "2,150.00",
-            "plan_type": "SME",
-            "plan_day": "7days validity don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
-            "plan_name": "10GB",
-            "plan_id": "64",
-            "amount": "3,150.00",
-            "plan_type": "SME",
-            "plan_day": "30days validity don't buy if owing",
-            "network": "AIRTEL"
-        },
-        {
             "plan_name": "750MB",
             "plan_id": "79",
             "amount": "205.00",
@@ -548,7 +500,7 @@ const unfilteredplans = {
             "network": "MTN"
         }
     ],
-    "bilal": [
+    "bilal":[
         {
             "plan_name": "500MB",
             "plan_id": "1",

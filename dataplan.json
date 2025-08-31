@@ -135,15 +135,6 @@
     "vendor": "bilal"
   },
   {
-    "planName": "150MB",
-    "planId": "59",
-    "amount": "78.00",
-    "planType": "SME",
-    "duration": "1day validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
     "planName": "200MB",
     "planId": "118",
     "amount": "214.00",
@@ -160,15 +151,6 @@
     "duration": "1 day night bundle",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "300MB",
-    "planId": "60",
-    "amount": "146.00",
-    "planType": "SME",
-    "duration": "2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "300MB",
@@ -217,15 +199,6 @@
   },
   {
     "planName": "1GB",
-    "planId": "61",
-    "amount": "390.00",
-    "planType": "SME",
-    "duration": "3days validity social bundles, don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "1GB",
     "planId": "121",
     "amount": "830.00",
     "planType": "COOPERATE GIFTING",
@@ -259,15 +232,6 @@
     "duration": "3 days",
     "network": "AIRTEL",
     "vendor": "bilal"
-  },
-  {
-    "planName": "2GB",
-    "planId": "62",
-    "amount": "620.00",
-    "planType": "SME",
-    "duration": "2days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
   },
   {
     "planName": "2GB",
@@ -316,15 +280,6 @@
   },
   {
     "planName": "7GB",
-    "planId": "63",
-    "amount": "2293.00",
-    "planType": "SME",
-    "duration": "7days validity don't buy if owing",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "7GB",
     "planId": "72",
     "amount": "2208.00",
     "planType": "GIFTING PROMO",
@@ -338,15 +293,6 @@
     "amount": "3213.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days validity",
-    "network": "AIRTEL",
-    "vendor": "quickvtu"
-  },
-  {
-    "planName": "10GB",
-    "planId": "64",
-    "amount": "3354.00",
-    "planType": "SME",
-    "duration": "30days validity don't buy if owing",
     "network": "AIRTEL",
     "vendor": "quickvtu"
   },
