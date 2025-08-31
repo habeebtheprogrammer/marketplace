@@ -1,7 +1,7 @@
 const Users = require("../model/users.model")
 const Delivery = require("../model/delivery.model")
  
-exports.getUsers = async (filters = {}) => {
+exports.getUsers = async (filters = {}, options = {}) => {
     const data = await Users.paginate(filters,  {
         sort: {_id: -1},
         populate: [
@@ -11,7 +11,8 @@ exports.getUsers = async (filters = {}) => {
             {
                 path: "referredBy",
                 select: ["firstName", 'oneSignalId',"_id"],
-            }]
+            }],
+            ...options  // <-- pass page, limit, select, etc.
     })
     return data
 }

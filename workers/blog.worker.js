@@ -8,7 +8,7 @@ const { sendNotification } = require('../utils/onesignal');
 class BlogWorker {
   constructor() {
     this.job = null;
-    this.schedule = '0 17 * * *'; // Run at 5 PM daily
+    this.schedule = '0 19 * * *'; // Run at 5 PM daily
     this.batchSize = 100;
   }
 
@@ -74,22 +74,22 @@ class BlogWorker {
         for (const user of users.docs) {
           try {
             // Push notification
-            // await sendNotification({
-            //   headings: { "en": posts?.docs?.[0]?.title },
-            //   contents: { "en": `${posts?.docs?.[0]?.excerpt}` },
-            //   include_subscription_ids: [user?.oneSignalId],
-            //   url: `https://360gadgetsafrica.com/blog/${posts?.docs?.[0]?.slug}`,
-            //   big_picture: posts?.docs?.[0]?.coverImage,
-            // });
+            await sendNotification({
+              headings: { "en": posts?.docs?.[0]?.title },
+              contents: { "en": `${posts?.docs?.[0]?.excerpt}` },
+              include_subscription_ids: [user?.oneSignalId],
+              url: `https://360gadgetsafrica.com/blog/${posts?.docs?.[0]?.slug}`,
+              big_picture: posts?.docs?.[0]?.coverImage,
+            });
   
-            // // // Email
-            // await emailTransporter.sendMail({
-            //   from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
-            //   to: user.email,
-            //   subject: posts.docs?.[0]?.excerpt || 
-            //            `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
-            //   html: emailTemplates.daily_blog_digest({ posts: posts.docs })
-            // });
+            // // Email
+            await emailTransporter.sendMail({
+              from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
+              to: user.email,
+              subject: posts.docs?.[0]?.excerpt || 
+                       `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
+              html: emailTemplates.daily_blog_digest({ posts: posts.docs })
+            });
   
             totalSent++;
             console.log(`Sent email to ${user.email}`);
