@@ -8,7 +8,7 @@ const { sendNotification } = require('../utils/onesignal');
 class BlogWorker {
   constructor() {
     this.job = null;
-    this.schedule = '0 18 * * *'; // Run at 6 PM daily
+    this.schedule = '0 17 * * *'; // Run at 5 PM daily
     this.batchSize = 100;
   }
 
@@ -23,80 +23,91 @@ class BlogWorker {
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1); // Start of next day
       
-      const posts = await getBlogPosts({query: {
-        createdAt: { $gte: today, $lt: tomorrow }, // Between today 00:00 and tomorrow 00:00
-        archive: false
-      }, options: { 
-        sort: { createdAt: -1 },
-      }});
-
+      const posts = await getBlogPosts({
+        query: {
+          createdAt: { $gte: today, $lt: tomorrow },
+          archive: false
+        },
+        options: { sort: { createdAt: -1 } }
+      });
+  
       if (!posts.docs.length) {
         console.log('No new blog posts today. Skipping digest.');
         return { sent: 0, skipped: 0 };
       }
-
+  
       // Get all active users with Gmail addresses
       let page = 1;
       let totalSent = 0;
       let hasMore = true;
-
+  
       while (hasMore) {
         const users = await getUsers(
           { 
             $and: [
-              { email: /@gmail\.com$/i },             // must be Gmail
-              { email: { $not: /archived/i } }        // exclude anything with "archived"
+              { email: /@gmail\.com$/i },
+              { email: { $not: /archived/i } },
+              {
+                $or: [
+                  { verificationCode: { $exists: false } }, // field doesn’t exist
+                  { verificationCode: null },               // explicitly null
+                  { verificationCode: '' }                  // empty string
+                ]
+              }
             ],
-            userType: 'superuser'
+            userType: { $in: ['superuser', 'user'] }
+
           },
           { 
             page, 
             limit: this.batchSize,
-            select: 'email firstName'
+            select: 'email firstName oneSignalId'
           }
         );
-
+        console.log(users.totalDocs)
         if (!users.docs.length) {
           hasMore = false;
           continue;
         }
-        // Send emails in parallel
-        const sendPromises = users.docs.map(user => {
+  
+        // Send emails sequentially (1 per second)
+        for (const user of users.docs) {
           try {
-            sendNotification({
+            // Push notification
+            await sendNotification({
               headings: { "en": posts?.docs?.[0]?.title },
               contents: { "en": `${posts?.docs?.[0]?.excerpt}` },
-              include_subscription_ids: [user?.oneSignalId], 
-              url:  `https://360gadgetsafrica.com/blog/${posts?.docs?.[0]?.slug}`,
-              buttons: [
-                {
-                  action: 'view',
-                  text: 'Read More',
-                  icon: 'https://res.cloudinary.com/dnltxw2jt/image/upload/v1738234994/logo_fvvotl.png',
-                }
-              ],
+              include_subscription_ids: [user?.oneSignalId],
+              url: `https://360gadgetsafrica.com/blog/${posts?.docs?.[0]?.slug}`,
               big_picture: posts?.docs?.[0]?.coverImage,
-            })
+            });
+  
+            // // Email
+            await emailTransporter.sendMail({
+              from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
+              to: user.email,
+              subject: posts.docs?.[0]?.excerpt || 
+                       `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
+              html: emailTemplates.daily_blog_digest({ posts: posts.docs })
+            });
+  
+            totalSent++;
+            console.log(`Sent email to ${user.email}`);
+  
+            // Delay 1 second before next send
+            await new Promise(resolve => setTimeout(resolve, 1000));
+  
           } catch (error) {
-            console.log(error)
+            console.error(`Error sending to ${user.email}:`, error);
           }
-
-          return emailTransporter.sendMail({
-            from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
-            to: user.email,
-            subject: posts.docs?.[0]?.excerpt || `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
-            html: emailTemplates.daily_blog_digest({posts: posts.docs})
-          });
-        });
-    
-        await Promise.all(sendPromises);
-        totalSent += users.docs.length;
-        console.log(`Sent ${users.docs.length} emails in batch ${page}`);
+        }
+  
+        console.log(`Completed batch ${page}, sent ${users.docs.length} emails.`);
         
         page++;
         hasMore = users.hasNextPage;
       }
-
+  
       console.log(`Daily blog digest completed. Sent ${totalSent} emails.`);
       return { sent: totalSent, skipped: 0 };
     } catch (error) {
@@ -104,6 +115,7 @@ class BlogWorker {
       throw error;
     }
   }
+  
 
   start() {
     if (this.job) {
