@@ -155,7 +155,7 @@ ul.social {
                     </p>
                   </td>
                   <td class="force-cell img-col" style="vertical-align:top;">
-                    <img class="img-col-img" src="https://terra01.s3.amazonaws.com/images/Gadgets%20Payment%20November%2028%2C%202023%20%287%29.png" alt="Top-up services" width="100"  style="width:100%; max-width:120px; border-radius:4px; display:block;">
+                    <img class="img-col-img" src="https://terra01.s3.amazonaws.com/images/vtu.png" alt="Top-up services" width="100"  style="width:100%; max-width:120px; border-radius:4px; display:block;">
                   </td>
                 </tr>
               </table>
@@ -211,7 +211,7 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
@@ -458,7 +458,7 @@ ul.social {
                                 © 2025 Team 360 Ventures RC 7927753. All rights reserved
                             </p>
                             <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                                At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                                At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                             </p>
                             <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                                  No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
@@ -577,11 +577,11 @@ ul.social {
                 <tr>
                   <td class="force-cell text-col" style="vertical-align:top; padding-right:20px;">
                     <p style="margin:0 0 16px 0; font-size:14px; color:#757575; line-height:1.6;">
-                      Don’t miss this limited-time awoof offer. Save more, earn cashback, and even make money while helping your friends stay connected!
+                      Don’t miss this limited-time awoof offer. Save more, earn cashback, and while helping your friends stay connected!
                     </p>
                   </td>
                   <td class="force-cell img-col" style="vertical-align:top;">
-                    <img class="img-col-img" src="https://terra01.s3.amazonaws.com/images/Gadgets%20Payment%20November%2028%2C%202023%20%287%29.png" alt="Data top-up promo" width="100" style="border-radius:4px; display:block;">
+                    <img class="img-col-img" src="https://terra01.s3.amazonaws.com/images/vtu.png" alt="Data top-up promo" width="100" style="border-radius:4px; display:block;">
                   </td>
                 </tr>
               </table>
@@ -637,7 +637,7 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
@@ -806,7 +806,7 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
@@ -1048,7 +1048,7 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
@@ -1210,7 +1210,7 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love. While we are a technology and e-commerce platform (not a bank), our secure wallet and payment services are powered by trusted CBN-licensed partners such as Monnify and Flutterwave, giving you peace of mind with every transaction.
+                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
