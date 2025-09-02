@@ -8,7 +8,7 @@ const { sendNotification } = require('../utils/onesignal');
 class BlogWorker {
   constructor() {
     this.job = null;
-    this.schedule = '0 19 * * *'; // Run at 5 PM daily
+    this.schedule = '0 16 * * *'; // Run at 5 PM daily
     this.batchSize = 100;
   }
 

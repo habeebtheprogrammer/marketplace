@@ -27,7 +27,7 @@ var notification = new OneSignal.Notification();
     console.log('Notification sent successfully:');
     console.log(JSON.stringify(response, null, 2));
   } catch (error) {
-    console.error('Error sending notification:', error);
+    // console.error('Error sending notification:', error);
   }
 }
 
