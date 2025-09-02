@@ -2,7 +2,7 @@
 const JourneyTemplate = require("../model/journeyTemplate.model");
 const UserJourney = require("../model/userJourney.model");
 const emailTemplates = require("../emailTemplates");
-const { emailTransporter } = require("../utils/helpers");
+const { emailTransporter } = require("../utils/email");
 const { getBlogPosts } = require("./blogposts.service");
 const { getCarts } = require("./carts.service");
 const { sendNotification } = require("../utils/onesignal");
