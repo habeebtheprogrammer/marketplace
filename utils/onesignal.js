@@ -15,6 +15,13 @@ var notification = new OneSignal.Notification();
     notification.headings = data.headings
     notification.contents = data.contents
     notification.url = data.url
+    if(data.big_picture) {
+      notification.big_picture = data.big_picture
+      notification.ios_attachments = {
+        id1: data.big_picture
+      };
+      notification.large_icon = data.big_picture;
+    }
     // data.buttons ?  notification.buttons = data.buttons : null
     // notification.filters = data.include_subscription_ids.map(id => ({
     //   field: 'tag',
