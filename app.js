@@ -4,6 +4,8 @@ const dbServerConnect = require("./config/dbServerConnect");
 const express = require('express');
 const journeyWorker = require('./workers/journey.worker');
 const blogWorker = require('./workers/blog.worker');
+const dailyDataPlanWorker = require("./workers/dailyDataPlan.worker");
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -53,6 +55,7 @@ app.get('*', (req, res) => res.send("Hello world"));
 mongoose.connection.once('connected', () => {
   journeyWorker.start();
   blogWorker.start();
+  dailyDataPlanWorker.start();
   console.log('Workers started');
 });
 
@@ -61,7 +64,8 @@ process.on('SIGINT', async () => {
   console.log('Shutting down workers...');
   await Promise.all([
     journeyWorker.stop(),
-    blogWorker.stop()
+    blogWorker.stop(),
+    dailyDataPlanWorker.stop()
   ].map(p => p.catch(console.error)));
   process.exit(0);
 });
