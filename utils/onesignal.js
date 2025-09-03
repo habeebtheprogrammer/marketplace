@@ -22,13 +22,9 @@ var notification = new OneSignal.Notification();
       };
       notification.large_icon = data.big_picture;
     }
-    // data.buttons ?  notification.buttons = data.buttons : null
-    // notification.filters = data.include_subscription_ids.map(id => ({
-    //   field: 'tag',
-    //   key: 'include_player_ids',
-    //   relation: '=',
-    //   value: id
-    // }));
+    if(data.buttons) {
+      notification.buttons = data.buttons
+    }
     notification.include_subscription_ids = data.include_subscription_ids
     const response = await client.createNotification(notification);
     console.log('Notification sent successfully:');
