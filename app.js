@@ -5,6 +5,7 @@ const express = require('express');
 const journeyWorker = require('./workers/journey.worker');
 const blogWorker = require('./workers/blog.worker');
 const dailyDataPlanWorker = require("./workers/dailyDataPlan.worker");
+const notificationWorker = require('./workers/notification.worker');
 
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -56,6 +57,7 @@ mongoose.connection.once('connected', () => {
   journeyWorker.start();
   blogWorker.start();
   dailyDataPlanWorker.start();
+  notificationWorker.start();
   console.log('Workers started');
 });
 
@@ -65,7 +67,8 @@ process.on('SIGINT', async () => {
   await Promise.all([
     journeyWorker.stop(),
     blogWorker.stop(),
-    dailyDataPlanWorker.stop()
+    dailyDataPlanWorker.stop(),
+    notificationWorker.stop ? notificationWorker.stop() : Promise.resolve()
   ].map(p => p.catch(console.error)));
   process.exit(0);
 });
