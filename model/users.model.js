@@ -8,12 +8,14 @@ const usersSchema = new Schema(
     email: {
       type: String,
       unique: true,
-      required: [true, 'Email is required']
+      required: [true, 'Email is required'],
+      index: true
     },
     oneSignalId: String,
     phoneNumber: [{
       type: String,
-      unique: true,
+      // Remove unique constraint from schema level, we'll handle it in application logic
+      default: []
     }],
     userType: {
       type: String,
@@ -22,7 +24,8 @@ const usersSchema = new Schema(
     },
     firstName: {
       type: String,
-      required: [true, 'First name is required']
+      required: [true, 'First name is required'],
+      index: true
     },
     lastName: {
       type: String,
