@@ -214,7 +214,7 @@ ul.social {
                     At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
+                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/unsubscribe"
                     style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
             </td>
         </tr>
@@ -1051,7 +1051,7 @@ ul.social {
                     At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
+                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/unsubscribe"
                     style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
             </td>
         </tr>
@@ -1213,7 +1213,7 @@ ul.social {
                     At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
+                     No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/unsubscribe"
                     style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
             </td>
         </tr>

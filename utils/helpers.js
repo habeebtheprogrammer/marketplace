@@ -17,11 +17,12 @@ exports.s3 = new AWS.S3({
 
 exports.emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
-  host:  process.env.SMTP2_HOST,
-  port: "587",
+  host:  process.env.SMTP3_HOST,
+port: 465,
+secure: true,
   auth: {
-    user:  process.env.SMTP2_USER, // generated ethereal user
-    pass:  process.env.SMTP2_PASSWORD, // generated ethereal password
+    user:  process.env.SMTP3_USER, // generated ethereal user
+    pass:  process.env.SMTP3_PASSWORD, // generated ethereal password
   },
 });
 
