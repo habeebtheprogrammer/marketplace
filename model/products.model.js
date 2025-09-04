@@ -100,8 +100,17 @@ const productsSchema = new Schema(
   { timestamps: true }
 );
 
-// exports.productsSchema = productsSchema;
-productsSchema.index({ title: 'text' });
+// Create text index on both title and description for better search
+productsSchema.index({ 
+  title: 'text',
+  description: 'text' 
+}, {
+  weights: {
+    title: 3,      // Higher weight for title matches
+    description: 1  // Lower weight for description matches
+  }
+});
+
 productsSchema.plugin(mongoosePaginate);
 
 const Products = mongoose.model("products", productsSchema);
