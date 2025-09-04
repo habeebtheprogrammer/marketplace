@@ -120,7 +120,7 @@ const processJourneySteps = async (journey) => {
       const html = await renderEmailContent(step.template, journey.userId?._id);
       if (!html) continue;
       await emailTransporter.sendMail({
-        from: '"360GadgetsAfrica" <hello@360gadgetsafrica.com>',
+        from: '"360GadgetsAfrica" <support@360gadgetsafrica.com>',
         to: journey.userId?.email,
         subject: step.subject || "Update from 360GadgetsAfrica",
         html
