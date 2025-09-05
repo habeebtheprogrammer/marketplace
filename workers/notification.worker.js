@@ -60,16 +60,16 @@ class NotificationWorker {
     
     this.couponNotifications = [
       {
-        title: (code, discount) => `🎉 ${discount}% Off Your Next Purchase!`,
-        content: (code, discount) => `Use code ${code} to get ${discount}% off your next order. Limited time offer!`
+        title: (code, discount) => `🎉 ${discount}% Off Data Purchase!`,
+        content: (code, discount) => `Use code ${code} to get ${discount}% off your next data purchase. Limited time offer!`
       },
       {
         title: (code, discount) => `✨ Special ${discount}% Discount For You!`,
-        content: (code, discount) => `Your exclusive code ${code} gets you ${discount}% off. Shop now!`
+        content: (code, discount) => `Your exclusive code ${code} gets you ${discount}% off data purchase. Shop now!`
       },
       {
         title: (code, discount) => `🔥 Hot Deal: ${discount}% Off!`,
-        content: (code, discount) => `Use code ${code} at checkout for ${discount}% off your purchase. Limited time only!`
+        content: (code, discount) => `Use code ${code} at checkout for ${discount}% off your data purchase. Limited time only!`
       }
     ];
   }
@@ -94,7 +94,7 @@ class NotificationWorker {
     });
     
     // Schedule for Friday at 11 AM (coupon notifications)
-    cron.schedule('0 11 * * 5', async () => {
+    cron.schedule('0 12 * * 5', async () => {
       console.log('Running coupon notifications...');
       await this.sendCouponNotification();
     }, {
