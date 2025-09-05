@@ -114,6 +114,37 @@ exports.sendOrderConfirmationEmail = ({email, order, address}) => {
       console.log(err);
     });
 };
+
+exports.sendPasswordResetEmail = async (email, resetLink) => {
+  console.log(email, resetLink)
+  try {
+    await this.emailTransporter.sendMail({
+      from: '"360gadgetsafrica" <support@360gadgetsafrica.com>',
+      to: email,
+      subject: 'Password Reset Request',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Password Reset Request</h2>
+          <p>We received a request to reset your password. Click the button below to set a new password:</p>
+          <p style="margin: 30px 0;">
+            <a href="${resetLink}" 
+               style="background-color: #000; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
+              Reset Password
+            </a>
+          </p>
+          <p>If you didn't request this, you can safely ignore this email.</p>
+          <p>This link will expire in 1 hour.</p>
+          <p>Best regards,<br>The 360gadgetsafrica Team</p>
+        </div>
+      `
+    });
+    console.log(`Password reset email sent to ${email}`);
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    throw error;
+  }
+};
+
 exports.sendSwapEmail = (order) => {
   this.emailTransporter
     .sendMail({

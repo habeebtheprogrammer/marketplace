@@ -51,6 +51,8 @@ const usersSchema = new Schema(
     referrals: { type: Number, default: 0 }, 
     verificationCode: String,
     deviceid: String,
+    resetToken: String,
+    resetTokenExpiry: Date,
     location: {
       latitude: String,
       longitude: String,

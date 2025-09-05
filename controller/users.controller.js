@@ -8,6 +8,7 @@ const {
   isAppleRelayEmail,
   generateRandomNumber,
   sendOtpCode,
+  sendPasswordResetEmail,
 } = require("../utils/helpers");
 const Users = require("../model/users.model");
 
@@ -305,6 +306,76 @@ exports.getReferrals = async (req, res, next) => {
     console.log(JSON.stringify(data, null, 2))
     successResponse(res, data);
   } catch (error) {
+    errorResponse(res, error);
+  }
+};
+ 
+exports.requestPasswordReset = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) throw new Error('Email is required');
+
+    const user = await usersService.getUsers({ email });
+    if (!user?.totalDocs) {
+      return successResponse(res, { message: 'If an account exists with this email, a password reset link has been sent' });
+    }
+
+    const resetToken = generateRandomNumber(12);
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+
+    await usersService.updateUsers(
+      { _id: user.docs[0]._id },
+      { 
+        resetToken,
+        resetTokenExpiry 
+      }
+    );
+
+    const resetLink = `https://360gadgetsafrica.com/reset-password?token=${resetToken}&id=${user.docs[0]._id}`;
+    await sendPasswordResetEmail(email, resetLink);
+
+    successResponse(res, { message: 'If an account exists with this email, a password reset link has been sent' });
+  } catch (error) {
+    console.error('Password reset error:', error);
+    errorResponse(res, error);
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { password, token, userId } = req.body;
+
+    if (!token || !userId) {
+      throw new Error('Invalid or expired reset link');
+    }
+
+    const user = await usersService.getUsers({ _id: userId, resetToken: token });
+    if (!user?.totalDocs) {
+      throw new Error('Invalid or expired reset link');
+    }
+
+    const userData = user.docs[0];
+    if (userData.resetTokenExpiry < Date.now()) {
+      throw new Error('Reset link has expired');
+    }
+ 
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    await usersService.updateUsers(
+      { _id: userId },
+      { 
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpiry: null
+      }
+    );
+
+    // Send email with new password
+    await sendPasswordResetEmail(userData.email, `Your new password is: ${password}`);
+
+    successResponse(res, { message: 'Password has been reset successfully. Please check your email for the new password.' });
+  } catch (error) {
+    console.error('Password reset error:', error);
     errorResponse(res, error);
   }
 };
