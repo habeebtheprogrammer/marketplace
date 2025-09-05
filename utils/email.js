@@ -3,12 +3,9 @@ const nodemailer = require('nodemailer');
 // Create a transporter object using the default SMTP transport
 const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
-  host:  process.env.SMTP_HOST,
-  port: "587",
-  tls: {
-      ciphers: "SSLv3",
-      rejectUnauthorized: false,
-  },
+ host:  process.env.SMTP_HOST,
+port: 465,
+secure: true,
   auth: {
     user:  process.env.SMTP_USER, // generated ethereal user
     pass:  process.env.SMTP_PASSWORD, // generated ethereal password
