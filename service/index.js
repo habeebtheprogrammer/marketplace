@@ -11,6 +11,7 @@ const promoService = require("./promo.service")
 const walletsService = require("./wallets.service")
 const blogpostsService = require("./blogposts.service")
 const journeyService = require("./journey.service")
+const chatSessionsService = require("./chatSessions.service")
 module.exports = {
     usersService,
     productsService,
@@ -24,5 +25,6 @@ module.exports = {
     promoService,
     walletsService,
     blogpostsService,
-    journeyService
+    journeyService,
+    chatSessionsService
 }

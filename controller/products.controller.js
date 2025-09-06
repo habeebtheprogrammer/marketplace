@@ -62,64 +62,105 @@ exports.updateProducts = async (req, res, next) => {
 };
 
 exports.getProducts = async (req, res, next) => {
-  var token = req.header("authorization");
   try {
-    if (token) {
-      token = token.split(" ")[1];
-      var data = jwt.verify(token, process.env.JWT_SECRET);
-      req.userId = data._id;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-  try {
-    var filter = {};
-    var { sort, limit = 9, page = 1, title } = req.query;
+    const { page = 1, limit = 10, sort, ...filters } = req.query;
 
-    var pagination = { limit, page };
+    const query = buildAdvancedFilterQuery(filters);
 
-    const query = await buildFilterQuery(req.query);
-    console.log(JSON.stringify(query), limit, sort);
-    var searchSortObj = title ? { score: { $meta: "textScore" } } : {};
+    const sortOptions = buildSortOptions(sort, filters.title);
 
-    sort =
-      sort == "highToLow"
-        ? { sort: { ...searchSortObj, original_price: -1 , videoUrl: -1} }
-        : sort == "lowToHigh"
-        ? { sort: { ...searchSortObj, original_price: 1 , videoUrl: 1} }
-        :
-        //  sort == "latest" ?   { sort: {  _id: -1} } : 
-        { sort: { ...searchSortObj,  priceUpdatedAt: -1, createdAt: -1,     } };
-
-    if (title) sort.sort.score = { $meta: "textScore" };
     const options = {
-      ...sort,
-      ...pagination,
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      sort: sortOptions,
+      populate: [
+        { path: 'vendorId', select: 'title' },
+        { path: 'categoryId', select: 'title' }
+      ]
     };
-    if (title) options.score = { $meta: "textScore" };
 
-    const data = await productsService.getProducts({
-      query: { ...query, archive: false },
-      options,
-    });
-    if (query.slug && data.totalDocs == 1) {
-      var promo = await promoService.getPromo({});
-      var obj = promo.toObject();
-      const applied = obj.rewards.applied
-        .map((id) => id.toString())
-        .includes(req.userId);
-      if (
-        applied &&
-        data.docs[0]._id?.toString() == obj.rewards.productId._id?.toString()
-      ) {
-        data.docs[0].discounted_price = 0;
-      }
-    }
+    const data = await productsService.getProducts({ query, options });
+
     successResponse(res, data);
   } catch (error) {
-    console.log(error);
+    console.error('Error in getProducts:', error);
     errorResponse(res, error);
   }
+};
+
+const buildAdvancedFilterQuery = (filters) => {
+  const query = { archive: false };
+
+  if (filters.title) {
+    query.$text = { $search: filters.title };
+  }
+  if (filters.categoryId) {
+    query.categoryId = filters.categoryId;
+  }
+  if (filters.vendorId) {
+    query.vendorId = filters.vendorId;
+  }
+  if (filters.trending) {
+    query.trending = filters.trending === 'true';
+  }
+  if (filters.minPrice || filters.maxPrice) {
+    query.original_price = {};
+    if (filters.minPrice) {
+      query.original_price.$gte = parseFloat(filters.minPrice);
+    }
+    if (filters.maxPrice) {
+      query.original_price.$lte = parseFloat(filters.maxPrice);
+    }
+  }
+  if (filters.minRating || filters.maxRating) {
+    query.rating = {};
+    if (filters.minRating) {
+      query.rating.$gte = parseFloat(filters.minRating);
+    }
+    if (filters.maxRating) {
+      query.rating.$lte = parseFloat(filters.maxRating);
+    }
+  }
+  if (filters.is_stock) {
+    query.is_stock = parseInt(filters.is_stock, 10);
+  }
+  if (filters.size) {
+    query['size.title'] = filters.size;
+    query['size.is_stock'] = 1;
+  }
+
+  return query;
+};
+
+const buildSortOptions = (sort, title) => {
+  const sortOptions = title ? { score: { $meta: 'textScore' } } : {};
+
+  switch (sort) {
+    case 'highToLow':
+      sortOptions.original_price = -1;
+      break;
+    case 'lowToHigh':
+      sortOptions.original_price = 1;
+      break;
+    case 'latest':
+      sortOptions.createdAt = -1;
+      break;
+    case 'trending':
+      sortOptions.trending = -1;
+      break;
+    case 'rating':
+      sortOptions.rating = -1;
+      break;
+    case 'views':
+      sortOptions.views = -1;
+      break;
+    default:
+      sortOptions.priceUpdatedAt = -1;
+      sortOptions.createdAt = -1;
+      break;
+  }
+
+  return sortOptions;
 };
 
 exports.uploadImages = async (req, res, next) => {

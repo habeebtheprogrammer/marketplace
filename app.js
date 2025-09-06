@@ -16,7 +16,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 
-var routes = require('./routes'); 
+const routes = require('./routes');
 const { createSiteMap } = require('./utils/sitemap');
  
 var app = express();
@@ -49,6 +49,8 @@ app.get('/robots.txt', (req, res) => {
 app.get('/sitemap.xml', createSiteMap)
 app.get('/robots.txt', createSiteMap)
 app.use('/api', routes);
+
+// Chat sessions API
 
 app.get('*', (req, res) => res.send("Hello world"));
 
