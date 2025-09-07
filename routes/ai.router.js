@@ -1,10 +1,8 @@
 const express = require('express');
-const { chatSessionsService } = require('../service');
 const axios = require('axios');
-const chatAuth = require('../middleware/chatAuth');
 const router = express.Router();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
-const MARKETPLACE_BASE_URL = process.env.MARKETPLACE_BASE_URL || 'http://localhost:4000/api';
+const MARKETPLACE_BASE_URL = 'https://api.360gadgetsafrica.com/api';
 
 // Gemini tool-calling setup
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
