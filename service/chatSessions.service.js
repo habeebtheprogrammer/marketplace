@@ -1,22 +1,23 @@
 const ChatSession = require("../model/chatSessions.model");
 
-// Helper to build user query
-const buildUserQuery = (userId, deviceId = null) => {
-  if (!userId) return {};
-  
-  // For guest users, match either by userId (guest_*) or deviceId
-  if (typeof userId === 'string' && userId.startsWith('guest_')) {
+// Helper to build user/device scoping query
+// Ensures queries only return documents owned by either the authenticated user
+// or (for guests) the specific deviceId. If neither is present, returns a query
+// that matches nothing.
+const buildUserQuery = (userId = null, deviceId = null) => {
+  if (userId) {
+    return { userId };
+  }
+  if (deviceId) {
     return {
       $or: [
-        { userId },
-        { deviceId: deviceId || userId },
-        { userId: null, deviceId: deviceId || userId }
-      ]
+        { deviceId },
+        { userId: null, deviceId },
+      ],
     };
   }
-  
-  // For authenticated users, match by userId
-  return { userId };
+  // No identifier provided – match nothing
+  return { _id: null };
 };
 
 exports.createSession = async (sessionData) => {
@@ -25,43 +26,37 @@ exports.createSession = async (sessionData) => {
 };
 
 exports.getSession = async (sessionId, userId = null, deviceId = null) => {
-  const query = { sessionId };
-  if (userId) {
-    Object.assign(query, buildUserQuery(userId, deviceId));
-  }
-  console.log(query,'query',userId,sessionId, deviceId)
+  const query = { sessionId, ...buildUserQuery(userId, deviceId) };
   return await ChatSession.findOne(query);
 };
 
-exports.getUserSessions = async (userId, { page = 1, limit = 10 } = {}) => {
+exports.getUserSessions = async (userId = null, deviceId = null, { page = 1, limit = 10 } = {}) => {
   const options = { 
     page: +page || 1, 
     limit: +limit || 10, 
     sort: { updatedAt: -1 }, 
-    select: '-messages' 
+    // select: '-messages' 
   };
   
-  const query = { isActive: true };
-  if (userId) {
-    Object.assign(query, buildUserQuery(userId));
-  }
+  const query = { isActive: true, ...buildUserQuery(userId, deviceId) };
   
   return await ChatSession.paginate(query, options);
 };
 
-exports.addMessage = async (sessionId, message) => {
+exports.addMessage = async (sessionId, message, userId = null, deviceId = null) => {
   return await ChatSession.findOneAndUpdate(
-    { sessionId },
-    { $push: { messages: message },
+    { sessionId, ...buildUserQuery(userId, deviceId) },
+    { 
+      $push: { messages: message },
       $set: { updatedAt: new Date() }
     },
     { new: true }
   );
 };
 
-exports.updateSession = async (sessionId, updates) => {
+exports.updateSession = async (sessionId, updates, userId = null, deviceId = null) => {
   return await ChatSession.findOneAndUpdate(
-    { sessionId },
+    { sessionId, ...buildUserQuery(userId, deviceId) },
     { $set: { ...updates, updatedAt: new Date() } },
     { new: true }
   );

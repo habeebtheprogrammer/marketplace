@@ -9,13 +9,13 @@ const { errorResponse } = require('../utils/responder');
 const chatAuth = (req, res, next) => {
   // Check for JWT token
   const authHeader = req.headers.authorization;
+  const headerDeviceId = req.headers['x-device-id'] || req.headers['device-id'];
     if (authHeader) {
     const token = authHeader.split(' ')[1];
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.userId = decoded._id;
-      const deviceId = req.headers['device-id'];
-      req.deviceId = deviceId;
+      if (headerDeviceId) req.deviceId = headerDeviceId;
       return next();
     } catch (error) {
       // If token is invalid, continue as guest
@@ -23,15 +23,16 @@ const chatAuth = (req, res, next) => {
   }
   
   // For unauthenticated users, require device-id header
-  const deviceId = req.headers['device-id'];
+  const deviceId = headerDeviceId;
   if (!deviceId) {
     return errorResponse(res, { 
       message: 'Authentication required. Please provide a valid token or device ID.' 
-    }, 401);
+    }, 'Authentication required.', 401)
   }
   
   // For guest users, use deviceId as userId
 //   req.userId = `guest_${deviceId}`;
+  req.deviceId = deviceId;
   req.isGuest = true;
   next();
 };

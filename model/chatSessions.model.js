@@ -24,24 +24,8 @@ const messageSchema = new mongoose.Schema({
 
 const chatSessionSchema = new mongoose.Schema({
   userId: {
-    type: mongoose.Schema.Types.Mixed,
-    required: true,
-    index: true,
-    set: function(userId) {
-      // If it's a guest ID (starts with 'guest_'), store as string
-      if (typeof userId === 'string' && userId.startsWith('guest_')) {
-        return userId;
-      }
-      // Otherwise, try to convert to ObjectId
-      try {
-        return mongoose.Types.ObjectId(userId);
-      } catch (e) {
-        return userId; // Return as is if conversion fails
-      }
-    },
-    get: function(userId) {
-      return userId;
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users',
   },
   sessionId: {
     type: String,
