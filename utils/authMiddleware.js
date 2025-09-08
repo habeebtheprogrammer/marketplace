@@ -22,7 +22,7 @@ exports.checkAuth = (req, res, next) => {
     req.email = data.email;
     req.banned = data.banned;
     req.oneSignalId = oneSignalId
-    if(req.banned) throw Error("You account has been temporarily suspended.")
+    if(req.banned == true) throw Error("You account has been temporarily suspended.")
     if(data.verificationCode && req.originalUrl != '/api/users/refreshToken'){
       throw Error("Please verify your account")
     }
