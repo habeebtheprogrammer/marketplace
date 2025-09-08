@@ -8,7 +8,7 @@ class DailyDataPlanWorker {
   constructor() {
     this.job = null;
     this.schedule = '0 7 * * *'; // 8 AM daily
-    this.networks = ['MTN', 'AIRTEL', 'GLO', '9MOBILE'];
+    this.networks = ['MTN', 'AIRTEL', 'GLO'];
   }
 
   /**
