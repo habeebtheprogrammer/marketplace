@@ -12,6 +12,10 @@ const usersSchema = new Schema(
       index: true
     },
     oneSignalId: String,
+    banned: {
+      type: Boolean,
+      default: false
+    },
     phoneNumber: [{
       type: String,
       // Remove unique constraint from schema level, we'll handle it in application logic
