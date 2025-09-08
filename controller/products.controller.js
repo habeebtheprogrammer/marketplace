@@ -79,6 +79,12 @@ exports.getProducts = async (req, res, next) => {
       ]
     };
 
+    // If slug lookup is requested, force a single exact match response
+    if (filters.slug) {
+      options.page = 1;
+      options.limit = 1;
+    }
+
     const data = await productsService.getProducts({ query, options });
 
     successResponse(res, data);
@@ -93,6 +99,10 @@ const buildAdvancedFilterQuery = (filters) => {
 
   if (filters.title) {
     query.$text = { $search: filters.title };
+  }
+  // Exact product lookup by slug
+  if (filters.slug) {
+    query.slug = filters.slug;
   }
   if (filters.categoryId) {
     query.categoryId = filters.categoryId;
