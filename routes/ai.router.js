@@ -744,10 +744,10 @@ router.get('/chat', async (req, res) => {
             { headers, params }
         );
         // Surface device id back to the client for guest flows
-        if (headers['device-id']) {
-            res.set('x-device-id', headers['device-id']);
-            res.set('Access-Control-Expose-Headers', 'x-device-id');
-        }
+        // if (headers['device-id']) {
+        //     res.set('x-device-id', headers['device-id']);
+        //     res.set('Access-Control-Expose-Headers', 'x-device-id');
+        // }
         res.json(resp.data?.data || resp.data);
     } catch (err) {
         console.log(err)
@@ -761,16 +761,15 @@ router.get('/chat/:sessionId', async (req, res) => {
         const headers = getAuthHeaders(req);
         const { sessionId } = req.params;
         if (!sessionId) return res.status(400).json({ error: 'sessionId is required' });
-
         const resp = await axios.get(
             `${MARKETPLACE_BASE_URL}/chat/${encodeURIComponent(sessionId)}`,
             { headers }
         );
 
-        if (headers['device-id']) {
-            res.set('x-device-id', headers['device-id']);
-            res.set('Access-Control-Expose-Headers', 'x-device-id');
-        }
+        // if (headers['device-id']) {
+        //     res.set('x-device-id', headers['device-id']);
+        //     res.set('Access-Control-Expose-Headers', 'x-device-id');
+        // }
 
         // Augment messages with an 'html' field for better persistence on reload
         let data = resp.data?.data || resp.data;
@@ -789,7 +788,7 @@ router.get('/chat/:sessionId', async (req, res) => {
         }
 
         res.json(data);
-    } catch (err) {console.log(err)
+    } catch (err) {console.log(err,'asdf')
         const status = err.response?.status || 500;
         res.status(status).json({ error: err.response?.data || err.message });
     }

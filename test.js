@@ -22,7 +22,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "6",
-            "amount": "1,100.00",
+            "amount": "1,150.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -30,7 +30,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "7",
-            "amount": "1,650.00",
+            "amount": "1,700.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -498,13 +498,117 @@ const unfilteredplans = {
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days (MTN GIFTING)",
             "network": "MTN"
+        },
+        {
+            "plan_name": "150MB",
+            "plan_id": "149",
+            "amount": "60.00",
+            "plan_type": "SME",
+            "plan_day": "1day|| Don't Buy if Owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "300MB",
+            "plan_id": "150",
+            "amount": "120.00",
+            "plan_type": "SME",
+            "plan_day": "2days || Don't buy if Owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "600MB",
+            "plan_id": "151",
+            "amount": "220.00",
+            "plan_type": "SME",
+            "plan_day": "2days || Don't Buy if Owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "1GB",
+            "plan_id": "152",
+            "amount": "390.00",
+            "plan_type": "SME",
+            "plan_day": "400",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "2GB",
+            "plan_id": "153",
+            "amount": "530.00",
+            "plan_type": "SME",
+            "plan_day": "1days || Don't Buy if Owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "2GB",
+            "plan_id": "154",
+            "amount": "1,550.00",
+            "plan_type": "SME",
+            "plan_day": "30days|| Don't buy if owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "3GB",
+            "plan_id": "155",
+            "amount": "2,050.00",
+            "plan_type": "SME",
+            "plan_day": "30days || Don't buy if owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "3.5GB",
+            "plan_id": "156",
+            "amount": "1,550.00",
+            "plan_type": "SME",
+            "plan_day": "7days|| Don\u2019t buy if owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "4GB",
+            "plan_id": "157",
+            "amount": "780.00",
+            "plan_type": "SME",
+            "plan_day": "2days|| Don\u2019t buy owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "7GB",
+            "plan_id": "158",
+            "amount": "2,150.00",
+            "plan_type": "SME",
+            "plan_day": "7days || Don't if owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "10GB",
+            "plan_id": "159",
+            "amount": "3,120.00",
+            "plan_type": "SME",
+            "plan_day": "30days || Don't buy if owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "13GB",
+            "plan_id": "160",
+            "amount": "5,100.00",
+            "plan_type": "SME",
+            "plan_day": "30days || Don't buy if owing",
+            "network": "AIRTEL"
+        },
+        {
+            "plan_name": "35GB",
+            "plan_id": "161",
+            "amount": "10,100.00",
+            "plan_type": "SME",
+            "plan_day": "30days || Don't buy if owing",
+            "network": "AIRTEL"
         }
     ],
     "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "410.00",
+            "amount": "400.00",
             "plan_type": "SME",
             "plan_day": "30days to 7days",
             "network": "MTN"

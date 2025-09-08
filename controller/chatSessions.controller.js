@@ -79,7 +79,6 @@ exports.getSession = async (req, res, next) => {
     if (!session) {
       return errorResponse(res, { message: 'Session not found' }, 404);
     }
-
     successResponse(res, { ...session.toObject?.() || session});
   } catch (error) {console.log(error)
     errorResponse(res, error);
