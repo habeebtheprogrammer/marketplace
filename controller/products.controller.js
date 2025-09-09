@@ -4,6 +4,7 @@ const {
   usersService,
   vendorsService,
   promoService,
+  categoriesService,
 } = require("../service");
 const {
   generateRandomNumber,
@@ -65,7 +66,7 @@ exports.getProducts = async (req, res, next) => {
   try {
     const { page = 1, limit = 10, sort, ...filters } = req.query;
 
-    const query = buildAdvancedFilterQuery(filters);
+    const query = await buildAdvancedFilterQuery(filters);
 
     const sortOptions = buildSortOptions(sort, filters.title);
 
@@ -94,7 +95,7 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
-const buildAdvancedFilterQuery = (filters) => {
+const buildAdvancedFilterQuery = async (filters) => {
   const query = { archive: false };
 
   if (filters.title) {
@@ -106,6 +107,26 @@ const buildAdvancedFilterQuery = (filters) => {
   }
   if (filters.categoryId) {
     query.categoryId = filters.categoryId;
+  }
+  // Category lookup by provided category identifier (e.g., slug or title)
+  if (filters.category && !query.categoryId) {
+    try {
+      const search = String(filters.category).trim();
+      // Try to match by slug or case-insensitive exact title
+      const categories = await categoriesService.getCategories({
+        archive: false,
+        $or: [
+          { slug: search },
+          { title: { $regex: `^${search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } },
+        ],
+      });
+      const categoryDoc = categories?.docs?.[0];
+      if (categoryDoc?._id) {
+        query.categoryId = categoryDoc._id;
+      }
+    } catch (e) {
+      // Fail silently for category lookup; proceed without category filter
+    }
   }
   if (filters.vendorId) {
     query.vendorId = filters.vendorId;
