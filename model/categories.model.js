@@ -9,6 +9,10 @@ const categorySchema = new Schema(
       type: String,
       required: [true, 'Title is required']
     },
+    description: {
+      type: String,
+      required: [true, 'Description is required']
+    },
     image: {
       type: String,
       required: [true, 'An image is required']
