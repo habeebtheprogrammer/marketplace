@@ -2,11 +2,12 @@ const Products = require("../model/products.model");
 const RequestsModel = require("../model/requests.model");
 
 exports.getProducts = async ({ query = {}, options = {} }) => {
+  console.log('looooooo')
   const data = await Products.paginate(query, {
     populate: [
       {
         path: "categoryId",
-        select: "title",
+        select: ["title", "slug"],
       },
       {
         path: "vendorId",
@@ -65,7 +66,7 @@ exports.getProductById = async (id) => {
   const data = await Products.findById(id).populate([
     {
       path: "categoryId",
-      select: "title",
+      select: ["title", "slug"],
     },
     {
       path: "vendorId",

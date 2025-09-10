@@ -74,10 +74,6 @@ exports.getProducts = async (req, res, next) => {
       page: parseInt(page, 10),
       limit: parseInt(limit, 10),
       sort: sortOptions,
-      populate: [
-        { path: 'vendorId', select: 'title' },
-        { path: 'categoryId', select: 'title' }
-      ]
     };
 
     // If slug lookup is requested, force a single exact match response
@@ -115,15 +111,13 @@ const buildAdvancedFilterQuery = async (filters) => {
       // Try to match by slug or case-insensitive exact title
       const categories = await categoriesService.getCategories({
         archive: false,
-        $or: [
-          { slug: search },
-          { title: { $regex: `^${search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } },
-        ],
+        slug: search 
       });
       const categoryDoc = categories?.docs?.[0];
       if (categoryDoc?._id) {
         query.categoryId = categoryDoc._id;
       }
+      console.log(search,'search', categoryDoc)
     } catch (e) {
       // Fail silently for category lookup; proceed without category filter
     }

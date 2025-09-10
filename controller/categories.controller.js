@@ -38,8 +38,9 @@ exports.updateCategories = async (req, res, next) => {
 };
 
 exports.getCategories = async (req, res, next) => {
-  try {
-    const data = await categoriesService.getCategories({});
+  try { 
+    const query =  req.query || {}
+    const data = await categoriesService.getCategories(query);
     successResponse(res, data);
   } catch (error) {
     errorResponse(res, error);

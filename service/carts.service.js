@@ -7,8 +7,13 @@ exports.getCarts = async (filters = {}) => {
           populate: {
             path: "vendorId",
             select: "title"
+          },
+          populate: {
+            path: "categoryId",
+            select: ["title", "slug"]
           }
-        }]})
+        },
+      ]})
     return data
 }
 

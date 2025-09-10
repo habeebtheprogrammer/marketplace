@@ -1,7 +1,7 @@
 const Categories = require("../model/categories.model");
 
-exports.getCategories = async (filters = {}) => {
-  const data = await Categories.paginate(filters, {});
+exports.getCategories = async (filters = {}, options = {}) => {
+  const data = await Categories.paginate(filters, options);
   return data;
 };
 
