@@ -1622,11 +1622,11 @@ ul.social {
                           <tr>
                               <td width="60%" class="logo" style="text-align: center;">
                                   <ul class="navigation">
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=6693a207de54aec5bdcdac71">Iphones</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=66bdb30df477a40cd5597863">Samsung</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=66bc53fcf477a40cd559785a">Google Pixel</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=6693a1b7eae4b1d9160fa213">Laptops</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=66939b495f023a03cf476d45">Accessories</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/Iphones-42877">Iphones</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/samsung-232323">Samsung</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/pixel-42877">Google Pixel</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/Macbooks-ipads-59769">Laptops</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/Accessories-82240">Accessories</a></li>
                                   </ul>
                               </td>
                           </tr>
@@ -2358,11 +2358,11 @@ ul.social {
                           <tr>
                               <td width="60%" class="logo" style="text-align: center;">
                                   <ul class="navigation">
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=6693a207de54aec5bdcdac71">Iphones</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=66bdb30df477a40cd5597863">Samsung</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=66bc53fcf477a40cd559785a">Google Pixel</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=6693a1b7eae4b1d9160fa213">Laptops</a></li>
-                                      <li><a href="https://360gadgetsafrica.com/product-listing?categoryId=66939b495f023a03cf476d45">Accessories</a></li>
+                                     <li><a href="https://360gadgetsafrica.com/gadgets/Iphones-42877">Iphones</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/samsung-232323">Samsung</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/pixel-42877">Google Pixel</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/Macbooks-ipads-59769">Laptops</a></li>
+                                      <li><a href="https://360gadgetsafrica.com/gadgets/Accessories-82240">Accessories</a></li>
                                   </ul>
                               </td>
                           </tr>
