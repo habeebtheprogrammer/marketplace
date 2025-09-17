@@ -608,7 +608,7 @@ const unfilteredplans = {
         {
             "plan_name": "500MB",
             "plan_id": "1",
-            "amount": "400.00",
+            "amount": "380.00",
             "plan_type": "SME",
             "plan_day": "30days to 7days",
             "network": "MTN"
