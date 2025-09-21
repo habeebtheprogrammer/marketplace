@@ -85,7 +85,7 @@ class NotificationWorker {
     });
 
     // Schedule for Wednesday at 2 PM (gadget notifications)
-    cron.schedule('0 16 * * 3', async () => {
+    cron.schedule('0 15 * * 3', async () => {
       console.log('Running gadget notifications...');
       await this.sendGadgetNotification();
     }, {
