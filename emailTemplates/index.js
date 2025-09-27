@@ -285,10 +285,10 @@ ul.social {
                 </ul>
                 <h3 style="margin:16px 0 10px; font-size:16px; font-weight:700; color:#292929;">Your Role</h3>
                 <p style="margin:0 0 14px; font-size:15px; color:#333; line-height:1.6;">
-                  Use your influence to represent 360 Gadgets Africa in your school — helping students discover how to buy, repair, finance, and top-up their gadgets with ease.
+                  Use your influence to represent 360 Gadgets Africa in your school: helping students discover how to buy, repair, finance, and top-up their gadgets with ease.
                 </p>
                 <div style="margin:18px 0 22px; text-align:center;">
-                  <a href="https://chat.whatsapp.com/H19qwMrILUrGP6o9I58puP" target="_blank" style="background:#000; color:#fff; text-decoration:none; padding:12px 22px; border-radius:6px; font-weight:600; display:inline-block;">Get Started</a>
+                  <a href="https://360gadgetsafrica.com" target="_blank" style="background:#000; color:#fff; text-decoration:none; padding:12px 22px; border-radius:6px; font-weight:600; display:inline-block;">Continue</a>
                 </div>
                 <p style="margin:0; font-size:12px; color:#777; line-height:1.6;">
                   By applying to or participating in the Student Ambassador Program, you agree to comply with the Terms of Use and any program-specific guidelines communicated to you. Participation is voluntary and may be modified or discontinued at any time at the discretion of 360GadgetsAfrica.
