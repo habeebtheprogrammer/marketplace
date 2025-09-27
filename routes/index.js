@@ -36,5 +36,6 @@ router.use("/ussd", ussdRoutes); // USSD endpoint for Africa's talking
 router.use("/journey", journeyRouter);  
 router.use("/chat", chatSessionsRouter);
 router.use("/ai", aiRouter);
+router.use("/blog", blogpostsRouter);
 router.use("/ambassador", ambassadorRouter);
 module.exports = router
