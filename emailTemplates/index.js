@@ -288,7 +288,7 @@ ul.social {
                   Use your influence to represent 360 Gadgets Africa in your school — helping students discover how to buy, repair, finance, and top-up their gadgets with ease.
                 </p>
                 <div style="margin:18px 0 22px; text-align:center;">
-                  <a href="https://chat.whatsapp.com/H19qwMrILUrGP6o9I58puP" target="_blank" style="background:#000; color:#fff; text-decoration:none; padding:12px 22px; border-radius:6px; font-weight:600; display:inline-block;">Join Now</a>
+                  <a href="https://chat.whatsapp.com/H19qwMrILUrGP6o9I58puP" target="_blank" style="background:#000; color:#fff; text-decoration:none; padding:12px 22px; border-radius:6px; font-weight:600; display:inline-block;">Get Started</a>
                 </div>
                 <p style="margin:0; font-size:12px; color:#777; line-height:1.6;">
                   By applying to or participating in the Student Ambassador Program, you agree to comply with the Terms of Use and any program-specific guidelines communicated to you. Participation is voluntary and may be modified or discontinued at any time at the discretion of 360GadgetsAfrica.
