@@ -8,6 +8,7 @@ This document provides a comprehensive guide to the Marketplace API, designed to
 - [Product Management](#product-management)
 - [Category Management](#category-management) 
 - [Wallet Management](#wallet-management) 
+- [Ambassador Management](#ambassador-management)
 
 ---
 
@@ -242,6 +243,152 @@ This document provides a comprehensive guide to the Marketplace API, designed to
   }
   ```
 - **Error Responses**:
+  - `400 Bad Request`: 
+    - Invalid request body
+    - Amount exceeds ₦500 limit
+    - Insufficient balance
+  - `401 Unauthorized`: Invalid or missing authentication token
+
+---
+
+## Ambassador Management
+
+### 1. List Ambassadors
+
+- Endpoint: `/ambassador`
+- HTTP Method: `GET`
+- Description: Retrieves a paginated list of ambassadors. Supports basic text search across `fullName`, `email`, `university`, and `department`.
+- Authentication: None.
+- Query Parameters:
+  - `page` (number, optional): Page number (default: 1)
+  - `limit` (number, optional): Items per page (default: 10)
+  - `sort` (string, optional): Field to sort by (desc) e.g. `createdAt`
+  - `search` (string, optional): Text to search across fields
+- Response (Success - 200):
+  ```json
+  {
+    "success": true,
+    "data": {
+      "docs": [
+        {
+          "_id": "66f6b2f4a1b2c3d4e5f67890",
+          "fullName": "Jane Doe",
+          "email": "jane@example.com",
+          "university": "UNILAG",
+          "department": "Computer Science",
+          "phone": "08030000000",
+          "archive": false,
+          "createdAt": "2025-09-27T20:50:00.000Z",
+          "updatedAt": "2025-09-27T20:50:00.000Z"
+        }
+      ],
+      "totalDocs": 1,
+      "limit": 10,
+      "page": 1,
+      "totalPages": 1,
+      "hasPrevPage": false,
+      "hasNextPage": false
+    }
+  }
+  ```
+
+### 2. Create Ambassador
+
+- Endpoint: `/ambassador`
+- HTTP Method: `POST`
+- Description: Creates a new ambassador record.
+- Authentication: Bearer token required.
+- Request Body:
+  ```json
+  {
+    "fullName": "Jane Doe",
+    "email": "jane@example.com",
+    "university": "UNILAG",
+    "department": "Computer Science",
+    "phone": "08030000000"
+  }
+  ```
+- Response (Success - 201/200):
+  ```json
+  {
+    "success": true,
+    "data": {
+      "_id": "66f6b2f4a1b2c3d4e5f67890",
+      "fullName": "Jane Doe",
+      "email": "jane@example.com",
+      "university": "UNILAG",
+      "department": "Computer Science",
+      "phone": "08030000000",
+      "archive": false,
+      "createdAt": "2025-09-27T20:50:00.000Z",
+      "updatedAt": "2025-09-27T20:50:00.000Z"
+    }
+  }
+  ```
+- Error Responses:
+  - `412 Precondition Failed`: Validation failed (missing/invalid fields)
+  - `409 Conflict`: Duplicate email
+  - `401 Unauthorized`: Missing/invalid token
+
+### 3. Update Ambassador
+
+- Endpoint: `/ambassador`
+- HTTP Method: `PATCH`
+- Description: Updates an existing ambassador. Requires `_id` in body. Only provided fields are updated.
+- Authentication: Bearer token required.
+- Request Body:
+  ```json
+  {
+    "_id": "66f6b2f4a1b2c3d4e5f67890",
+    "phone": "08031111111"
+  }
+  ```
+- Response (Success - 200):
+  ```json
+  {
+    "success": true,
+    "data": {
+      "_id": "66f6b2f4a1b2c3d4e5f67890",
+      "fullName": "Jane Doe",
+      "email": "jane@example.com",
+      "university": "UNILAG",
+      "department": "Computer Science",
+      "phone": "08031111111",
+      "archive": false,
+      "updatedAt": "2025-09-27T21:00:00.000Z"
+    }
+  }
+  ```
+- Error Responses:
+  - `412 Precondition Failed`: `_id` missing
+  - `401 Unauthorized`: Missing/invalid token
+
+### 4. Delete Ambassador
+
+- Endpoint: `/ambassador`
+- HTTP Method: `DELETE`
+- Description: Deletes an ambassador by ID.
+- Authentication: Bearer token required.
+- Request Body:
+  ```json
+  {
+    "id": "66f6b2f4a1b2c3d4e5f67890"
+  }
+  ```
+- Response (Success - 200):
+  ```json
+  {
+    "success": true,
+    "data": {
+      "_id": "66f6b2f4a1b2c3d4e5f67890",
+      "fullName": "Jane Doe",
+      "email": "jane@example.com"
+    }
+  }
+  ```
+- Error Responses:
+  - `400 Bad Request`: `id` missing
+  - `401 Unauthorized`: Missing/invalid token
   - `404 Not Found`: Product with the specified ID was not found
   
 ## Category Management
@@ -667,9 +814,3 @@ This document provides a comprehensive guide to the Marketplace API, designed to
   }
   ```
 - **Error Responses**:
-  - `400 Bad Request`: 
-    - Invalid request body
-    - Amount exceeds ₦500 limit
-    - Insufficient balance
-  - `401 Unauthorized`: Invalid or missing authentication token
- 

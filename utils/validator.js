@@ -72,6 +72,17 @@ exports.categoryCreationValidator = async (req, res, next) => {
     validate(req, res, next, validationRule)
 }
 
+exports.ambassadorCreationValidator = async (req, res, next) => {
+    const validationRule = {
+        "fullName": "required|string",
+        "email": "required|string|email",
+        "university": "required|string",
+        "department": "required|string",
+        "phone": "required|string",
+    };
+    validate(req, res, next, validationRule)
+}
+
 exports.vendorsCreationValidator = async (req, res, next) => {
     const validationRule = {
         "title": "required|string",

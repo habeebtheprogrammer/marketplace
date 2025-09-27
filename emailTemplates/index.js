@@ -227,6 +227,112 @@ ul.social {
 </html>
 `
   },
+  ambassador_program_invite: function ({ fullName = "there" } = {}) {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>360GadgetsAfrica - Student Ambassador Program</title>
+  <style>
+    body, table, td, p, a { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+    table, td { mso-table-lspace:0pt; mso-table-rspace:0pt; }
+    @media screen and (max-width: 600px) {
+      .container { width: 100% !important; border-radius: 0 !important; }
+      .mobile-padding { padding: 20px !important; }
+    }
+  </style>
+  <!--[if mso]>
+  <style>
+    .fallback-button { background:#000 !important; }
+  </style>
+  <![endif]-->
+  </head>
+  <body style="margin:0; padding:0; background-color:#f8f9fa; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f8f9fa;">
+      <tr>
+        <td align="center" style="padding:40px 20px;">
+          <table role="presentation" class="container" width="600" border="0" cellspacing="0" cellpadding="0" style="max-width:600px; background-color:#ffffff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+            <tr>
+              <td valign="top" style="padding: 16px 40px 0; text-align:center;">
+                <a href="https://360gadgetsafrica.com"><img width="50" src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1735744097/360/zpibebpd5dopnxvttltd.png" alt="360GadgetsAfrica"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="mobile-padding" style="padding:10px 40px 10px; text-align:center;">
+                <h1 style="margin:0; font-size:26px; font-weight:700; color:#292929; line-height:1.2; font-family:'Playfair Display', Georgia, serif;">
+                  You're Invited, ${fullName}!
+                </h1>
+                <p style="margin:10px 0 0; font-size:14px; color:#666;">Join the 360 Gadgets Africa Student Ambassador Program</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 40px;">
+                <table role="presentation" width="100%"><tr><td style="border-bottom:1px solid #e6e6e6;"></td></tr></table>
+              </td>
+            </tr>
+            <tr>
+              <td class="mobile-padding" style="padding:20px 40px 10px;">
+                <p style="margin:0 0 14px; font-size:15px; color:#333; line-height:1.6;">
+                  Do you love gadgets, technology, and connecting with people? 360 Gadgets Africa is launching a Student Ambassador Program and we’re looking for energetic, influential students from your campus to join us!
+                </p>
+                <h3 style="margin:16px 0 10px; font-size:16px; font-weight:700; color:#292929;">What’s in it for you?</h3>
+                <ul style="margin:0; padding-left:18px; font-size:14px; color:#555; line-height:1.7;">
+                  <li>Be recognized as an official 360 Gadgets Africa Student Ambassador</li>
+                  <li>Gain leadership and marketing experience that stands out on your CV</li>
+                  <li>Get exclusive rewards from discounts to commissions and more</li>
+                  <li>Access to exciting events, giveaways, and insider perks</li>
+                </ul>
+                <h3 style="margin:16px 0 10px; font-size:16px; font-weight:700; color:#292929;">Your Role</h3>
+                <p style="margin:0 0 14px; font-size:15px; color:#333; line-height:1.6;">
+                  Use your influence to represent 360 Gadgets Africa in your school — helping students discover how to buy, repair, finance, and top-up their gadgets with ease.
+                </p>
+                <div style="margin:18px 0 22px; text-align:center;">
+                  <a href="https://chat.whatsapp.com/H19qwMrILUrGP6o9I58puP" target="_blank" style="background:#000; color:#fff; text-decoration:none; padding:12px 22px; border-radius:6px; font-weight:600; display:inline-block;">Join Now</a>
+                </div>
+                <p style="margin:0; font-size:12px; color:#777; line-height:1.6;">
+                  By applying to or participating in the Student Ambassador Program, you agree to comply with the Terms of Use and any program-specific guidelines communicated to you. Participation is voluntary and may be modified or discontinued at any time at the discretion of 360GadgetsAfrica.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td class="mobile-padding" style="padding: 25px 40px 10px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffd93d; border-radius: 6px;">
+                  <tr>
+                    <td style="padding: 20px; text-align: center;">
+                      <p style="margin: 0; font-size: 12px; color: #e91e63; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">NEED HELP?</p>
+                      <h2 class="mobile-h2" style="margin: 0; font-size: 18px; font-weight: bold; color: #292929; line-height: 1.2;">If you have any questions, reply to this email — our team is always ready to help.</h2>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 30px 25px; background-color: #f8f9fa;">
+                <ul style="padding:0; margin:0; list-style:none; text-align:left;">
+                  <li style="display:inline-block; margin-right:10px;">
+                    <a href="https://apps.apple.com/app/360gadgetsafrica/id6736353137?platform=iphone" target="_blank">
+                      <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1731154161/ntsv2brfd8lboncvjavk.png" alt="Download on the App Store" style="width:100px;" />
+                    </a>
+                  </li>
+                  <li style="display:inline-block; margin-right:10px;">
+                    <a href="https://play.google.com/store/apps/details?id=com.gadgetsafrica.gadgetsafrica" target="_blank">
+                      <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1731153650/ibfyv6toskeeikywuuv5.webp" alt="Download on Google Play" style="width:100px;" />
+                    </a>
+                  </li>
+                </ul>
+                <p style="margin: 12px 0 8px; font-size: 12px; color: #999999; line-height: 1.4;">© 2025 Team 360 Ventures RC 7927753. All rights reserved</p>
+                <p style="margin: 0; font-size: 12px; color: #999999; line-height: 1.5;">At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love.</p>
+                <p style="margin: 8px 0 0; font-size: 12px; color: #999999; line-height: 1.5;">No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`
+  },
   getting_started: function () {
     return `
         <!DOCTYPE html>

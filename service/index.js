@@ -12,6 +12,7 @@ const walletsService = require("./wallets.service")
 const blogpostsService = require("./blogposts.service")
 const journeyService = require("./journey.service")
 const chatSessionsService = require("./chatSessions.service")
+const ambassadorService = require("./ambassador.service")
 module.exports = {
     usersService,
     productsService,
@@ -26,5 +27,6 @@ module.exports = {
     walletsService,
     blogpostsService,
     journeyService,
-    chatSessionsService
+    chatSessionsService,
+    ambassadorService,
 }

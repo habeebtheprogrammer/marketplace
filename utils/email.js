@@ -29,7 +29,7 @@ const sendEmail = async (to, subject, html, from = "support@360gadgetsafrica.com
             html,
         };
 
-        const info = await this.emailTransporter.sendMail(mailOptions);
+        const info = await emailTransporter.sendMail(mailOptions);
         console.log(info)
         return {
             success: true,

@@ -18,6 +18,7 @@ const ussdRoutes = require('./ussd.router');
 const journeyRouter = require('./journey.router');
 const chatSessionsRouter = require('./chatSessions.router');
 const aiRouter = require('./ai.router');
+const ambassadorRouter = require('./ambassador.router');
 router.use("/emails", emailRouter);
 router.use("/users", usersRouter)
 router.use("/vendors", vendorsRouter)
@@ -30,10 +31,10 @@ router.use("/orders", ordersRouter)
 router.use("/swap", swapRouter)
 router.use("/promo", promoRouter)
 router.use("/wallets", walletsRouter)
-router.use("/blog", blogpostsRouter)
 router.use("/coupons", couponsRouter)
-router.use("/ussd", ussdRoutes); // USSD endpoint for Africa's Talking
+router.use("/ussd", ussdRoutes); // USSD endpoint for Africa's talking
 router.use("/journey", journeyRouter);  
 router.use("/chat", chatSessionsRouter);
 router.use("/ai", aiRouter);
-module.exports = router 
+router.use("/ambassador", ambassadorRouter);
+module.exports = router

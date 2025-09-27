@@ -13,6 +13,7 @@ const walletsController = require("./wallets.controller")
 const blogpostsController = require("./blogposts.controller")
 const journeyController = require("./journey.controller")
 const chatSessionsController = require("./chatSessions.controller");
+const ambassadorController = require("./ambassador.controller")
 
 module.exports  = {
     usersController,
@@ -29,4 +30,5 @@ module.exports  = {
     blogpostsController,
     journeyController,
     chatSessionsController,
+    ambassadorController,
 }
