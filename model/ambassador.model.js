@@ -28,6 +28,10 @@ const ambassadorSchema = new Schema(
       type: String,
       required: [true, 'Phone number is required']
     },
+    why: {
+      type: String,
+      required: [true, 'Reason for applying is required']
+    },
     archive: {
       type: Boolean,
       default: false
@@ -37,7 +41,7 @@ const ambassadorSchema = new Schema(
 );
 
 ambassadorSchema.plugin(mongoosePaginate);
-ambassadorSchema.index({ fullName: 'text', email: 'text', university: 'text', department: 'text' });
+ambassadorSchema.index({ fullName: 'text', email: 'text', university: 'text', department: 'text', why: 'text' });
 
 const Ambassador = mongoose.model("ambassadors", ambassadorSchema);
 

@@ -79,6 +79,7 @@ exports.ambassadorCreationValidator = async (req, res, next) => {
         "university": "required|string",
         "department": "required|string",
         "phone": "required|string",
+        "why": "required|string",
     };
     validate(req, res, next, validationRule)
 }

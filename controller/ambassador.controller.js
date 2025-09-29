@@ -11,6 +11,7 @@ exports.createAmbassador = async (req, res) => {
       university: req.body.university,
       department: req.body.department,
       phone: req.body.phone,
+      why: req.body.why,
     });
     // Fire-and-forget email (do not block or fail the main response)
     try {
