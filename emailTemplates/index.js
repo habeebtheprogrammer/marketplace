@@ -211,9 +211,6 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
-                </p>
-                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/unsubscribe"
                     style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
             </td>
@@ -322,7 +319,6 @@ ul.social {
                   </li>
                 </ul>
                 <p style="margin: 12px 0 8px; font-size: 12px; color: #999999; line-height: 1.4;">© 2025 Team 360 Ventures RC 7927753. All rights reserved</p>
-                <p style="margin: 0; font-size: 12px; color: #999999; line-height: 1.5;">At 360GadgetsAfrica, we power smarter shopping, seamless payments, and instant access to the gadgets you love.</p>
                 <p style="margin: 8px 0 0; font-size: 12px; color: #999999; line-height: 1.5;">No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms" style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
               </td>
             </tr>
@@ -564,9 +560,6 @@ ul.social {
                                 © 2025 Team 360 Ventures RC 7927753. All rights reserved
                             </p>
                             <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                                At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
-                            </p>
-                            <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                                  No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
                                 style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
                         </td>
@@ -743,9 +736,6 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
-                </p>
-                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
                     style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
             </td>
@@ -910,9 +900,6 @@ ul.social {
                 
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.4;">
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
-                </p>
-                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/terms"
@@ -1154,9 +1141,6 @@ ul.social {
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
-                </p>
-                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/unsubscribe"
                     style="color: rgba(0,0,0,.8);">Unsubscribe here</a></p>
             </td>
@@ -1314,9 +1298,6 @@ ul.social {
                 
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.4;">
                     © 2025 Team 360 Ventures RC 7927753. All rights reserved
-                </p>
-                <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
-                    At 360GadgetsAfrica, we power smarter shopping, and instant access to the gadgets you love. 
                 </p>
                 <p style="margin: 0 0 15px; font-size: 12px; color: #999999; line-height: 1.5;">
                      No longer want to receive these email? You can <a href="https://360gadgetsafrica.com/unsubscribe"
