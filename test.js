@@ -1614,14 +1614,6 @@ const unfilteredplans = {
             "network": "GLO"
         },
         {
-            "plan_name": "7GB",
-            "plan_id": "161",
-            "amount": "1,485.00",
-            "plan_type": "GIFTING PROMO",
-            "plan_day": "7days",
-            "network": "AIRTEL"
-        },
-        {
             "plan_name": "4GB",
             "plan_id": "162",
             "amount": "750.00",
