@@ -576,7 +576,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "2",
-            "amount": "550.00",
+            "amount": "500.00",
             "plan_type": "SME",
             "plan_day": "30 days",
             "network": "MTN"
@@ -584,7 +584,7 @@ const unfilteredplans = {
         {
             "plan_name": "2GB",
             "plan_id": "3",
-            "amount": "1,100.00",
+            "amount": "1,000.00",
             "plan_type": "SME",
             "plan_day": "Monthly",
             "network": "MTN"
@@ -592,7 +592,7 @@ const unfilteredplans = {
         {
             "plan_name": "3GB",
             "plan_id": "4",
-            "amount": "1,650.00",
+            "amount": "1,500.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -600,7 +600,7 @@ const unfilteredplans = {
         {
             "plan_name": "5GB",
             "plan_id": "5",
-            "amount": "2,750.00",
+            "amount": "2,500.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -608,7 +608,7 @@ const unfilteredplans = {
         {
             "plan_name": "10GB",
             "plan_id": "6",
-            "amount": "5,500.00",
+            "amount": "5,000.00",
             "plan_type": "SME",
             "plan_day": "30days",
             "network": "MTN"
@@ -994,7 +994,7 @@ const unfilteredplans = {
             "plan_id": "70",
             "amount": "520.00",
             "plan_type": "GIFTING PROMO",
-            "plan_day": "7 days",
+            "plan_day": "1 days",
             "network": "AIRTEL"
         },
         {
@@ -1018,7 +1018,7 @@ const unfilteredplans = {
             "plan_id": "73",
             "amount": "3,070.00",
             "plan_type": "GIFTING PROMO",
-            "plan_day": "30days",
+            "plan_day": "7 days",
             "network": "AIRTEL"
         },
         {
@@ -1750,7 +1750,7 @@ const filters = [
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'COOPERATE GIFTING' },
     // { vendor: 'bilal', network: 'MTN', planToRemove: 'GIFTING PROMO' },
-    { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
+    // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING PROMO' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'COOPERATE GIFTING' },
     { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'GIFTING' },
     // { vendor: 'bilal', network: 'AIRTEL', planToRemove: 'SME' },
