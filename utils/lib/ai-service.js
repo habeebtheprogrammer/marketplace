@@ -91,7 +91,21 @@ async function analyzeMultipleProducts(imageDataBase64, messageText) {
     const { object } = await generateObject({
       model: gemini,
       schema: MultipleProductAnalysisSchema,
-      prompt: `You are an expert product cataloger. Analyze the following WhatsApp message, which may contain descriptions for one or more electronic gadgets. Extract each distinct product's detailed name (including specifications like storage, RAM), a comprehensive description (including all specifications like processor, RAM, SSD, screen size, features like keyboard light, fingerprint unlock, Face ID, etc.), its numerical price, its most appropriate category, and its brand. If multiple products are listed, separate them clearly. If a price is not explicitly mentioned for a product, set it to null. Provide a confidence score for each product's extraction.
+      prompt: `You are an expert e-commerce merchandiser and product cataloger. Analyze the following WhatsApp message, which may contain descriptions for one or more electronic gadgets.
+
+      For each distinct product, extract:
+      - A detailed, specific name including key specs (storage, RAM, model).
+      - A persuasive, conversion-focused description that BOTH lists key specifications (processor, RAM, SSD, screen size, notable features like keyboard light, fingerprint unlock, Face ID, battery health, condition, etc.) AND sells the benefits.
+        • Start with 1–2 concise sentences highlighting benefits, ideal user, and what makes it a great buy.
+        • Then include a compact spec rundown in natural language (not a bullet list), keeping it readable for shoppers.
+        • Include trust builders when applicable: warranty/return policy (if present in text or from context), seller reliability, and usage scenario.
+        • Keep tone friendly and confident; avoid hype words like “best in the world”.
+      - Its numerical price (or null if price isn’t present).
+      - The most appropriate category.
+      - The brand.
+      - A confidence score (0–1).
+
+      The output must strictly match the schema. Do NOT add fields.
 
       Message Text:
       ${messageText}
@@ -108,28 +122,25 @@ async function analyzeMultipleProducts(imageDataBase64, messageText) {
         products: [
           {
             name: "Lenovo ThinkPad X390 8GB RAM 256GB SSD",
-            description: "Intel Core i5-10210U 10th Generation, 8GB Ram, 256GB SSD, 14\" FHD, 2.10GHz, Keyboard Light, Fingerprint Unlock.",
+            description: "Built for reliable performance at work and school, this ThinkPad balances speed and portability with an excellent keyboard and security features. Intel Core i5-10210U 10th Generation, 8GB RAM, 256GB SSD, 14\" FHD display, 2.10GHz; Keyboard Light and Fingerprint Unlock included.",
             price: 320000,
             category: "Laptop",
-            brand: "Lenovo",
             confidence: 0.95,
             videoUrl: null
           },
           {
             name: "Lenovo ThinkPad X13 8GB RAM 256GB SSD",
-            description: "Intel Core i5-10310U 10th Generation, 8GB Ram, 256GB SSD, 14\" FHD, 2.30GHz, Keyboard Light, Fingerprint Unlock & Face ID Unlock.",
-            price: 340000,
-            category: "Laptop",
-            brand: "Lenovo",
-            confidence: 0.95,
-            videoUrl: null
-          }
-        ]
+            description: "Transform your workday with this powerful, portable ThinkPad X13. Enjoy seamless performance with 10th-gen Intel Core i5 processing, ample 8GB RAM, and rapid 256GB SSD storage. Plus, stay productive with a crisp 14\" FHD display, Keyboard Light, and advanced Fingerprint & Face ID Unlock security.",
+      price: 340000,
+      category: "Laptop",
+      brand: "Lenovo",
+      confidence: 0.95,
+      videoUrl: null
+      ]
       }
 
       Make sure to include key specifications in the product name for better identification.`,
     })
-
     console.log("Gemini analysis complete.")
 
     // Search for YouTube videos for each product
@@ -163,7 +174,10 @@ async function analyzeProductImage(imageUrl) {
     const { text } = await generateText({
       model: gemini,
       prompt:
-        "Describe the electronic gadget in this image, focusing on its type, visible features, and potential brand. Be concise.",
+        "Write a short, persuasive product blurb for the electronic gadget in this image that helps it SELL.\n" +
+        "Start with 1–2 sentences highlighting benefits, ideal user, and what makes it a great buy.\n" +
+        "Then naturally mention key visible specs/features (e.g., display size, ports, camera layout, materials, condition) without bullets.\n" +
+        "Keep it under 80–100 words, confident tone, no overhype.",
       // Note: For image analysis, you would need to pass the image data to the model
       // This is a simplified version - you may need to adjust based on the AI SDK's image handling
     })
