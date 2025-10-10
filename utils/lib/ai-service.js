@@ -98,6 +98,7 @@ async function analyzeMultipleProducts(imageDataBase64, messageText) {
       - A persuasive, conversion-focused description that BOTH lists key specifications (processor, RAM, SSD, screen size, notable features like keyboard light, fingerprint unlock, Face ID, battery health, condition, etc.) AND sells the benefits.
         • Start with 1–2 concise sentences highlighting benefits, ideal user, and what makes it a great buy.
         • Then include a compact spec rundown in natural language (not a bullet list), keeping it readable for shoppers.
+        • If the text mentions any of these terms, briefly explain them in shopper-friendly language within the description: "Factory unlocked" (works with all networks), "Locked" (restricted to a specific carrier until unlocked), "Open Box" (item is like-new; packaging opened for display/inspection), "eSIM" (digital SIM built into the phone), "Physical SIM" (removable SIM card), "Mint" (near-new condition with minimal signs of use).
         • Include trust builders when applicable: warranty/return policy (if present in text or from context), seller reliability, and usage scenario.
         • Keep tone friendly and confident; avoid hype words like “best in the world”.
       - Its numerical price (or null if price isn’t present).
@@ -177,6 +178,7 @@ async function analyzeProductImage(imageUrl) {
         "Write a short, persuasive product blurb for the electronic gadget in this image that helps it SELL.\n" +
         "Start with 1–2 sentences highlighting benefits, ideal user, and what makes it a great buy.\n" +
         "Then naturally mention key visible specs/features (e.g., display size, ports, camera layout, materials, condition) without bullets.\n" +
+        "If terms like 'Factory unlocked', 'Locked', 'Open Box', 'eSIM', 'Physical SIM', or 'Mint' apply or are visible, include a quick shopper-friendly explanation in-line (e.g., Factory unlocked = works on all networks).\n" +
         "Keep it under 80–100 words, confident tone, no overhype.",
       // Note: For image analysis, you would need to pass the image data to the model
       // This is a simplified version - you may need to adjust based on the AI SDK's image handling
