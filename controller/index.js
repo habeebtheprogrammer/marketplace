@@ -14,6 +14,7 @@ const blogpostsController = require("./blogposts.controller")
 const journeyController = require("./journey.controller")
 const chatSessionsController = require("./chatSessions.controller");
 const ambassadorController = require("./ambassador.controller")
+const whatsappController = require("./whatsapp.controller")
 
 module.exports  = {
     usersController,
@@ -31,4 +32,5 @@ module.exports  = {
     journeyController,
     chatSessionsController,
     ambassadorController,
+    whatsappController
 }

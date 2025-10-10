@@ -19,6 +19,7 @@ const journeyRouter = require('./journey.router');
 const chatSessionsRouter = require('./chatSessions.router');
 const aiRouter = require('./ai.router');
 const ambassadorRouter = require('./ambassador.router');
+const whatsappRouter = require("./whatsapp.router");
 router.use("/emails", emailRouter);
 router.use("/users", usersRouter)
 router.use("/vendors", vendorsRouter)
@@ -38,4 +39,5 @@ router.use("/chat", chatSessionsRouter);
 router.use("/ai", aiRouter);
 router.use("/blog", blogpostsRouter);
 router.use("/ambassador", ambassadorRouter);
+router.use("/whatsapp", whatsappRouter);
 module.exports = router
