@@ -3,12 +3,12 @@ const nodemailer = require('nodemailer');
 // Create a transporter object using the default SMTP transport
 const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
- host:  process.env.SMTP_HOST,
-port: 465,
-secure: true,
+ host:  process.env.SMTP4_HOST,
+port: 587,
+secure: false,
   auth: {
-    user:  process.env.SMTP_USER, // generated ethereal user
-    pass:  process.env.SMTP_PASSWORD, // generated ethereal password
+    user:  process.env.SMTP4_USER, // generated ethereal user
+    pass:  process.env.SMTP4_PASSWORD, // generated ethereal password
   },
 });
 
@@ -20,7 +20,7 @@ secure: true,
  * @param {string} [from] - Sender email address (defaults to SMTP_USER)
  * @returns {Promise<Object>} - Result of the email sending operation
  */
-const sendEmail = async (to, subject, html, from = "support@360gadgetsafrica.com") => {
+const sendEmail = async (to, subject, html, from = "hello@360gadgetsafrica.com") => {
     try {
         const mailOptions = {
             from: `"${'360GadgetsAfrica'}" <${from}>`,

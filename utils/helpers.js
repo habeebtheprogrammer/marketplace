@@ -17,12 +17,12 @@ exports.s3 = new AWS.S3({
 
 exports.emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
-  host:  process.env.SMTP_HOST,
-port: 465,
-secure: true,
+  host:  process.env.SMTP4_HOST,
+port: 587,
+secure: false,
   auth: {
-    user:  process.env.SMTP_USER, // generated ethereal user
-    pass:  process.env.SMTP_PASSWORD, // generated ethereal password
+    user:  process.env.SMTP4_USER, // generated ethereal user
+    pass:  process.env.SMTP4_PASSWORD, // generated ethereal password
   },
 });
 
@@ -38,7 +38,7 @@ exports.createToken = (data) => {
 exports.sendSignupMail = (email) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: email,
       subject: "Welcome to 360gadgetsafrica! Connect with reliable sellers across Nigeria",
       html: emailTemplates.welcome_email(),
@@ -54,7 +54,7 @@ exports.sendSignupMail = (email) => {
 exports.sendOtpCode = (email, code) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: email,
       subject: "Verify your account",
       html: emailTemplates.otpCode(code),
@@ -70,7 +70,7 @@ exports.sendOtpCode = (email, code) => {
 exports.sendErrorEmail = (error) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: 'habibmail31@gmail.com',
       subject: "An error has occured",
       html: `${error}`,
@@ -86,8 +86,8 @@ exports.sendErrorEmail = (error) => {
 exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
-      to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      to: ['hello@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
       subject: "You have a new order",
       html:  emailTemplates.newOrder({order, address, pickup, deliveryMethod})
     })
@@ -102,7 +102,7 @@ exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
 exports.sendOrderConfirmationEmail = ({email, order, address}) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to:  email,
       subject: "Order Confirmation - 360gadgetsafrica",
       html:  emailTemplates.orderConfirmation({order,address})
@@ -119,7 +119,7 @@ exports.sendPasswordResetEmail = async (email, resetLink) => {
   console.log(email, resetLink)
   try {
     await this.emailTransporter.sendMail({
-      from: '"360gadgetsafrica" <support@360gadgetsafrica.com>',
+      from: '"360gadgetsafrica" <hello@360gadgetsafrica.com>',
       to: email,
       subject: 'Password Reset Request',
       html: `
@@ -148,8 +148,8 @@ exports.sendPasswordResetEmail = async (email, resetLink) => {
 exports.sendSwapEmail = (order) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
-      to: 'support@360gadgetsafrica.com',
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      to: 'hello@360gadgetsafrica.com',
       subject: "You have a new swap order",
       html: `Hi there, you have a new swap order 
       ${JSON.stringify(order)}`,
@@ -164,7 +164,7 @@ exports.sendSwapEmail = (order) => {
 exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) => {
   this.emailTransporter
     .sendMail({
-      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: email,
       subject,
       html:  emailTemplates.requestUpdate({title,description,slug,img}),
