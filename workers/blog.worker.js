@@ -8,7 +8,7 @@ const { sendNotification } = require('../utils/onesignal');
 class BlogWorker {
   constructor() {
     this.job = null;
-    this.schedule = '0 18 * * *'; // Run at 5 PM daily
+    this.schedule = '0 12 * * *'; // Run at 5 PM daily
     this.batchSize = 100;
   }
 
@@ -44,25 +44,26 @@ class BlogWorker {
       while (hasMore) {
         const users = await getUsers(
           { 
-            $and: [
-              { email: /@gmail\.com$/i },
-              { email: { $not: /archived/i } },
-              {
-                $or: [
-                  { verificationCode: { $exists: false } }, // field doesn’t exist
-                  { verificationCode: null },               // explicitly null
-                  { verificationCode: '' }                  // empty string
-                ]
-              }
-            ],
-            userType: { $in: ['superuser', 'user'] }
+             unsubscribe: { $not: true } 
+            // $and: [
+            //   { email: /@gmail\.com$/i },
+            //   { email: { $not: /archived/i } },
+            //   {
+            //     $or: [
+            //       { verificationCode: { $exists: false } }, // field doesn’t exist
+            //       { verificationCode: null },               // explicitly null
+            //       { verificationCode: '' }                  // empty string
+            //     ]
+            //   }
+            // ],
+            // userType: { $in: ['superuser', 'user'] }
 
           },
           { 
             page, 
             limit: this.batchSize,
             select: 'email firstName oneSignalId',
-            sort: { createdAt: -1 }
+            // sort: { createdAt: -1 }
           }
         );
         console.log(users.totalDocs)
