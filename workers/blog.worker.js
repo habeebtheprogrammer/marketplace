@@ -8,7 +8,7 @@ const { sendNotification } = require('../utils/onesignal');
 class BlogWorker {
   constructor() {
     this.job = null;
-    this.schedule = '10 12 * * *'; // Run at 12 PM daily
+    this.schedule = '25 12 * * *'; // Run at 12 PM daily
     this.batchSize = 100;
   }
 
@@ -85,13 +85,13 @@ class BlogWorker {
             });
   
             // // Email
-            // await emailTransporter.sendMail({
-            //   from: '"360GadgetsAfrica" <hello@360gadgetsafrica.com>',
-            //   to: user.email,
-            //   subject: posts.docs?.[0]?.excerpt || 
-            //            `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
-            //   html: emailTemplates.daily_blog_digest({ posts: posts.docs })
-            // });
+            await emailTransporter.sendMail({
+              from: '"360GadgetsAfrica" <hello@360gadgetsafrica.com>',
+              to: user.email,
+              subject: posts.docs?.[0]?.excerpt || 
+                       `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
+              html: emailTemplates.daily_blog_digest({ posts: posts.docs })
+            });
   
             totalSent++;
             console.log(`Sent email to ${user.email}`);
