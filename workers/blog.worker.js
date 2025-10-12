@@ -44,7 +44,7 @@ class BlogWorker {
       while (hasMore) {
         const users = await getUsers(
           { 
-             unsubscribe: { $not: true } 
+             unsubscribe: { $not: { $eq: true } } 
             // $and: [
             //   { email: /@gmail\.com$/i },
             //   { email: { $not: /archived/i } },
