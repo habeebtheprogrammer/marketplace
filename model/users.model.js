@@ -9,7 +9,9 @@ const usersSchema = new Schema(
       type: String,
       unique: true,
       required: [true, 'Email is required'],
-      index: true
+      index: true,
+      trim: true,
+      lowercase: true,
     },
     oneSignalId: String,
     banned: {
@@ -29,11 +31,16 @@ const usersSchema = new Schema(
     firstName: {
       type: String,
       required: [true, 'First name is required'],
-      index: true
+      index: true,
+      trim: true,
+      lowercase: true,
     },
     lastName: {
       type: String,
-      required: [true, 'Last name is required']
+      required: [true, 'Last name is required'],
+      index: true,
+      trim: true,
+      lowercase: true,
     },
     avatar: {
       type: String,
@@ -57,6 +64,10 @@ const usersSchema = new Schema(
     deviceid: String,
     resetToken: String,
     resetTokenExpiry: Date,
+    unsubscribed: {
+      type: Boolean,
+      default: false
+    },
     location: {
       latitude: String,
       longitude: String,

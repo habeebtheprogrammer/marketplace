@@ -2,7 +2,7 @@
 const JourneyTemplate = require("../model/journeyTemplate.model");
 const UserJourney = require("../model/userJourney.model");
 const emailTemplates = require("../emailTemplates");
-const { emailTransporter } = require("../utils/email");
+const { sendEmail } = require("../utils/email");
 const { getBlogPosts } = require("./blogposts.service");
 const { getCarts } = require("./carts.service");
 const { sendNotification } = require("../utils/onesignal");
@@ -119,7 +119,7 @@ const processJourneySteps = async (journey) => {
     try {
       const html = await renderEmailContent(step.template, journey.userId?._id);
       if (!html) continue;
-      await emailTransporter.sendMail({
+      await sendEmail({
         from: '"360GadgetsAfrica" <hello@360gadgetsafrica.com>',
         to: journey.userId?.email,
         subject: step.subject || "Update from 360GadgetsAfrica",

@@ -61,7 +61,7 @@ exports.createUser = async (req, res, next) => {
       );
     }
     successResponse(res, { user, token });
-    !isAppleRelayEmail(user.email) && journeyService.handleUserSignup(user?._id)
+    journeyService.handleUserSignup(user?._id)
     if (user.verificationCode) sendOtpCode(user.email, user.verificationCode);
   } catch (error) {
     console.log(error)
@@ -87,7 +87,23 @@ exports.updateUser = async (req, res, next) => {
     errorResponse(res, error);
   }
 };
-
+exports.unsubscribedUser = async (req, res, next) => {
+  try {
+    const { emailList } = req.body;
+    emailList.forEach(async (email) => {
+      const user = await usersService.getUsers({ email });
+      try {
+        if (!user?.totalDocs) throw Error("Email addresss does not exist");
+        await usersService.updateUsers({ email }, { unsubscribed: true });
+      } catch (error) {
+        console.log(error)
+      }
+    });
+    successResponse(res, { success: true });
+  } catch (error) {
+    errorResponse(res, error);
+  }
+};
 exports.sendOtpEmail = async (req, res, next) => {
   try {
     var { email } = req.body;
@@ -309,7 +325,7 @@ exports.getReferrals = async (req, res, next) => {
     errorResponse(res, error);
   }
 };
- 
+
 exports.requestPasswordReset = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -325,9 +341,9 @@ exports.requestPasswordReset = async (req, res, next) => {
 
     await usersService.updateUsers(
       { _id: user.docs[0]._id },
-      { 
+      {
         resetToken,
-        resetTokenExpiry 
+        resetTokenExpiry
       }
     );
 
@@ -358,12 +374,12 @@ exports.resetPassword = async (req, res, next) => {
     if (userData.resetTokenExpiry < Date.now()) {
       throw new Error('Reset link has expired');
     }
- 
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     await usersService.updateUsers(
       { _id: userId },
-      { 
+      {
         password: hashedPassword,
         resetToken: null,
         resetTokenExpiry: null

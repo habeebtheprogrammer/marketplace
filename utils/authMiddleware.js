@@ -80,7 +80,7 @@ exports.googleAuth = async (req, res, next) => {
         });
         var token = createToken(JSON.stringify(user));
         successResponse(res, { user, token });
-        !isAppleRelayEmail(email) && journeyService.handleUserSignup(user?._id)
+        journeyService.handleUserSignup(user?._id)
 
       } else {
         var token = createToken(JSON.stringify(user.docs[0]));
@@ -127,7 +127,7 @@ exports.appleSignin = async (req, res, next) => {
         });
         var token = createToken(JSON.stringify(data));
         successResponse(res, { user: data, token });
-        !isAppleRelayEmail(email) && sendSignupMail(email);
+        journeyService.handleUserSignup(data?._id)
       } else {
         var token = createToken(JSON.stringify(userObj.docs[0]));
         successResponse(res, { user: userObj.docs[0], token });

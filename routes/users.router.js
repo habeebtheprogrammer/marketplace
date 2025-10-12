@@ -20,5 +20,5 @@ router.post('/verifyOtp', usersController.verifyOtp);
 router.post('/request-password-reset', usersController.requestPasswordReset);
 router.post('/reset-password', usersController.resetPassword);
 router.delete('/delete/:_id', checkAuth, adminAccessOnly, usersController.deleteUsers);
-
+router.post('/unsubscribedUser', usersController.unsubscribedUser);
 module.exports = router;

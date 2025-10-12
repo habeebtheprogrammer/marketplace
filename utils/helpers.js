@@ -4,6 +4,7 @@ const emailTemplates = require("../emailTemplates");
 const AWS = require("aws-sdk")
 const crypto = require("crypto");
 const { getCategories } = require("../service/categories.service");
+const { emailTransporter, sendEmail } = require("./email");
 exports.s3Bucket = process.env.AWS_BUCKET;
 
 exports.s3 = new AWS.S3({
@@ -14,17 +15,7 @@ exports.s3 = new AWS.S3({
   region: process.env.AWS_REGION
 });
 
-
-exports.emailTransporter = nodemailer.createTransport({
-  // service: "Outlook365",
-  host:  process.env.SMTP4_HOST,
-port: 465,
-secure: true,
-  auth: {
-    user:  process.env.SMTP4_USER, // generated ethereal user
-    pass:  process.env.SMTP4_PASSWORD, // generated ethereal password
-  },
-});
+ 
 
 exports.generateRandomNumber = (n) => {
   return Math.floor(Math.random() * (9 * Math.pow(10, n - 1))) + Math.pow(10, n - 1);
@@ -36,8 +27,7 @@ exports.createToken = (data) => {
 };
 
 exports.sendSignupMail = (email) => {
-  this.emailTransporter
-    .sendMail({
+  sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: email,
       subject: "Welcome to 360gadgetsafrica! Connect with reliable sellers across Nigeria",
@@ -52,8 +42,7 @@ exports.sendSignupMail = (email) => {
 };
 
 exports.sendOtpCode = (email, code) => {
-  this.emailTransporter
-    .sendMail({
+   sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: email,
       subject: "Verify your account",
@@ -68,8 +57,7 @@ exports.sendOtpCode = (email, code) => {
 };
 
 exports.sendErrorEmail = (error) => {
-  this.emailTransporter
-    .sendMail({
+   sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: 'habibmail31@gmail.com',
       subject: "An error has occured",
@@ -84,8 +72,7 @@ exports.sendErrorEmail = (error) => {
 };
 
 exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
-  this.emailTransporter
-    .sendMail({
+   sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: ['hello@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
       subject: "You have a new order",
@@ -100,8 +87,7 @@ exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
 };
 
 exports.sendOrderConfirmationEmail = ({email, order, address}) => {
-  this.emailTransporter
-    .sendMail({
+    sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to:  email,
       subject: "Order Confirmation - 360gadgetsafrica",
@@ -118,7 +104,7 @@ exports.sendOrderConfirmationEmail = ({email, order, address}) => {
 exports.sendPasswordResetEmail = async (email, resetLink) => {
   console.log(email, resetLink)
   try {
-    await this.emailTransporter.sendMail({
+    await sendEmail({
       from: '"360gadgetsafrica" <hello@360gadgetsafrica.com>',
       to: email,
       subject: 'Password Reset Request',
@@ -146,8 +132,7 @@ exports.sendPasswordResetEmail = async (email, resetLink) => {
 };
 
 exports.sendSwapEmail = (order) => {
-  this.emailTransporter
-    .sendMail({
+    sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: 'hello@360gadgetsafrica.com',
       subject: "You have a new swap order",
@@ -162,8 +147,7 @@ exports.sendSwapEmail = (order) => {
     });
 };
 exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) => {
-  this.emailTransporter
-    .sendMail({
+    sendEmail({
       from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
       to: email,
       subject,
