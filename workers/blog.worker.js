@@ -8,7 +8,7 @@ const { sendNotification } = require('../utils/onesignal');
 class BlogWorker {
   constructor() {
     this.job = null;
-    this.schedule = '28 12 * * *'; // Run at 12 PM daily
+    this.schedule = '13 14 * * *'; // Run at 12 PM daily
     this.batchSize = 100;
   }
 
@@ -86,7 +86,7 @@ class BlogWorker {
   
             // // Email
             await sendEmail({
-              from: '"360GadgetsAfrica" <hello@360gadgetsafrica.com>',
+              from: '"360gadgetsafrica" <support@360gadgetsafrica.com>',
               to: user.email,
               subject: posts.docs?.[0]?.excerpt || 
                        `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
@@ -97,7 +97,7 @@ class BlogWorker {
             console.log(`Sent email to ${user.email}`);
   
             // Delay 1 second before next send
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 3000));
   
           } catch (error) {
             console.error(`Error sending to ${user.email}:`, error);

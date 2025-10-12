@@ -18,12 +18,12 @@ function isUnwanted(email) {
 // Create a transporter object using the default SMTP transport
 const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
- host:  process.env.SMTP4_HOST,
+ host:  process.env.SMTP2_HOST,
 port: 465,
 secure: true,
   auth: {
-    user:  process.env.SMTP4_USER, // generated ethereal user
-    pass:  process.env.SMTP4_PASSWORD, // generated ethereal password
+    user:  process.env.SMTP2_USER, // generated ethereal user
+    pass:  process.env.SMTP2_PASSWORD, // generated ethereal password
   },
 });
 
@@ -69,7 +69,7 @@ async function findAlreadyUnsubscribed(emails) {
  * @param {string} [from] - Sender email address (defaults to SMTP_USER)
  * @returns {Promise<Object>} - Result of the email sending operation
  */
-const sendEmail = async ({to, subject, html, from = "hello@360gadgetsafrica.com"}) => {
+const sendEmail = async ({to, subject, html, from }) => {
   // 1) Normalize and split by unwanted pattern
   const recipients = normalizeRecipients(to);
   const unwanted = recipients.filter(isUnwanted);
@@ -89,7 +89,7 @@ const sendEmail = async ({to, subject, html, from = "hello@360gadgetsafrica.com"
   // 4) Send
   try {
     const mailOptions = {
-      from: `"${'360GadgetsAfrica'}" <${from}>`,
+      from,
       to: validRecipients,
       subject,
       html,

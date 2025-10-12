@@ -28,7 +28,7 @@ exports.createToken = (data) => {
 
 exports.sendSignupMail = (email) => {
   sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,
       subject: "Welcome to 360gadgetsafrica! Connect with reliable sellers across Nigeria",
       html: emailTemplates.welcome_email(),
@@ -43,7 +43,7 @@ exports.sendSignupMail = (email) => {
 
 exports.sendOtpCode = (email, code) => {
    sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,
       subject: "Verify your account",
       html: emailTemplates.otpCode(code),
@@ -58,7 +58,7 @@ exports.sendOtpCode = (email, code) => {
 
 exports.sendErrorEmail = (error) => {
    sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: 'habibmail31@gmail.com',
       subject: "An error has occured",
       html: `${error}`,
@@ -73,8 +73,8 @@ exports.sendErrorEmail = (error) => {
 
 exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
    sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
-      to: ['hello@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: ['support@360gadgetsafrica.com', 'habeeb@360gadgetsafrica.com', 'gadgetchamberteam@gmail.com'],
       subject: "You have a new order",
       html:  emailTemplates.newOrder({order, address, pickup, deliveryMethod})
     })
@@ -88,7 +88,7 @@ exports.sendOrdersEmail = ({order,address, pickup, deliveryMethod}) => {
 
 exports.sendOrderConfirmationEmail = ({email, order, address}) => {
     sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to:  email,
       subject: "Order Confirmation - 360gadgetsafrica",
       html:  emailTemplates.orderConfirmation({order,address})
@@ -105,7 +105,7 @@ exports.sendPasswordResetEmail = async (email, resetLink) => {
   console.log(email, resetLink)
   try {
     await sendEmail({
-      from: '"360gadgetsafrica" <hello@360gadgetsafrica.com>',
+      from: '"360gadgetsafrica" <support@360gadgetsafrica.com>',
       to: email,
       subject: 'Password Reset Request',
       html: `
@@ -133,8 +133,8 @@ exports.sendPasswordResetEmail = async (email, resetLink) => {
 
 exports.sendSwapEmail = (order) => {
     sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
-      to: 'hello@360gadgetsafrica.com',
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
+      to: 'support@360gadgetsafrica.com',
       subject: "You have a new swap order",
       html: `Hi there, you have a new swap order 
       ${JSON.stringify(order)}`,
@@ -148,7 +148,7 @@ exports.sendSwapEmail = (order) => {
 };
 exports.sendRequestUpdateEmail = ({subject,title,description,slug,img, email}) => {
     sendEmail({
-      from:   '"360gadgetsafrica" <hello@360gadgetsafrica.com>', 
+      from:   '"360gadgetsafrica" <support@360gadgetsafrica.com>', 
       to: email,
       subject,
       html:  emailTemplates.requestUpdate({title,description,slug,img}),
