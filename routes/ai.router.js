@@ -309,7 +309,7 @@ function formatToolResponses(toolResponses) {
                     const escape = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                     const rows = items.map(it => {
                         const slug = it.slug || it._id || '';
-                        const href = `https://360gadgetsafrica.com/product-details/${encodeURIComponent(slug)}`;
+                        const href = `https://360gadgetsafrica.com/gadgets/${it.categoryId.slug}/${encodeURIComponent(slug)}`;
                         const img = Array.isArray(it.images) && it.images.length ? it.images[0] : '';
                         const title = it.title || it.name || 'Untitled Product';
                         const desc = it.description || '';
