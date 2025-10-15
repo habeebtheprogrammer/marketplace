@@ -25,7 +25,6 @@ exports.onboardWhatsApp = async (req, res, next) => {
       console.log(req.body)
         // If request comes from WhatsApp Flows, it will be encrypted
         const isEncrypted = !!req.body?.encrypted_aes_key
-
         // Decrypt if necessary
         let decryptedBody, aesKeyBuffer, initialVectorBuffer
         if (isEncrypted) {
@@ -38,67 +37,6 @@ exports.onboardWhatsApp = async (req, res, next) => {
                 return res.send(encryptResponse(payload, aesKeyBuffer, initialVectorBuffer))
             }
         }
-
-        // Extract fields (prefer decrypted body when present)
-        const {
-            firstName,
-            lastName,
-            email,
-            phone,
-            pin,
-        } = (isEncrypted ? (decryptedBody?.data || decryptedBody || {}) : req.body) || {}
-
-        const normalizedEmail = String(email || '').trim().toLowerCase()
-        const phoneNormalized = phone ? removeCountryCode(String(phone)) : undefined
-
-        // If code is provided, this is the verification step
-        if (code) {
-            if (!normalizedEmail) throw new Error('Email is required')
-            const userRes = await usersService.getUsers({ email: normalizedEmail, verificationCode: String(code) })
-            if (!userRes?.totalDocs) throw new Error('Incorrect otp. please try again')
-
-            const userDoc = userRes.docs[0]
-            const update = { verificationCode: "" }
-            if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
-            const updated = await usersService.updateUsers({ _id: userDoc._id }, update)
-            const token = createToken(JSON.stringify(updated))
-            return successResponse(res, { verified: true, user: updated, token })
-        }
-
-        // Init step: requires firstName, email
-        if (!normalizedEmail) throw new Error('Email is required')
-        if (!firstName) throw new Error('First name is required')
-
-        const existing = await usersService.getUsers({ email: normalizedEmail })
-        const verificationCode = generateRandomNumber(5)
-
-        if (existing?.totalDocs) {
-            const update = { verificationCode: String(verificationCode) }
-            if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
-            await usersService.updateUsers({ _id: existing.docs[0]._id }, update)
-            sendOtpCode(normalizedEmail, verificationCode)
-            return successResponse(res, { next: 'verify', exists: true })
-        }
-
-        // Create new user flow
-        const randPassword = Math.random().toString(36).slice(-10)
-        const hash = await bcrypt.hash(randPassword, 10)
-        const referralCode = String(firstName).substring(0, 4).toUpperCase() + generateRandomNumber(4)
-
-        const userPayload = {
-            email: normalizedEmail,
-            firstName: String(firstName).trim(),
-            lastName: String(lastName || firstName).trim(),
-            password: hash,
-            referralCode,
-            verificationCode: String(verificationCode),
-        }
-        if (phoneNormalized) userPayload.phoneNumber = [phoneNormalized]
-
-        const created = await usersService.createUser(userPayload)
-        try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
-        sendOtpCode(normalizedEmail, verificationCode)
-        return successResponse(res, { next: 'verify', exists: false })
     } catch (error) {
         return errorResponse(res, error)
     }
@@ -191,12 +129,12 @@ exports.postWhatsapp = async (req, res, next) => {
 
             // Route based on business line
             if (businessNumber === '2349084535024') {
-              await handleOnboardingFlow(change.value, message, fromNumber)
+              await handleOnboardingFlow(change.value, message, fromNumber, businessNumber)
               return
             }
 
             if (businessNumber === '2348039938596') {
-              await handleProductFlow(change.value, message, fromNumber)
+              await handleProductFlow(change.value, message, fromNumber, businessNumber)
               return
             }
 
@@ -211,7 +149,7 @@ exports.postWhatsapp = async (req, res, next) => {
       }
 }
 
-async function handleOnboardingFlow(value, message, fromNumber) {
+async function handleOnboardingFlow(value, message, fromNumber, businessNumber) {
   try {
     const contacts = value?.contacts || []
     const waId = contacts?.[0]?.wa_id || fromNumber
@@ -234,19 +172,19 @@ async function handleOnboardingFlow(value, message, fromNumber) {
       const normalizedEmail = String(email).trim().toLowerCase()
       const userRes = await usersService.getUsers({ email: normalizedEmail, verificationCode: String(code) })
       if (!userRes?.totalDocs) {
-        await sendWhatsAppMessage(fromNumber, '❌ Incorrect code. Please try again.')
+        await sendWhatsAppMessage(fromNumber, '❌ Incorrect code. Please try again.', businessNumber)
         return
       }
       const update = { verificationCode: '' }
       if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
       const updated = await usersService.updateUsers({ _id: userRes.docs[0]._id }, update)
-      await sendWhatsAppMessage(fromNumber, `✅ Verified! Welcome, ${updated.firstName}.`)
+      await sendWhatsAppMessage(fromNumber, `✅ Verified! Welcome, ${updated.firstName}.`, businessNumber)
       return
     }
 
     // Init path
     if (!email || !firstName) {
-      await sendWhatsAppMessage(fromNumber, 'Please provide your first name and email in the flow to continue.')
+      await sendWhatsAppMessage(fromNumber, 'Please provide your first name and email in the flow to continue.', businessNumber)
       return
     }
     const normalizedEmail = String(email).trim().toLowerCase()
@@ -258,7 +196,7 @@ async function handleOnboardingFlow(value, message, fromNumber) {
       if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
       await usersService.updateUsers({ _id: existing.docs[0]._id }, update)
       sendOtpCode(normalizedEmail, verificationCode)
-      await sendWhatsAppMessage(fromNumber, 'We sent a verification code to your email. Enter it in the next screen.')
+      await sendWhatsAppMessage(fromNumber, 'We sent a verification code to your email. Enter it in the next screen.', businessNumber)
       return
     }
 
@@ -277,23 +215,23 @@ async function handleOnboardingFlow(value, message, fromNumber) {
     const created = await usersService.createUser(userPayload)
     try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
     sendOtpCode(normalizedEmail, verificationCode)
-    await sendWhatsAppMessage(fromNumber, 'Account created! We sent a verification code to your email. Enter it in the next screen.')
+    await sendWhatsAppMessage(fromNumber, 'Account created! We sent a verification code to your email. Enter it in the next screen.', businessNumber)
   } catch (e) {
     console.error('handleOnboardingFlow error:', e)
-    try { await sendWhatsAppMessage(fromNumber, 'An error occurred. Please try again later.') } catch {}
+    try { await sendWhatsAppMessage(fromNumber, 'An error occurred. Please try again later.', businessNumber) } catch {}
   }
 }
 
-async function handleProductFlow(value, message, fromNumber) {
+async function handleProductFlow(value, message, fromNumber, businessNumber) {
   // Keep existing product processing logic
   if (!isPhoneAuthorized(fromNumber)) {
-    await sendWhatsAppMessage(fromNumber, '❌ Your phone number is not authorized to create products. Please contact the administrator.')
+    await sendWhatsAppMessage(fromNumber, '❌ Your phone number is not authorized to create products. Please contact the administrator.', businessNumber)
     return
   }
 
   const vendorId = getVendorIdFromPhone(fromNumber)
   if (!vendorId) {
-    await sendWhatsAppMessage(fromNumber, '❌ System error: Could not find your vendor account. Please contact support.')
+    await sendWhatsAppMessage(fromNumber, '❌ System error: Could not find your vendor account. Please contact support.', businessNumber)
     return
   }
 
@@ -302,7 +240,7 @@ async function handleProductFlow(value, message, fromNumber) {
     const imageId = message.image.id
     const caption = message.image.caption || ''
     if (!caption.trim()) {
-      await sendWhatsAppMessage(fromNumber, 'Please provide a description or price with your product image.')
+      await sendWhatsAppMessage(fromNumber, 'Please provide a description or price with your product image.', businessNumber)
       return
     }
     const whatsappMediaUrl = await getWhatsAppMediaUrl(imageId)
@@ -381,9 +319,9 @@ async function getWhatsAppMediaUrl(mediaId) {
     return url
   }
   
-  async function sendWhatsAppMessage(to, message) {
+  async function sendWhatsAppMessage(to, message, businessNumber) {
     const accessToken = process.env.WHATSAPP_ACCESS_TOKEN
-    const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID
+    const phoneNumberId = resolvePhoneNumberId(businessNumber)
     const response = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
       method: 'POST',
       headers: {
@@ -396,4 +334,21 @@ async function getWhatsAppMediaUrl(mediaId) {
       const errorBody = await response.text()
       console.error('sendWhatsAppMessage error:', response.status, errorBody)
     }
+  }
+
+  function resolvePhoneNumberId(businessNumber) {
+    // Allow specific env var per business number, fallback to defaults
+    if (businessNumber) {
+      const specificVar = process.env[`WHATSAPP_PHONE_ID_${businessNumber}`]
+      if (specificVar) return specificVar
+    }
+    // Named envs for known lines
+    if (businessNumber === '2349084535024' && process.env.WHATSAPP_PHONE_NUMBER_ID_ONBOARD) {
+      return process.env.WHATSAPP_PHONE_NUMBER_ID_ONBOARD
+    }
+    if (businessNumber === '2348039938596' && process.env.WHATSAPP_PHONE_NUMBER_ID_PRODUCTS) {
+      return process.env.WHATSAPP_PHONE_NUMBER_ID_PRODUCTS
+    }
+    // Global fallback
+    return process.env.WHATSAPP_PHONE_NUMBER_ID
   }
