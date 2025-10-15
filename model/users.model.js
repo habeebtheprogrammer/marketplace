@@ -61,11 +61,6 @@ const usersSchema = new Schema(
     referralCode: { type: String, unique: true },
     referrals: { type: Number, default: 0 }, 
     verificationCode: String,
-    pin: {
-      type: String,
-      // plain string for now; can be hashed later for security
-      default: null,
-    },
     deviceid: String,
     resetToken: String,
     resetTokenExpiry: Date,

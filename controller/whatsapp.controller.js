@@ -5,6 +5,9 @@ const { usersService, journeyService } = require("../service")
 const { successResponse, errorResponse } = require("../utils/responder")
 const bcrypt = require("bcryptjs")
 const { createToken, generateRandomNumber, sendOtpCode, removeCountryCode } = require("../utils/helpers")
+const crypto = require('crypto')
+const fs = require('fs')
+const path = require('path')
 
 // WhatsApp webhook verification
 exports.getWhatsapp = async (req, res, next) => {
@@ -18,71 +21,94 @@ exports.getWhatsapp = async (req, res, next) => {
 
 // WhatsApp Onboarding (init + verify)
 exports.onboardWhatsApp = async (req, res, next) => {
-    try {
-        console.log(req.body)
-       
-        const normalizedEmail = String(email || '').trim().toLowerCase()
-        const phoneNormalized = phone ? removeCountryCode(String(phone)) : undefined
-
-        // If code is provided, this is the verification step
-        if (code) {
-            if (!normalizedEmail) throw new Error('Email is required')
-            const userRes = await usersService.getUsers({ email: normalizedEmail, verificationCode: String(code) })
-            if (!userRes?.totalDocs) throw new Error('Incorrect otp. please try again')
-
-            const userDoc = userRes.docs[0]
-            const update = { verificationCode: "" }
-            if (phoneNormalized) {
-                // ensure phone number is saved and unique
-                update.$addToSet = { phoneNumber: phoneNormalized }
-            }
-            const updated = await usersService.updateUsers({ _id: userDoc._id }, update)
-            const token = createToken(JSON.stringify(updated))
-            return successResponse(res, { verified: true, user: updated, token })
-        }
-
-        // Init step: requires firstName, email, and phone for WhatsApp
-        if (!normalizedEmail) throw new Error('Email is required')
-        if (!firstName) throw new Error('First name is required')
-
-        const existing = await usersService.getUsers({ email: normalizedEmail })
-        const verificationCode = generateRandomNumber(5)
-
-        if (existing?.totalDocs) {
-            // Existing user: update verification code and attach phone
-            const update = { verificationCode: String(verificationCode) }
-            if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
-            const updated = await usersService.updateUsers({ _id: existing.docs[0]._id }, update)
-            // send email
-            sendOtpCode(normalizedEmail, verificationCode)
-            return successResponse(res, { next: 'verify', exists: true })
-        } else {
-            // New user: create with random password, save phone, and send code
-            const randPassword = Math.random().toString(36).slice(-10)
-            const hash = await bcrypt.hash(randPassword, 10)
-            const referralCode = String(firstName).substring(0, 4).toUpperCase() + generateRandomNumber(4)
-
-            const userPayload = {
-                email: normalizedEmail,
-                firstName: String(firstName).trim(),
-                lastName: String(lastName || firstName).trim(),
-                password: hash,
-                referralCode,
-                verificationCode: String(verificationCode),
-            }
-            if (phoneNormalized) userPayload.phoneNumber = [phoneNormalized]
-
-            const created = await usersService.createUser(userPayload)
-            // Fire and forget journey signup
-            try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
-            // send email
-            sendOtpCode(normalizedEmail, verificationCode)
-            return successResponse(res, { next: 'verify', exists: false })
-        }
-    } catch (error) {
-        return errorResponse(res, error)
-    }
+  try {
+    console.log(req.body)
+      // If request comes from WhatsApp Flows, it will be encrypted
+      const isEncrypted = !!req.body?.encrypted_aes_key
+      // Decrypt if necessary
+      let decryptedBody, aesKeyBuffer, initialVectorBuffer
+      if (isEncrypted) {
+          const privateKeyPem = resolvePrivateKey()
+          const passphrase = process.env.PRIVATE_KEY_PASSPHRASE || undefined
+          ;({ decryptedBody, aesKeyBuffer, initialVectorBuffer } = decryptRequest(req.body, privateKeyPem, passphrase))
+          console.log('Flows decrypted:', JSON.stringify(decryptedBody, null, 2))
+          // Handle Health Check: action === 'ping' -> respond with encrypted Base64
+          if (decryptedBody?.action === 'ping') {
+              const payload = { data: { status: 'active' } }
+              return res.send(encryptResponse(payload, aesKeyBuffer, initialVectorBuffer))
+          }
+      }
+  } catch (error) {
+      return errorResponse(res, error)
+  }
 }
+
+// Decrypt request from WhatsApp Flows (RSA-OAEP + AES-128-GCM)
+function decryptRequest(body, privatePem, passphrase) {
+  const { encrypted_aes_key, encrypted_flow_data, initial_vector } = body
+  const privateKey = crypto.createPrivateKey(passphrase ? { key: privatePem, passphrase } : { key: privatePem })
+  const decryptedAesKey = crypto.privateDecrypt(
+      {
+          key: privateKey,
+          padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+          oaepHash: 'sha256',
+      },
+      Buffer.from(encrypted_aes_key, 'base64')
+  )
+
+  const flowDataBuffer = Buffer.from(encrypted_flow_data, 'base64')
+  const initialVectorBuffer = Buffer.from(initial_vector, 'base64')
+  const TAG_LENGTH = 16
+  const encryptedBody = flowDataBuffer.subarray(0, -TAG_LENGTH)
+  const encryptedTag = flowDataBuffer.subarray(-TAG_LENGTH)
+
+  const decipher = crypto.createDecipheriv('aes-128-gcm', decryptedAesKey, initialVectorBuffer)
+  decipher.setAuthTag(encryptedTag)
+  const decryptedJSONString = Buffer.concat([decipher.update(encryptedBody), decipher.final()]).toString('utf-8')
+  return { decryptedBody: JSON.parse(decryptedJSONString), aesKeyBuffer: decryptedAesKey, initialVectorBuffer }
+}
+
+// Encrypt response to WhatsApp Flows (AES-128-GCM, Base64, IV flipped)
+function encryptResponse(response, aesKeyBuffer, initialVectorBuffer) {
+  const flipped = []
+  for (const pair of initialVectorBuffer.entries()) {
+      const byte = pair[1]
+      flipped.push((~byte) & 0xff)
+  }
+  const cipher = crypto.createCipheriv('aes-128-gcm', aesKeyBuffer, Buffer.from(flipped))
+  const enc = Buffer.concat([
+      cipher.update(JSON.stringify(response), 'utf-8'),
+      cipher.final(),
+      cipher.getAuthTag(),
+  ])
+  return enc.toString('base64')
+} 
+function resolvePrivateKey() {
+  // Prefer env var PRIVATE_KEY (supports \n-escaped)
+  if (process.env.PRIVATE_KEY && process.env.PRIVATE_KEY.trim()) {
+      const maybe = process.env.PRIVATE_KEY
+      // Replace literal \n with newline for env-friendly storage
+      return maybe.includes("\\n") ? maybe.replace(/\\n/g, "\n") : maybe
+  }
+  // Support PRIVATE_KEY_PATH pointing to PEM file
+  const keyPath = process.env.PRIVATE_KEY_PATH
+  if (keyPath && fs.existsSync(keyPath)) {
+      return fs.readFileSync(keyPath, 'utf8')
+  }
+  // Fallbacks: common default locations
+  try {
+      const projectRoot = path.resolve(__dirname, '..')
+      const defaultRel = path.join(projectRoot, 'keys', '360-wa.pem')
+      if (fs.existsSync(defaultRel)) return fs.readFileSync(defaultRel, 'utf8')
+  } catch{}
+  // Absolute path provided by user (as last resort)
+  const absoluteHint = '/keys/360-wa.pem'
+  if (fs.existsSync(absoluteHint)) {
+      return fs.readFileSync(absoluteHint, 'utf8')
+  }
+  throw new Error('Missing RSA PRIVATE_KEY/PRIVATE_KEY_PATH for WhatsApp Flows encryption')
+}
+
 
 // Handle incoming WhatsApp messages
 exports.postWhatsapp = async (req, res, next) => {
