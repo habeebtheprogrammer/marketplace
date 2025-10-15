@@ -21,26 +21,81 @@ exports.getWhatsapp = async (req, res, next) => {
 
 // WhatsApp Onboarding (init + verify)
 exports.onboardWhatsApp = async (req, res, next) => {
-  try {
     console.log(req.body)
       // If request comes from WhatsApp Flows, it will be encrypted
       const isEncrypted = !!req.body?.encrypted_aes_key
       // Decrypt if necessary
       let decryptedBody, aesKeyBuffer, initialVectorBuffer
-      if (isEncrypted) {
-          const privateKeyPem = resolvePrivateKey()
-          const passphrase = process.env.PRIVATE_KEY_PASSPHRASE || undefined
-          ;({ decryptedBody, aesKeyBuffer, initialVectorBuffer } = decryptRequest(req.body, privateKeyPem, passphrase))
-          console.log('Flows decrypted:', JSON.stringify(decryptedBody, null, 2))
-          // Handle Health Check: action === 'ping' -> respond with encrypted Base64
-          if (decryptedBody?.action === 'ping') {
-              const payload = { data: { status: 'active' } }
-              return res.send(encryptResponse(payload, aesKeyBuffer, initialVectorBuffer))
-          }
-      }
-  } catch (error) {
-      return errorResponse(res, error)
-  }
+        if (isEncrypted) {
+            const privateKeyPem = resolvePrivateKey()
+            const passphrase = process.env.PRIVATE_KEY_PASSPHRASE || undefined
+            ;({ decryptedBody, aesKeyBuffer, initialVectorBuffer } = decryptRequest(req.body, privateKeyPem, passphrase))
+            console.log('Flows decrypted:', JSON.stringify(decryptedBody, null, 2))
+            // Handle Health Check: action === 'ping' -> respond with encrypted Base64
+            if (decryptedBody?.action === 'ping') {
+                const payload = { data: { status: 'active' } }
+                return res.send(encryptResponse(payload, aesKeyBuffer, initialVectorBuffer))
+            }
+
+            // Handle onboarding/signin/forgot via Flows screens
+            const screen = String(decryptedBody?.screen || '').toUpperCase()
+            const data = decryptedBody?.data || {}
+
+            if (screen === 'SIGN_UP') {
+                const firstName = String(data.first_name || '').trim()
+                const lastName = String(data.last_name || '').trim() || firstName
+                const email = String(data.email || '').trim().toLowerCase()
+                const password = String(data.password || '')
+                const confirm = String(data.confirm_password || '')
+                const termsOk = !!data.terms_agreement
+                if (!firstName || !email || !password) return successResponse(res, { ok: false, message: 'Missing first_name, email or password' })
+                if (password !== confirm) return successResponse(res, { ok: false, message: 'Passwords do not match' })
+                if (!termsOk) return successResponse(res, { ok: false, message: 'Terms must be accepted' })
+
+                const existing = await usersService.getUsers({ email })
+                if (existing?.totalDocs) {
+                    return successResponse(res, { ok: false, message: 'Email already exists. Please sign in or use forgot password.' })
+                }
+                const hash = await bcrypt.hash(password, 10)
+                const referralCode = firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4)
+                const created = await usersService.createUser({
+                    email,
+                    firstName,
+                    lastName: lastName || firstName,
+                    password: hash,
+                    referralCode,
+                })
+                try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
+                return successResponse(res, { ok: true, user: { id: created?._id, email: created?.email, firstName: created?.firstName, lastName: created?.lastName } })
+            }
+
+            if (screen === 'SIGN_IN') {
+                const email = String(data.email || '').trim().toLowerCase()
+                const password = String(data.password || '')
+                if (!email || !password) return successResponse(res, { ok: false, message: 'Missing email or password' })
+                const userRes = await usersService.getUsers({ email })
+                if (!userRes?.totalDocs) return successResponse(res, { ok: false, message: 'Invalid credentials' })
+                const user = userRes.docs[0]
+                const ok = await bcrypt.compare(password, user.password)
+                if (!ok) return successResponse(res, { ok: false, message: 'Invalid credentials' })
+                const token = createToken(JSON.stringify(user))
+                return successResponse(res, { ok: true, token, user: { id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName } })
+            }
+
+            if (screen === 'FORGOT_PASSWORD') {
+                const email = String(data.email || '').trim().toLowerCase()
+                if (!email) return successResponse(res, { ok: false, message: 'Email is required' })
+                const userRes = await usersService.getUsers({ email })
+                if (!userRes?.totalDocs) return successResponse(res, { ok: false, message: 'If the email exists, an OTP will be sent.' })
+                const code = generateRandomNumber(5)
+                await usersService.updateUsers({ _id: userRes.docs[0]._id }, { verificationCode: String(code) })
+                sendOtpCode(email, code)
+                return successResponse(res, { ok: true, message: 'OTP sent to email' })
+            }
+
+            // Unknown screen: return decrypted payload for inspection
+            return successResponse(res, { ok: false, message: 'Unknown screen', payload: decryptedBody })
+        }
 }
 
 // Decrypt request from WhatsApp Flows (RSA-OAEP + AES-128-GCM)
