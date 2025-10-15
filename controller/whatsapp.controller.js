@@ -102,7 +102,7 @@ function resolvePrivateKey() {
         if (fs.existsSync(defaultRel)) return fs.readFileSync(defaultRel, 'utf8')
     } catch{}
     // Absolute path provided by user (as last resort)
-    const absoluteHint = '/Users/user/softwares/marketplace/keys/360-wa.pem'
+    const absoluteHint = '/keys/360-wa.pem'
     if (fs.existsSync(absoluteHint)) {
         return fs.readFileSync(absoluteHint, 'utf8')
     }
