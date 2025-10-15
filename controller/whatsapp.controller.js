@@ -176,55 +176,31 @@ exports.postWhatsapp = async (req, res, next) => {
     try {
         const body = req.body
         console.log('Webhook received:', JSON.stringify(body, null, 2))
-    
+
         // respond fast to WhatsApp
         res.status(200).json({ status: 'accepted' })
-    
+
         // background processing
         setImmediate(async () => {
           try {
             const change = body?.entry?.[0]?.changes?.[0]
             if (!change || change.field !== 'messages' || !change.value?.messages?.length) return
             const message = change.value.messages[0]
-            const fromNumber = message.from
-            const messageId = message.id
-    
-            if (!isPhoneAuthorized(fromNumber)) {
-              await sendWhatsAppMessage(fromNumber, '❌ Your phone number is not authorized to create products. Please contact the administrator.')
+            const fromNumber = message.from // user wa id
+            const businessNumber = message?.context?.from // business line
+
+            // Route based on business line
+            if (businessNumber === '2349084535024') {
+              await handleOnboardingFlow(change.value, message, fromNumber)
               return
             }
-    
-            const vendorId = getVendorIdFromPhone(fromNumber)
-            if (!vendorId) {
-              await sendWhatsAppMessage(fromNumber, '❌ System error: Could not find your vendor account. Please contact support.')
+
+            if (businessNumber === '2348039938596') {
+              await handleProductFlow(change.value, message, fromNumber)
               return
             }
-    
-            if (message.type === 'image') {
-              const imageId = message.image.id
-              const caption = message.image.caption || ''
-              if (!caption.trim()) {
-                await sendWhatsAppMessage(fromNumber, 'Please provide a description or price with your product image.')
-                return
-              }
-    
-              const whatsappMediaUrl = await getWhatsAppMediaUrl(imageId)
-              if (!whatsappMediaUrl) throw new Error('Could not retrieve WhatsApp media URL.')
-              const { buffer, contentType } = await downloadWhatsAppMedia(whatsappMediaUrl)
-              const uploadedImageUrl = await uploadImageToExternalServer(buffer, contentType, imageId)
-              const imageDataBase64 = buffer.toString('base64')
-              await processProductMessage(
-                uploadedImageUrl,
-                `data:${contentType};base64,${imageDataBase64}`,
-                caption,
-                messageId,
-                fromNumber,
-                vendorId
-              )
-            } else if (message.type === 'text') {
-              const messageText = message.text?.body || ''
-              await processProductMessage('', '', messageText, messageId, fromNumber, vendorId)
-            }
+
+            // Default: ignore or extend with future handlers
           } catch (err) {
             console.error('Background processing error:', err)
           }
@@ -233,6 +209,119 @@ exports.postWhatsapp = async (req, res, next) => {
         console.error('Webhook handler error:', err)
         try { res.status(200).json({ status: 'accepted-with-error' }) } catch {}
       }
+}
+
+async function handleOnboardingFlow(value, message, fromNumber) {
+  try {
+    const contacts = value?.contacts || []
+    const waId = contacts?.[0]?.wa_id || fromNumber
+    const phoneNormalized = waId ? removeCountryCode(String(waId)) : undefined
+
+    // Parse flow interactive response if present
+    let payload = {}
+    if (message?.type === 'interactive' && message?.interactive?.type === 'nfm_reply') {
+      const resp = message?.interactive?.nfm_reply?.response_json
+      try { payload = JSON.parse(resp || '{}') } catch {}
+    }
+
+    const firstName = payload?.screen_0_First_Name_0
+    const lastName = payload?.screen_0_Last_Name_1 || firstName
+    const email = payload?.screen_0_Email_Address_2
+    const code = payload?.screen_1_User_Pin_0 || payload?.pin
+
+    if (code && email) {
+      // Verify path
+      const normalizedEmail = String(email).trim().toLowerCase()
+      const userRes = await usersService.getUsers({ email: normalizedEmail, verificationCode: String(code) })
+      if (!userRes?.totalDocs) {
+        await sendWhatsAppMessage(fromNumber, '❌ Incorrect code. Please try again.')
+        return
+      }
+      const update = { verificationCode: '' }
+      if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
+      const updated = await usersService.updateUsers({ _id: userRes.docs[0]._id }, update)
+      await sendWhatsAppMessage(fromNumber, `✅ Verified! Welcome, ${updated.firstName}.`)
+      return
+    }
+
+    // Init path
+    if (!email || !firstName) {
+      await sendWhatsAppMessage(fromNumber, 'Please provide your first name and email in the flow to continue.')
+      return
+    }
+    const normalizedEmail = String(email).trim().toLowerCase()
+    const existing = await usersService.getUsers({ email: normalizedEmail })
+    const verificationCode = generateRandomNumber(5)
+
+    if (existing?.totalDocs) {
+      const update = { verificationCode: String(verificationCode) }
+      if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
+      await usersService.updateUsers({ _id: existing.docs[0]._id }, update)
+      sendOtpCode(normalizedEmail, verificationCode)
+      await sendWhatsAppMessage(fromNumber, 'We sent a verification code to your email. Enter it in the next screen.')
+      return
+    }
+
+    const randPassword = Math.random().toString(36).slice(-10)
+    const hash = await bcrypt.hash(randPassword, 10)
+    const referralCode = String(firstName).substring(0, 4).toUpperCase() + generateRandomNumber(4)
+    const userPayload = {
+      email: normalizedEmail,
+      firstName: String(firstName).trim(),
+      lastName: String(lastName || firstName).trim(),
+      password: hash,
+      referralCode,
+      verificationCode: String(verificationCode),
+    }
+    if (phoneNormalized) userPayload.phoneNumber = [phoneNormalized]
+    const created = await usersService.createUser(userPayload)
+    try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
+    sendOtpCode(normalizedEmail, verificationCode)
+    await sendWhatsAppMessage(fromNumber, 'Account created! We sent a verification code to your email. Enter it in the next screen.')
+  } catch (e) {
+    console.error('handleOnboardingFlow error:', e)
+    try { await sendWhatsAppMessage(fromNumber, 'An error occurred. Please try again later.') } catch {}
+  }
+}
+
+async function handleProductFlow(value, message, fromNumber) {
+  // Keep existing product processing logic
+  if (!isPhoneAuthorized(fromNumber)) {
+    await sendWhatsAppMessage(fromNumber, '❌ Your phone number is not authorized to create products. Please contact the administrator.')
+    return
+  }
+
+  const vendorId = getVendorIdFromPhone(fromNumber)
+  if (!vendorId) {
+    await sendWhatsAppMessage(fromNumber, '❌ System error: Could not find your vendor account. Please contact support.')
+    return
+  }
+
+  const messageId = message.id
+  if (message.type === 'image') {
+    const imageId = message.image.id
+    const caption = message.image.caption || ''
+    if (!caption.trim()) {
+      await sendWhatsAppMessage(fromNumber, 'Please provide a description or price with your product image.')
+      return
+    }
+    const whatsappMediaUrl = await getWhatsAppMediaUrl(imageId)
+    if (!whatsappMediaUrl) throw new Error('Could not retrieve WhatsApp media URL.')
+    const { buffer, contentType } = await downloadWhatsAppMedia(whatsappMediaUrl)
+    const uploadedImageUrl = await uploadImageToExternalServer(buffer, contentType, imageId)
+    const imageDataBase64 = buffer.toString('base64')
+    await processProductMessage(
+      uploadedImageUrl,
+      `data:${contentType};base64,${imageDataBase64}`,
+      caption,
+      messageId,
+      fromNumber,
+      vendorId
+    )
+  } else if (message.type === 'text') {
+    const messageText = message.text?.body || ''
+    await processProductMessage('', '', messageText, messageId, fromNumber, vendorId)
+  }
 }
 
 async function getWhatsAppMediaUrl(mediaId) {
