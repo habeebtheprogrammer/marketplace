@@ -29,6 +29,7 @@ exports.onboardWhatsApp = async (req, res, next) => {
         let decryptedBody, aesKeyBuffer, initialVectorBuffer
         if (isEncrypted) {
             const privateKeyPem = resolvePrivateKey()
+            console.log(String(privateKeyPem))
             const passphrase = process.env.PRIVATE_KEY_PASSPHRASE || undefined
             ;({ decryptedBody, aesKeyBuffer, initialVectorBuffer } = decryptRequest(req.body, privateKeyPem, passphrase))
             // Handle Health Check: action === 'ping' -> respond with encrypted Base64
