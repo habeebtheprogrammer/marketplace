@@ -18,8 +18,14 @@ exports.getWhatsapp = async (req, res, next) => {
 
 // WhatsApp Onboarding (init + verify)
 exports.onboardWhatsApp = async (req, res, next) => {
-    try {console.log(req.body)
-        const { firstName, lastName, email, phone, code } = req.body || {}
+    try {
+        console.log(req.body)
+        const { firstName, lastName, email, phone, code ,encrypted_flow_data,encrypted_aes_key,initial_vector} = req.body || {}
+        if(encrypted_flow_data && encrypted_aes_key && initial_vector){
+          res.status(200).json({})
+          return
+        }
+      
         const normalizedEmail = String(email || '').trim().toLowerCase()
         const phoneNormalized = phone ? removeCountryCode(String(phone)) : undefined
 
