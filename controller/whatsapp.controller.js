@@ -1,6 +1,10 @@
  
 const { processProductMessage } = require("../utils/lib/product-service")
 const { getVendorIdFromPhone, isPhoneAuthorized } = require("../utils/lib/config")
+const { usersService, journeyService } = require("../service")
+const { successResponse, errorResponse } = require("../utils/responder")
+const bcrypt = require("bcryptjs")
+const { createToken, generateRandomNumber, sendOtpCode, removeCountryCode } = require("../utils/helpers")
 
 // WhatsApp webhook verification
 exports.getWhatsapp = async (req, res, next) => {
@@ -10,6 +14,73 @@ exports.getWhatsapp = async (req, res, next) => {
     const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN
     if (mode === 'subscribe' && token === VERIFY_TOKEN) return res.status(200).send(challenge)
     return res.status(403).send('Forbidden')
+}
+
+// WhatsApp Onboarding (init + verify)
+exports.onboardWhatsApp = async (req, res, next) => {
+    try {console.log(req.body)
+        const { firstName, lastName, email, phone, code } = req.body || {}
+        const normalizedEmail = String(email || '').trim().toLowerCase()
+        const phoneNormalized = phone ? removeCountryCode(String(phone)) : undefined
+
+        // If code is provided, this is the verification step
+        if (code) {
+            if (!normalizedEmail) throw new Error('Email is required')
+            const userRes = await usersService.getUsers({ email: normalizedEmail, verificationCode: String(code) })
+            if (!userRes?.totalDocs) throw new Error('Incorrect otp. please try again')
+
+            const userDoc = userRes.docs[0]
+            const update = { verificationCode: "" }
+            if (phoneNormalized) {
+                // ensure phone number is saved and unique
+                update.$addToSet = { phoneNumber: phoneNormalized }
+            }
+            const updated = await usersService.updateUsers({ _id: userDoc._id }, update)
+            const token = createToken(JSON.stringify(updated))
+            return successResponse(res, { verified: true, user: updated, token })
+        }
+
+        // Init step: requires firstName, email, and phone for WhatsApp
+        if (!normalizedEmail) throw new Error('Email is required')
+        if (!firstName) throw new Error('First name is required')
+
+        const existing = await usersService.getUsers({ email: normalizedEmail })
+        const verificationCode = generateRandomNumber(5)
+
+        if (existing?.totalDocs) {
+            // Existing user: update verification code and attach phone
+            const update = { verificationCode: String(verificationCode) }
+            if (phoneNormalized) update.$addToSet = { phoneNumber: phoneNormalized }
+            const updated = await usersService.updateUsers({ _id: existing.docs[0]._id }, update)
+            // send email
+            sendOtpCode(normalizedEmail, verificationCode)
+            return successResponse(res, { next: 'verify', exists: true })
+        } else {
+            // New user: create with random password, save phone, and send code
+            const randPassword = Math.random().toString(36).slice(-10)
+            const hash = await bcrypt.hash(randPassword, 10)
+            const referralCode = String(firstName).substring(0, 4).toUpperCase() + generateRandomNumber(4)
+
+            const userPayload = {
+                email: normalizedEmail,
+                firstName: String(firstName).trim(),
+                lastName: String(lastName || firstName).trim(),
+                password: hash,
+                referralCode,
+                verificationCode: String(verificationCode),
+            }
+            if (phoneNormalized) userPayload.phoneNumber = [phoneNormalized]
+
+            const created = await usersService.createUser(userPayload)
+            // Fire and forget journey signup
+            try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
+            // send email
+            sendOtpCode(normalizedEmail, verificationCode)
+            return successResponse(res, { next: 'verify', exists: false })
+        }
+    } catch (error) {
+        return errorResponse(res, error)
+    }
 }
 
 // Handle incoming WhatsApp messages

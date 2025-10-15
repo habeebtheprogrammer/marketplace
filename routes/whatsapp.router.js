@@ -6,5 +6,6 @@ var router = express.Router();
 
 router.get('/webhook', whatsappController.getWhatsapp);
 router.post('/webhook', whatsappController.postWhatsapp);
+router.post('/onboard', whatsappController.onboardWhatsApp);
 
 module.exports = router;
