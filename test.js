@@ -564,7 +564,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal":[
+    "bilal": [
         {
             "plan_name": "500MB",
             "plan_id": "1",
