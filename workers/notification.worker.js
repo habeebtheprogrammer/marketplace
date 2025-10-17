@@ -10,8 +10,8 @@ class NotificationWorker {
         content: "Through our partnered repair & diagnostics provider A1 Info Tech, your devices get professional care. Click to contact now!"
       },
       {
-        title: "Powered by Scottech Gadgets",
-        content: "From cracked screens to slow laptops, Scottech Gadgets has you covered. Tap here to contact our partner now!"
+        title: "Powered by Scott Tech Gadgets",
+        content: "From cracked screens to slow laptops, Scott Tech Gadgets has you covered. Tap here to contact our partner now!"
       },
       {
         title: "Your Trusted Repair Partner",
@@ -19,7 +19,7 @@ class NotificationWorker {
       },
       {
         title: "Trusted Repairs, Fast",
-        content: "From screens to batteries, Scottech Gadgets handles it all. Tap to contact today."
+        content: "From screens to batteries, Scott Tech Gadgets handles it all. Tap to contact today."
       },
       {
         title: "Laptop Running Slow?",
@@ -27,7 +27,7 @@ class NotificationWorker {
       },
       {
         title: "Battery Issues?",
-        content: "Scottech Gadgets will bring your gadget back to life. Click to book your fix."
+        content: "Scott Tech Gadgets will bring your gadget back to life. Click to book your fix."
       }
     ];
 
