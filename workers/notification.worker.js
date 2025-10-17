@@ -115,7 +115,7 @@ class NotificationWorker {
         headings: { en: notification.title },
         contents: { en: notification.content },
         big_picture: "https://terra01.s3.amazonaws.com/images/%40a1techinstitute%20-%20R%C3%A2%C3%84%C2%93Download.JPEG",
-        url: "https://360gadgetsafrica.com/technicians/A1-infotech"
+        url: "https://360gadgetsafrica.com/technicians"
       });
       console.log('Repair notification sent:', notification.title);
     } catch (error) {
