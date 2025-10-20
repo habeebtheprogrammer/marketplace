@@ -19,6 +19,7 @@ exports.updateWallet = async (filter, data) => {
 }
 
 exports.fetchTransactions = async (filter,options={sort:{ "_id": -1}}) => {
+    console.log(filter,options, 'trrasssss')
     const transactions = await Transactions.paginate(filter, options);
     return transactions
 }
