@@ -3,9 +3,10 @@ const fs = require('fs')
 const path = require('path')
 const { processProductMessage } = require('./lib/product-service')
 const { getVendorIdFromPhone, isPhoneAuthorized } = require('./lib/config')
-const { usersService } = require('../service')
+const { usersService, journeyService } = require('../service')
 const { processAIChat } = require('./aiChat')
-const { removeCountryCode } = require('./helpers')
+const { removeCountryCode, createToken, generateRandomNumber, sendOtpCode } = require('./helpers')
+const bcrypt = require('bcryptjs')
 
 // Decrypt request from WhatsApp Flows (RSA-OAEP + AES-128-GCM)
 function decryptRequest(body, privatePem, passphrase) {
@@ -116,26 +117,57 @@ async function handleWebhookBackground(body) {
 
 async function handleBotMessage(body){
   try {
-        console.log('Webhook received:', JSON.stringify(body, null, 2))
+    console.log('Webhook received:', JSON.stringify(body, null, 2))
     const change = body?.entry?.[0]?.changes?.[0]
     if (!change || change.field !== 'messages' || !change.value?.messages?.length) return
+    
     const message = change.value.messages[0]
-    const fromNumber = "+"+message.from
-    console.log(fromNumber)
+    const contacts = change.value.contacts?.[0]
+    const fromNumber = "+" + message.from
+    const phoneNumberId = change.value.metadata?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID
+    
+    // Handle WhatsApp Flow completion (nfm_reply)
+    if (message.type === 'interactive' && message.interactive?.type === 'nfm_reply') {
+      try {
+        const responseJson = JSON.parse(message.interactive.nfm_reply.response_json || '{}')
+        const formDataString = responseJson.optional_param1
+        
+        if (!formDataString) {
+          console.error('No form data in flow completion')
+          return
+        }
+        
+        const formData = JSON.parse(formDataString)
+        const action = formData.action
+        
+        console.log('Flow completion detected:', { action, fromNumber })
+        
+        if (action === 'SIGN_UP') {
+          // Create new user with WhatsApp phone
+          await handleSignUpInWebhook(formData, fromNumber, phoneNumberId)
+        } else if (action === 'SIGN_IN') {
+          // Update existing user's phone
+          await handleSignInInWebhook(formData, fromNumber, phoneNumberId)
+        }
+        
+        return
+      } catch (e) {
+        console.error('Error handling flow completion:', e.message)
+      }
+    }
+    
     // 1) Lookup user by phone number
     let foundUser = null
     try {
-        // Fallback: explicit $in-style query for array fields (if supported by service layer)
-        const byIn = await usersService.getUsers({ phoneNumber: { $in: [fromNumber] } })
-        if (byIn?.totalDocs) foundUser = byIn.docs[0]
+      const byIn = await usersService.getUsers({ phoneNumber: { $in: [fromNumber] } })
+      if (byIn?.totalDocs) foundUser = byIn.docs[0]
     } catch (e) {
       console.error('handleBotMessage user lookup error:', e?.message)
     }
-    const phoneNumberId = change.value.metadata?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID
 
     if (foundUser) {
       // 2) Use local AI service (no HTTP)
-      const prompt = (message?.text?.body || '').trim()
+      const prompt = (message?.text?.body || message?.button?.text || '').trim()
       if (!prompt) return
 
       let aiText = 'I had trouble processing your request. Please try again.'
@@ -307,6 +339,155 @@ async function sendWhatsAppMessage(phoneNumberId, message) {
   }
 }
 
+// Handle WhatsApp Flow completion and update user phone
+async function handleFlowCompletion(userId, whatsappPhone, action, phoneNumberId) {
+  try {
+    const user = await usersService.getUserById(userId)
+    if (!user) {
+      console.error('User not found:', userId)
+      return
+    }
+    
+    // Update user's phone number if not already present
+    const currentPhones = Array.isArray(user.phoneNumber) ? user.phoneNumber : []
+    if (!currentPhones.includes(whatsappPhone)) {
+      await usersService.updateUsers(
+        { _id: userId },
+        { phoneNumber: [...currentPhones, whatsappPhone] }
+      )
+      console.log(`Added WhatsApp number ${whatsappPhone} to user ${userId}`)
+    }
+    
+    // Send welcome template message
+    const welcomeTemplate = {
+      messaging_product: 'whatsapp',
+      to: whatsappPhone.replace('+', ''),
+      type: 'template',
+      template: {
+        name: 'gadget_shop_intro',
+        language: { code: 'en_US' },
+        components: [
+          {
+            type: 'HEADER',
+            parameters: [
+              {
+                type: 'image',
+                image: {
+                  link: 'https://terra01.s3.amazonaws.com/images/photo-1609081219090-a6d81d3085bf%20%281%29.jpeg'
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+    
+    await sendWhatsAppMessage(phoneNumberId, welcomeTemplate)
+    console.log(`Welcome template sent to ${whatsappPhone} for action: ${action}`)
+  } catch (e) {
+    console.error('handleFlowCompletion error:', e.message)
+  }
+}
+
+// Handle user sign-up in webhook (with WhatsApp phone)
+async function handleSignUpInWebhook(formData, whatsappPhone, phoneNumberId) {
+  try {
+    const { firstName, lastName, email, password } = formData
+    
+    // Hash password and create user with WhatsApp phone
+    const hash = await bcrypt.hash(password, 10)
+    const referralCode = firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4)
+    
+    const created = await usersService.createUser({
+      email,
+      firstName: firstName.toLowerCase(),
+      lastName: (lastName || firstName).toLowerCase(),
+      password: hash,
+      referralCode,
+      phoneNumber: [whatsappPhone]
+    })
+    
+    console.log(`✅ User created via WhatsApp: ${email} with phone ${whatsappPhone}`)
+    
+    // Trigger signup journey
+    try {
+      journeyService.handleUserSignup(created._id)
+    } catch (e) {
+      console.log('journey signup error', e?.message)
+    }
+    
+    // Send welcome template
+    await sendWelcomeTemplate(whatsappPhone, phoneNumberId)
+    
+  } catch (e) {
+    console.error('handleSignUpInWebhook error:', e.message)
+  }
+}
+
+// Handle user sign-in in webhook (update phone)
+async function handleSignInInWebhook(formData, whatsappPhone, phoneNumberId) {
+  try {
+    const { userId } = formData
+    
+    const user = await usersService.getUserById(userId)
+    if (!user) {
+      console.error('User not found:', userId)
+      return
+    }
+    
+    // Update user's phone number if not already present
+    const currentPhones = Array.isArray(user.phoneNumber) ? user.phoneNumber : []
+    if (!currentPhones.includes(whatsappPhone)) {
+      await usersService.updateUsers(
+        { _id: userId },
+        { phoneNumber: [...currentPhones, whatsappPhone] }
+      )
+      console.log(`✅ Added WhatsApp number ${whatsappPhone} to user ${userId}`)
+    } else {
+      console.log(`ℹ️ User ${userId} already has phone ${whatsappPhone}`)
+    }
+    
+    // Send welcome template
+    await sendWelcomeTemplate(whatsappPhone, phoneNumberId)
+    
+  } catch (e) {
+    console.error('handleSignInInWebhook error:', e.message)
+  }
+}
+
+// Send welcome template helper
+async function sendWelcomeTemplate(whatsappPhone, phoneNumberId) {
+  try {
+    const welcomeTemplate = {
+      messaging_product: 'whatsapp',
+      to: whatsappPhone.replace('+', ''),
+      type: 'template',
+      template: {
+        name: 'gadget_shop_intro',
+        language: { code: 'en_US' },
+        components: [
+          {
+            type: 'HEADER',
+            parameters: [
+              {
+                type: 'image',
+                image: {
+                  link: 'https://terra01.s3.amazonaws.com/images/photo-1609081219090-a6d81d3085bf%20%281%29.jpeg'
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+    
+    await sendWhatsAppMessage(phoneNumberId, welcomeTemplate)
+    console.log(`📱 Welcome template sent to ${whatsappPhone}`)
+  } catch (e) {
+    console.error('sendWelcomeTemplate error:', e.message)
+  }
+}
+
 
 
 module.exports = {
@@ -320,4 +501,8 @@ module.exports = {
   runAsyncImmediate,
   handleWebhookBackground,
   handleBotMessage,
+  handleFlowCompletion,
+  handleSignUpInWebhook,
+  handleSignInInWebhook,
+  sendWelcomeTemplate,
 }

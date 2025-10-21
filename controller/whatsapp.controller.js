@@ -50,38 +50,42 @@ exports.onboardWhatsApp = async (req, res, next) => {
               const confirm = String(data.confirm_password || '')
               const termsOk = !!data.terms_agreement
               
-              // --- Validation Failures (Keep {ok: false} format) ---
-              if (!firstName || !email || !password) { res.set('Content-Type', 'text/plain'); return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Missing first_name, email or password' } }, aesKeyBuffer, initialVectorBuffer)) }
-              if (password !== confirm) { res.set('Content-Type', 'text/plain'); return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Passwords do not match' } }, aesKeyBuffer, initialVectorBuffer)) }
-              if (!termsOk) { res.set('Content-Type', 'text/plain'); return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Terms must be accepted' } }, aesKeyBuffer, initialVectorBuffer)) }
-
+              // --- Validation only (don't create user yet) ---
+              if (!firstName || !email || !password) { 
+                  res.set('Content-Type', 'text/plain')
+                  return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Missing first_name, email or password' } }, aesKeyBuffer, initialVectorBuffer)) 
+              }
+              if (password !== confirm) { 
+                  res.set('Content-Type', 'text/plain')
+                  return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Passwords do not match' } }, aesKeyBuffer, initialVectorBuffer)) 
+              }
+              if (!termsOk) { 
+                  res.set('Content-Type', 'text/plain')
+                  return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Terms must be accepted' } }, aesKeyBuffer, initialVectorBuffer)) 
+              }
+              
               const existing = await usersService.getUsers({ email })
               if (existing?.totalDocs) {
                   res.set('Content-Type', 'text/plain')
                   return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Email already exists. Please sign in or use forgot password.' } }, aesKeyBuffer, initialVectorBuffer))
               }
               
-              // --- Successful Sign Up (UPDATED: Use {status: 'success'} format) ---
-              const hash = await bcrypt.hash(password, 10)
-              const referralCode = firstName.substring(0, 4).toUpperCase() + generateRandomNumber(4)
-              const created = await usersService.createUser({
-                  email,
+              // Pass form data to webhook via optional params (webhook will create user)
+              const formData = JSON.stringify({
                   firstName,
-                  lastName: lastName || firstName,
-                  password: hash,
-                  referralCode,
+                  lastName,
+                  email,
+                  password, // Will be hashed in webhook
+                  action: 'SIGN_UP'
               })
-              try { journeyService.handleUserSignup(created?._id) } catch (e) { console.log('journey signup error', e?.message) }
               
-              // FINAL RESPONSE: Complete the flow on successful signup
               const successPayload = {
                   screen: 'SUCCESS',
                   data: {
                       extension_message_response: {
                           params: {
-                              flow_token: flowToken || '',
-                              optional_param1: String(created?._id || ''),
-                              optional_param2: String(created?.email || '')
+                              flow_token: flowToken || 'unused',
+                              optional_param1: formData
                           }
                       }
                   }
@@ -93,26 +97,40 @@ exports.onboardWhatsApp = async (req, res, next) => {
           if (screen === 'SIGN_IN') {
               const email = String(data.email || '').trim().toLowerCase()
               const password = String(data.password || '')
-
-              // --- Validation Failures (Keep {ok: false} format) ---
-              if (!email || !password) { res.set('Content-Type', 'text/plain'); return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Missing email or password' } }, aesKeyBuffer, initialVectorBuffer)) }
+              
+              // --- Validation only (don't authenticate yet) ---
+              if (!email || !password) { 
+                  res.set('Content-Type', 'text/plain')
+                  return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Missing email or password' } }, aesKeyBuffer, initialVectorBuffer)) 
+              }
+              
               const userRes = await usersService.getUsers({ email })
-              if (!userRes?.totalDocs) { res.set('Content-Type', 'text/plain'); return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Invalid credentials' } }, aesKeyBuffer, initialVectorBuffer)) }
+              if (!userRes?.totalDocs) { 
+                  res.set('Content-Type', 'text/plain')
+                  return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Invalid credentials' } }, aesKeyBuffer, initialVectorBuffer)) 
+              }
+              
               const user = userRes.docs[0]
               const ok = await bcrypt.compare(password, user.password)
-              if (!ok) { res.set('Content-Type', 'text/plain'); return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Invalid credentials' } }, aesKeyBuffer, initialVectorBuffer)) }
+              if (!ok) { 
+                  res.set('Content-Type', 'text/plain')
+                  return res.send(encryptResponse({ screen: currentScreen, data: { error_message: 'Invalid credentials' } }, aesKeyBuffer, initialVectorBuffer)) 
+              }
               
-              // FINAL RESPONSE: Complete the flow on successful sign-in
-              const token = createToken(JSON.stringify(user))
+              // Pass user data to webhook via optional params (webhook will update phone and send welcome)
+              const formData = JSON.stringify({
+                  userId: String(user._id),
+                  email: user.email,
+                  action: 'SIGN_IN'
+              })
+              
               const successPayload = {
                   screen: 'SUCCESS',
                   data: {
                       extension_message_response: {
                           params: {
-                              flow_token: flowToken || '',
-                              optional_param1: String(user?._id || ''),
-                              optional_param2: String(user?.email || ''),
-                              optional_param3: String(token || '')
+                              flow_token: flowToken || 'unused',
+                              optional_param1: formData
                           }
                       }
                   }
