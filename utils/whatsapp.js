@@ -166,9 +166,15 @@ async function handleBotMessage(body){
     }
 
     if (foundUser) {
-      // 2) Use local AI service (no HTTP)
+      // 2) Mark message as read (shows double blue checkmarks)
+      const messageId = message.id
+      await sendTypingIndicator(phoneNumberId, fromNumber, 'on', messageId)
+      
+      // 3) Use local AI service (no HTTP)
       const prompt = (message?.text?.body || message?.button?.text || '').trim()
-      if (!prompt) return
+      if (!prompt) {
+        return
+      }
 
       let aiText = 'I had trouble processing your request. Please try again.'
       try {
@@ -178,10 +184,10 @@ async function handleBotMessage(body){
         console.error('AI chat local call failed:', e?.message)
       }
 
-      // 3) Send AI response back to user
+      // 4) Send AI response back to user
       const textMsg = {
         messaging_product: 'whatsapp',
-        to: fromNumber,
+        to: fromNumber.replace('+', ''),
         type: 'text',
         text: { body: aiText.slice(0, 4000) },
       }
@@ -192,7 +198,7 @@ async function handleBotMessage(body){
     // 4) Not found: send onboarding template
     const templateMsg = {
       messaging_product: 'whatsapp',
-      to: fromNumber,
+      to: fromNumber.replace('+', ''),
       type: 'template',
       template: {
         name: 'onboard',
@@ -336,6 +342,41 @@ async function sendWhatsAppMessage(phoneNumberId, message) {
   if (!response.ok) {
     const errorBody = await response.text()
     console.error('sendWhatsAppMessage error:', response.status, errorBody)
+  }
+}
+
+// Send typing indicator with read receipt
+async function sendTypingIndicator(phoneNumberId, toNumber, status, messageId) {
+  try {
+    if (status === 'on' && messageId) {
+      const accessToken = process.env.WHATSAPP_ACCESS_TOKEN
+      const payload = {
+        messaging_product: 'whatsapp',
+        status: 'read',
+        message_id: messageId,
+        typing_indicator: {
+          type: 'text'
+        }
+      }
+      
+      const response = await fetch(`https://graph.facebook.com/v18.0/${phoneNumberId}/messages`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+      
+      if (!response.ok) {
+        const errorBody = await response.text()
+        console.error('sendTypingIndicator error:', response.status, errorBody)
+      } else {
+        console.log(`✓ Read receipt + typing indicator sent for message ${messageId}`)
+      }
+    }
+  } catch (e) {
+    console.error('sendTypingIndicator exception:', e.message)
   }
 }
 
@@ -498,6 +539,7 @@ module.exports = {
   downloadWhatsAppMedia,
   uploadImageToExternalServer,
   sendWhatsAppMessage,
+  sendTypingIndicator,
   runAsyncImmediate,
   handleWebhookBackground,
   handleBotMessage,
