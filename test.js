@@ -14,7 +14,7 @@ const unfilteredplans = {
         {
             "plan_name": "1GB",
             "plan_id": "5",
-            "amount": "530.00",
+            "amount": "520.00",
             "plan_type": "SME",
             "plan_day": "1Month",
             "network": "MTN"
@@ -564,7 +564,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal": [
+    "bilal":  [
         {
             "plan_name": "500MB",
             "plan_id": "1",
