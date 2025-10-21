@@ -102,7 +102,7 @@ const buildAdvancedFilterQuery = async (filters) => {
     query.slug = filters.slug;
   }
   if (filters.categoryId) {
-    query.categoryId = filters.categoryId;
+    query.categoryId = String(filters.categoryId).trim().replace(/['"]/g, '');
   }
   // Category lookup by provided category identifier (e.g., slug or title)
   if (filters.category && !query.categoryId) {
@@ -123,7 +123,7 @@ const buildAdvancedFilterQuery = async (filters) => {
     }
   }
   if (filters.vendorId) {
-    query.vendorId = filters.vendorId;
+    query.vendorId = String(filters.vendorId).trim().replace(/['"]/g, '');
   }
   if (filters.trending) {
     query.trending = filters.trending === 'true';
