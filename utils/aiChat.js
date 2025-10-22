@@ -1,50 +1,50 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai')
 const mongoose = require('mongoose')
+const fetch = require('node-fetch')
+const { createToken } = require('./helpers')
 const chatSessions = require('../service/chatSessions.service')
 const services = require('../service')
 
 // Initialize Gemini once
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
 
-// System instruction tailored for WhatsApp bot
-const SYSTEM_PROMPT = `You are 360AI, a smart customer support and operations assistant for 360GadgetsAfrica.
+// System instruction tailored for WhatsApp bot (persona + behavior)
+const SYSTEM_PROMPT = `You are an advanced AI assistant designed to act as a smart customer support & operations chatbot for 360 Gadgets Africa.
+Your purpose is to help users manage their accounts, perform wallet & VTU transactions, and make product inquiries intelligently.
+Company website: https://www.360gadgetsafrica.com. You may learn business information dynamically from this website and its sitemap and use it to improve answers (product types, services, pricing, etc.).
 
-COMPANY CONTEXT
-- Brand: 360GadgetsAfrica — a trusted Nigerian tech marketplace.
-- Offerings: authentic gadgets (with warranty), repairs, wallet, airtime/data (VTU), and curated product discovery.
-- Website: https://360gadgetsafrica.com
-- You may learn business info dynamically from the website and sitemap to improve answers.
-
-CORE CAPABILITIES
+Core Functional Areas
 1) User Profile Management
-- Get user profile: name, email, phones, wallet info.
-- Update profile: name/email/phone/password (respect API constraints).
-- Check referral code/bonus if present.
+- Get user profile details (name, email, wallet balance, activity).
+- Update user details (e.g., name, email, phone number).
+- Check and display referral code or bonus.
 
-2) Data & Airtime (VTU)
-- Help pick network (MTN, GLO, Airtel, 9mobile).
-- Show data plans (paginated if many).
-- Flow: Select network → Select plan → Enter phone → Confirm → Execute.
-- Confirm intent before purchase. On failure, propose recovery steps.
+2) Data & Airtime Top-up
+- Help user select network (MTN, GLO, Airtel, 9mobile).
+- Show paginated data or airtime plan lists dynamically from backend datalists.
+- Guide the purchase flow: Select network → Select plan → Enter phone → Confirm purchase → Execute.
+- Handle failed transactions gracefully with recovery steps.
 
 3) Wallet Management
-- Show current wallet balance and linked accounts (banks/virtual) where available.
-- Provide funding guidance; show transaction history.
+- Show current wallet balance; provide funding guidance.
+- Show transaction history.
+- Deduct wallet balance after successful purchases.
 
 4) Product Enquiry
-- Search gadgets (phones, laptops, accessories).
-- Show price, availability, specs; recommend alternatives.
-- Filter by category, price range, vendor, rating, stock.
+- Let users ask about available gadgets (e.g., iPhones, laptops, accessories).
+- Fetch product details (price, availability, specs, promotions) using backend product services.
+- Support filtering by price range, category, availability. Recommend similar products if unavailable.
 
-INTERACTION STYLE
-- Be concise, friendly, and action-oriented.
-- Ask clarifying questions when required inputs are missing.
-- Confirm before any transaction or irreversible operation.
-- Handle errors gracefully; propose next steps.
+Integration Instructions
+- You may call controller/service functions in-process to fetch/update data, and you may guide users through flows on WhatsApp.
+- Use natural language understanding to map user intents to the correct function call.
+- When unsure, ask clarifying questions; always confirm before executing transactions.
 
-AUTH RULES
-- This WhatsApp bot operates for known users (identified by phone). Tools that require account context should use the provided userId. If not available, ask to register via onboarding.
-` 
+Smart Behavior
+- Respond conversationally in short, readable WhatsApp-friendly text (not JSON).
+- Personalize using user profile data when available.
+- Handle errors gracefully and propose next steps.
+`
 
 // Helpers for WhatsApp-friendly formatting
 function formatMoney(amount, currency = 'NGN') {
@@ -59,10 +59,15 @@ function formatDate(dt) {
 
 function toolDeclarations() {
   return [{
-    function_declarations: [
+    functionDeclarations: [
       {
         name: 'getUserAccount',
         description: 'Retrieve the user account summary including wallet balance',
+        parameters: { type: 'object', properties: {} }
+      },
+      {
+        name: 'getWalletBalance',
+        description: 'Get wallet balance only',
         parameters: { type: 'object', properties: {} }
       },
       {
@@ -119,6 +124,55 @@ function toolDeclarations() {
         }
       },
       {
+        name: 'getProductDetails',
+        description: 'Get a single product by ID and return details',
+        parameters: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] }
+      },
+      {
+        name: 'getDataPlans',
+        description: 'Get data plans from local dataplan.json with optional filters',
+        parameters: {
+          type: 'object',
+          properties: {
+            network: { type: 'string' },
+            vendor: { type: 'string' },
+            planType: { type: 'string' },
+            page: { type: 'number' },
+            limit: { type: 'number' }
+          }
+        }
+      },
+      {
+        name: 'purchaseData',
+        description: 'Purchase a data plan for a phone number. Always confirm before executing.',
+        parameters: {
+          type: 'object',
+          properties: {
+            planId: { type: 'string' },
+            vendor: { type: 'string', description: 'quickvtu | bilal' },
+            network: { type: 'string' },
+            planType: { type: 'string' },
+            amount: { type: 'number' },
+            phone: { type: 'string' },
+            confirm: { type: 'boolean', description: 'Must be true to execute the purchase' }
+          },
+          required: ['planId','vendor','network','planType','amount','phone']
+        }
+      },
+      {
+        name: 'buyAirtime',
+        description: 'Buy airtime for a phone number. Always confirm before executing.',
+        parameters: {
+          type: 'object',
+          properties: {
+            amount: { type: 'number' },
+            phone: { type: 'string' },
+            confirm: { type: 'boolean', description: 'Must be true to execute the purchase' }
+          },
+          required: ['amount','phone']
+        }
+      },
+      {
         name: 'airtimeInfo',
         description: 'Provide information about airtime purchase limits and flow',
         parameters: { type: 'object', properties: {} }
@@ -155,6 +209,18 @@ async function executeTool(name, args, { userId } = {}) {
         return msg
       } catch (e) {
         return `⚠️ Error fetching account: ${e.message}`
+      }
+    }
+    case 'getWalletBalance': {
+      if (!userId) return '⚠️ Please sign in to view your wallet.'
+      try {
+        const walletList = await services.walletsService.getWallets({ userId })
+        const walletDoc = walletList?.docs?.[0]
+        const balance = walletDoc?.balance || 0
+        const currency = walletDoc?.currency || 'NGN'
+        return `💰 Wallet Balance: ${formatMoney(balance, currency)}`
+      } catch (e) {
+        return `⚠️ Error fetching wallet: ${e.message}`
       }
     }
     case 'updateUserAccount': {
@@ -244,10 +310,10 @@ async function executeTool(name, args, { userId } = {}) {
           query.$text = { $search: args.title }
         }
         if (args?.categoryId) {
-          query.categoryId = new mongoose.Types.ObjectId(String(args.categoryId))
+          try { query.categoryId = new mongoose.Types.ObjectId(String(args.categoryId)) } catch {}
         }
         if (args?.vendorId) {
-          query.vendorId = new mongoose.Types.ObjectId(String(args.vendorId))
+          try { query.vendorId = new mongoose.Types.ObjectId(String(args.vendorId)) } catch {}
         }
         if (args?.trending === true) query.trending = true
         
@@ -277,12 +343,149 @@ async function executeTool(name, args, { userId } = {}) {
             ? ` ~${formatMoney(p.original_price)}~` 
             : ''
           const inStock = (p.is_stock ?? 0) > 0 ? '✅' : '❌'
-          return `${i + 1}. *${p.title}*\n   ${formatMoney(price)}${wasPrice} ${inStock}\n   Rating: ${p.rating || 'N/A'} ⭐ (${p.reviews || 0} reviews)`
+          const rating = (p.rating && typeof p.rating === 'object' && p.rating._bsontype === 'Decimal128')
+            ? Number(p.rating.toString())
+            : (typeof p.rating === 'number' ? p.rating : 'N/A')
+          return `${i + 1}. *${p.title}*\n   ${formatMoney(price)}${wasPrice} ${inStock}\n   Rating: ${rating} ⭐ (${p.reviews || 0} reviews)`
         })
         
         return `*Search Results* (Page ${resp.page}/${resp.totalPages}, ${resp.totalDocs} total):\n\n${items.join('\n\n')}`
       } catch (e) {
         return `⚠️ Error searching products: ${e.message}`
+      }
+    }
+    case 'getProductDetails': {
+      try {
+        const id = args?.id
+        if (!id) return '⚠️ Product ID is required.'
+        const p = await services.productsService.getProductById(id)
+        const price = p.discounted_price || p.original_price || 0
+        const wasPrice = p.discounted_price && p.original_price > p.discounted_price 
+          ? ` ~${formatMoney(p.original_price)}~` 
+          : ''
+        const inStock = (p.is_stock ?? 0) > 0 ? '✅ In stock' : '❌ Out of stock'
+        const rating = (p.rating && typeof p.rating === 'object' && p.rating._bsontype === 'Decimal128')
+          ? Number(p.rating.toString())
+          : (typeof p.rating === 'number' ? p.rating : 'N/A')
+        const cat = p.categoryId?.title ? `\nCategory: ${p.categoryId.title}` : ''
+        const vendor = p.vendorId?.title ? `\nVendor: ${p.vendorId.title}` : ''
+        return `*${p.title}*\n${formatMoney(price)}${wasPrice}\n${inStock}\nRating: ${rating} ⭐ (${p.reviews || 0} reviews)${cat}${vendor}`
+      } catch (e) {
+        return `⚠️ Error fetching product: ${e.message}`
+      }
+    }
+    case 'getDataPlans': {
+      try {
+        const plans = require('../dataplan.json')
+        let list = Array.isArray(plans) ? plans : []
+        if (args?.network) list = list.filter(p => String(p.network).toUpperCase() === String(args.network).toUpperCase())
+        if (args?.vendor) list = list.filter(p => String(p.vendor).toLowerCase() === String(args.vendor).toLowerCase())
+        if (args?.planType) list = list.filter(p => String(p.planType).toUpperCase() === String(args.planType).toUpperCase())
+        const page = args?.page || 1
+        const limit = args?.limit || 10
+        const start = (page - 1) * limit
+        const pageItems = list.slice(start, start + limit)
+        if (pageItems.length === 0) return 'No plans found for your filters.'
+        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} • ${p.network} • ${p.planType}\n   ${formatMoney(p.amount)} • Plan ID: ${p.planId} • Vendor: ${p.vendor}`)
+        return `*Data Plans* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n\n')}`
+      } catch (e) {
+        return `⚠️ Error loading plans: ${e.message}`
+      }
+    }
+    case 'purchaseData': {
+      if (!userId) return '⚠️ Please sign in to purchase data.'
+      const missing = []
+      if (!args?.planId) missing.push('planId')
+      if (!args?.vendor) missing.push('vendor')
+      if (!args?.network) missing.push('network')
+      if (!args?.planType) missing.push('planType')
+      if (args?.amount == null) missing.push('amount')
+      if (!args?.phone) missing.push('phone')
+      if (missing.length) {
+        return `To buy data, I need: ${missing.join(', ')}.
+Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planType: 'SME', amount: 520, phone: '08031234567' }`
+      }
+      if (!args?.confirm) {
+        return `You are about to buy ${args.network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${args.phone} via ${args.vendor}.
+Reply: confirm purchaseData to proceed.`
+      }
+      try {
+        // Create minimal JWT from user to satisfy checkAuth middleware
+        const user = await services.usersService.getUserById(userId)
+        if (!user) return '⚠️ User not found.'
+        const token = createToken(JSON.stringify({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userType: user.userType,
+          email: user.email,
+          banned: user.banned,
+        }))
+
+        const resp = await fetch(`${process.env.SELF_BASE_URL || 'http://localhost:8080'}/api/wallets/buyDataPlan`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            plan: {
+              planId: String(args.planId),
+              vendor: String(args.vendor),
+              network: String(args.network).toUpperCase(),
+              planType: String(args.planType).toUpperCase(),
+              amount: Number(args.amount)
+            },
+            phone: String(args.phone)
+          })
+        })
+        const data = await resp.json().catch(() => ({}))
+        if (!resp.ok) {
+          const msg = data?.errors?.[0] || data?.error || resp.statusText
+          return `❌ Purchase failed: ${msg}`
+        }
+        return `✅ Data purchase initialized. We are processing your request.
+Ref: ${data?.reference || '—'}
+You will get a notification shortly.`
+      } catch (e) {
+        return `⚠️ Error purchasing data: ${e.message}`
+      }
+    }
+    case 'buyAirtime': {
+      if (!userId) return '⚠️ Please sign in to buy airtime.'
+      const missing = []
+      if (args?.amount == null) missing.push('amount')
+      if (!args?.phone) missing.push('phone')
+      if (missing.length) {
+        return `To buy airtime, I need: ${missing.join(', ')}.
+Example: buyAirtime { amount: 200, phone: '08031234567' }`
+      }
+      if (!args?.confirm) {
+        return `You are about to buy airtime of ${formatMoney(args.amount)} for ${args.phone}.
+Reply: confirm buyAirtime to proceed.`
+      }
+      try {
+        const user = await services.usersService.getUserById(userId)
+        if (!user) return '⚠️ User not found.'
+        const token = createToken(JSON.stringify({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userType: user.userType,
+          email: user.email,
+          banned: user.banned,
+        }))
+        const resp = await fetch(`${process.env.SELF_BASE_URL || 'http://localhost:8080'}/api/wallets/buyAirtime`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ amount: Number(args.amount), phone: String(args.phone) })
+        })
+        const data = await resp.json().catch(() => ({}))
+        if (!resp.ok) {
+          const msg = data?.errors?.[0] || data?.error || resp.statusText
+          return `❌ Airtime purchase failed: ${msg}`
+        }
+        return `✅ Airtime purchase successful.
+Ref: ${data?.reference || data?.data?.reference || '—'}`
+      } catch (e) {
+        return `⚠️ Error buying airtime: ${e.message}`
       }
     }
     case 'airtimeInfo': {
@@ -307,6 +510,32 @@ function toGeminiHistory(messages) {
         role: m.role === 'assistant' ? 'model' : 'user',
         parts: [{ text: String(m.content) }],
       }))
+  } catch {
+    return []
+  }
+}
+
+// Extract function calls in a robust way across SDK versions
+function extractFunctionCalls(result) {
+  try {
+    const maybeFn = result?.response?.functionCalls
+    if (typeof maybeFn === 'function') {
+      return maybeFn() || []
+    }
+  } catch {}
+  try {
+    const parts = result?.response?.candidates?.[0]?.content?.parts || []
+    const calls = []
+    for (const p of parts) {
+      if (p?.functionCall?.name) {
+        let args = p.functionCall.args
+        if (typeof args === 'string') {
+          try { args = JSON.parse(args) } catch {}
+        }
+        calls.push({ name: p.functionCall.name, args: args || {} })
+      }
+    }
+    return calls
   } catch {
     return []
   }
@@ -358,7 +587,7 @@ async function processAIChat(prompt, sessionId, userId = null, deviceId = null) 
   const history = toGeminiHistory(allMessages)
 
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash',
+    model: 'gemini-1.5-flash',
     tools: toolDeclarations(),
     systemInstruction: SYSTEM_PROMPT,
   })
@@ -368,7 +597,7 @@ async function processAIChat(prompt, sessionId, userId = null, deviceId = null) 
   let text = 'I had trouble processing your request.'
   try {
     const result = await chat.sendMessage(prompt)
-    const calls = result?.response?.functionCalls?.() || []
+    const calls = extractFunctionCalls(result)
     if (calls.length > 0) {
       const outputs = []
       for (const c of calls) {
