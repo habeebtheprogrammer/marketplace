@@ -422,7 +422,7 @@ Reply: confirm purchaseData to proceed.`
           banned: user.banned,
         }))
 
-        const resp = await fetch(`${process.env.SELF_BASE_URL || 'http://localhost:8080'}/api/wallets/buyDataPlan`, {
+        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/api/wallets/buyDataPlan`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({
@@ -472,7 +472,7 @@ Reply: confirm buyAirtime to proceed.`
           email: user.email,
           banned: user.banned,
         }))
-        const resp = await fetch(`${process.env.SELF_BASE_URL || 'http://localhost:8080'}/api/wallets/buyAirtime`, {
+        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/api/wallets/buyAirtime`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({ amount: Number(args.amount), phone: String(args.phone) })
