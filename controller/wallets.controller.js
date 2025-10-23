@@ -242,7 +242,7 @@ exports.fetch = async (req, res, next) => {
       var accounts = result.responseBody.accounts?.map((account) => ({
         accountName: result.responseBody.accountName,
         accountNumber: account.accountNumber,
-        bankName: account.bankName + " (1.5% fee)",
+        bankName: account.bankName + " (1.5% fee capped at ₦2000)",
       }));
     }
     res.json({
@@ -414,7 +414,7 @@ exports.buyDataPlan = async (req, res, next) => {
 
     // Check wallet balance against final amount after discount
     var wallet = await walletsService.getWallets({ userId: req.userId });
-    if (wallet.docs[0].balance < finalAmount || wallet.totalDocs == 0) {
+    if (wallet.totalDocs === 0 || !wallet.docs[0] || wallet.docs[0].balance < finalAmount) {
       throw new Error("Insufficient balance. Please fund your wallet");
     }
 
@@ -701,7 +701,7 @@ exports.buyAirtime = async (req, res, next) => {
     
     // Check wallet balance
     const wallet = await walletsService.getWallets({ userId: req.userId });
-    if (wallet.totalDocs === 0 || wallet.docs[0].balance < parseInt(req.body.amount)) {
+    if (wallet.totalDocs === 0 || !wallet.docs[0] || wallet.docs[0].balance < parseInt(req.body.amount)) {
       return errorResponse(res, null, "Insufficient balance. Please fund your wallet", 400);
     }
     

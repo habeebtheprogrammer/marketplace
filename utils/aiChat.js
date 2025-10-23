@@ -2,17 +2,34 @@ const { GoogleGenerativeAI } = require('@google/generative-ai')
 const mongoose = require('mongoose')
 const fetch = require('node-fetch')
 const { createToken } = require('./helpers')
+const { detectNetwork } = require('./vtu')
 const chatSessions = require('../service/chatSessions.service')
 const services = require('../service')
 
 // Initialize Gemini once
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
+const DEFAULT_GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-pro'
 
 // System instruction tailored for WhatsApp bot (persona + behavior)
-const SYSTEM_PROMPT = `You are an advanced AI assistant designed to act as a smart customer support & operations chatbot for 360 Gadgets Africa.
+function getSystemPrompt(userContext = {}) {
+  const { userPhone, userNetwork, userName } = userContext
+  
+  let contextInfo = ''
+  if (userPhone && userNetwork) {
+    contextInfo = `
+USER CONTEXT:
+- User's WhatsApp phone: ${userPhone}
+- User's network: ${userNetwork}
+- User's name: ${userName || 'User'}
+
+IMPORTANT: When the user wants to buy airtime or data for their own phone line, automatically use their phone number (${userPhone}) and network (${userNetwork}). Do NOT ask for phone number or network in such cases.
+`
+  }
+
+  return `You are an advanced AI assistant designed to act as a smart customer support & operations chatbot for 360 Gadgets Africa.
 Your purpose is to help users manage their accounts, perform wallet & VTU transactions, and make product inquiries intelligently.
 Company website: https://www.360gadgetsafrica.com. You may learn business information dynamically from this website and its sitemap and use it to improve answers (product types, services, pricing, etc.).
-
+${contextInfo}
 Core Functional Areas
 1) User Profile Management
 - Get user profile details (name, email, wallet balance, activity).
@@ -24,6 +41,7 @@ Core Functional Areas
 - Show paginated data or airtime plan lists dynamically from backend datalists.
 - Guide the purchase flow: Select network → Select plan → Enter phone → Confirm purchase → Execute.
 - Handle failed transactions gracefully with recovery steps.
+- AUTO-DETECT: When user wants airtime/data for themselves, use their phone and network automatically.
 
 3) Wallet Management
 - Show current wallet balance; provide funding guidance.
@@ -39,12 +57,18 @@ Integration Instructions
 - You may call controller/service functions in-process to fetch/update data, and you may guide users through flows on WhatsApp.
 - Use natural language understanding to map user intents to the correct function call.
 - When unsure, ask clarifying questions; always confirm before executing transactions.
+- For self-purchases (airtime/data to user's own phone), automatically use their phone number and network.
 
 Smart Behavior
 - Respond conversationally in short, readable WhatsApp-friendly text (not JSON).
 - Personalize using user profile data when available.
 - Handle errors gracefully and propose next steps.
+- Be proactive: if user says "buy airtime" or "buy data" without specifying phone, assume they mean their own phone.
+- IMPORTANT: When user says "yes", "confirm", "ok", "proceed", etc., look at the conversation history to understand what they're confirming.
+- If the last assistant message was asking for confirmation of a purchase, interpret "yes" as confirmation with confirm: true.
+- Always maintain context from previous messages in the conversation.
 `
+}
 
 // Helpers for WhatsApp-friendly formatting
 function formatMoney(amount, currency = 'NGN') {
@@ -68,6 +92,11 @@ function toolDeclarations() {
       {
         name: 'getWalletBalance',
         description: 'Get wallet balance only',
+        parameters: { type: 'object', properties: {} }
+      },
+      {
+        name: 'getFundingAccount',
+        description: 'Fetch user\'s Monnify virtual account details and current balance for funding the wallet',
         parameters: { type: 'object', properties: {} }
       },
       {
@@ -144,32 +173,32 @@ function toolDeclarations() {
       },
       {
         name: 'purchaseData',
-        description: 'Purchase a data plan for a phone number. Always confirm before executing.',
+        description: 'Purchase a data plan for a phone number. If no phone/network specified, use user\'s own phone and network. Always confirm before executing.',
         parameters: {
           type: 'object',
           properties: {
             planId: { type: 'string' },
             vendor: { type: 'string', description: 'quickvtu | bilal' },
-            network: { type: 'string' },
+            network: { type: 'string', description: 'If not provided, will auto-detect from user\'s phone' },
             planType: { type: 'string' },
             amount: { type: 'number' },
-            phone: { type: 'string' },
+            phone: { type: 'string', description: 'If not provided, will use user\'s own phone' },
             confirm: { type: 'boolean', description: 'Must be true to execute the purchase' }
           },
-          required: ['planId','vendor','network','planType','amount','phone']
+          required: ['planId','vendor','planType','amount']
         }
       },
       {
         name: 'buyAirtime',
-        description: 'Buy airtime for a phone number. Always confirm before executing.',
+        description: 'Buy airtime for a phone number. If no phone specified, use user\'s own phone. Always confirm before executing.',
         parameters: {
           type: 'object',
           properties: {
             amount: { type: 'number' },
-            phone: { type: 'string' },
+            phone: { type: 'string', description: 'Phone number. If not provided, will use user\'s own phone' },
             confirm: { type: 'boolean', description: 'Must be true to execute the purchase' }
           },
-          required: ['amount','phone']
+          required: ['amount']
         }
       },
       {
@@ -181,7 +210,7 @@ function toolDeclarations() {
   }]
 }
 
-async function executeTool(name, args, { userId } = {}) {
+async function executeTool(name, args, { userId, contacts } = {}) {
   switch (name) {
     case 'getUserAccount': {
       if (!userId) return '⚠️ Please sign in to view your account.'
@@ -191,7 +220,11 @@ async function executeTool(name, args, { userId } = {}) {
         if (!user) return '⚠️ User account not found.'
         
         // getWallets returns paginated { docs: [...], totalDocs, ... }
-        const walletList = await services.walletsService.getWallets({ userId: user._id })
+        let walletList = await services.walletsService.getWallets({ userId: user._id })
+        
+        // Create wallet if it doesn't exist
+        // No wallet creation here; the /wallets fetch endpoint will handle setup via Monnify
+        
         const walletDoc = walletList?.docs?.[0]
         const balance = walletDoc?.balance || 0
         const currency = walletDoc?.currency || 'NGN'
@@ -214,13 +247,48 @@ async function executeTool(name, args, { userId } = {}) {
     case 'getWalletBalance': {
       if (!userId) return '⚠️ Please sign in to view your wallet.'
       try {
-        const walletList = await services.walletsService.getWallets({ userId })
+        let walletList = await services.walletsService.getWallets({ userId })
+        
         const walletDoc = walletList?.docs?.[0]
         const balance = walletDoc?.balance || 0
         const currency = walletDoc?.currency || 'NGN'
         return `💰 Wallet Balance: ${formatMoney(balance, currency)}`
       } catch (e) {
         return `⚠️ Error fetching wallet: ${e.message}`
+      }
+    }
+    case 'getFundingAccount': {
+      if (!userId) return '⚠️ Please sign in to view funding account.'
+      try {
+        // Create minimal JWT to satisfy checkAuth
+        const user = await services.usersService.getUserById(userId)
+        if (!user) return '⚠️ User not found.'
+        const token = createToken(JSON.stringify({
+          _id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userType: user.userType,
+          email: user.email,
+          banned: user.banned,
+        }))
+
+        const base = process.env.API_BASE_URL || 'http://localhost:8080'
+        const resp = await fetch(`${base}/wallets`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        })
+        const data = await resp.json().catch(() => ({}))
+        if (!resp.ok) {
+          const msg = data?.errors?.[0] || data?.error || resp.statusText
+          return `⚠️ Could not fetch account: ${msg}`
+        }
+        const bal = formatMoney(Number(data?.balance || 0))
+        const accounts = Array.isArray(data?.accounts) ? data.accounts : []
+        if (accounts.length === 0) return `Your wallet balance is ${bal}. Funding account is not yet available. Please try again shortly.`
+        const lines = accounts.map((a, i) => `${i+1}. ${a.bankName}\n   ${a.accountName}\n   ${a.accountNumber}`)
+        return `*Funding Account Details*\nBalance: ${bal}\n\n${lines.join('\n\n')}`
+      } catch (e) {
+        return `⚠️ Error fetching funding account: ${e.message}`
       }
     }
     case 'updateUserAccount': {
@@ -394,19 +462,45 @@ async function executeTool(name, args, { userId } = {}) {
     }
     case 'purchaseData': {
       if (!userId) return '⚠️ Please sign in to purchase data.'
+      
+      console.log('🔄 PROCESSING DATA PURCHASE REQUEST:', {
+        userId: userId,
+        args: args,
+        timestamp: new Date().toISOString()
+      })
+      
+      // Get user's phone number and network if not provided
+      let phoneNumber = args?.phone || (contacts?.wa_id ? `0${String(contacts.wa_id).replace(/^234/, '').replace(/^\+234/, '')}` : undefined)
+      let network = args?.network
+      
+      if (!phoneNumber || !network) {
+        try {
+          const user = await services.usersService.getUserById(userId)
+          if (!phoneNumber && user && user.phoneNumber && user.phoneNumber.length > 0) phoneNumber = user.phoneNumber[0]
+          if (!network && phoneNumber) network = detectNetwork(phoneNumber)
+        } catch (e) {
+          console.error('Error fetching user phone/network:', e.message)
+        }
+      }
+
+      // Do not create wallets here; rely on /wallets endpoint to provision via Monnify
+      
       const missing = []
       if (!args?.planId) missing.push('planId')
       if (!args?.vendor) missing.push('vendor')
-      if (!args?.network) missing.push('network')
+      if (!network) missing.push('network (or add phone to your profile)')
       if (!args?.planType) missing.push('planType')
       if (args?.amount == null) missing.push('amount')
-      if (!args?.phone) missing.push('phone')
+      if (!phoneNumber) missing.push('phone (or add phone to your profile)')
       if (missing.length) {
         return `To buy data, I need: ${missing.join(', ')}.
 Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planType: 'SME', amount: 520, phone: '08031234567' }`
       }
+      
       if (!args?.confirm) {
-        return `You are about to buy ${args.network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${args.phone} via ${args.vendor}.
+        const isOwnPhone = !args?.phone // If no phone was provided, it's their own phone
+        const phoneLabel = isOwnPhone ? 'your phone' : phoneNumber
+        return `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel} (${phoneNumber}) via ${args.vendor}.
 Reply: confirm purchaseData to proceed.`
       }
       try {
@@ -422,43 +516,100 @@ Reply: confirm purchaseData to proceed.`
           banned: user.banned,
         }))
 
-        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/api/wallets/buyDataPlan`, {
+        const requestData = {
+          plan: {
+            planId: String(args.planId),
+            vendor: String(args.vendor),
+            network: String(network).toUpperCase(),
+            planType: String(args.planType).toUpperCase(),
+            amount: Number(args.amount)
+          },
+          phone: String(phoneNumber)
+        }
+
+        console.log('📱 DATA PURCHASE REQUEST:', {
+          userId: userId,
+          userPhone: phoneNumber,
+          userNetwork: network,
+          requestData: requestData,
+          timestamp: new Date().toISOString()
+        })
+
+        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/wallets/buyDataPlan`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({
-            plan: {
-              planId: String(args.planId),
-              vendor: String(args.vendor),
-              network: String(args.network).toUpperCase(),
-              planType: String(args.planType).toUpperCase(),
-              amount: Number(args.amount)
-            },
-            phone: String(args.phone)
-          })
+          body: JSON.stringify(requestData)
         })
         const data = await resp.json().catch(() => ({}))
+        
+        console.log('📱 DATA PURCHASE RESPONSE:', {
+          status: resp.status,
+          statusText: resp.statusText,
+          responseData: data,
+          timestamp: new Date().toISOString()
+        })
+        
         if (!resp.ok) {
           const msg = data?.errors?.[0] || data?.error || resp.statusText
+          console.log('❌ DATA PURCHASE FAILED:', msg)
           return `❌ Purchase failed: ${msg}`
         }
+        
+        console.log('✅ DATA PURCHASE SUCCESS:', {
+          reference: data?.reference,
+          userId: userId,
+          timestamp: new Date().toISOString()
+        })
+        
         return `✅ Data purchase initialized. We are processing your request.
 Ref: ${data?.reference || '—'}
 You will get a notification shortly.`
       } catch (e) {
+        console.log('❌ DATA PURCHASE ERROR:', {
+          error: e.message,
+          stack: e.stack,
+          userId: userId,
+          timestamp: new Date().toISOString()
+        })
         return `⚠️ Error purchasing data: ${e.message}`
       }
     }
     case 'buyAirtime': {
       if (!userId) return '⚠️ Please sign in to buy airtime.'
+      
+      console.log('🔄 PROCESSING AIRTIME PURCHASE REQUEST:', {
+        userId: userId,
+        args: args,
+        timestamp: new Date().toISOString()
+      })
+      
+      // Get user's phone number if not provided
+      let phoneNumber = args?.phone || (contacts?.wa_id ? `0${String(contacts.wa_id).replace(/^234/, '').replace(/^\+234/, '')}` : undefined)
+      if (!phoneNumber) {
+        try {
+          const user = await services.usersService.getUserById(userId)
+          if (user && user.phoneNumber && user.phoneNumber.length > 0) {
+            phoneNumber = user.phoneNumber[0]
+          }
+        } catch (e) {
+          console.error('Error fetching user phone:', e.message)
+        }
+      }
+
+      // Do not create wallets here; rely on /wallets endpoint to provision via Monnify
+      
       const missing = []
       if (args?.amount == null) missing.push('amount')
-      if (!args?.phone) missing.push('phone')
+      if (!phoneNumber) missing.push('phone (or add phone to your profile)')
       if (missing.length) {
         return `To buy airtime, I need: ${missing.join(', ')}.
 Example: buyAirtime { amount: 200, phone: '08031234567' }`
       }
+      
       if (!args?.confirm) {
-        return `You are about to buy airtime of ${formatMoney(args.amount)} for ${args.phone}.
+        const isOwnPhone = !args?.phone // If no phone was provided, it's their own phone
+        const phoneLabel = isOwnPhone ? 'your phone' : phoneNumber
+        return `You are about to buy airtime of ${formatMoney(args.amount)} for ${phoneLabel} (${phoneNumber}).
 Reply: confirm buyAirtime to proceed.`
       }
       try {
@@ -472,14 +623,29 @@ Reply: confirm buyAirtime to proceed.`
           email: user.email,
           banned: user.banned,
         }))
-        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/api/wallets/buyAirtime`, {
+
+        const requestData = {
+          amount: Number(args.amount),
+          phone: String(phoneNumber)
+        }
+
+        console.log('📞 AIRTIME PURCHASE REQUEST:', {
+          userId: userId,
+          userPhone: phoneNumber,
+          userNetwork: detectNetwork(phoneNumber),
+          requestData: requestData,
+          timestamp: new Date().toISOString()
+        })
+
+        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/wallets/buyAirtime`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ amount: Number(args.amount), phone: String(args.phone) })
+          body: JSON.stringify(requestData)
         })
         const data = await resp.json().catch(() => ({}))
         if (!resp.ok) {
           const msg = data?.errors?.[0] || data?.error || resp.statusText
+          console.log('❌ AIRTIME PURCHASE FAILED:', msg)
           return `❌ Airtime purchase failed: ${msg}`
         }
         return `✅ Airtime purchase successful.
@@ -560,8 +726,9 @@ async function ensureSession(sessionId, userId = null, deviceId = null) {
   return session
 }
 
-async function processAIChat(prompt, sessionId, userId = null, deviceId = null) {
+async function processAIChat(prompt, sessionId, userId = null, contacts) {
   if (!prompt) return 'Please provide a question.'
+  const deviceId = null
   const session = await ensureSession(String(sessionId), userId, deviceId)
 
   // Save user message in this session
@@ -584,12 +751,56 @@ async function processAIChat(prompt, sessionId, userId = null, deviceId = null) 
     // fallback to current session only
     allMessages = Array.isArray(session?.messages) ? session.messages : []
   }
-  const history = toGeminiHistory(allMessages)
+  // Trim history to last 40 messages to keep context tight
+  const trimmed = allMessages.slice(-40)
+  let history = toGeminiHistory(trimmed)
+  // Ensure history starts with a user message as required by Gemini
+  if (history.length && history[0].role !== 'user') {
+    const firstUserIdx = history.findIndex(h => h && h.role === 'user')
+    history = firstUserIdx >= 0 ? history.slice(firstUserIdx) : []
+  }
 
+  console.log('💬 CONVERSATION HISTORY:', {
+    userId: userId,
+    messageCount: allMessages.length,
+    lastMessages: allMessages.slice(-5), // Last 5 messages for context
+    currentPrompt: prompt,
+    timestamp: new Date().toISOString()
+  })
+
+  // Get user context for personalized system prompt
+  let userContext = {}
+  if (userId) {
+    try {
+      const user = await services.usersService.getUserById(userId)
+      const waPhone = contacts?.wa_id ? `0${String(contacts.wa_id).replace(/^234/, '').replace(/^\+234/, '')}` : undefined
+      const savedPhone = (user && user.phoneNumber && user.phoneNumber.length > 0) ? user.phoneNumber[0] : undefined
+      const userPhone = waPhone || savedPhone
+      const userNetwork = userPhone ? detectNetwork(userPhone) : undefined
+      if (userPhone) {
+        userContext = {
+          userPhone,
+          userNetwork,
+          userName: contacts?.profile?.name || [user?.firstName, user?.lastName].filter(Boolean).join(' '),
+        }
+        console.log('👤 USER CONTEXT LOADED:', {
+          userId: userId,
+          userPhone: userPhone,
+          userNetwork: userNetwork,
+          userName: userContext.userName,
+          timestamp: new Date().toISOString()
+        })
+      }
+    } catch (e) {
+      console.error('Error fetching user context:', e.message)
+    }
+  }
+
+  const modelName = DEFAULT_GEMINI_MODEL
   const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: modelName,
     tools: toolDeclarations(),
-    systemInstruction: SYSTEM_PROMPT,
+    systemInstruction: getSystemPrompt(userContext),
   })
 
   // Start chat with history and send message
@@ -598,14 +809,30 @@ async function processAIChat(prompt, sessionId, userId = null, deviceId = null) 
   try {
     const result = await chat.sendMessage(prompt)
     const calls = extractFunctionCalls(result)
+    
+    console.log('🤖 AI FUNCTION CALLS:', {
+      prompt: prompt,
+      calls: calls,
+      userId: userId,
+      timestamp: new Date().toISOString()
+    })
+    
     if (calls.length > 0) {
       const outputs = []
       for (const c of calls) {
         const { name, args } = c
         try {
-          const out = await executeTool(name, args, { userId })
+          const out = await executeTool(name, args, { userId, contacts })
           outputs.push(typeof out === 'string' ? out : (out?.error ? `⚠️ ${out.error}` : String(out)))
         } catch (e) {
+          console.log('❌ TOOL EXECUTION ERROR:', {
+            toolName: name,
+            args: args,
+            error: e.message,
+            stack: e.stack,
+            userId: userId,
+            timestamp: new Date().toISOString()
+          })
           outputs.push(`⚠️ ${e.message}`)
         }
       }
@@ -614,6 +841,13 @@ async function processAIChat(prompt, sessionId, userId = null, deviceId = null) 
       text = String(result?.response?.text?.() || await result?.response?.text() || '') || 'I had trouble processing your request.'
     }
   } catch (e) {
+    console.log('❌ AI CHAT ERROR:', {
+      error: e.message,
+      stack: e.stack,
+      userId: userId,
+      prompt: prompt,
+      timestamp: new Date().toISOString()
+    })
     text = 'I had trouble processing your request.'
   }
 

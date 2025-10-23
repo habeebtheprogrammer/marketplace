@@ -179,7 +179,7 @@ async function handleBotMessage(body){
       let aiText = 'I had trouble processing your request. Please try again.'
       try {
         // Use userId as both sessionId and user scope for persistent memory
-        aiText = await processAIChat(prompt, String(foundUser?._id), String(foundUser?._id), null)
+        aiText = await processAIChat(prompt, String(foundUser?._id), String(foundUser?._id), contacts)
       } catch (e) {
         console.error('AI chat local call failed:', e?.message)
       }
