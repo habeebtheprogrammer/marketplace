@@ -52,6 +52,7 @@ Core Functional Areas
 - Let users ask about available gadgets (e.g., iPhones, laptops, accessories).
 - Fetch product details (price, availability, specs, promotions) using backend product services.
 - Support filtering by price range, category, availability. Recommend similar products if unavailable.
+- CRITICAL: When searchProducts returns "SEARCH_COMPLETE:X:Y", it means X WhatsApp template cards have been sent automatically (out of Y total matches). DO NOT list products in text. Simply say something like "I found Y products and sent you the top X. Reply with a number to see details, or 'more' to load more."
 
 Integration Instructions
 - You may call controller/service functions in-process to fetch/update data, and you may guide users through flows on WhatsApp.
@@ -439,15 +440,6 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         if (!resp?.docs || resp.docs.length === 0) {
           return 'No products found matching your criteria. Try different filters or keywords.'
         }
-        
-        const items = resp.docs.map((p, i) => {
-          const price = p.discounted_price || p.original_price || 0
-          const wasPrice = p.discounted_price && p.original_price > p.discounted_price 
-            ? ` ~${formatMoney(p.original_price)}~` 
-            : ''
-          const inStock = (p.is_stock ?? 0) > 0 ? '✅ In stock' : '❌ Out of stock'
-          return `${i + 1}. *${p.title}*\n   ${formatMoney(price)}${wasPrice} • ${inStock}`
-        })
 
         // Persist last product list and original query for pagination and numeric selection
         try {
@@ -477,7 +469,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
 
         // Send top 4 results as WhatsApp template messages
         try {
-          const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2
+          const phoneNumberId =   process.env.WHATSAPP_PHONE_NUMBER_ID2
           const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
           if (phoneNumberId && toNumber) {
             const { sendProductTemplate } = require('./whatsappTemplates')
@@ -492,6 +484,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
               const imageUrl = Array.isArray(p.images) && p.images[0] ? p.images[0] : undefined
               const descriptionRaw = String(p.description || '').slice(0, 900)
               const description = descriptionRaw && descriptionRaw.trim().length > 0 ? descriptionRaw : p.title
+              console.log('🧩 Sending product template', { phoneNumberId, toNumber, title: p.title, url: link })
               await sendProductTemplate(phoneNumberId, toNumber, {
                 title: p.title,
                 description,
@@ -503,8 +496,13 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
           }
         } catch {}
 
-        const followup = `\n\nWould you like to see more results?`
-        return `I\'ve sent the top ${Math.min(4, resp.docs.length)} matches. ${followup}`
+        // Only prompt to see more if there are more pages available
+        const hasMore = Number(options.page || 1) < Number(resp.totalPages || 1)
+        if (hasMore) {
+          return `Would you like to see more results?`
+        }
+        // No extra text if no more pages
+        return ''
       } catch (e) {
         return `⚠️ Error searching products: ${e.message}`
       }
@@ -964,7 +962,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
             if (isProductCtx && chosen?.id) {
               // Build and send template card for the chosen product, then details text
               try {
-                const phoneNumberId = contacts?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID
+                const phoneNumberId = contacts?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID2
                 const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
                 const priceLine = chosen.wasPrice ? `${formatMoney(chosen.price)} ~${formatMoney(chosen.wasPrice)}~` : `${formatMoney(chosen.price)}`
                 const updatedAt = chosen.updatedAt ? ` (updated ${new Date(chosen.updatedAt).toLocaleDateString('en-NG')})` : ''
