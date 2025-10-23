@@ -42,6 +42,7 @@ Core Functional Areas
 - Guide the purchase flow: Select network → Select plan → Enter phone → Confirm purchase → Execute.
 - Handle failed transactions gracefully with recovery steps.
 - AUTO-DETECT: When user wants airtime/data for themselves, use their phone and network automatically.
+- CRITICAL: When user asks for a data plan (e.g., "MTN 3.2GB under 2000"), you MUST call getDataPlans with planName set to the size mentioned (e.g., planName: "3.2GB"). NEVER say a plan doesn't exist without calling the tool first.
 
 3) Wallet Management
 - Show current wallet balance; provide funding guidance.
@@ -160,13 +161,22 @@ function toolDeclarations() {
       },
       {
         name: 'getDataPlans',
-        description: 'Get data plans from local dataplan.json with optional filters',
+        description: 'Get data plans from local dataplan.json with optional filters. IMPORTANT: If user mentions a specific size (e.g., "3.2GB", "500MB"), you MUST pass it as planName parameter to find that exact size.',
         parameters: {
           type: 'object',
           properties: {
-            network: { type: 'string' },
+            network: { type: 'string', description: 'MTN | GLO | Airtel | 9MOBILE. If omitted, bot will detect from user phone.' },
             vendor: { type: 'string' },
-            planType: { type: 'string' },
+            planType: { type: 'string', description: 'SME | GIFTING | COOPERATE GIFTING | etc. Optional; if strict match fails, system relaxes to show all types for the requested size.' },
+            planName: { type: 'string', description: 'CRITICAL: Use when user specifies a data size like 3.2GB, 1GB, 500MB. This will find plans with that size regardless of type.' },
+            search: { type: 'string', description: 'Free-text contains filter across name/type/duration/network' },
+            amount: { type: 'number', description: 'Exact amount match' },
+            minAmount: { type: 'number', description: 'Minimum amount (NGN). Use when user says at least X.' },
+            maxAmount: { type: 'number', description: 'Maximum amount (NGN). Use when user says below/not above X.' },
+            minSizeMB: { type: 'number', description: 'Minimum size in MB' },
+            maxSizeMB: { type: 'number', description: 'Maximum size in MB' },
+            minSize: { type: 'string', description: 'Minimum size like 1GB/500MB' },
+            maxSize: { type: 'string', description: 'Maximum size like 3GB/1500MB' },
             page: { type: 'number' },
             limit: { type: 'number' }
           }
@@ -530,17 +540,203 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
     }
     case 'getDataPlans': {
       try {
+        console.log('📊 getDataPlans called with args:', JSON.stringify(args, null, 2))
         const plans = require('../dataplan.json')
         let list = Array.isArray(plans) ? plans : []
-        if (args?.network) list = list.filter(p => String(p.network).toUpperCase() === String(args.network).toUpperCase())
-        if (args?.vendor) list = list.filter(p => String(p.vendor).toLowerCase() === String(args.vendor).toLowerCase())
-        if (args?.planType) list = list.filter(p => String(p.planType).toUpperCase() === String(args.planType).toUpperCase())
+        const debug = { total: list.length, argsReceived: args }
+
+        // Derive network if not provided using user's phone
+        let effectiveNetwork = args?.network
+        if (!effectiveNetwork) {
+          try {
+            const waPhone = contacts?.wa_id ? `0${String(contacts.wa_id).replace(/^234/, '').replace(/^\+234/, '')}` : undefined
+            let userPhone
+            if (userId && !waPhone) {
+              const user = await services.usersService.getUserById(userId)
+              if (user && Array.isArray(user.phoneNumber) && user.phoneNumber.length > 0) userPhone = user.phoneNumber[0]
+            }
+            const phone = waPhone || userPhone
+            if (phone) effectiveNetwork = detectNetwork(phone)
+          } catch {}
+        }
+
+        // Ignore unknown/invalid network values
+        const allowedNetworks = ['MTN', 'GLO', 'AIRTEL', '9MOBILE']
+        if (!allowedNetworks.includes(String(effectiveNetwork || '').toUpperCase())) {
+          effectiveNetwork = null
+        }
+
+        if (effectiveNetwork) {
+          list = list.filter(p => String(p.network).toUpperCase() === String(effectiveNetwork).toUpperCase())
+          debug.afterNetwork = list.length
+        }
+        if (args?.vendor) {
+          list = list.filter(p => String(p.vendor).toLowerCase() === String(args.vendor).toLowerCase())
+          debug.afterVendor = list.length
+        }
+
+        // Flexible planType matching (partial + synonyms)
+        if (args?.planType) {
+          const q = String(args.planType).toUpperCase()
+          const matchesType = (pt) => {
+            const s = String(pt || '').toUpperCase()
+            if (!q) return true
+            if (s.includes(q)) return true
+            // Synonyms/normalizations
+            if (q.includes('GIFT')) return s.includes('GIFT') // matches GIFTING, GIFTING PROMO
+            if (q.includes('PROMO')) return s.includes('PROMO')
+            if (q.includes('CORP') || q.includes('COOP') || q.includes('CORPORATE') || q.includes('COOPERATE')) return s.includes('COOPERATE')
+            if (q === 'SME') return s.includes('SME')
+            return false
+          }
+          list = list.filter(p => matchesType(p.planType))
+          debug.afterPlanType = list.length
+        }
+
+        // If planName is a size (e.g., 1GB/500MB), prefer numeric size filtering and skip string contains filter
+        const planNameSizeMB = parseSizeToMB(args?.planName)
+        if (args?.planName && planNameSizeMB == null) {
+          const q = String(args.planName).toLowerCase()
+          list = list.filter(p => String(p.planName).toLowerCase().includes(q))
+          debug.afterPlanName = list.length
+        }
+        if (args?.amount != null) list = list.filter(p => Number(p.amount) === Number(args.amount))
+        if (args?.amount != null) debug.afterAmount = list.length
+        if (args?.search) {
+          const q = String(args.search).toLowerCase()
+          list = list.filter(p => [p.planName, p.planType, p.duration, p.network].some(v => String(v || '').toLowerCase().includes(q)))
+          debug.afterSearch = list.length
+        }
+        if (args?.minAmount != null) list = list.filter(p => Number(p.amount) >= Number(args.minAmount))
+        if (args?.minAmount != null) debug.afterMinAmount = list.length
+        if (args?.maxAmount != null) list = list.filter(p => Number(p.amount) <= Number(args.maxAmount))
+        if (args?.maxAmount != null) debug.afterMaxAmount = list.length
+
+        // Sort by data size ascending (parse planName like 500MB, 1.5GB, 1TB)
+        function toMegabytes(name) {
+          try {
+            const m = String(name || '').toUpperCase().match(/([0-9]+(?:\.[0-9]+)?)\s*(TB|GB|MB)/)
+            if (!m) return Number.MAX_SAFE_INTEGER
+            const val = parseFloat(m[1])
+            const unit = m[2]
+            if (unit === 'TB') return val * 1024 * 1024
+            if (unit === 'GB') return val * 1024
+            return val
+          } catch { return Number.MAX_SAFE_INTEGER }
+        }
+        function parseSizeToMB(val) {
+          if (val == null) return null
+          if (typeof val === 'number') return val
+          const m = String(val).toUpperCase().match(/([0-9]+(?:\.[0-9]+)?)\s*(TB|GB|MB)?/)
+          if (!m) return null
+          const num = parseFloat(m[1])
+          const unit = m[2] || 'MB'
+          if (unit === 'TB') return num * 1024 * 1024
+          if (unit === 'GB') return num * 1024
+          return num
+        }
+
+        let minSize = parseSizeToMB(args?.minSizeMB != null ? args.minSizeMB : args?.minSize)
+        let maxSize = parseSizeToMB(args?.maxSizeMB != null ? args.maxSizeMB : args?.maxSize)
+        // Derive size from planName/search if explicit size bounds not set
+        const derivedSizeFromPlanName = parseSizeToMB(args?.planName)
+        const derivedSizeFromSearch = parseSizeToMB(args?.search)
+        
+        // Only apply size filtering if there's an explicit price/amount constraint
+        // Otherwise, planName is just a text hint and should not filter by exact size
+        const hasAmountConstraint = (args?.minAmount != null) || (args?.maxAmount != null) || (args?.amount != null)
+        
+        if (minSize == null && maxSize == null && hasAmountConstraint) {
+          const d = derivedSizeFromPlanName != null ? derivedSizeFromPlanName : derivedSizeFromSearch
+          if (d != null) {
+            // Use tolerance window: e.g., for 1GB (1024MB), include 900-1150 MB to capture 1GB, 1.1GB, 1.2GB variants
+            const tolerance = d * 0.15 // ±15% tolerance
+            minSize = Math.max(0, d - tolerance)
+            maxSize = d + tolerance
+          }
+        }
+        if (minSize != null) list = list.filter(p => toMegabytes(p.planName) >= minSize)
+        if (minSize != null) debug.afterMinSize = list.length
+        if (maxSize != null) list = list.filter(p => toMegabytes(p.planName) <= maxSize)
+        if (maxSize != null) debug.afterMaxSize = list.length
+
+        console.log('📊 DATA PLAN FILTER DEBUG:', { userId, args, effectiveNetwork, ...debug })
+
+        list = list.sort((a, b) => {
+          const sa = toMegabytes(a.planName)
+          const sb = toMegabytes(b.planName)
+          if (sa !== sb) return sa - sb
+          return Number(a.amount) - Number(b.amount)
+        })
         const page = args?.page || 1
-        const limit = args?.limit || 10
+        const unpaginated = (effectiveNetwork != null) || (args?.vendor != null) || (args?.planType != null) || (args?.planName != null) || (args?.amount != null) || (args?.minAmount != null) || (args?.maxAmount != null) || (minSize != null) || (maxSize != null) || (args?.search != null)
+        const limit = args?.limit || (unpaginated ? list.length : 10)
         const start = (page - 1) * limit
-        const pageItems = list.slice(start, start + limit)
-        if (pageItems.length === 0) return 'No plans found for your filters.'
-        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} • ${p.network} • ${p.planType}\n   ${formatMoney(p.amount)} • Plan ID: ${p.planId}`)
+        let pageItems = list.slice(start, start + limit)
+        let titleHint = ''
+        if (pageItems.length === 0) {
+          // Relaxed fallback tier 1: if a target size was requested, try to surface that size across types/vendors
+          try {
+            const targetMin = (minSize != null && maxSize == null) ? minSize : null
+            const targetMax = (maxSize != null && minSize == null) ? maxSize : null
+            const targetingExactSize = (targetMin != null && targetMax == null) || (targetMax != null && targetMin == null)
+            let alt = Array.isArray(plans) ? plans : []
+            if (effectiveNetwork) alt = alt.filter(p => String(p.network).toUpperCase() === String(effectiveNetwork).toUpperCase())
+            if (args?.minAmount != null) alt = alt.filter(p => Number(p.amount) >= Number(args.minAmount))
+            if (args?.maxAmount != null) alt = alt.filter(p => Number(p.amount) <= Number(args.maxAmount))
+            if (minSize != null) alt = alt.filter(p => toMegabytes(p.planName) >= minSize)
+            if (maxSize != null) alt = alt.filter(p => toMegabytes(p.planName) <= maxSize)
+
+            // If user hinted a specific size (e.g., 3.2GB), prefer exact size match before others
+            if (targetingExactSize) {
+              const exactMB = targetMin != null ? targetMin : targetMax
+              const exact = alt.filter(p => Math.abs(toMegabytes(p.planName) - exactMB) < 0.5)
+              if (exact.length > 0) {
+                alt = exact
+              } else {
+                // No exact: take nearest by size distance
+                const nearest = alt
+                  .map(p => ({ p, d: Math.abs(toMegabytes(p.planName) - exactMB) }))
+                  .sort((x, y) => x.d - y.d || (Number(x.p.amount) - Number(y.p.amount)))
+                  .slice(0, limit)
+                  .map(x => x.p)
+                alt = nearest
+                // Human label for requested size
+                const sizeLabel = exactMB >= 1024 ? `${(exactMB/1024).toFixed(1)}GB` : `${exactMB}MB`
+                titleHint = ` (closest to ${sizeLabel})`
+              }
+            }
+
+            alt = alt.sort((a,b)=>{
+              const sa = toMegabytes(a.planName), sb = toMegabytes(b.planName)
+              if (sa !== sb) return sa - sb
+              return Number(a.amount) - Number(b.amount)
+            })
+            pageItems = alt
+            if (pageItems.length === 0) return 'No plans found for your filters.'
+          } catch {
+            return 'No plans found for your filters.'
+          }
+        }
+
+        // Relaxed fallback tier 2: If still empty and a planName text exists, prefer textual match by planName
+        if (pageItems.length === 0 && args?.planName && parseSizeToMB(args.planName) == null) {
+          try {
+            const q = String(args.planName).toLowerCase()
+            let alt = Array.isArray(plans) ? plans : []
+            if (effectiveNetwork) alt = alt.filter(p => String(p.network).toUpperCase() === String(effectiveNetwork).toUpperCase())
+            if (args?.minAmount != null) alt = alt.filter(p => Number(p.amount) >= Number(args.minAmount))
+            if (args?.maxAmount != null) alt = alt.filter(p => Number(p.amount) <= Number(args.maxAmount))
+            alt = alt.filter(p => String(p.planName).toLowerCase().includes(q))
+            alt = alt.sort((a,b)=>{
+              const sa = toMegabytes(a.planName), sb = toMegabytes(b.planName)
+              if (sa !== sb) return sa - sb
+              return Number(a.amount) - Number(b.amount)
+            })
+            pageItems = alt
+          } catch {}
+        }
+        const lines = pageItems.map((p, i) => `${start + i + 1}. *${p.planName}* - ${formatMoney(p.amount)} (${p.duration}) `)
 
         // Persist last data list for numeric selection and set context
         try {
@@ -551,7 +747,8 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
           }, userId, null)
         } catch {}
 
-        return `*Data Plans* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n\n')}\n\nReply with the number to select a plan.`
+        const networkLabel = effectiveNetwork ? ` (${effectiveNetwork})` : ''
+        return `*Data Plans${titleHint}${networkLabel}* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan.`
       } catch (e) {
         return `⚠️ Error loading plans: ${e.message}`
       }
@@ -627,6 +824,10 @@ Reply: confirm purchaseData to proceed.`
           email: user.email,
           banned: user.banned,
         }))
+
+        if (!network) {
+          return 'I need your network to proceed (MTN, GLO, Airtel, 9mobile). Please reply with the network and try again.'
+        }
 
         const requestData = {
           plan: {
@@ -986,7 +1187,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
             }
             if (!isProductCtx && chosen) {
               // For data/airtime lists, echo back selection and prompt confirmation
-              const summary = `You selected option ${pickedIndex + 1}. If this is correct, reply: confirm.`
+              const summary = `You selected option ${pickedIndex + 1}. is this correct?.`
               await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
               return summary
             }
@@ -994,6 +1195,47 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
         }
       } catch {}
     }
+
+    // Heuristic pre-router for data plan queries: parse prompt and directly call getDataPlans
+    try {
+      const rawText = String(prompt || '')
+      const lower = rawText.toLowerCase()
+      // More specific: must have "data" or explicit size in separate matches
+      const mentionsData = /(data\s*plan|dataplan|buy\s*data)\b/i.test(rawText)
+      const sizeMatch = rawText.match(/\b(\d+(?:\.\d+)?)\s*(tb|gb|mb)\b/i) // Word boundary ensures "500MB" not "data"
+      const networkMatch = rawText.match(/\b(mtn|glo|airtel|9\s*mobile|9mobile)\b/i)
+      const hasPricePhrase = /(under|below|not\s*above|less\s*than|at\s*least|from|more\s*than|between|to|and|₦|ngn|\d{3,})/i.test(rawText)
+
+      if ((mentionsData || sizeMatch || networkMatch) && (sizeMatch || networkMatch || hasPricePhrase)) {
+        const args = {}
+        // Network
+        if (networkMatch) {
+          const n = networkMatch[1].toUpperCase().replace(/\s+/g, '')
+          args.network = n === '9MOBILE' || n === '9MOBILE' ? '9MOBILE' : n
+        }
+        // Size as planName ONLY if explicit match (e.g., "500MB", "1.2GB") - NOT just "data"
+        if (sizeMatch) {
+          const val = sizeMatch[1]
+          const unit = sizeMatch[2].toUpperCase()
+          args.planName = `${val}${unit}`
+        }
+        // Plan type
+        if (/\bsme\b/i.test(rawText)) args.planType = 'SME'
+        else if (/gift|gifting/i.test(rawText)) args.planType = 'GIFTING'
+        else if (/coop|corporate|cooperate/i.test(rawText)) args.planType = 'COOPERATE GIFTING'
+        // Amounts
+        const num = (s) => Number(String(s).replace(/[^0-9.]/g, ''))
+        let m
+        if ((m = rawText.match(/(?:under|below|not\s*above|less\s*than|<=)\s*₦?\s*([\d,]+)/i))) args.maxAmount = num(m[1])
+        if ((m = rawText.match(/(?:at\s*least|from|more\s*than|>=|above)\s*₦?\s*([\d,]+)/i))) args.minAmount = num(m[1])
+        if ((m = rawText.match(/between\s*₦?\s*([\d,]+)\s*(?:and|to)\s*₦?\s*([\d,]+)/i))) { args.minAmount = num(m[1]); args.maxAmount = num(m[2]) }
+
+        console.log('🛣️ PRE-ROUTED getDataPlans with:', args)
+        const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
+        return String(out)
+      }
+    } catch {}
 
     const result = await chat.sendMessage(prompt)
     const calls = extractFunctionCalls(result)

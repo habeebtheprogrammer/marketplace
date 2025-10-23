@@ -9,6 +9,17 @@ const { processAIChat } = require('./aiChat')
 const { removeCountryCode, createToken, generateRandomNumber, sendOtpCode } = require('./helpers')
 const bcrypt = require('bcryptjs')
 
+// Normalize formatting for WhatsApp (use single * for bold)
+function normalizeWhatsAppFormatting(text) {
+  try {
+    return String(text)
+      // Convert Markdown **bold** to WhatsApp *bold*
+      .replace(/\*\*(.*?)\*\*/g, '*$1*')
+  } catch {
+    return text
+  }
+}
+
 // Decrypt request from WhatsApp Flows (RSA-OAEP + AES-128-GCM)
 function decryptRequest(body, privatePem, passphrase) {
   const { encrypted_aes_key, encrypted_flow_data, initial_vector } = body
@@ -190,7 +201,7 @@ async function handleBotMessage(body){
         messaging_product: 'whatsapp',
         to: fromNumber.replace('+', ''),
         type: 'text',
-        text: { body: aiText.slice(0, 4000), preview_url: true },
+        text: { body: normalizeWhatsAppFormatting(aiText).slice(0, 4000), preview_url: true },
       }
       await sendWhatsAppMessage(phoneNumberId, textMsg)
       
