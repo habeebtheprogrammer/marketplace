@@ -4,6 +4,7 @@ const path = require('path')
 const { processProductMessage } = require('./lib/product-service')
 const { getVendorIdFromPhone, isPhoneAuthorized } = require('./lib/config')
 const { usersService, journeyService } = require('../service')
+const { sendProductTemplate } = require('./whatsappTemplates')
 const { processAIChat } = require('./aiChat')
 const { removeCountryCode, createToken, generateRandomNumber, sendOtpCode } = require('./helpers')
 const bcrypt = require('bcryptjs')
@@ -189,9 +190,12 @@ async function handleBotMessage(body){
         messaging_product: 'whatsapp',
         to: fromNumber.replace('+', ''),
         type: 'text',
-        text: { body: aiText.slice(0, 4000) },
+        text: { body: aiText.slice(0, 4000), preview_url: true },
       }
       await sendWhatsAppMessage(phoneNumberId, textMsg)
+      
+      // If AI provided a structured list of product(s) (via metadata), we can also send template cards.
+      // The AI will persist metadata.lastProductList in the session; here we only define a helper.
       return
     }
 

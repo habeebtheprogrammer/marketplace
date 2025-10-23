@@ -35,7 +35,6 @@ exports.onboardWhatsApp = async (req, res, next) => {
               const payload = { data: { status: 'active' } }
               return res.send(encryptResponse(payload, aesKeyBuffer, initialVectorBuffer))
           }
-
           // Handle onboarding/signin/forgot via Flows screens
           const screen = String(decryptedBody?.screen || '').toUpperCase()
           const data = decryptedBody?.data || {}
@@ -173,6 +172,7 @@ exports.webhook = async (req, res, next) => {
         // respond fast to WhatsApp
         res.status(200).json({ status: 'accepted' })
         const change = body?.entry?.[0]?.changes?.[0]
+        console.log(JSON.stringify(body, null, 2))
         if (!change || change.field !== 'messages' || !change.value?.messages?.length) return
         const phoneNumberId = change.value.metadata.phone_number_id
 

@@ -210,7 +210,7 @@ function toolDeclarations() {
   }]
 }
 
-async function executeTool(name, args, { userId, contacts } = {}) {
+async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
   switch (name) {
     case 'getUserAccount': {
       if (!userId) return '⚠️ Please sign in to view your account.'
@@ -371,35 +371,70 @@ async function executeTool(name, args, { userId, contacts } = {}) {
     case 'searchProducts': {
       try {
         const query = { archive: { $ne: true } }
-        
-        // getProducts expects { query: {}, options: {} }, returns paginated result
-        if (args?.title) {
-          // Use text search for keyword matching (requires text index on title & description)
-          query.$text = { $search: args.title }
+
+        // Normalize keyword
+        const rawKeyword = String(args?.title || '').trim()
+        const keyword = rawKeyword.toLowerCase()
+
+        // Attempt to infer closest category from keyword if categoryId not supplied
+        let inferredCategoryId = null
+        if (!args?.categoryId && keyword) {
+          try {
+            const cats = await services.categoriesService.getCategories({ archive: { $ne: true } }, { limit: 200 })
+            const list = Array.isArray(cats?.docs) ? cats.docs : []
+            let best = { score: 0, id: null }
+            for (const c of list) {
+              const title = String(c.title || '').toLowerCase()
+              const slug = String(c.slug || '').toLowerCase()
+              let score = 0
+              if (title && keyword.includes(title)) score += 3
+              if (slug && keyword.includes(slug)) score += 3
+              // token overlap
+              const tTokens = title.split(/[^a-z0-9]+/).filter(Boolean)
+              for (const t of tTokens) {
+                if (t.length >= 3 && keyword.includes(t)) score += 1
+              }
+              if (score > best.score) best = { score, id: c._id }
+            }
+            if (best.score >= 2 && best.id) inferredCategoryId = String(best.id)
+          } catch {}
         }
-        if (args?.categoryId) {
-          try { query.categoryId = new mongoose.Types.ObjectId(String(args.categoryId)) } catch {}
+
+        // Build product query
+        if (rawKeyword) {
+          query.$text = { $search: rawKeyword }
+        }
+        const effectiveCategoryId = args?.categoryId || inferredCategoryId
+        if (effectiveCategoryId) {
+          try { query.categoryId = new mongoose.Types.ObjectId(String(effectiveCategoryId)) } catch { query.categoryId = String(effectiveCategoryId) }
         }
         if (args?.vendorId) {
-          try { query.vendorId = new mongoose.Types.ObjectId(String(args.vendorId)) } catch {}
+          try { query.vendorId = new mongoose.Types.ObjectId(String(args.vendorId)) } catch { query.vendorId = String(args.vendorId) }
         }
         if (args?.trending === true) query.trending = true
-        
+
         // Price range filter (use discounted_price as primary)
         if (args?.minPrice != null || args?.maxPrice != null) {
           query.discounted_price = {}
           if (args?.minPrice != null) query.discounted_price.$gte = Number(args.minPrice)
           if (args?.maxPrice != null) query.discounted_price.$lte = Number(args.maxPrice)
         }
-        
+
         const options = {
           page: args?.page || 1,
           limit: args?.limit || 10,
           sort: query.$text ? { score: { $meta: 'textScore' } } : { createdAt: -1 },
           projection: query.$text ? { score: { $meta: 'textScore' } } : undefined,
         }
-        
-        const resp = await services.productsService.getProducts({ query, options })
+
+        let resp = await services.productsService.getProducts({ query, options })
+
+        // Fallback: if none found and we inferred a category, retry with only category filter
+        if ((!resp?.docs || resp.docs.length === 0) && inferredCategoryId) {
+          const fallbackQuery = { archive: { $ne: true } }
+          try { fallbackQuery.categoryId = new mongoose.Types.ObjectId(String(inferredCategoryId)) } catch { fallbackQuery.categoryId = String(inferredCategoryId) }
+          resp = await services.productsService.getProducts({ query: fallbackQuery, options })
+        }
         
         if (!resp?.docs || resp.docs.length === 0) {
           return 'No products found matching your criteria. Try different filters or keywords.'
@@ -410,14 +445,66 @@ async function executeTool(name, args, { userId, contacts } = {}) {
           const wasPrice = p.discounted_price && p.original_price > p.discounted_price 
             ? ` ~${formatMoney(p.original_price)}~` 
             : ''
-          const inStock = (p.is_stock ?? 0) > 0 ? '✅' : '❌'
-          const rating = (p.rating && typeof p.rating === 'object' && p.rating._bsontype === 'Decimal128')
-            ? Number(p.rating.toString())
-            : (typeof p.rating === 'number' ? p.rating : 'N/A')
-          return `${i + 1}. *${p.title}*\n   ${formatMoney(price)}${wasPrice} ${inStock}\n   Rating: ${rating} ⭐ (${p.reviews || 0} reviews)`
+          const inStock = (p.is_stock ?? 0) > 0 ? '✅ In stock' : '❌ Out of stock'
+          return `${i + 1}. *${p.title}*\n   ${formatMoney(price)}${wasPrice} • ${inStock}`
         })
-        
-        return `*Search Results* (Page ${resp.page}/${resp.totalPages}, ${resp.totalDocs} total):\n\n${items.join('\n\n')}`
+
+        // Persist last product list and original query for pagination and numeric selection
+        try {
+          const compact = resp.docs.map(p => ({
+            id: String(p._id),
+            title: p.title,
+            slug: p.slug,
+            categorySlug: p?.categoryId?.slug || '',
+            image: Array.isArray(p.images) && p.images[0] ? p.images[0] : null,
+            updatedAt: p.priceUpdatedAt || p.updatedAt || p.createdAt,
+            price: p.discounted_price || p.original_price || 0,
+            wasPrice: (p.discounted_price && p.original_price > p.discounted_price) ? p.original_price : null
+          }))
+          if (sessionId) await chatSessions.updateSession(String(sessionId), {
+            'metadata.selectionContext': 'products',
+            'metadata.lastProductList': { items: compact, savedAt: new Date().toISOString(), page: options.page, limit: options.limit, totalPages: resp.totalPages },
+            'metadata.lastProductQuery': {
+              title: rawKeyword || null,
+              categoryId: effectiveCategoryId || null,
+              vendorId: args?.vendorId || null,
+              trending: args?.trending === true ? true : null,
+              minPrice: args?.minPrice ?? null,
+              maxPrice: args?.maxPrice ?? null
+            }
+          }, userId, null)
+        } catch {}
+
+        // Send top 4 results as WhatsApp template messages
+        try {
+          const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2
+          const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
+          if (phoneNumberId && toNumber) {
+            const { sendProductTemplate } = require('./whatsappTemplates')
+            const top = resp.docs.slice(0, 4)
+            for (const p of top) {
+              const price = p.discounted_price || p.original_price || 0
+              const was = p.discounted_price && p.original_price > p.discounted_price ? p.original_price : null
+              const priceLine = was ? `${formatMoney(price)} ~${formatMoney(was)}~` : `${formatMoney(price)}`
+              const updatedAt = p.priceUpdatedAt || p.updatedAt || p.createdAt
+              const updated = updatedAt ? ` (updated ${new Date(updatedAt).toLocaleDateString('en-NG')})` : ''
+              const link = (p?.categoryId?.slug && p.slug) ? `/${p.categoryId.slug}/${encodeURIComponent(p.slug)}` : ''
+              const imageUrl = Array.isArray(p.images) && p.images[0] ? p.images[0] : undefined
+              const descriptionRaw = String(p.description || '').slice(0, 900)
+              const description = descriptionRaw && descriptionRaw.trim().length > 0 ? descriptionRaw : p.title
+              await sendProductTemplate(phoneNumberId, toNumber, {
+                title: p.title,
+                description,
+                priceLine: `${priceLine}${updated}`,
+                imageUrl,
+                productUrl: link
+              })
+            }
+          }
+        } catch {}
+
+        const followup = `\n\nWould you like to see more results?`
+        return `I\'ve sent the top ${Math.min(4, resp.docs.length)} matches. ${followup}`
       } catch (e) {
         return `⚠️ Error searching products: ${e.message}`
       }
@@ -432,12 +519,13 @@ async function executeTool(name, args, { userId, contacts } = {}) {
           ? ` ~${formatMoney(p.original_price)}~` 
           : ''
         const inStock = (p.is_stock ?? 0) > 0 ? '✅ In stock' : '❌ Out of stock'
-        const rating = (p.rating && typeof p.rating === 'object' && p.rating._bsontype === 'Decimal128')
-          ? Number(p.rating.toString())
-          : (typeof p.rating === 'number' ? p.rating : 'N/A')
         const cat = p.categoryId?.title ? `\nCategory: ${p.categoryId.title}` : ''
         const vendor = p.vendorId?.title ? `\nVendor: ${p.vendorId.title}` : ''
-        return `*${p.title}*\n${formatMoney(price)}${wasPrice}\n${inStock}\nRating: ${rating} ⭐ (${p.reviews || 0} reviews)${cat}${vendor}`
+        const link = (p.categoryId?.slug && p.slug) ? `\nLink: https://360gadgetsafrica.com/gadgets/${p.categoryId.slug}/${encodeURIComponent(p.slug)}` : ''
+        const desc = p.description ? `\n\n${p.description}` : ''
+        const updatedAt = p.priceUpdatedAt ? `\nUpdated: ${new Date(p.priceUpdatedAt).toLocaleString('en-NG')}` : ''
+        const vendorFollowup = `\n\nWould you like me to connect you with the partnered vendor for more details?`
+        return `*${p.title}*\n${formatMoney(price)}${wasPrice}${updatedAt}\n${inStock}${cat}${vendor}${link}${desc}${vendorFollowup}`
       } catch (e) {
         return `⚠️ Error fetching product: ${e.message}`
       }
@@ -454,8 +542,18 @@ async function executeTool(name, args, { userId, contacts } = {}) {
         const start = (page - 1) * limit
         const pageItems = list.slice(start, start + limit)
         if (pageItems.length === 0) return 'No plans found for your filters.'
-        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} • ${p.network} • ${p.planType}\n   ${formatMoney(p.amount)} • Plan ID: ${p.planId} • Vendor: ${p.vendor}`)
-        return `*Data Plans* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n\n')}`
+        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} • ${p.network} • ${p.planType}\n   ${formatMoney(p.amount)} • Plan ID: ${p.planId}`)
+
+        // Persist last data list for numeric selection and set context
+        try {
+          const compact = pageItems.map(p => ({ planId: String(p.planId), vendor: String(p.vendor), network: String(p.network), planType: String(p.planType), amount: Number(p.amount), planName: p.planName }))
+          if (sessionId) await chatSessions.updateSession(String(sessionId), {
+            'metadata.selectionContext': 'data',
+            'metadata.lastDataList': { items: compact, savedAt: new Date().toISOString(), page, limit }
+          }, userId, null)
+        } catch {}
+
+        return `*Data Plans* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n\n')}\n\nReply with the number to select a plan.`
       } catch (e) {
         return `⚠️ Error loading plans: ${e.message}`
       }
@@ -493,6 +591,22 @@ async function executeTool(name, args, { userId, contacts } = {}) {
       if (args?.amount == null) missing.push('amount')
       if (!phoneNumber) missing.push('phone (or add phone to your profile)')
       if (missing.length) {
+        // If plan details not provided, try to extract from lastDataList by index
+        if (sessionId && /^\d{1,2}$/.test(String(args?.selection || ''))) {
+          try {
+            const currentSession = await chatSessions.getSession(String(sessionId), userId, null)
+            const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
+            const idx = parseInt(String(args.selection), 10) - 1
+            const chosen = (dataList && Array.isArray(dataList.items)) ? dataList.items[idx] : null
+            if (chosen) {
+              args.planId = chosen.planId
+              args.vendor = chosen.vendor
+              args.planType = chosen.planType
+              args.amount = chosen.amount
+              network = chosen.network
+            }
+          } catch {}
+        }
         return `To buy data, I need: ${missing.join(', ')}.
 Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planType: 'SME', amount: 520, phone: '08031234567' }`
       }
@@ -807,6 +921,82 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
   const chat = model.startChat({ history })
   let text = 'I had trouble processing your request.'
   try {
+    // Try to resolve selection from the last search only when the user clearly intends to select
+    if (sessionId) {
+      try {
+        const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+        const ctx = currentSession?.metadata?.get?.('selectionContext') || currentSession?.metadata?.selectionContext
+        const isProductCtx = ctx === 'products'
+        const productList = currentSession?.metadata?.get?.('lastProductList') || currentSession?.metadata?.lastProductList
+        const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
+        const items = isProductCtx
+          ? ((productList && Array.isArray(productList.items)) ? productList.items : [])
+          : ((dataList && Array.isArray(dataList.items)) ? dataList.items : [])
+        if (items.length > 0) {
+          const raw = String(prompt).trim()
+          const lower = raw.toLowerCase()
+
+          // Detect explicit selection intent; avoid hijacking normal keyword queries (e.g., "hp 8th gen")
+          const selectionRegexes = [
+            /^(pick|choose|option|number|no|item)?\s*\d{1,2}(?:st|nd|rd|th)?[.!]?$/i,
+            /^(the\s+)?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)(\s+one)?[.!]?$/i
+          ]
+          const selectionIntent = selectionRegexes.some(r => r.test(raw))
+          if (!selectionIntent) {
+            // No clear selection intent; proceed to normal model handling
+            throw new Error('skip-selection')
+          }
+
+          // 1) Numeric selection anywhere in the phrase (supports 1st/2nd/11th, etc.)
+          let pickedIndex = -1
+          const numRegex = /(\d{1,2})(?:st|nd|rd|th)?/gi
+          let m
+          while ((m = numRegex.exec(raw)) !== null) {
+            const n = parseInt(m[1], 10)
+            const idx = n - 1
+            if (idx >= 0 && idx < items.length) { pickedIndex = idx; break }
+          }
+
+          // 2) No fuzzy matching here to avoid accidental stale picks; require numeric selection intent
+
+          if (pickedIndex >= 0) {
+            const chosen = items[pickedIndex]
+            if (isProductCtx && chosen?.id) {
+              // Build and send template card for the chosen product, then details text
+              try {
+                const phoneNumberId = contacts?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID
+                const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
+                const priceLine = chosen.wasPrice ? `${formatMoney(chosen.price)} ~${formatMoney(chosen.wasPrice)}~` : `${formatMoney(chosen.price)}`
+                const updatedAt = chosen.updatedAt ? ` (updated ${new Date(chosen.updatedAt).toLocaleDateString('en-NG')})` : ''
+                const productUrl = (chosen.categorySlug && chosen.slug) ? `https://360gadgetsafrica.com/gadgets/${chosen.categorySlug}/${encodeURIComponent(chosen.slug)}` : ''
+                const desc = ''
+                if (phoneNumberId && toNumber) {
+                  const { sendProductTemplate } = require('./whatsappTemplates')
+                  await sendProductTemplate(phoneNumberId, toNumber, {
+                    title: chosen.title,
+                    description: desc,
+                    priceLine: `${priceLine}${updatedAt}`,
+                    imageUrl: chosen.image,
+                    productUrl
+                  })
+                }
+              } catch {}
+
+              const details = await executeTool('getProductDetails', { id: chosen.id }, { userId, contacts, sessionId })
+              await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: details }, userId, deviceId)
+              return details
+            }
+            if (!isProductCtx && chosen) {
+              // For data/airtime lists, echo back selection and prompt confirmation
+              const summary = `You selected option ${pickedIndex + 1}. If this is correct, reply: confirm.`
+              await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
+              return summary
+            }
+          }
+        }
+      } catch {}
+    }
+
     const result = await chat.sendMessage(prompt)
     const calls = extractFunctionCalls(result)
     
@@ -822,7 +1012,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
       for (const c of calls) {
         const { name, args } = c
         try {
-          const out = await executeTool(name, args, { userId, contacts })
+          const out = await executeTool(name, args, { userId, contacts, sessionId })
           outputs.push(typeof out === 'string' ? out : (out?.error ? `⚠️ ${out.error}` : String(out)))
         } catch (e) {
           console.log('❌ TOOL EXECUTION ERROR:', {
