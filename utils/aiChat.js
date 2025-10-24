@@ -5,7 +5,7 @@ const { createToken } = require('./helpers')
 const { detectNetwork } = require('./vtu')
 const chatSessions = require('../service/chatSessions.service')
 const services = require('../service')
-
+const moment = require('moment')
 // Initialize Gemini once
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
 const DEFAULT_GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-pro'
@@ -487,12 +487,12 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             for (const p of top) {
               const price = p.discounted_price || p.original_price || 0
               const was = p.discounted_price && p.original_price > p.discounted_price ? p.original_price : null
-              const priceLine = was ? `${formatMoney(price)} ~${formatMoney(was)}~` : `${formatMoney(price)}`
+              const priceLine = was ? `*${formatMoney(price)}*` : `*${formatMoney(price)}*`
               const updatedAt = p.priceUpdatedAt || p.updatedAt || p.createdAt
-              const updated = updatedAt ? ` (updated ${new Date(updatedAt).toLocaleDateString('en-NG')})` : ''
+              const updated = updatedAt ? `\n*(Price last updated: ${moment(updatedAt).fromNow()})*` : ''
               const link = (p?.categoryId?.slug && p.slug) ? `/${p.categoryId.slug}/${encodeURIComponent(p.slug)}` : ''
               const imageUrl = Array.isArray(p.images) && p.images[0] ? p.images[0] : undefined
-              const descriptionRaw = String(p.description || '').slice(0, 900)
+              const descriptionRaw = String(p.description || '').slice(0, 897) + '...'
               const description = descriptionRaw && descriptionRaw.trim().length > 0 ? descriptionRaw : p.title
               console.log('🧩 Sending product template', { phoneNumberId, toNumber, title: p.title, url: link })
               await sendProductTemplate(phoneNumberId, toNumber, {
@@ -642,17 +642,24 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         const derivedSizeFromPlanName = parseSizeToMB(args?.planName)
         const derivedSizeFromSearch = parseSizeToMB(args?.search)
         
-        // Only apply size filtering if there's an explicit price/amount constraint
-        // Otherwise, planName is just a text hint and should not filter by exact size
+        // If user explicitly requested a size via planName (e.g., "3.2GB"), ALWAYS apply a tolerance window
+        const explicitSizeRequested = derivedSizeFromPlanName != null
+        // Only apply implicit size filtering (from generic search) if there's a price constraint
         const hasAmountConstraint = (args?.minAmount != null) || (args?.maxAmount != null) || (args?.amount != null)
         
-        if (minSize == null && maxSize == null && hasAmountConstraint) {
-          const d = derivedSizeFromPlanName != null ? derivedSizeFromPlanName : derivedSizeFromSearch
-          if (d != null) {
-            // Use tolerance window: e.g., for 1GB (1024MB), include 900-1150 MB to capture 1GB, 1.1GB, 1.2GB variants
-            const tolerance = d * 0.15 // ±15% tolerance
+        if (minSize == null && maxSize == null) {
+          if (explicitSizeRequested) {
+            const d = derivedSizeFromPlanName
+            const tolerance = d * 0.15
             minSize = Math.max(0, d - tolerance)
             maxSize = d + tolerance
+          } else if (hasAmountConstraint) {
+            const d = derivedSizeFromSearch
+            if (d != null) {
+              const tolerance = d * 0.15
+              minSize = Math.max(0, d - tolerance)
+              maxSize = d + tolerance
+            }
           }
         }
         if (minSize != null) list = list.filter(p => toMegabytes(p.planName) >= minSize)
@@ -809,8 +816,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
       if (!args?.confirm) {
         const isOwnPhone = !args?.phone // If no phone was provided, it's their own phone
         const phoneLabel = isOwnPhone ? 'your phone' : phoneNumber
-        return `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel} (${phoneNumber}) via ${args.vendor}.
-Reply: confirm purchaseData to proceed.`
+        return `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel} (${phoneNumber}).\nReply: confirm purchaseData to proceed.`
       }
       try {
         // Create minimal JWT from user to satisfy checkAuth middleware
@@ -825,25 +831,33 @@ Reply: confirm purchaseData to proceed.`
           banned: user.banned,
         }))
 
-        if (!network) {
-          return 'I need your network to proceed (MTN, GLO, Airtel, 9mobile). Please reply with the network and try again.'
+        // Validate network and phone before calling backend
+        const allowedNetworks = ['MTN','GLO','AIRTEL','9MOBILE']
+        const normalizedNetwork = String(network || '').toUpperCase()
+        if (!allowedNetworks.includes(normalizedNetwork)) {
+          return 'Please tell me your network to proceed (MTN, GLO, Airtel, 9mobile).'
+        }
+        const cleanPhone = String(phoneNumber || '').replace(/\D/g, '')
+        const normalizedPhone = (cleanPhone.startsWith('0') && cleanPhone.length === 11) ? cleanPhone : null
+        if (!normalizedPhone) {
+          return 'Please send the 11-digit phone number to receive the data (e.g., 08031234567).'
         }
 
         const requestData = {
           plan: {
             planId: String(args.planId),
             vendor: String(args.vendor),
-            network: String(network).toUpperCase(),
+            network: normalizedNetwork,
             planType: String(args.planType).toUpperCase(),
             amount: Number(args.amount)
           },
-          phone: String(phoneNumber)
+          phone: String(normalizedPhone)
         }
 
         console.log('📱 DATA PURCHASE REQUEST:', {
           userId: userId,
-          userPhone: phoneNumber,
-          userNetwork: network,
+          userPhone: normalizedPhone,
+          userNetwork: normalizedNetwork,
           requestData: requestData,
           timestamp: new Date().toISOString()
         })
@@ -863,9 +877,14 @@ Reply: confirm purchaseData to proceed.`
         })
         
         if (!resp.ok) {
-          const msg = data?.errors?.[0] || data?.error || resp.statusText
-          console.log('❌ DATA PURCHASE FAILED:', msg)
-          return `❌ Purchase failed: ${msg}`
+          const rawMsg = data?.errors?.[0] || data?.error || resp.statusText || ''
+          let friendly = 'I could not complete the purchase.'
+          const msgStr = String(rawMsg || '').toLowerCase()
+          if (msgStr.includes('insufficient')) friendly = 'You have an insufficient wallet balance to complete this transaction.'
+          else if (msgStr.includes('network')) friendly = 'I still need your network to proceed (MTN, GLO, Airtel, 9mobile).'
+          else if (resp.status >= 500) friendly = 'The service had an issue processing the request just now.'
+          else if (msgStr.includes('phone')) friendly = 'That phone number looks invalid. Please send an 11-digit number that starts with 0.'
+          return `${friendly}`
         }
         
         console.log('✅ DATA PURCHASE SUCCESS:', {
@@ -874,9 +893,14 @@ Reply: confirm purchaseData to proceed.`
           timestamp: new Date().toISOString()
         })
         
-        return `✅ Data purchase initialized. We are processing your request.
-Ref: ${data?.reference || '—'}
-You will get a notification shortly.`
+        try {
+          if (sessionId) await chatSessions.updateSession(String(sessionId), {
+            'metadata.lastDataPhone': String(normalizedPhone),
+            'metadata.lastDataNetwork': String(normalizedNetwork)
+          }, userId, null)
+        } catch {}
+        
+        return `✅ Data purchase initialized. We are processing your request.\nRef: ${data?.reference || '—'}\nYou will get a notification shortly.`
       } catch (e) {
         console.log('❌ DATA PURCHASE ERROR:', {
           error: e.message,
@@ -884,7 +908,11 @@ You will get a notification shortly.`
           userId: userId,
           timestamp: new Date().toISOString()
         })
-        return `⚠️ Error purchasing data: ${e.message}`
+        // Never surface coding errors; guide user to provide missing info
+        if ((e.message || '').toLowerCase().includes('network')) {
+          return 'Please tell me your network to proceed (MTN, GLO, Airtel, 9mobile).'
+        }
+        return 'I had trouble completing that. Please confirm your network (MTN, GLO, Airtel, 9mobile) and the 11-digit phone number to receive the data.'
       }
     }
     case 'buyAirtime': {
@@ -1186,10 +1214,28 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
               return details
             }
             if (!isProductCtx && chosen) {
-              // For data/airtime lists, echo back selection and prompt confirmation
-              const summary = `You selected option ${pickedIndex + 1}. is this correct?.`
-              await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
-              return summary
+              // Immediately proceed to purchase flow using the chosen plan
+              try {
+                // Save pending purchase details to session and prompt for explicit confirmation
+                if (sessionId) await chatSessions.updateSession(String(sessionId), {
+                  'metadata.pendingPurchase': {
+                    planId: String(chosen.planId),
+                    vendor: String(chosen.vendor),
+                    network: String(chosen.network),
+                    planType: String(chosen.planType),
+                    amount: Number(chosen.amount),
+                    planName: String(chosen.planName || '')
+                  }
+                }, userId, deviceId)
+
+                const summary = `You're about to buy ${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')} for ${formatMoney(chosen.amount)}. Is this correct? Reply 'yes' to proceed..`
+                await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
+                return summary
+              } catch (e) {
+                const fallback = 'I had trouble proceeding with that selection. Please confirm your network and the 11-digit phone number.'
+                await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, deviceId)
+                return fallback
+              }
             }
           }
         }
@@ -1200,40 +1246,90 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
     try {
       const rawText = String(prompt || '')
       const lower = rawText.toLowerCase()
-      // More specific: must have "data" or explicit size in separate matches
-      const mentionsData = /(data\s*plan|dataplan|buy\s*data)\b/i.test(rawText)
-      const sizeMatch = rawText.match(/\b(\d+(?:\.\d+)?)\s*(tb|gb|mb)\b/i) // Word boundary ensures "500MB" not "data"
-      const networkMatch = rawText.match(/\b(mtn|glo|airtel|9\s*mobile|9mobile)\b/i)
-      const hasPricePhrase = /(under|below|not\s*above|less\s*than|at\s*least|from|more\s*than|between|to|and|₦|ngn|\d{3,})/i.test(rawText)
 
-      if ((mentionsData || sizeMatch || networkMatch) && (sizeMatch || networkMatch || hasPricePhrase)) {
-        const args = {}
-        // Network
-        if (networkMatch) {
-          const n = networkMatch[1].toUpperCase().replace(/\s+/g, '')
-          args.network = n === '9MOBILE' || n === '9MOBILE' ? '9MOBILE' : n
-        }
-        // Size as planName ONLY if explicit match (e.g., "500MB", "1.2GB") - NOT just "data"
-        if (sizeMatch) {
-          const val = sizeMatch[1]
-          const unit = sizeMatch[2].toUpperCase()
-          args.planName = `${val}${unit}`
-        }
-        // Plan type
-        if (/\bsme\b/i.test(rawText)) args.planType = 'SME'
-        else if (/gift|gifting/i.test(rawText)) args.planType = 'GIFTING'
-        else if (/coop|corporate|cooperate/i.test(rawText)) args.planType = 'COOPERATE GIFTING'
-        // Amounts
-        const num = (s) => Number(String(s).replace(/[^0-9.]/g, ''))
-        let m
-        if ((m = rawText.match(/(?:under|below|not\s*above|less\s*than|<=)\s*₦?\s*([\d,]+)/i))) args.maxAmount = num(m[1])
-        if ((m = rawText.match(/(?:at\s*least|from|more\s*than|>=|above)\s*₦?\s*([\d,]+)/i))) args.minAmount = num(m[1])
-        if ((m = rawText.match(/between\s*₦?\s*([\d,]+)\s*(?:and|to)\s*₦?\s*([\d,]+)/i))) { args.minAmount = num(m[1]); args.maxAmount = num(m[2]) }
+      // Handle confirm for pending data purchase
+      const isConfirm = /\b(confirm|yes|proceed|go ahead|ok)\b/i.test(lower)
+      if (isConfirm) {
+        try {
+          const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+          const pending = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
+          if (pending && pending.planId && pending.vendor) {
+            const result = await executeTool('purchaseData', {
+              planId: String(pending.planId),
+              vendor: String(pending.vendor),
+              network: String(pending.network || ''),
+              planType: String(pending.planType || ''),
+              amount: Number(pending.amount),
+              confirm: true
+            }, { userId, contacts, sessionId })
+            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, deviceId)
+            // Clear pending
+            try { await chatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null }, userId, deviceId) } catch {}
+            return String(result)
+          }
+        } catch {}
+      }
 
-        console.log('🛣️ PRE-ROUTED getDataPlans with:', args)
-        const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
-        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
-        return String(out)
+      // 0) Handle "last number/phone" intent for data purchases
+      const wantsLastNumber = /(last|previous)\s+(number|phone)/i.test(lower) && /(data|buy\s*data|purchase\s*data)/i.test(lower)
+      if (wantsLastNumber) {
+        try {
+          const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+          const lastPhone = currentSession?.metadata?.get?.('lastDataPhone') || currentSession?.metadata?.lastDataPhone
+          const lastNet = currentSession?.metadata?.get?.('lastDataNetwork') || currentSession?.metadata?.lastDataNetwork
+          if (lastPhone) {
+            const netLabel = lastNet ? ` on ${lastNet}` : ''
+            const reply = `The last number you used for a data purchase was ${lastPhone}${netLabel}. Should I use it again?`
+            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
+            return reply
+          }
+        } catch {}
+        const ask = 'I don\'t yet have a previous data number for you. Please send the 11-digit phone number to use.'
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: ask }, userId, deviceId)
+        return ask
+      }
+
+      // 1) Exclude obvious product/device queries from data routing
+      const deviceKeywords = /(iphone|samsung|tecno|infinix|laptop|macbook|ipad|airpods|watch|accessor(y|ies))/i
+      if (deviceKeywords.test(lower)) {
+        // Let the model/tools handle product flow
+      } else {
+        // 2) Data routing with stricter conditions
+        const mentionsData = /(data\s*plan|dataplan|buy\s*data|top\s*up\s*data|purchase\s*data)\b/i.test(rawText)
+        const sizeMatch = rawText.match(/\b(\d+(?:\.[0-9]+)?)\s*(tb|gb|mb)\b/i)
+        const networkMatch = rawText.match(/\b(mtn|glo|airtel|9\s*mobile|9mobile)\b/i)
+        const hasPricePhrase = /(under|below|not\s*above|less\s*than|at\s*least|from|more\s*than|between|to|and|₦|ngn|\d{3,})/i.test(rawText)
+        const mentionsPlanOrData = /(\bdata\b|\bplan\b)/i.test(lower)
+
+        if ((mentionsData || (mentionsPlanOrData && (sizeMatch || networkMatch || hasPricePhrase)))) {
+          const args = {}
+          // Network
+          if (networkMatch) {
+            const n = networkMatch[1].toUpperCase().replace(/\s+/g, '')
+            args.network = n === '9MOBILE' ? '9MOBILE' : n
+          }
+          // Size only when explicit
+          if (sizeMatch) {
+            const val = sizeMatch[1]
+            const unit = sizeMatch[2].toUpperCase()
+            args.planName = `${val}${unit}`
+          }
+          // Plan type
+          if (/\bsme\b/i.test(rawText)) args.planType = 'SME'
+          else if (/gift|gifting/i.test(rawText)) args.planType = 'GIFTING'
+          else if (/coop|corporate|cooperate/i.test(rawText)) args.planType = 'COOPERATE GIFTING'
+          // Amounts
+          const num = (s) => Number(String(s).replace(/[^0-9.]/g, ''))
+          let m
+          if ((m = rawText.match(/(?:under|below|not\s*above|less\s*than|<=)\s*₦?\s*([\d,]+)/i))) args.maxAmount = num(m[1])
+          if ((m = rawText.match(/(?:at\s*least|from|more\s*than|>=|above)\s*₦?\s*([\d,]+)/i))) args.minAmount = num(m[1])
+          if ((m = rawText.match(/between\s*₦?\s*([\d,]+)\s*(?:and|to)\s*₦?\s*([\d,]+)/i))) { args.minAmount = num(m[1]); args.maxAmount = num(m[2]) }
+
+          console.log('🛣️ PRE-ROUTED getDataPlans with:', args)
+          const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
+          await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
+          return String(out)
+        }
       }
     } catch {}
 
