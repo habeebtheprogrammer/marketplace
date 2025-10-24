@@ -20,6 +20,7 @@ exports.checkAuth = (req, res, next) => {
     req.lastName = data.lastName;
     req.userType = data.userType;
     req.email = data.email;
+    req.phoneNumber = data.phoneNumber;
     req.banned = data.banned;
     req.oneSignalId = oneSignalId
     console.log(data.banned, data.email)

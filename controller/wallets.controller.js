@@ -19,7 +19,7 @@ const Transactions = require("../model/transactions.model");
 const AppliedCoupon = require("../model/appliedCoupons.model");
 const Coupon = require("../model/coupons.model");
 const mongoose = require("mongoose");
-
+const { sendWhatsAppMessage } = require("../utils/whatsapp");
 // const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
 
 // Helper function to make authenticated requests to Monify API
@@ -414,6 +414,7 @@ exports.buyDataPlan = async (req, res, next) => {
 
     // Check wallet balance against final amount after discount
     var wallet = await walletsService.getWallets({ userId: req.userId });
+    const balanceBefore = wallet.totalDocs && wallet.docs[0] ? Number(wallet.docs[0].balance) : 0
     if (wallet.totalDocs === 0 || !wallet.docs[0] || wallet.docs[0].balance < finalAmount) {
       throw new Error("Insufficient balance. Please fund your wallet");
     }
@@ -423,6 +424,7 @@ exports.buyDataPlan = async (req, res, next) => {
       { userId: req.userId },
       { $inc: { balance: -finalAmount } }
     );
+    const balanceAfter = balanceBefore - finalAmount
 
     const ref = "Data_" + generateRandomNumber(11);
 
@@ -452,6 +454,12 @@ exports.buyDataPlan = async (req, res, next) => {
       network: plan.network,
       planType: plan.planType,
       dataAmount: convertToMegabytes(plan.planName),
+      planName: plan.planName,
+      vendor: req.body.plan.vendor,
+      phone: req.body.phone,
+      source: req.body.source === 'whatsapp' ? 'whatsapp' : 'website',
+      balanceBefore,
+      balanceAfter,
       status: "pending",
     };
     const transaction = await walletsService.saveTransactions(data);
@@ -522,6 +530,20 @@ exports.buyDataPlan = async (req, res, next) => {
               ],
               url: "gadgetsafrica://profile",
             });
+            if (req.body.source === 'whatsapp') {
+              try {
+                await sendWhatsAppMessage(process.env.WHATSAPP_PHONE_NUMBER_ID2, {
+                  messaging_product: 'whatsapp',
+                  to: req.body.wa_id,
+                  type: 'text',
+                  text: {
+                    body: `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.`
+                  }
+              })
+              } catch (error) {
+                console.log('Error sending WhatsApp message:', error);
+              }
+            }
           }
         } else {
           // Success case
@@ -572,6 +594,22 @@ exports.buyDataPlan = async (req, res, next) => {
           if(isValidPlan){
             await Coupon.markAsUsed(req.userId);
           }
+
+          // If WhatsApp source, send WhatsApp message here (placeholder; actual send function not shown)
+          if (req.body.source === 'whatsapp') {
+            try {
+              await sendWhatsAppMessage(process.env.WHATSAPP_PHONE_NUMBER_ID2, {
+                messaging_product: 'whatsapp',
+                to: req.body.wa_id,
+                type: 'text',
+                text: {
+                  body: `Congratulations ${req.firstName}! You have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25`
+                }
+              })
+            } catch (error) {
+              console.log('Error sending WhatsApp message:', error);
+            }
+          }
         }
       } catch (error) {
         console.log(error);
@@ -591,12 +629,30 @@ exports.buyDataPlan = async (req, res, next) => {
             status: "successful",
             type: "credit",
           });
+          console.log(req.body,'sendddding')
+          if (req.body.source === 'whatsapp') {
+            try {
+              await sendWhatsAppMessage(process.env.WHATSAPP_PHONE_NUMBER_ID2, {
+                messaging_product: 'whatsapp',
+                to: req.body.wa_id,
+                type: 'text',
+                text: {
+                  body: `Hi ${req.firstName}, we're currently experiencing some network challenges for ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.`
+                }
+              })
+            } catch (error) {
+              console.log('Error sending WhatsApp message:', error);
+            }
+          }
           sendNotification({
             headings: { en: `Network issues. Try another plan` },
             contents: {
-              en: `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.`,
+              en: `Hi ${req.firstName}, we're currently experiencing some network challenges for ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.`,
             },
-            include_subscription_ids: [req.oneSignalId, ...include_player_ids],
+            include_subscription_ids: [
+              req.oneSignalId,
+              ...include_player_ids,
+            ],
             url: "gadgetsafrica://profile",
           });
         }
@@ -701,6 +757,7 @@ exports.buyAirtime = async (req, res, next) => {
     
     // Check wallet balance
     const wallet = await walletsService.getWallets({ userId: req.userId });
+    const balanceBefore = wallet.totalDocs && wallet.docs[0] ? Number(wallet.docs[0].balance) : 0
     if (wallet.totalDocs === 0 || !wallet.docs[0] || wallet.docs[0].balance < parseInt(req.body.amount)) {
       return errorResponse(res, null, "Insufficient balance. Please fund your wallet", 400);
     }
@@ -710,6 +767,7 @@ exports.buyAirtime = async (req, res, next) => {
       { userId: req.userId },
       { $inc: { balance: -parseInt(req.body.amount) } }
     );
+    const balanceAfter = balanceBefore - parseInt(req.body.amount)
     
     const ref = `Airtime_${generateRandomNumber(11)}`;
     const data = {
@@ -719,6 +777,10 @@ exports.buyAirtime = async (req, res, next) => {
       narration: `Airtime topup to ${req.body.phone}`,
       currency: "NGN",
       type: "debit",
+      phone: req.body.phone,
+      source: req.body.source === 'whatsapp' ? 'whatsapp' : 'website',
+      balanceBefore,
+      balanceAfter,
       status: "successful",
     };
     
@@ -773,7 +835,7 @@ exports.buyAirtime = async (req, res, next) => {
           type: "credit",
         });
         
-        // Send failure notification
+        // Send failure notification (and WhatsApp if source)
         sendNotification({
           headings: { en: "Transaction Failed" },
           contents: {
@@ -782,13 +844,29 @@ exports.buyAirtime = async (req, res, next) => {
           include_subscription_ids: [req.oneSignalId, ...(includePlayerIds || [])],
           url: "gadgetsafrica://profile",
         });
+        if (req.body.source === 'whatsapp') {
+          try {
+            await sendWhatsAppMessage(process.env.WHATSAPP_PHONE_NUMBER_ID2, 
+              {
+                messaging_product: 'whatsapp',
+                to: req.body.wa_id,
+                type: 'text',
+                text: {
+                  body: `Hi ${req.firstName}, we couldn't process your airtime purchase. Your account has been refunded.`
+                }
+              }
+            )
+          } catch (error) {
+            console.log('Error sending WhatsApp message:', error);
+          }
+        }
         
         return errorResponse(res, null, "Transaction failed. Please try again later.", 400);
       }
       
       // If we get here, the transaction was successful
       successResponse(res, transaction);
-      // Send success notification
+      // Send success notification (and WhatsApp if source)
       sendNotification({
         headings: { en: "Payment Successful" },
         contents: {
@@ -797,6 +875,20 @@ exports.buyAirtime = async (req, res, next) => {
         include_subscription_ids: [req.oneSignalId, ...(includePlayerIds || [])],
         url: "gadgetsafrica://profile",
       });
+      if (req.body.source === 'whatsapp') {
+        try {
+          await sendWhatsAppMessage(process.env.WHATSAPP_PHONE_NUMBER_ID2, {
+            messaging_product: 'whatsapp',
+            to: req.body.wa_id,
+            type: 'text',
+            text: {
+              body: `Congratulations ${req.firstName}! You have successfully sent ₦${req.body.amount} airtime to ${req.body.phone}.`
+            }
+          })
+        } catch (error) {
+          console.log('Error sending WhatsApp message:', error);
+        }
+      }
       
     } catch (error) {
       console.error('Error processing airtime purchase:', error);

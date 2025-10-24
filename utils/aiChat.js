@@ -283,7 +283,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
           banned: user.banned,
         }))
 
-        const base = process.env.API_BASE_URL || 'http://localhost:8080'
+        const base = process.env.API_BASE_URL || 'http://localhost:4000/api'
         const resp = await fetch(`${base}/wallets`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -816,7 +816,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
       if (!args?.confirm) {
         const isOwnPhone = !args?.phone // If no phone was provided, it's their own phone
         const phoneLabel = isOwnPhone ? 'your phone' : phoneNumber
-        return `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel} (${phoneNumber}).\nReply: confirm purchaseData to proceed.`
+        return `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel} (${phoneNumber}).\nPlease reply with 'yes' to confirm.`
       }
       try {
         // Create minimal JWT from user to satisfy checkAuth middleware
@@ -847,11 +847,13 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
           plan: {
             planId: String(args.planId),
             vendor: String(args.vendor),
-            network: normalizedNetwork,
+            network: String(network).toUpperCase(),
             planType: String(args.planType).toUpperCase(),
-            amount: Number(args.amount)
+            amount: Number(args.amount),
           },
-          phone: String(normalizedPhone)
+          phone: String(phoneNumber),
+          source: 'whatsapp',
+          wa_id: contacts?.wa_id  
         }
 
         console.log('📱 DATA PURCHASE REQUEST:', {
@@ -862,7 +864,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
           timestamp: new Date().toISOString()
         })
 
-        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/wallets/buyDataPlan`, {
+        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:4000/api'}/wallets/buyDataPlan`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify(requestData)
@@ -951,7 +953,7 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
         const isOwnPhone = !args?.phone // If no phone was provided, it's their own phone
         const phoneLabel = isOwnPhone ? 'your phone' : phoneNumber
         return `You are about to buy airtime of ${formatMoney(args.amount)} for ${phoneLabel} (${phoneNumber}).
-Reply: confirm buyAirtime to proceed.`
+Are you sure you want to proceed?. Reply 'yes' to proceed..`
       }
       try {
         const user = await services.usersService.getUserById(userId)
@@ -967,18 +969,12 @@ Reply: confirm buyAirtime to proceed.`
 
         const requestData = {
           amount: Number(args.amount),
-          phone: String(phoneNumber)
+          phone: String(phoneNumber),
+          wa_id: contacts?.wa_id ,
+          source: 'whatsapp'
         }
 
-        console.log('📞 AIRTIME PURCHASE REQUEST:', {
-          userId: userId,
-          userPhone: phoneNumber,
-          userNetwork: detectNetwork(phoneNumber),
-          requestData: requestData,
-          timestamp: new Date().toISOString()
-        })
-
-        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:8080'}/wallets/buyAirtime`, {
+        const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:4000/api'}/wallets/buyAirtime`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify(requestData)

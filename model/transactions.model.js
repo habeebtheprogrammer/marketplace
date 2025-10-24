@@ -37,11 +37,20 @@ var transactionsSchema = mongoose.Schema({
   planType:{
     type: String,
   },
+  planName:{
+    type: String,
+  },
   network:{
     type: String,
   },
   dataAmount:{
     type: Number,
+  },
+  vendor:{
+    type: String,
+  },
+  phone:{
+    type: String,
   },
   destinationBankCode:{
     type: String,
@@ -67,6 +76,20 @@ var transactionsSchema = mongoose.Schema({
     required: [true, 'type is required'],
     enum: { values: ["debit", "credit"], message: '{VALUE} is not supported for type field.' },
     index: true
+  },
+  source: {
+    type: String,
+    enum: { values: ["whatsapp","website"], message: '{VALUE} is not supported for source field.' },
+    default: 'website',
+    index: true
+  },
+  balanceBefore: {
+    type: Number,
+    default: null
+  },
+  balanceAfter: {
+    type: Number,
+    default: null
   },
 }, 
 { timestamps: true }
