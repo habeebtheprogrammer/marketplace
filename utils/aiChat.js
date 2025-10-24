@@ -1253,18 +1253,21 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
         try {
           const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
           const pending = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
+          const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
+          const pendingNetwork = currentSession?.metadata?.get?.('pendingNetwork') || currentSession?.metadata?.pendingNetwork
           if (pending && pending.planId && pending.vendor) {
             const result = await executeTool('purchaseData', {
               planId: String(pending.planId),
               vendor: String(pending.vendor),
-              network: String(pending.network || ''),
+              network: String(pending.network || pendingNetwork || ''),
               planType: String(pending.planType || ''),
               amount: Number(pending.amount),
+              phone: pendingPhone ? String(pendingPhone) : undefined,
               confirm: true
             }, { userId, contacts, sessionId })
             await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, deviceId)
             // Clear pending
-            try { await chatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null }, userId, deviceId) } catch {}
+            try { await chatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null, 'metadata.pendingPhone': null, 'metadata.pendingNetwork': null }, userId, deviceId) } catch {}
             return String(result)
           }
         } catch {}
@@ -1301,10 +1304,26 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
         const hasPricePhrase = /(under|below|not\s*above|less\s*than|at\s*least|from|more\s*than|between|to|and|₦|ngn|\d{3,})/i.test(rawText)
         const mentionsPlanOrData = /(\bdata\b|\bplan\b)/i.test(lower)
 
+        // Try to extract a phone number from the prompt (Nigerian format). Normalize to 11-digit starting with 0
+        let extractedPhone = null
+        try {
+          const phoneCandidate = rawText.match(/(\+?234|0)\s?\d{3}\s?\d{3}\s?\d{4}/)
+          if (phoneCandidate) {
+            const digits = phoneCandidate[0].replace(/\D/g, '')
+            if (digits.startsWith('234') && digits.length === 13) extractedPhone = '0' + digits.slice(3)
+            else if (digits.length === 11 && digits.startsWith('0')) extractedPhone = digits
+          }
+        } catch {}
+
         if ((mentionsData || (mentionsPlanOrData && (sizeMatch || networkMatch || hasPricePhrase)))) {
           const args = {}
-          // Network
-          if (networkMatch) {
+          // Prefer network inferred from provided phone over text/WA
+          if (extractedPhone) {
+            const inferred = detectNetwork(extractedPhone)
+            if (inferred && inferred !== 'Unknown') args.network = inferred
+          }
+          // Network from text if not inferred by phone
+          if (!args.network && networkMatch) {
             const n = networkMatch[1].toUpperCase().replace(/\s+/g, '')
             args.network = n === '9MOBILE' ? '9MOBILE' : n
           }
@@ -1326,6 +1345,15 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
           if ((m = rawText.match(/between\s*₦?\s*([\d,]+)\s*(?:and|to)\s*₦?\s*([\d,]+)/i))) { args.minAmount = num(m[1]); args.maxAmount = num(m[2]) }
 
           console.log('🛣️ PRE-ROUTED getDataPlans with:', args)
+
+          // Persist pending phone/network for later purchase
+          try {
+            if (sessionId) await chatSessions.updateSession(String(sessionId), {
+              'metadata.pendingPhone': extractedPhone || null,
+              'metadata.pendingNetwork': args.network || null
+            }, userId, deviceId)
+          } catch {}
+
           const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
           await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
           return String(out)
