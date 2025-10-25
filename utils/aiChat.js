@@ -318,12 +318,14 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         const fmtBal = formatMoney(balance, currency)
        
         let msg = `*Account Summary*\n`
-        msg += `👤 Name: ${name || '—'}\n`
-        msg += `📧 Email: ${user.email || '—'}\n`
-        msg += `📱 Phones: ${phones}\n`
-        msg += `💰 Wallet: ${fmtBal}`
-        if (user.referralCode) msg += `\n🎁 Referral Code: ${user.referralCode}`
-        if (user.referrals) msg += `\n👥 Referrals: ${user.referrals}`
+        msg += `*Balance:* *${fmtBal}*\n\n`
+        msg += `Name: ${name || '—'}\n`
+        msg += `Email: ${user.email || '—'}\n`
+        msg += `Phones: ${phones}`
+       
+        if (user.referralCode) msg += `\nReferral Code: ${user.referralCode}`
+        if (user.referrals) msg += `\nReferrals: ${user.referrals}`
+       
         return msg
       } catch (e) {
         return `⚠️ Error fetching account: ${e.message}`
@@ -371,7 +373,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         const bal = formatMoney(Number(data?.balance || 0))
         const accounts = Array.isArray(data?.accounts) ? data.accounts : []
         if (accounts.length === 0) return `Your wallet balance is ${bal}. Funding account is not yet available. Please try again shortly.`
-        const lines = accounts.map((a, i) => `${i+1}. ${a.bankName}\n ${a.accountName}\n ${a.accountNumber}`)
+        const lines = accounts.map((a, i) => `*Bank*\n${a.bankName}\n*Acct number*\n${a.accountName}\n*Acct Name*\n${a.accountNumber}`)
         return `*Funding Account Details*\nBalance: ${bal}\n\n${lines.join('\n\n')}`
       } catch (e) {
         return `⚠️ Error fetching funding account: ${e.message}`
