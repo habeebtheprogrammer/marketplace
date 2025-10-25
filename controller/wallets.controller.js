@@ -589,6 +589,20 @@ exports.buyDataPlan = async (req, res, next) => {
               ],
               url: "gadgetsafrica://profile",
             });
+             if (req.body.source === 'whatsapp') {
+            try {
+              await sendWhatsAppMessage(process.env.WHATSAPP_PHONE_NUMBER_ID2, {
+                messaging_product: 'whatsapp',
+                to: req.body.wa_id,
+                type: 'text',
+                text: {
+                  body: `Congratulations ${req?.firstName} 🎉! You just earned ₦${bonus} cashback bonus. Refer a friend to join 360gadgetsafrica to earn more bonus.`,
+                }
+              })
+            } catch (error) {
+              console.log('Error sending WhatsApp message:', error);
+            }
+          }
           }
 
           if(isValidPlan){

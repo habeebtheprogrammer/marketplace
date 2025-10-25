@@ -355,7 +355,8 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
           userType: user.userType,
           email: user.email,
           banned: user.banned,
-          phoneNumber: user.phoneNumber,
+          phoneNumber: user.phoneNumber, 
+          oneSignalId: user.oneSignalId
         }))
         const base = process.env.API_BASE_URL || 'http://localhost:4000/api'
         const resp = await fetch(`${base}/wallets`, {
@@ -925,6 +926,11 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
       _id: user._id,
       userType: user.userType,
       banned: user.banned,
+      oneSignalId: user.oneSignalId,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phoneNumber: user.phoneNumber,
+    
     });
     const normalizedNetwork = String(network || '').toUpperCase();
     if (!ALLOWED_NETWORKS.includes(normalizedNetwork)) {
