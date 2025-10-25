@@ -1156,41 +1156,29 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
   if (!prompt) return 'Please provide a question.'
   const deviceId = null
   const session = await ensureSession(String(sessionId), userId, deviceId)
-  // Save user message in this session
   await chatSessions.addMessage(String(sessionId), { role: 'user', content: String(prompt) }, userId, deviceId)
-  // Build history from ALL active sessions for this user/device to maintain memory
+
+  // Build history from ALL active sessions
   let allMessages = []
   try {
     const pageSize = 50
     const list = await chatSessions.getUserSessions(userId, deviceId, { page: 1, limit: pageSize })
     const sessions = Array.isArray(list?.docs) ? list.docs : []
-    // Oldest to newest by updatedAt, then concatenate messages
-    const ordered = sessions.sort((a,b) => new Date(a.updatedAt) - new Date(b.updatedAt))
+    const ordered = sessions.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt))
     for (const s of ordered) {
-      if (Array.isArray(s.messages)) {
-        allMessages = allMessages.concat(s.messages)
-      }
+      if (Array.isArray(s.messages)) allMessages = allMessages.concat(s.messages)
     }
   } catch (e) {
-    // fallback to current session only
     allMessages = Array.isArray(session?.messages) ? session.messages : []
   }
-  // Trim history to last 40 messages to keep context tight
   const trimmed = allMessages.slice(-40)
   let history = toGeminiHistory(trimmed)
-  // Ensure history starts with a user message as required by Gemini
   if (history.length && history[0].role !== 'user') {
     const firstUserIdx = history.findIndex(h => h && h.role === 'user')
     history = firstUserIdx >= 0 ? history.slice(firstUserIdx) : []
   }
-  console.log('💬 CONVERSATION HISTORY:', {
-    userId: userId,
-    messageCount: allMessages.length,
-    lastMessages: allMessages.slice(-5), // Last 5 messages for context
-    currentPrompt: prompt,
-    timestamp: new Date().toISOString()
-  })
-  // Get user context for personalized system prompt
+
+  // Load user context
   let userContext = {}
   if (userId) {
     try {
@@ -1200,275 +1188,305 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
       const userPhone = waPhone || savedPhone
       const userNetwork = userPhone ? detectNetwork(userPhone) : undefined
       if (userPhone) {
-        userContext = {
-          userPhone,
-          userNetwork,
-          userName: contacts?.profile?.name || [user?.firstName, user?.lastName].filter(Boolean).join(' '),
-        }
-        console.log('👤 USER CONTEXT LOADED:', {
-          userId: userId,
-          userPhone: userPhone,
-          userNetwork: userNetwork,
-          userName: userContext.userName,
-          timestamp: new Date().toISOString()
-        })
+        userContext = { userPhone, userNetwork, userName: contacts?.profile?.name || [user?.firstName, user?.lastName].filter(Boolean).join(' ') }
       }
     } catch (e) {
       console.error('Error fetching user context:', e.message)
     }
   }
-  const modelName = DEFAULT_GEMINI_MODEL
+
   const model = genAI.getGenerativeModel({
-    model: modelName,
+    model: DEFAULT_GEMINI_MODEL,
     tools: toolDeclarations(),
     systemInstruction: getSystemPrompt(userContext),
   })
-  // Start chat with history and send message
   const chat = model.startChat({ history })
-  let text = 'I had trouble processing your request.'
-  try {
-    // Try to resolve selection from the last search only when the user clearly intends to select
-    if (sessionId) {
-      try {
-        const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
-        const ctx = currentSession?.metadata?.get?.('selectionContext') || currentSession?.metadata?.selectionContext
-        const isProductCtx = ctx === 'products'
-        const productList = currentSession?.metadata?.get?.('lastProductList') || currentSession?.metadata?.lastProductList
-        const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
-        const items = isProductCtx
-          ? ((productList && Array.isArray(productList.items)) ? productList.items : [])
-          : ((dataList && Array.isArray(dataList.items)) ? dataList.items : [])
-        if (items.length > 0) {
-          const raw = String(prompt).trim()
-          const lower = raw.toLowerCase()
-          // Detect explicit selection intent; avoid hijacking normal keyword queries (e.g., "hp 8th gen")
-          const selectionRegexes = [
-            /^(pick|choose|option|number|no|item)?\s*\d{1,2}(?:st|nd|rd|th)?[.!]?$/i,
-            /^(the\s+)?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)(\s+one)?[.!]?$/i
-          ]
-          const selectionIntent = selectionRegexes.some(r => r.test(raw))
-          if (!selectionIntent) {
-            // No clear selection intent; proceed to normal model handling
-            throw new Error('skip-selection')
-          }
-          // 1) Numeric selection anywhere in the phrase (supports 1st/2nd/11th, etc.)
-          let pickedIndex = -1
-          const numRegex = /(\d{1,2})(?:st|nd|rd|th)?/gi
-          let m
-          while ((m = numRegex.exec(raw)) !== null) {
-            const n = parseInt(m[1], 10)
-            const idx = n - 1
-            if (idx >= 0 && idx < items.length) { pickedIndex = idx; break }
-          }
-          // 2) No fuzzy matching here to avoid accidental stale picks; require numeric selection intent
-          if (pickedIndex >= 0) {
-            const chosen = items[pickedIndex]
-            if (isProductCtx && chosen?.id) {
-              // Build and send template card for the chosen product, then details text
-              try {
-                const phoneNumberId = contacts?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID2
-                const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
-                const priceLine = chosen.wasPrice ? `${formatMoney(chosen.price)} ~${formatMoney(chosen.wasPrice)}~` : `${formatMoney(chosen.price)}`
-                const updatedAt = chosen.updatedAt ? ` (updated ${new Date(chosen.updatedAt).toLocaleDateString('en-NG')})` : ''
-                const productUrl = (chosen.categorySlug && chosen.slug) ? `https://360gadgetsafrica.com/gadgets/${chosen.categorySlug}/${encodeURIComponent(chosen.slug)}` : ''
-                const desc = ''
-                if (phoneNumberId && toNumber) {
-                  const { sendProductTemplate } = require('./whatsappTemplates')
-                  await sendProductTemplate(phoneNumberId, toNumber, {
-                    title: chosen.title,
-                    description: desc,
-                    priceLine: `${priceLine}${updatedAt}`,
-                    imageUrl: chosen.image,
-                    productUrl
-                  })
+
+  // Handle "Retry" explicitly
+  const lowerPrompt = String(prompt).trim().toLowerCase()
+  if (lowerPrompt === 'retry') {
+    try {
+      const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+      let pendingPurchase = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
+
+      // Reconstruct last purchase from history if no valid pendingPurchase or expired
+      if (!pendingPurchase || hasPendingPurchaseExpired(pendingPurchase)) {
+        const messages = currentSession?.messages || []
+        console.log('Attempting to reconstruct purchase from history...', { messageCount: messages.length })
+        for (let i = messages.length - 1; i >= 0; i--) {
+          const msg = messages[i]
+          if (msg.role === 'assistant' && msg.content && typeof msg.content === 'string') {
+            // Enhanced regex to handle variations in confirmation messages
+            const match = msg.content.match(/You(?:'| a)re about to buy\s*(\w+)\s*(\w+)(?:\s*([\w\s]+))?\s*for\s*(?:₦?[\d,.]+)\s*to\s*([\w\s]+(?:\d+)?)/i)
+            if (match) {
+              const [, network, planType, planName, phone] = match
+              // Extract amount from the same message
+              const amountMatch = msg.content.match(/for\s*(?:₦?([\d,.]+))/i)
+              const amount = amountMatch ? Number(amountMatch[1].replace(/[^0-9.]/g, '')) : null
+              if (amount) {
+                pendingPurchase = {
+                  network: network.toUpperCase(),
+                  planType: planType.toUpperCase(),
+                  planName: planName ? planName.trim() : '',
+                  amount: amount,
+                  phone: phone.includes('your phone') ? null : phone.trim(),
+                  expiresAt: new Date(Date.now() + PENDING_PURCHASE_TIMEOUT_MS).toISOString(),
                 }
-              } catch {}
-              const details = await executeTool('getProductDetails', { id: chosen.id }, { userId, contacts, sessionId })
-              await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: details }, userId, deviceId)
-              return details
-            }
-            if (!isProductCtx && chosen) {
-              // Immediately proceed to purchase flow using the chosen plan
-              try {
-                // Save pending purchase details to session and prompt for explicit confirmation
-                if (sessionId) await chatSessions.updateSession(String(sessionId), {
-                  'metadata.pendingPurchase': {
-                    planId: String(chosen.planId),
-                    vendor: String(chosen.vendor),
-                    network: String(chosen.network),
-                    planType: String(chosen.planType),
-                    amount: Number(chosen.amount),
-                    planName: String(chosen.planName || ''),
-                    phone: currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone || null  // NEW: persist phone here too
+                console.log('Reconstructed purchase from history:', pendingPurchase)
+                // Fetch planId and vendor from lastDataList
+                const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
+                if (dataList && Array.isArray(dataList.items)) {
+                  const item = dataList.items.find(p =>
+                    p.network === pendingPurchase.network &&
+                    p.planType === pendingPurchase.planType &&
+                    p.planName === pendingPurchase.planName &&
+                    p.amount === pendingPurchase.amount
+                  )
+                  if (item) {
+                    pendingPurchase.planId = item.planId
+                    pendingPurchase.vendor = item.vendor
+                    console.log('Matched with lastDataList:', { planId: item.planId, vendor: item.vendor })
+                  } else {
+                    console.log('No exact match found in lastDataList, using partial data')
                   }
-                }, userId, deviceId)
-                const summary = `You're about to buy ${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')} for ${formatMoney(chosen.amount)} to ${currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone}. Is this correct? Reply 'yes' to proceed..`
-                await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
-                return summary
-              } catch (e) {
-                const fallback = 'I had trouble proceeding with that selection. Please confirm your network and the 11-digit phone number.'
-                await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, deviceId)
-                return fallback
+                }
+                break
               }
             }
           }
         }
-      } catch {}
-    }
-    // Heuristic pre-router for data plan queries: parse prompt and directly call getDataPlans
-    try {
-      const rawText = String(prompt || '')
-      const lower = rawText.toLowerCase()
-      // Handle confirm for pending data purchase
-      const isConfirm = /\b(confirm|yes|proceed|go ahead|ok)\b/i.test(lower)
-      if (isConfirm) {
-        try {
-          const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
-          const pending = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
-          const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
-          const pendingNetwork = currentSession?.metadata?.get?.('pendingNetwork') || currentSession?.metadata?.pendingNetwork
-          if (pending && pending.planId && pending.vendor) {
-            const result = await executeTool('purchaseData', {
-              planId: String(pending.planId),
-              vendor: String(pending.vendor),
-              network: String(pending.network || pendingNetwork || ''),
-              planType: String(pending.planType || ''),
-              amount: Number(pending.amount),
-              phone: pending.phone || (pendingPhone ? String(pendingPhone) : undefined),  // NEW: check pending.phone first
-              confirm: true
-            }, { userId, contacts, sessionId })
-            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, deviceId)
-            // Clear pending
-            try { await chatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null, 'metadata.pendingPhone': null, 'metadata.pendingNetwork': null }, userId, deviceId) } catch {}
-            return String(result)
+
+        // Fallback to lastDataList if history reconstruction fails
+        if (!pendingPurchase) {
+          const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
+          if (dataList && Array.isArray(dataList.items) && dataList.items.length > 0) {
+            const lastItem = dataList.items[dataList.items.length - 1]
+            pendingPurchase = {
+              planId: lastItem.planId,
+              vendor: lastItem.vendor,
+              network: lastItem.network,
+              planType: lastItem.planType,
+              amount: lastItem.amount,
+              planName: lastItem.planName || '',
+              phone: null, // Will use user's phone if not specified
+              expiresAt: new Date(Date.now() + PENDING_PURCHASE_TIMEOUT_MS).toISOString(),
+            }
+            console.log('Fallback to lastDataList:', pendingPurchase)
           }
-        } catch {}
-      }
-      // 0) Handle "last number/phone" intent for data purchases
-      const wantsLastNumber = /(last|previous)\s+(number|phone)/i.test(lower) && /(data|buy\s*data|purchase\s*data)/i.test(lower)
-      if (wantsLastNumber) {
-        try {
-          const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
-          const lastPhone = currentSession?.metadata?.get?.('lastDataPhone') || currentSession?.metadata?.lastDataPhone
-          const lastNet = currentSession?.metadata?.get?.('lastDataNetwork') || currentSession?.metadata?.lastDataNetwork
-          if (lastPhone) {
-            const netLabel = lastNet ? ` on ${lastNet}` : ''
-            const reply = `The last number you used for a data purchase was ${lastPhone}${netLabel}. Should I use it again?`
-            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
-            return reply
-          }
-        } catch {}
-        const ask = 'I don\'t yet have a previous data number for you. Please send the 11-digit phone number to use.'
-        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: ask }, userId, deviceId)
-        return ask
-      }
-      // 1) Exclude obvious product/device queries from data routing
-      const deviceKeywords = /(iphone|samsung|tecno|infinix|laptop|macbook|ipad|airpods|watch|accessor(y|ies))/i
-      if (deviceKeywords.test(lower)) {
-        // Let the model/tools handle product flow
-      } else {
-        // 2) Data routing with stricter conditions
-        const mentionsData = /(data\s*plan|dataplan|buy\s*data|top\s*up\s*data|purchase\s*data)\b/i.test(rawText)
-        const sizeMatch = rawText.match(/\b(\d+(?:\.[0-9]+)?)\s*(tb|gb|mb)\b/i)
-        const networkMatch = rawText.match(/\b(mtn|glo|airtel|9\s*mobile|9mobile)\b/i)
-        const hasPricePhrase = /(under|below|not\s*above|less\s*than|at\s*least|from|more\s*than|between|to|and|₦|ngn|\d{3,})/i.test(rawText)
-        const mentionsPlanOrData = /(data|plan|mb|gb|tb)/i.test(lower)  // Changed: substring test, added mb/gb/tb
-        // Try to extract a phone number from the prompt (Nigerian format). Normalize to 11-digit starting with 0
-        let extractedPhone = null
-        try {
-          const phoneCandidate = rawText.match(/(\+?234|0)[\s-]*\d{3}[\s-]*\d{3}[\s-]*\d{4}/)  // Added [\s-]* for dashes/spaces
-          if (phoneCandidate) {
-            const digits = phoneCandidate[0].replace(/\D/g, '')
-            if (digits.startsWith('234') && digits.length === 13) extractedPhone = '0' + digits.slice(3)
-            else if (digits.length === 11 && digits.startsWith('0')) extractedPhone = digits
-          }
-        } catch {}
-        if ((mentionsData || (mentionsPlanOrData && (sizeMatch || networkMatch || hasPricePhrase)))) {
-          const args = {}
-          // Prefer network inferred from provided phone over text/WA
-          if (extractedPhone) {
-            const inferred = detectNetwork(extractedPhone)
-            if (inferred && inferred !== 'Unknown') args.network = inferred
-          }
-          // Network from text if not inferred by phone
-          if (!args.network && networkMatch) {
-            const n = networkMatch[1].toUpperCase().replace(/\s+/g, '')
-            args.network = n === '9MOBILE' ? '9MOBILE' : n
-          }
-          // Size only when explicit
-          if (sizeMatch) {
-            const val = sizeMatch[1]
-            const unit = sizeMatch[2].toUpperCase()
-            args.planName = `${val}${unit}`
-          }
-          // Plan type
-          if (/\bsme\b/i.test(rawText)) args.planType = 'SME'
-          else if (/gift|gifting/i.test(rawText)) args.planType = 'GIFTING'
-          else if (/coop|corporate|cooperate/i.test(rawText)) args.planType = 'COOPERATE GIFTING'
-          // Amounts
-          const num = (s) => Number(String(s).replace(/[^0-9.]/g, ''))
-          let m
-          if ((m = rawText.match(/(?:under|below|not\s*above|less\s*than|<=)\s*₦?\s*([\d,]+)/i))) args.maxAmount = num(m[1])
-          if ((m = rawText.match(/(?:at\s*least|from|more\s*than|>=|above)\s*₦?\s*([\d,]+)/i))) args.minAmount = num(m[1])
-          if ((m = rawText.match(/between\s*₦?\s*([\d,]+)\s*(?:and|to)\s*₦?\s*([\d,]+)/i))) { args.minAmount = num(m[1]); args.maxAmount = num(m[2]) }
-          console.log('🛣️ PRE-ROUTED getDataPlans with:', args)
-          // Persist pending phone/network for later purchase
-          try {
-            if (sessionId) await chatSessions.updateSession(String(sessionId), {
-              'metadata.pendingPhone': extractedPhone || null,
-              'metadata.pendingNetwork': args.network || null
-            }, userId, deviceId)
-          } catch {}
-          const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
-          await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
-          return String(out)
         }
       }
-    } catch {}
+
+      if (pendingPurchase) {
+        const phone = pendingPurchase.phone || currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
+        const netWarning = (phone && detectNetwork(phone) !== pendingPurchase.network && detectNetwork(phone) !== 'Unknown')
+          ? `\nNote: Phone network (${detectNetwork(phone)}) may not match plan network (${pendingPurchase.network}). Proceed?`
+          : ''
+        // Save or update pendingPurchase
+        const newExpiresAt = new Date(Date.now() + PENDING_PURCHASE_TIMEOUT_MS).toISOString()
+        await chatSessions.updateSession(String(sessionId), {
+          'metadata.pendingPurchase': { ...pendingPurchase, expiresAt: newExpiresAt },
+        }, userId, deviceId)
+        const summary = `You're about to buy ${pendingPurchase.network} ${pendingPurchase.planType} ${pendingPurchase.planName || ''} for ${formatMoney(pendingPurchase.amount)} to ${phone || 'your phone'}.${netWarning}\nPlease reply with 'yes' to confirm.`
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
+        return summary
+      } else {
+        const reply = 'I couldn’t find a previous purchase to retry. Please select a new plan or provide details to buy again.'
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
+        return reply
+      }
+    } catch (e) {
+      console.error('Error handling retry:', e.message)
+      const reply = 'I had trouble retrying the purchase. Please select a new plan or provide details.'
+      await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
+      return reply
+    }
+  }
+
+  // Handle confirmation for pending purchase
+  const isConfirm = /\b(confirm|yes|proceed|go ahead|ok)\b/i.test(lowerPrompt)
+  if (isConfirm) {
+    try {
+      const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+      const pendingPurchase = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
+      const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
+      const pendingNetwork = currentSession?.metadata?.get?.('pendingNetwork') || currentSession?.metadata?.pendingNetwork
+      if (pendingPurchase) {
+        const result = await executeTool('purchaseData', {
+          planId: String(pendingPurchase.planId),
+          vendor: String(pendingPurchase.vendor),
+          network: String(pendingPurchase.network || pendingNetwork || ''),
+          planType: String(pendingPurchase.planType || ''),
+          amount: Number(pendingPurchase.amount),
+          phone: pendingPurchase.phone || (pendingPhone ? String(pendingPhone) : undefined),
+          confirm: true
+        }, { userId, contacts, sessionId })
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, deviceId)
+        await chatSessions.updateSession(String(sessionId), {
+          'metadata.pendingPurchase': null,
+          'metadata.pendingPhone': null,
+          'metadata.pendingNetwork': null,
+          'metadata.pendingAmount': null
+        }, userId, deviceId)
+        return String(result)
+      } else {
+        const reply = 'No pending purchase found. Please select a plan to buy.'
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
+        return reply
+      }
+    } catch (e) {
+      console.error('Error processing confirmation:', e.message)
+      const reply = 'I had trouble confirming the purchase. Please try again or select a new plan.'
+      await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
+      return reply
+    }
+  }
+
+  // Handle numeric selection for data or products
+  try {
+    const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+    const ctx = currentSession?.metadata?.get?.('selectionContext') || currentSession?.metadata?.selectionContext
+    const isProductCtx = ctx === 'products'
+    const productList = currentSession?.metadata?.get?.('lastProductList') || currentSession?.metadata?.lastProductList
+    const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
+    const items = isProductCtx ? (productList?.items || []) : (dataList?.items || [])
+    if (items.length > 0) {
+      const raw = String(prompt).trim()
+      const selectionRegexes = [
+        /^(pick|choose|option|number|no|item)?\s*\d{1,2}(?:st|nd|rd|th)?[.!]?$/i,
+        /^(the\s+)?(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)(\s+one)?[.!]?$/i
+      ]
+      const selectionIntent = selectionRegexes.some(r => r.test(raw))
+      if (selectionIntent) {
+        let pickedIndex = -1
+        const numRegex = /(\d{1,2})(?:st|nd|rd|th)?/gi
+        let m
+        while ((m = numRegex.exec(raw)) !== null) {
+          const n = parseInt(m[1], 10)
+          const idx = n - 1
+          if (idx >= 0 && idx < items.length) { pickedIndex = idx; break }
+        }
+        if (pickedIndex >= 0) {
+          const chosen = items[pickedIndex]
+          if (isProductCtx && chosen?.id) {
+            const priceLine = chosen.wasPrice ? `${formatMoney(chosen.price)} ~${formatMoney(chosen.wasPrice)}~` : `${formatMoney(chosen.price)}`
+            const updatedAt = chosen.updatedAt ? ` (updated ${new Date(chosen.updatedAt).toLocaleDateString('en-NG')})` : ''
+            const productUrl = (chosen.categorySlug && chosen.slug) ? `https://360gadgetsafrica.com/gadgets/${chosen.categorySlug}/${encodeURIComponent(chosen.slug)}` : ''
+            if (contacts?.phone_number_id && contacts?.wa_id) {
+              const { sendProductTemplate } = require('./whatsappTemplates')
+              await sendProductTemplate(contacts.phone_number_id, `+${contacts.wa_id}`, {
+                title: chosen.title,
+                description: '',
+                priceLine: `${priceLine}${updatedAt}`,
+                imageUrl: chosen.image,
+                productUrl
+              })
+            }
+            const details = await executeTool('getProductDetails', { id: chosen.id }, { userId, contacts, sessionId })
+            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: details }, userId, deviceId)
+            return details
+          }
+          if (!isProductCtx && chosen) {
+            const phone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
+            await chatSessions.updateSession(String(sessionId), {
+              'metadata.pendingPurchase': {
+                planId: String(chosen.planId),
+                vendor: String(chosen.vendor),
+                network: String(chosen.network),
+                planType: String(chosen.planType),
+                amount: Number(chosen.amount),
+                planName: String(chosen.planName || ''),
+                phone: phone || null,
+                expiresAt: new Date(Date.now() + PENDING_PURCHASE_TIMEOUT_MS).toISOString()
+              }
+            }, userId, deviceId)
+            const phoneLabel = phone ? phone : 'your phone'
+            const summary = `You're about to buy ${chosen.network} ${chosen.planType} ${chosen.planName || ''} for ${formatMoney(chosen.amount)} to ${phoneLabel}. Is this correct? Reply 'yes' to proceed.`
+            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
+            return summary
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Error handling selection:', e.message)
+  }
+
+  // Heuristic pre-router for data plan queries (skip if pendingPurchase exists)
+  const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+  const pendingPurchase = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
+  if (!pendingPurchase) {
+    const rawText = String(prompt)
+    const lower = rawText.toLowerCase()
+    const deviceKeywords = /(iphone|samsung|tecno|infinix|laptop|macbook|ipad|airpods|watch|accessor(y|ies))/i
+    if (!deviceKeywords.test(lower)) {
+      const mentionsData = /(data\s*plan|dataplan|buy\s*data|top\s*up\s*data|purchase\s*data)\b/i.test(rawText)
+      const sizeMatch = rawText.match(/\b(\d+(?:\.[0-9]+)?)\s*(tb|gb|mb)\b/i)
+      const networkMatch = rawText.match(/\b(mtn|glo|airtel|9\s*mobile|9mobile)\b/i)
+      const hasPricePhrase = /(under|below|not\s*above|less\s*than|at\s*least|from|more\s*than|between|to|and|₦|ngn|\d{3,})/i.test(rawText)
+      const mentionsPlanOrData = /(data|plan|mb|gb|tb)/i.test(lower)
+      let extractedPhone = null
+      try {
+        const phoneCandidate = rawText.match(/(\+?234|0)[\s-]*\d{3}[\s-]*\d{3}[\s-]*\d{4}/)
+        if (phoneCandidate) {
+          const digits = phoneCandidate[0].replace(/\D/g, '')
+          if (digits.startsWith('234') && digits.length === 13) extractedPhone = '0' + digits.slice(3)
+          else if (digits.length === 11 && digits.startsWith('0')) extractedPhone = digits
+        }
+      } catch {}
+      if ((mentionsData || (mentionsPlanOrData && (sizeMatch || networkMatch || hasPricePhrase)))) {
+        const args = {}
+        if (extractedPhone) {
+          const inferred = detectNetwork(extractedPhone)
+          if (inferred && inferred !== 'Unknown') args.network = inferred
+        }
+        if (!args.network && networkMatch) {
+          const n = networkMatch[1].toUpperCase().replace(/\s+/g, '')
+          args.network = n === '9MOBILE' ? '9MOBILE' : n
+        }
+        if (sizeMatch) args.planName = `${sizeMatch[1]}${sizeMatch[2].toUpperCase()}`
+        if (/\bsme\b/i.test(rawText)) args.planType = 'SME'
+        else if (/gift|gifting/i.test(rawText)) args.planType = 'GIFTING'
+        else if (/coop|corporate|cooperate/i.test(rawText)) args.planType = 'COOPERATE GIFTING'
+        const num = (s) => Number(String(s).replace(/[^0-9.]/g, ''))
+        let m
+        if ((m = rawText.match(/(?:under|below|not\s*above|less\s*than|<=)\s*₦?\s*([\d,]+)/i))) args.maxAmount = num(m[1])
+        if ((m = rawText.match(/(?:at\s*least|from|more\s*than|>=|above)\s*₦?\s*([\d,]+)/i))) args.minAmount = num(m[1])
+        if ((m = rawText.match(/between\s*₦?\s*([\d,]+)\s*(?:and|to)\s*₦?\s*([\d,]+)/i))) {
+          args.minAmount = num(m[1])
+          args.maxAmount = num(m[2])
+        }
+        try {
+          if (sessionId) await chatSessions.updateSession(String(sessionId), {
+            'metadata.pendingPhone': extractedPhone || null,
+            'metadata.pendingNetwork': args.network || null
+          }, userId, deviceId)
+        } catch {}
+        const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
+        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
+        return String(out)
+      }
+    }
+  }
+
+  // Default AI processing
+  let text = 'I had trouble processing your request.'
+  try {
     const result = await chat.sendMessage(prompt)
     const calls = extractFunctionCalls(result)
-   
-    console.log('🤖 AI FUNCTION CALLS:', {
-      prompt: prompt,
-      calls: calls,
-      userId: userId,
-      timestamp: new Date().toISOString()
-    })
-   
     if (calls.length > 0) {
       const outputs = []
       for (const c of calls) {
-        const { name, args } = c
-        try {
-          const out = await executeTool(name, args, { userId, contacts, sessionId })
-          outputs.push(typeof out === 'string' ? out : (out?.error ? `⚠️ ${out.error}` : String(out)))
-        } catch (e) {
-          console.log('❌ TOOL EXECUTION ERROR:', {
-            toolName: name,
-            args: args,
-            error: e.message,
-            stack: e.stack,
-            userId: userId,
-            timestamp: new Date().toISOString()
-          })
-          outputs.push(`⚠️ ${e.message}`)
-        }
+        const out = await executeTool(c.name, c.args, { userId, contacts, sessionId })
+        outputs.push(typeof out === 'string' ? out : (out?.error ? `⚠️ ${out.error}` : String(out)))
       }
       text = outputs.length === 1 ? outputs[0] : outputs.map((o, i) => `(${i+1}) ${o}`).join('\n')
     } else {
       text = String(result?.response?.text?.() || await result?.response?.text() || '') || 'I had trouble processing your request.'
     }
   } catch (e) {
-    console.log('❌ AI CHAT ERROR:', {
-      error: e.message,
-      stack: e.stack,
-      userId: userId,
-      prompt: prompt,
-      timestamp: new Date().toISOString()
-    })
+    console.error('AI CHAT ERROR:', { error: e.message, stack: e.stack, userId, prompt, timestamp: new Date().toISOString() })
     text = 'I had trouble processing your request.'
   }
-  // Save assistant message
   await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: text }, userId, deviceId)
   return text
 }
