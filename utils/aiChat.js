@@ -373,8 +373,8 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         const bal = formatMoney(Number(data?.balance || 0))
         const accounts = Array.isArray(data?.accounts) ? data.accounts : []
         if (accounts.length === 0) return `Your wallet balance is ${bal}. Funding account is not yet available. Please try again shortly.`
-        const lines = accounts.map((a, i) => `*Bank*\n${a.bankName}\n*Acct number*\n${a.accountName}\n*Acct Name*\n${a.accountNumber}`)
-        return `*Funding Account Details*\nBalance: ${bal}\n\n${lines.join('\n\n')}`
+        const lines = accounts.map((a, i) => `\n*${a.accountName}*\n*${a.accountNumber}*\n*${a.bankName}*`)
+        return `To fund your wallet, kindly send any amount to your virtual account below:\n\n${lines.join('\n\n')} \n\n📌 Please pin this chat to easily access your account details.`
       } catch (e) {
         return `⚠️ Error fetching funding account: ${e.message}`
       }
@@ -960,7 +960,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
       userNetwork: normalizedNetwork,
       timestamp: nowIso(),
     });
-    const resp = await fetch(`${process.env.API_BASE_URL}/wallets/buyDataPlan`, {
+    const resp = await fetch(`${process.env.API_BASE_URL || 'http://localhost:4000/api'}/wallets/buyDataPlan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(requestData),

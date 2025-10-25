@@ -78,6 +78,47 @@ async function sendProductTemplate(phoneNumberId, toNumber, { title, description
   await sendWhatsAppMessage(phoneNumberId, templateMsg)
 }
 
+async function sendReceiptTemplate(phoneNumberId, toNumber, { ref, description, balance, imageUrl } = {}) {
+  const safeRef = sanitizeParam(ref, 120)
+  const safeDescription = sanitizeParam(description, 600)
+  const safeBalance = sanitizeParam(balance, 60)
+  const receiptImage = imageUrl || 'https://terra01.s3.amazonaws.com/images/receipt-1.jpg'
+
+  const to = String(toNumber || '').replace(/^\+/, '')
+  if (!to) return
+
+  const templateMsg = {
+    messaging_product: 'whatsapp',
+    to,
+    type: 'template',
+    template: {
+      name: 'transaction_successful',
+      language: { code: 'en_US' },
+      components: [
+        {
+          type: 'header',
+          parameters: [
+            {
+              type: 'image',
+              image: { link: receiptImage },
+            },
+          ],
+        },
+        {
+          type: 'body',
+          parameters: [
+            { type: 'text', text: safeDescription },
+            { type: 'text', text: safeRef },
+            { type: 'text', text: safeBalance },
+          ],
+        },
+      ],
+    },
+  }
+
+  await sendWhatsAppMessage(phoneNumberId, templateMsg)
+}
+
 async function sendTextMessage(phoneNumberId, toNumber, body) {
   const text = sanitizeParam(body, 4000)
   if (!text) return
@@ -90,6 +131,6 @@ async function sendTextMessage(phoneNumberId, toNumber, body) {
   await sendWhatsAppMessage(phoneNumberId, message)
 }
 
-module.exports = { sendProductTemplate, sendTextMessage }
+module.exports = { sendProductTemplate, sendReceiptTemplate, sendTextMessage }
 
 
