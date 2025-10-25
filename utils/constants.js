@@ -1,0 +1,27 @@
+const NETWORK_PREFIXES = {
+  MTN: ['0803', '0806', '0703', '0706', '0813', '0816', '0810', '0814', '0903', '0906', '0913', '0916', '07025', '07026', '0704'],
+  AIRTEL: ['0802', '0808', '0708', '0812', '0701', '0902', '0901', '0904', '0907', '0912'],
+  GLO: ['0805', '0807', '0705', '0815', '0811', '0905', '0915'],
+  '9MOBILE': ['0809', '0817', '0818', '0908', '0909'],
+}
+
+const ALLOWED_NETWORKS = Object.keys(NETWORK_PREFIXES)
+
+const CONFIRM_WORDS = ['yes', 'confirm', 'proceed', 'ok', 'okay', 'sure', 'yeah', 'yep', 'affirmative']
+
+const DEFAULT_PAGE_LIMIT = 10
+const DEFAULT_PRODUCT_TEMPLATE_LIMIT = 4
+const SESSION_HISTORY_LIMIT = 40
+const SESSION_FETCH_LIMIT = 1
+const PENDING_PURCHASE_TIMEOUT_MS = 5 * 60 * 1000 // 5 minutes
+
+module.exports = {
+  NETWORK_PREFIXES,
+  ALLOWED_NETWORKS,
+  CONFIRM_WORDS,
+  DEFAULT_PAGE_LIMIT,
+  DEFAULT_PRODUCT_TEMPLATE_LIMIT,
+  SESSION_HISTORY_LIMIT,
+  SESSION_FETCH_LIMIT,
+  PENDING_PURCHASE_TIMEOUT_MS,
+}

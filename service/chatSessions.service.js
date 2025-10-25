@@ -21,8 +21,16 @@ const buildUserQuery = (userId = null, deviceId = null) => {
 };
 
 exports.createSession = async (sessionData) => {
-  const session = new ChatSession(sessionData);
-  return await session.save();
+  const { sessionId, userId = null, deviceId = null, ...rest } = sessionData
+  const query = { sessionId }
+  if (userId) query.userId = userId
+  else if (deviceId) query.deviceId = deviceId
+
+  return await ChatSession.findOneAndUpdate(
+    query,
+    { $setOnInsert: { sessionId, userId, deviceId, ...rest }, $set: { isActive: true, updatedAt: new Date() } },
+    { new: true, upsert: true }
+  )
 };
 
 exports.getSession = async (sessionId, userId = null, deviceId = null) => {
