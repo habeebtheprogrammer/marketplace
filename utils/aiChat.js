@@ -12,6 +12,7 @@ const {
   SESSION_FETCH_LIMIT,
   PENDING_PURCHASE_TIMEOUT_MS,
 } = require('./constants')
+const { sendConfirmationTemplate } = require('./whatsappTemplates')
 const chatSessions = require('../service/chatSessions.service')
 const services = require('../service')
 const moment = require('moment')

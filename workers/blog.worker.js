@@ -97,7 +97,7 @@ class BlogWorker {
             console.log(`Sent email to ${user.email}`);
   
             // Delay 1 second before next send
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
   
           } catch (error) {
             console.error(`Error sending to ${user.email}:`, error);

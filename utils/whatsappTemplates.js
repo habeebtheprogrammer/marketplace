@@ -119,6 +119,36 @@ async function sendReceiptTemplate(phoneNumberId, toNumber, { ref, description, 
   await sendWhatsAppMessage(phoneNumberId, templateMsg)
 }
 
+async function sendConfirmationTemplate(phoneNumberId, toNumber, { text } = {}) {
+  const safeText = sanitizeParam(text, 600)
+
+  const to = String(toNumber || '').replace(/^[+]/, '')
+  if (!to || !safeText) return
+
+  const templateMsg = {
+    messaging_product: 'whatsapp',
+    to,
+    type: 'template',
+    template: {
+      name: 'confirmation',
+      language: { code: 'en_US' },
+      components: [
+        {
+          type: 'body',
+          parameters: [
+            {
+              type: 'text',
+              text: safeText,
+            },
+          ],
+        },
+      ],
+    },
+  }
+
+  await sendWhatsAppMessage(phoneNumberId, templateMsg)
+}
+
 async function sendTextMessage(phoneNumberId, toNumber, body) {
   const text = sanitizeParam(body, 4000)
   if (!text) return
@@ -131,6 +161,6 @@ async function sendTextMessage(phoneNumberId, toNumber, body) {
   await sendWhatsAppMessage(phoneNumberId, message)
 }
 
-module.exports = { sendProductTemplate, sendReceiptTemplate, sendTextMessage }
+module.exports = { sendProductTemplate, sendReceiptTemplate, sendConfirmationTemplate, sendTextMessage }
 
 
