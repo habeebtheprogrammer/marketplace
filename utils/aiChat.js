@@ -920,7 +920,17 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
     } catch (e) {
       console.error('Error updating session metadata:', e.message);
     }
-    return `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel}.${netWarning}\nPlease reply with 'yes' to confirm.`;
+    try {
+      const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
+      const toNumber = contacts?.wa_id  
+      if (phoneNumberId && toNumber) {
+        const text = `You are about to buy ${network} ${args.planType} (Plan ID ${args.planId}) for ${formatMoney(args.amount)} to ${phoneLabel}.${netWarning}\nReply 'Yes' to confirm.`
+        await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+      }
+    } catch (e) {
+      console.log('Failed to send WA confirmation template (data):', e?.message)
+    }
+    return '';
   }
   try {
     const user = await services.usersService.getUserById(userId);
@@ -1050,8 +1060,17 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
       if (!args?.confirm) {
         const isOwnPhone = !args?.phone // If no phone was provided, it's their own phone
         const phoneLabel = isOwnPhone ? 'your phone' : phoneNumber
-        return `You are about to buy airtime of ${formatMoney(args.amount)} for ${phoneLabel}.
-Are you sure you want to proceed?. Reply 'yes' to proceed..`
+        try {
+          const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
+          const toNumber = contacts?.wa_id  
+          if (phoneNumberId && toNumber) {
+            const text = `You are about to buy airtime of ${formatMoney(args.amount)} for ${phoneLabel}.\nReply 'Yes' to confirm.`
+            await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+          }
+        } catch (e) {
+          console.log('Failed to send WA confirmation template (airtime):', e?.message)
+        }
+        return ''
       }
       try {
         const user = await services.usersService.getUserById(userId)
@@ -1305,9 +1324,17 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                     phone: currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone || null  // NEW: persist phone here too
                   }
                 }, userId, deviceId)
-                const summary = `You're about to buy ${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')} for ${formatMoney(chosen.amount)} to ${currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone}. Is this correct? Reply 'yes' to proceed..`
-                await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: summary }, userId, deviceId)
-                return summary
+                try {
+                  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
+                  const toNumber = contacts?.wa_id  
+                  if (phoneNumberId && toNumber) {
+                    const text = `You're about to buy ${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')} for ${formatMoney(chosen.amount)} to ${currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone}. Reply 'Yes' to confirm.`
+                    await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+                  }
+                } catch (e) {
+                  console.log('Failed to send WA confirmation template (data selection):', e?.message)
+                }
+                return ''
               } catch (e) {
                 const fallback = 'I had trouble proceeding with that selection. Please confirm your network and the 11-digit phone number.'
                 await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, deviceId)
