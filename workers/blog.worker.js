@@ -86,7 +86,7 @@ class BlogWorker {
   
             // // Email
             // await sendEmail({
-            //   from: '"360gadgetsafrica" <support@360gadgetsafrica.com>',
+            //   from: '"360gadgetsafrica" <hello@360gadgetsafrica.com>',
             //   to: user.email,
             //   subject: posts.docs?.[0]?.excerpt || 
             //            `Daily Digest: ${posts.docs.length} New Blog ${posts.docs.length > 1 ? 'Posts' : 'Post'}`,
