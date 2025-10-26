@@ -18,12 +18,12 @@ function isUnwanted(email) {
 // Create a transporter object using the default SMTP transport
 const emailTransporter = nodemailer.createTransport({
   // service: "Outlook365",
- host:  process.env.SMTP4_HOST,
+ host:  process.env.SMTP2_HOST,
 port: 465,
 secure: true,
   auth: {
-    user:  process.env.SMTP4_USER, // generated ethereal user
-    pass:  process.env.SMTP4_PASSWORD, // generated ethereal password
+    user:  process.env.SMTP2_USER, // generated ethereal user
+    pass:  process.env.SMTP2_PASSWORD, // generated ethereal password
   },
 });
 
