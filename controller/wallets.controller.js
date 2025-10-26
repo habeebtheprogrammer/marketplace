@@ -891,6 +891,7 @@ exports.buyAirtime = async (req, res, next) => {
         include_subscription_ids: [req.oneSignalId, ...(includePlayerIds || [])],
         url: "gadgetsafrica://profile",
       });
+      console.log('sending receipt', req.body)
       if (req.body.source === 'whatsapp' && req.body.wa_id) {
         try {
           await sendReceiptTemplate(
@@ -900,7 +901,7 @@ exports.buyAirtime = async (req, res, next) => {
               ref: transaction.reference,
               description: `${net} airtime topup to ${req.body.phone}.`,
               balance: balanceAfter,
-            }
+            } 
           )
         } catch (error) {
           console.log('Error sending WhatsApp message:', error);
