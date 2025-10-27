@@ -13,7 +13,7 @@ const {
   PENDING_PURCHASE_TIMEOUT_MS,
 } = require('./constants')
 const { sendConfirmationTemplate } = require('./whatsappTemplates')
-const chatSessions = require('../service/chatSessions.service')
+const waChatSessions = require('../service/whatsappChatSessions.service')
 const services = require('../service')
 const moment = require('moment')
 const CONFIRM_WORD_SET = new Set(CONFIRM_WORDS.map(w => w.toLowerCase()))
@@ -126,23 +126,23 @@ function extractErrorMessage(data, fallback = 'Unknown error') {
   if (typeof data?.error === 'string') return data.error
   return fallback
 }
-async function updateSessionMetadata(sessionId, metadata, userId, deviceId) {
+async function updateSessionMetadata(sessionId, metadata, userId, waId) {
   if (!sessionId) return
   try {
-    await chatSessions.updateSession(String(sessionId), metadata, userId, deviceId)
+    await waChatSessions.updateSession(String(sessionId), metadata, userId, waId)
   } catch (error) {
     console.log('Failed to update session metadata', {
       sessionId,
       userId,
-      deviceId,
+      deviceId: waId,
       metadata,
       error: error?.message,
     })
   }
 }
-async function getConversationHistory(userId, deviceId, limit = SESSION_HISTORY_LIMIT) {
+async function getConversationHistory(userId, waId, limit = SESSION_HISTORY_LIMIT) {
   try {
-    const list = await chatSessions.getUserSessions(userId, deviceId, {
+    const list = await waChatSessions.getUserSessions(userId, waId, {
       page: 1,
       limit: SESSION_FETCH_LIMIT,
       sort: { updatedAt: -1 },
@@ -153,7 +153,7 @@ async function getConversationHistory(userId, deviceId, limit = SESSION_HISTORY_
   } catch (error) {
     console.warn('Failed to load conversation history', {
       userId,
-      deviceId,
+      deviceId: waId,
       error: error?.message,
     })
     return []
@@ -544,7 +544,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
               minPrice: args?.minPrice ?? null,
               maxPrice: args?.maxPrice ?? null
             }
-          }, userId, null)
+          }, userId, contacts?.wa_id)
         } catch {}
         // Send top 4 results as WhatsApp template messages
         try {
@@ -808,7 +808,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
           if (sessionId) await updateSessionMetadata(String(sessionId), {
             'metadata.selectionContext': 'data',
             'metadata.lastDataList': { items: compact, savedAt: nowIso(), page, limit }
-          }, userId, null)
+          }, userId, contacts?.wa_id)
         } catch {}
         const networkLabel = effectiveNetwork ? ` (${effectiveNetwork})` : ''
         return `*Data Plans${titleHint}${networkLabel}* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan.`
@@ -827,7 +827,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
   let pendingNetwork = null;
   try {
     if (sessionId) {
-      const currentSession = await chatSessions.getSession(String(sessionId), userId, null);
+      const currentSession = await waChatSessions.getSession(String(sessionId), userId, contacts?.wa_id || null);
       pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone || null;
       pendingNetwork = currentSession?.metadata?.get?.('pendingNetwork') || currentSession?.metadata?.pendingNetwork || null;
       if (!args?.planId) {
@@ -873,7 +873,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
   // Try to extract plan from lastDataList if selection index provided
   if (missing.length && sessionId && /^\d{1,2}$/.test(String(args?.selection || ''))) {
     try {
-      const currentSession = await chatSessions.getSession(String(sessionId), userId, null);
+      const currentSession = await waChatSessions.getSession(String(sessionId), userId, contacts?.wa_id || null);
       const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList;
       const idx = parseInt(String(args.selection), 10) - 1;
       const chosen = dataList && Array.isArray(dataList.items) ? dataList.items[idx] : null;
@@ -903,7 +903,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
     const netWarning = (detectedNet && detectedNet !== network && detectedNet !== 'Unknown') ? `\nNote: Phone network (${detectedNet}) may not match plan network (${network}). Proceed?` : ''
     try {
       if (sessionId) {
-        await chatSessions.updateSession(String(sessionId), {
+        await waChatSessions.updateSession(String(sessionId), {
           'metadata.pendingPhone': displayPhone || null,
           'metadata.pendingNetwork': network || null,
           'metadata.pendingPurchase': {
@@ -915,7 +915,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
             expiresAt: new Date(Date.now() + PENDING_PURCHASE_TIMEOUT_MS).toISOString(),
           },
           'metadata.pendingAmount': Number(args.amount) || null,
-        }, userId, null);
+        }, userId, contacts?.wa_id || null);
       }
     } catch (e) {
       console.error('Error updating session metadata:', e.message);
@@ -953,6 +953,14 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
     if (!normalizedPhone) {
       return 'Please send the 11-digit phone number to receive the data (e.g., 08031234567).';
     }
+    // Idempotency guard: prevent immediate duplicate confirms for same purchase
+    try {
+      const confirmHash = ['data', normalizedNetwork, normalizedPhone, String(args.planId), String(args.planType), String(args.vendor), String(args.amount)].join('|')
+      const { duplicate } = await waChatSessions.checkAndStampConfirm(String(sessionId), confirmHash, 10000, userId, contacts?.wa_id || null)
+      if (duplicate) {
+        return ''
+      }
+    } catch {}
     const requestData = {
       plan: {
         planId: String(args.planId),
@@ -1006,7 +1014,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
           'metadata.pendingNetwork': null,
           'metadata.pendingPurchase': null,
           'metadata.pendingAmount': null,
-        }, userId, null);
+        }, userId, contacts?.wa_id || null);
       }
     } catch (e) {
       console.error('Error updating session metadata:', e.message);
@@ -1072,6 +1080,15 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
         }
         return ''
       }
+      // Idempotency guard to avoid accidental duplicate airtime purchases on rapid double-confirm
+      try {
+        const normalizedPhone = isValidNigerianPhone(phoneNumber) ? sanitizePhone(phoneNumber) : String(phoneNumber)
+        const confirmHash = ['airtime', normalizedPhone, String(args.amount)].join('|')
+        const { duplicate } = await waChatSessions.checkAndStampConfirm(String(sessionId), confirmHash, 10000, userId, contacts?.wa_id || null)
+        if (duplicate) {
+          return ''
+        }
+      } catch {}
       try {
         const user = await services.usersService.getUserById(userId)
         if (!user) return '⚠️ User not found.'
@@ -1156,35 +1173,36 @@ function extractFunctionCalls(result) {
     return []
   }
 }
-async function ensureSession(sessionId, userId = null, deviceId = null) {
-  let session = await chatSessions.getSession(sessionId, userId, deviceId)
+async function ensureSession(sessionId, userId = null, waId = null) {
+  let session = await waChatSessions.getSession(sessionId, userId, waId)
   if (!session) {
     try {
-      session = await chatSessions.createSession({
+      session = await waChatSessions.createSession({
         sessionId,
         ...(userId ? { userId } : {}),
-        ...(deviceId ? { deviceId } : {}),
+        ...(waId ? { waId, phoneNumberId: (process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID) } : {}),
         isActive: true,
         messages: [],
       })
     } catch (e) {
       // Another process may have created it; try fetch again
-      session = await chatSessions.getSession(sessionId, userId, deviceId)
+      session = await waChatSessions.getSession(sessionId, userId, waId)
     }
   }
   return session
 }
 async function processAIChat(prompt, sessionId, userId = null, contacts) {
   if (!prompt) return 'Please provide a question.'
-  const deviceId = null
-  const session = await ensureSession(String(sessionId), userId, deviceId)
+  const waId = contacts?.wa_id || null
+  console.log(waId, userId, 'asdfasdf sadf')
+  const session = await ensureSession(String(sessionId), userId, waId)
   // Save user message in this session
-  await chatSessions.addMessage(String(sessionId), { role: 'user', content: String(prompt) }, userId, deviceId)
+  await waChatSessions.addMessage(String(sessionId), { role: 'user', content: String(prompt) }, userId, waId)
   // Build history from ALL active sessions for this user/device to maintain memory
   let allMessages = []
   try {
     const pageSize = 50
-    const list = await chatSessions.getUserSessions(userId, deviceId, { page: 1, limit: pageSize })
+    const list = await waChatSessions.getUserSessions(userId, waId, { page: 1, limit: pageSize })
     const sessions = Array.isArray(list?.docs) ? list.docs : []
     // Oldest to newest by updatedAt, then concatenate messages
     const ordered = sessions.sort((a,b) => new Date(a.updatedAt) - new Date(b.updatedAt))
@@ -1252,7 +1270,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
     // Try to resolve selection from the last search only when the user clearly intends to select
     if (sessionId) {
       try {
-        const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+        const currentSession = await waChatSessions.getSession(String(sessionId), userId, waId)
         const ctx = currentSession?.metadata?.get?.('selectionContext') || currentSession?.metadata?.selectionContext
         const isProductCtx = ctx === 'products'
         const productList = currentSession?.metadata?.get?.('lastProductList') || currentSession?.metadata?.lastProductList
@@ -1306,14 +1324,14 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                 }
               } catch {}
               const details = await executeTool('getProductDetails', { id: chosen.id }, { userId, contacts, sessionId })
-              await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: details }, userId, deviceId)
+              await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: details }, userId, waId)
               return details
             }
             if (!isProductCtx && chosen) {
               // Immediately proceed to purchase flow using the chosen plan
               try {
                 // Save pending purchase details to session and prompt for explicit confirmation
-                if (sessionId) await chatSessions.updateSession(String(sessionId), {
+                if (sessionId) await waChatSessions.updateSession(String(sessionId), {
                   'metadata.pendingPurchase': {
                     planId: String(chosen.planId),
                     vendor: String(chosen.vendor),
@@ -1323,7 +1341,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                     planName: String(chosen.planName || ''),
                     phone: currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone || null  // NEW: persist phone here too
                   }
-                }, userId, deviceId)
+                }, userId, waId)
                 try {
                   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
                   const toNumber = contacts?.wa_id  
@@ -1337,7 +1355,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                 return ''
               } catch (e) {
                 const fallback = 'I had trouble proceeding with that selection. Please confirm your network and the 11-digit phone number.'
-                await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, deviceId)
+                await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, waId)
                 return fallback
               }
             }
@@ -1353,7 +1371,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
       const isConfirm = /\b(confirm|yes|proceed|go ahead|ok)\b/i.test(lower)
       if (isConfirm) {
         try {
-          const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+          const currentSession = await waChatSessions.getSession(String(sessionId), userId, waId)
           const pending = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
           const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
           const pendingNetwork = currentSession?.metadata?.get?.('pendingNetwork') || currentSession?.metadata?.pendingNetwork
@@ -1367,9 +1385,9 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
               phone: pending.phone || (pendingPhone ? String(pendingPhone) : undefined),  // NEW: check pending.phone first
               confirm: true
             }, { userId, contacts, sessionId })
-            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, deviceId)
+            await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
             // Clear pending
-            try { await chatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null, 'metadata.pendingPhone': null, 'metadata.pendingNetwork': null }, userId, deviceId) } catch {}
+            try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null, 'metadata.pendingPhone': null, 'metadata.pendingNetwork': null }, userId, waId) } catch {}
             return String(result)
           }
         } catch {}
@@ -1378,18 +1396,18 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
       const wantsLastNumber = /(last|previous)\s+(number|phone)/i.test(lower) && /(data|buy\s*data|purchase\s*data)/i.test(lower)
       if (wantsLastNumber) {
         try {
-          const currentSession = await chatSessions.getSession(String(sessionId), userId, deviceId)
+          const currentSession = await waChatSessions.getSession(String(sessionId), userId, waId)
           const lastPhone = currentSession?.metadata?.get?.('lastDataPhone') || currentSession?.metadata?.lastDataPhone
           const lastNet = currentSession?.metadata?.get?.('lastDataNetwork') || currentSession?.metadata?.lastDataNetwork
           if (lastPhone) {
             const netLabel = lastNet ? ` on ${lastNet}` : ''
             const reply = `The last number you used for a data purchase was ${lastPhone}${netLabel}. Should I use it again?`
-            await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, deviceId)
+            await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: reply }, userId, waId)
             return reply
           }
         } catch {}
         const ask = 'I don\'t yet have a previous data number for you. Please send the 11-digit phone number to use.'
-        await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: ask }, userId, deviceId)
+        await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: ask }, userId, waId)
         return ask
       }
       // 1) Exclude obvious product/device queries from data routing
@@ -1444,13 +1462,13 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
           console.log('🛣️ PRE-ROUTED getDataPlans with:', args)
           // Persist pending phone/network for later purchase
           try {
-            if (sessionId) await chatSessions.updateSession(String(sessionId), {
+            if (sessionId) await waChatSessions.updateSession(String(sessionId), {
               'metadata.pendingPhone': extractedPhone || null,
               'metadata.pendingNetwork': args.network || null
-            }, userId, deviceId)
+            }, userId, waId)
           } catch {}
           const out = await executeTool('getDataPlans', args, { userId, contacts, sessionId })
-          await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, deviceId)
+          await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(out) }, userId, waId)
           return String(out)
         }
       }
@@ -1499,7 +1517,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
     text = 'I had trouble processing your request.'
   }
   // Save assistant message
-  await chatSessions.addMessage(String(sessionId), { role: 'assistant', content: text }, userId, deviceId)
+  await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: text }, userId, waId)
   return text
 }
 module.exports = { processAIChat }
