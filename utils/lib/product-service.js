@@ -26,19 +26,23 @@ function calculateOriginalPrice(cp) {
 }
 
 // Function to calculate the discounted selling price
-function calculateDiscountedPrice(cp) {
-  return cp
-  // if (cp < 10000) {
-  //   return cp + 1000
-  // } else if (cp >= 10000 && cp < 100000) {
-  //   return cp + 5000
-  // } else if (cp >= 100000 && cp <= 1500000) {
-  //   let profit = cp * 0.04 // 4%
-  //   profit = Math.min(Math.max(profit, 5000), 50000) // clamp between 5k and 50k
-  //   return cp + profit
-  // } else {
-  //   return cp + 50000 // flat max profit
-  // }
+function calculateDiscountedPrice(cp, vendorId) {
+  // Only apply discount for specific vendor ID, otherwise return cost price
+  if (vendorId !== '65afa65efcb2e4a192d771db') {
+    return cp;
+  }
+  
+  if (cp < 10000) {
+    return cp + 1000
+  } else if (cp >= 10000 && cp < 100000) {
+    return cp + 3000
+  } else if (cp >= 100000 && cp <= 1500000) {
+    let profit = cp * 0.01 // 1%
+    profit = Math.min(Math.max(profit, 5000), 8000) // clamp between 5k and 8k
+    return cp + profit
+  } else {
+    return cp + 8000 // flat max profit
+  }
 }
 
 // Function to send a reaction to a WhatsApp message
@@ -254,7 +258,7 @@ async function processProductMessage(
           const updated = await updateProduct({
             _id: bestMatch.product._id, 
             original_price: calculateOriginalPrice(costPrice),
-            discounted_price: calculateDiscountedPrice(costPrice),
+            discounted_price: calculateDiscountedPrice(costPrice, vendorId),
             priceUpdatedAt: new Date(),
             updatedAt: new Date().toISOString(), 
             // Optionally refresh description/video if provided
@@ -279,7 +283,7 @@ async function processProductMessage(
         title: productAnalysis.name,
         slug: generateSlug(productAnalysis.name),
         original_price: calculateOriginalPrice(costPrice),
-        discounted_price: calculateDiscountedPrice(costPrice),
+        discounted_price: calculateDiscountedPrice(costPrice, vendorId),
         description: fullDescription,
         images: serverImageUrl ? [serverImageUrl] : [],
         categoryId: categoryId,
@@ -322,7 +326,7 @@ async function processProductMessage(
       productAnalyses.slice(0, productsCreatedCount).forEach((product, index) => {
         successMessage += `${index + 1}. ${product.name}\n`
         successMessage += `   💰 Original: ₦${calculateOriginalPrice(product.price || 0).toLocaleString()}\n`
-        successMessage += `   🏷️ Discounted: ₦${calculateDiscountedPrice(product.price || 0).toLocaleString()}\n\n`
+        successMessage += `   🏷️ Discounted: ₦${calculateDiscountedPrice(product.price || 0, vendorId).toLocaleString()}\n\n`
       })
 
       await sendWhatsAppMessage(fromNumber, successMessage)

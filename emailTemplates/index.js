@@ -1340,12 +1340,7 @@ ul.social {
           <table role="presentation" class="container" width="600" cellspacing="0" cellpadding="0" style="max-width:600px; background-color:#ffffff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
             
             <!-- Header -->
-            <tr>
-              <td align="center" style="padding:30px 30px 10px;">
-                <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1735744097/360/zpibebpd5dopnxvttltd.png" alt="360 Gadgets Africa" width="60" style="display:block; margin-bottom:12px;">
-                <h1 style="margin:0; font-size:24px; font-weight:700; color:#292929;">360 Gadgets Africa</h1>
-              </td>
-            </tr>
+           
   
             <!-- Divider -->
             <tr>
@@ -1406,37 +1401,9 @@ ul.social {
             </tr>
   
             <!-- Store Links -->
-            <tr>
-              <td valign="middle" width="100%" style="padding: 20px 30px 0px; border-top: 1px solid #e0e0e0; background-color: #f8f9fa; text-align:center;">
-                <ul style="padding: 0; margin: 0; list-style:none;">
-                  <li style="display: inline-block; margin-right: 10px;">
-                    <a href="https://apps.apple.com/app/360gadgetsafrica/id6736353137?platform=iphone" target="_blank">
-                      <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1731154161/ntsv2brfd8lboncvjavk.png" alt="App Store" style="width: 100px;" />
-                    </a>
-                  </li>
-                  <li style="display: inline-block;">
-                    <a href="https://play.google.com/store/apps/details?id=com.gadgetsafrica.gadgetsafrica" target="_blank">
-                      <img src="https://res.cloudinary.com/dnltxw2jt/image/upload/v1731153650/ibfyv6toskeeikywuuv5.webp" alt="Google Play" style="width: 100px;" />
-                    </a>
-                  </li>
-                </ul>
-              </td>
-            </tr>
+        
   
-            <!-- Footer -->
-            <tr>
-              <td style="padding: 20px 30px;background-color: #f8f9fa; text-align:center;">
-                <p style="margin: 0 0 15px; font-size: 12px; color: #999999;">
-                  © 2025 Team 360 Ventures RC 7927753. All rights reserved.
-                </p>
-                <p style="margin: 0; font-size: 12px; color: #999999;">
-                  No longer want to receive these emails? 
-                  <a href="https://360gadgetsafrica.com/unsubscribe" style="color: rgba(0,0,0,.8); text-decoration: underline;">
-                    Unsubscribe here
-                  </a>
-                </p>
-              </td>
-            </tr>
+          
   
           </table>
         </td>
