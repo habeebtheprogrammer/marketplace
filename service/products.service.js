@@ -11,7 +11,7 @@ exports.getProducts = async ({ query = {}, options = {} }) => {
       },
       {
         path: "vendorId",
-        select: ["title", "phone", "videos", "address","regNum"],
+        select: ["title", "phone", "videos", "address","regNum", 'image'],
       },
       {
         path: "comments.creatorId",
@@ -70,7 +70,7 @@ exports.getProductById = async (id) => {
     },
     {
       path: "vendorId",
-      select: ["title", "phone", "videos", "address","regNum"],
+      select: ["title", "phone", "videos", "address","regNum", 'image'],
     },
   ]);
   if (!data) {
