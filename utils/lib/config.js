@@ -17,7 +17,7 @@
     phone: "+2349076087744"
   },
   {
-    vendorId: "690241f550cb0546b7d882c4",
+    vendorId: "690081fbee8d1a8c5bbcf6ab",
     phone: "+2348142079360"
   }
   
