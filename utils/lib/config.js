@@ -5,6 +5,10 @@
     phone: "+2347069568209",
   },
   {
+    vendorId: "66927af6eb322a27f7c6902c",
+    phone: "+2348181362484",
+  },
+  {
     vendorId: "65afa65efcb2e4a192d771db",
     phone: "+2348181362484",
   },
