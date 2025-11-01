@@ -31,6 +31,9 @@ const vendorsSchema = new Schema(
     phone: {
       type: String,
     },
+    regNum: {
+      type: String,
+    },
     videos: [{url: String, thumbnail: String}],
     // openingDays: {
     //   type: Array,

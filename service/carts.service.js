@@ -4,15 +4,17 @@ exports.getCarts = async (filters = {}) => {
     const data = await Carts.paginate(filters, {populate: [
         {
           path: "productId",
-          populate: {
-            path: "vendorId",
-            select: "title"
-          },
-          populate: {
-            path: "categoryId",
-            select: ["title", "slug"]
-          }
-        },
+          populate: [
+            {
+              path: "vendorId",
+              select: ["title", "address"]
+            },
+            {
+              path: "categoryId",
+              select: ["title", "slug"]
+            }
+          ]
+        }
       ]})
     return data
 }
