@@ -303,6 +303,10 @@ function formatToolResponses(toolResponses) {
                     return `Here are the matching data plans (${plans.length} found):\n${sample.join('\n')}`;
                 }
                 case 'searchProducts': {
+                    // Handle error case for invalid category
+                    if (response?.error) {
+                        return `Error: ${response.error}. Please try a different category or search term.`;
+                    }
                     const total = response?.totalDocs ?? response?.total ?? response?.docs?.length ?? 0;
                     const items = response?.docs || [];
                     if (!items.length) return 'No products found for your query.';
@@ -321,7 +325,8 @@ function formatToolResponses(toolResponses) {
         </div>
         <div style="flex:1;min-width:0;margin:0;line-height:1;align-self:flex-start;">
           <div style="font-weight:600;margin:0 0 4px 0;line-height:1.1;">${escape(title)}</div>
-          <div style="color:#555;font-size:13px;line-height:1.35;max-height:2.7em;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin:0;">${escape(desc)}</div>
+          <div style="color:#555;font-size:13px;line-height:1.35;max-height:2.7em;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin:0 0 4px 0;">${escape(desc)}</div>
+          <div style="font-weight:700;color:#2c3e50;font-size:14px;">₦${(it.discounted_price || it.original_price || it.price || 0).toLocaleString('en-NG')}</div>
         </div>
       </div>
     </a>`;
@@ -424,7 +429,21 @@ async function executeTool(name, args, req) {
             // Search
             if (args?.title != null) params.title = args.title;
             // Filters
-            if (args?.categoryId != null) params.categoryId = args.categoryId;
+            if (args?.categoryId != null) {
+                try {
+                    // First verify the category exists
+                    const categoryResp = await marketplaceClient(token).get(`/categories/${encodeURIComponent(args.categoryId)}`);
+                    if (!categoryResp.data?.data?._id) {
+                        return { error: `Category with ID ${args.categoryId} not found`, docs: [], total: 0 };
+                    }
+                    params.categoryId = args.categoryId;
+                } catch (error) {
+                    if (error.response?.status === 404) {
+                        return { error: `Category with ID ${args.categoryId} not found`, docs: [], total: 0 };
+                    }
+                    throw error; // Re-throw other errors
+                }
+            }
             if (args?.vendorId != null) params.vendorId = args.vendorId;
             if (args?.trending != null) params.trending = args.trending;
             if (args?.minPrice != null) params.minPrice = args.minPrice;
@@ -438,6 +457,7 @@ async function executeTool(name, args, req) {
             // Pagination
             if (args?.page != null) params.page = args.page;
             if (args?.limit != null) params.limit = args.limit;
+            
             const resp = await marketplaceClient(token).get('/products', { params });
             return resp.data?.data || resp.data;
         }
