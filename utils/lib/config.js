@@ -6,7 +6,7 @@
   },
   {
     vendorId: "66927af6eb322a27f7c6902c",
-    phone: "+23409166576239",
+    phone: "+2349166576239",
   },
   {
     vendorId: "65afa65efcb2e4a192d771db",
