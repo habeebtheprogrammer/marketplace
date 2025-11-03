@@ -23,6 +23,10 @@
   {
     vendorId: "690081fbee8d1a8c5bbcf6ab",
     phone: "+2348142079360"
+  },
+  {
+    vendorId: "6905e8392c471299d29c7186",
+    phone: "+2349037369363"
   }
   
 ]
