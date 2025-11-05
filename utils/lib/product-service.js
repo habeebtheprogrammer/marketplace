@@ -37,11 +37,11 @@ function calculateDiscountedPrice(cp, vendorId) {
   } else if (cp >= 10000 && cp < 100000) {
     return cp + 3000
   } else if (cp >= 100000 && cp <= 1500000) {
-    let profit = cp * 0.01 // 1%
-    profit = Math.min(Math.max(profit, 5000), 8000) // clamp between 5k and 8k
+    let profit = cp * 0.02 // 1%
+    profit = Math.min(Math.max(profit, 5000), 10000) // clamp between 5k and 8k
     return cp + profit
   } else {
-    return cp + 8000 // flat max profit
+    return cp + 10000 // flat max profit
   }
 }
 
