@@ -7,7 +7,8 @@ const productsSchema = new Schema(
   {
     title: {
       type: String,
-      required: [true, 'Title is required']
+      required: [true, 'Title is required'],
+      trim: true
     },
     priceUpdatedAt: {
       type: Date,

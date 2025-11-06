@@ -175,6 +175,37 @@ const knowledgeBase = {
     ],
   },
 
+  // Technicians
+  technicians: [
+    {
+      slug: "A1-infotech",
+      title: "A1 Info Tech",
+      address: "Shop 31 AAT PLAZA, Ilorin. and Challenge: Shop 4 opp 1st Uba bank, Ilorin.",
+      city: "Ilorin",
+      state: "Kwara",
+      phone: "+2348185857436",
+      url: "https://360gadgetsafrica.com/technicians/A1-infotech",
+    },
+    {
+      slug: "scottech-gadgets",
+      title: "Scott Tech & Gadgets",
+      address: "9 Ola Ayeni Street Platinum Plaza II Computer village Ikeja Lagos",
+      city: "Ikeja",
+      state: "Lagos",
+      phone: "+2347035052880",
+      url: "https://360gadgetsafrica.com/technicians/scottech-gadgets",
+    },
+    {
+      slug: "tripple-ace-computer",
+      title: "Tripple Ace Computer",
+      address: "16 Oshitelu Street, Off Otigba Street, Computer Village, Ikeja, Lagos",
+      city: "Ikeja",
+      state: "Lagos",
+      phone: "+2349136000333",
+      url: "https://360gadgetsafrica.com/technicians/tripple-ace-computer",
+    },
+  ],
+
   // Additional Information
   additional: {
     // Add any other business information, promotions, special offers, etc.
@@ -283,6 +314,17 @@ function formatKnowledgeBase() {
   kbText += `- Contact URL: ${knowledgeBase.company.website}${knowledgeBase.support.contact.url}\n`
   kbText += `- Support Hours: ${knowledgeBase.support.contact.hours}\n\n`
 
+  // Technicians
+  kbText += `TECHNICIANS & REPAIR SERVICES:\n`
+  kbText += `We have certified technicians in multiple locations. When customers need repairs, diagnostics, or technician services, refer them to the technician closest to their location.\n\n`
+  knowledgeBase.technicians.forEach(tech => {
+    kbText += `- ${tech.title}\n`
+    kbText += `  Location: ${tech.city}, ${tech.state}\n`
+    kbText += `  Address: ${tech.address}\n`
+    kbText += `  Phone: ${tech.phone}\n`
+    kbText += `  URL: ${tech.url}\n\n`
+  })
+
   // Additional
   if (knowledgeBase.additional.promotions) {
     kbText += `ADDITIONAL INFORMATION:\n`
@@ -296,8 +338,61 @@ function formatKnowledgeBase() {
   return kbText
 }
 
+/**
+ * Finds the closest technician based on user's location (city/state)
+ * @param {string} userCity - User's city
+ * @param {string} userState - User's state
+ * @returns {Object|null} - Closest technician or null if not found
+ */
+function findClosestTechnician(userCity, userState) {
+  if (!userCity && !userState) {
+    return null
+  }
+
+  const city = userCity ? String(userCity).toLowerCase().trim() : ''
+  const state = userState ? String(userState).toLowerCase().trim() : ''
+
+  // First, try to match by city
+  if (city) {
+    const cityMatch = knowledgeBase.technicians.find(tech => 
+      String(tech.city).toLowerCase() === city
+    )
+    if (cityMatch) return cityMatch
+  }
+
+  // Then try to match by state
+  if (state) {
+    const stateMatch = knowledgeBase.technicians.find(tech => 
+      String(tech.state).toLowerCase() === state
+    )
+    if (stateMatch) return stateMatch
+  }
+
+  // If no match, return the first technician (default)
+  return knowledgeBase.technicians.length > 0 ? knowledgeBase.technicians[0] : null
+}
+
+/**
+ * Formats technician information for display
+ * @param {Object} technician - Technician object
+ * @returns {string} - Formatted technician information
+ */
+function formatTechnicianInfo(technician) {
+  if (!technician) return ''
+  
+  let info = `*${technician.title}*\n\n`
+  info += `*Location:* ${technician.city}, ${technician.state}\n`
+  info += `*Address:* ${technician.address}\n`
+  info += `*Phone:* ${technician.phone}\n`
+  info += `*View Details:* ${technician.url}\n`
+  
+  return info
+}
+
 module.exports = {
   knowledgeBase,
   formatKnowledgeBase,
+  findClosestTechnician,
+  formatTechnicianInfo,
 }
 

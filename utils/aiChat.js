@@ -56,6 +56,7 @@ Core Functional Areas
 - Handle failed transactions gracefully with recovery steps.
 - AUTO-DETECT: When user wants airtime/data for themselves, use their phone and network automatically.
 - CRITICAL: When user asks for a data plan (e.g., "MTN 3.2GB under 2000"), you MUST call getDataPlans with planName set to the size mentioned (e.g., planName: "3.2GB"). NEVER say a plan doesn't exist without calling the tool first.
+- CRITICAL TRANSACTION ISSUES: When customers report transaction problems (e.g., data/airtime not delivered, payment issues, transaction marked successful but service not received, delivery failures, etc.), DO NOT claim to escalate, log, file complaints, or handle the issue yourself. You CANNOT escalate issues or log complaints. Simply direct them to contact support directly: Phone/WhatsApp: 0705 722 1476, Email: support@360gadgetsafrica.com. Be empathetic and apologize, but make it clear they need to contact support for resolution.
 3) Wallet Management
 - Show current wallet balance; provide funding guidance.
 - Show transaction history.
@@ -79,6 +80,8 @@ Integration Instructions
 - If the last assistant message was asking for confirmation of a purchase, interpret "yes" as confirmation with confirm: true.
 - Always maintain context from previous messages in the conversation.
 - RETRY FUNCTIONALITY: When user says "retry", "buy again", "purchase again", "repeat", or "redo", call retryLastTransaction to fetch their last transaction and show confirmation. The system will automatically detect if it's a data or airtime purchase and prepare the retry with all details from the database.
+- TRANSACTION ISSUES POLICY: If a customer reports any transaction problem (data/airtime not delivered, payment deducted but service not received, delivery failures, etc.), respond with empathy and immediately direct them to support. Example response: "I'm sorry to hear about this issue. Please contact our support team directly for immediate assistance: Phone/WhatsApp: 0705 722 1476, Email: support@360gadgetsafrica.com. They will investigate and resolve this for you." DO NOT claim you will escalate, log, file complaints, or handle it yourself. You are a chatbot and cannot perform these actions.
+- TECHNICIAN & REPAIR SERVICES: When customers ask about repairs, diagnostics, or need a technician, ALWAYS call the getTechnician tool. The tool will ask for location conversationally first (if not recently asked) to make the conversation natural, but location is NOT used for filtering - all technicians are always returned. After the tool sends all technicians individually, continue the conversation naturally and personally. Relate your response to their specific query (e.g., if they asked about phone repair, mention that these partners can help with phone repairs). Be friendly and helpful, and ask if there's anything else you can help with. The URL format is: https://360gadgetsafrica.com/technicians/{slug}. The technician information will be saved to session metadata with the URL included.
 `
 }
 // Helpers for WhatsApp-friendly formatting
@@ -147,6 +150,15 @@ async function updateSessionMetadata(sessionId, metadata, userId, waId) {
     })
   }
 }
+function getSupportContactInfo() {
+  return {
+    phone: '0705 722 1476',
+    whatsapp: '0705 722 1476',
+    email: 'support@360gadgetsafrica.com',
+    message: 'For assistance with this transaction, please contact our support team:\nPhone/WhatsApp: 0705 722 1476\nEmail: support@360gadgetsafrica.com'
+  }
+}
+
 async function getFundingAccountDetails(userId) {
   try {
     const user = await services.usersService.getUserById(userId)
@@ -333,6 +345,11 @@ function toolDeclarations() {
       {
         name: 'retryLastTransaction',
         description: 'Retry the last failed or successful transaction (data or airtime). Fetches the last transaction from history and prepares it for retry with confirmation.',
+        parameters: { type: 'object', properties: {} }
+      },
+      {
+        name: 'getTechnician',
+        description: 'Get technician information for repairs, diagnostics, or technician services. Use this when customers ask about repairs, diagnostics, or need a technician. The tool will ask for location conversationally first (if not recently asked), then return all available technicians with a helpful message.',
         parameters: { type: 'object', properties: {} }
       }
     ]
@@ -991,17 +1008,30 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
           const toNumber = contacts?.wa_id
     if (!phoneNumberId || !toNumber) {
       console.error('❌ Missing WhatsApp credentials for confirmation template:', { phoneNumberId: !!phoneNumberId, toNumber: !!toNumber })
-      return '⚠️ Unable to send confirmation. Please check your WhatsApp connection and try again.';
+      const supportInfo = getSupportContactInfo();
+      return `Unable to send confirmation. Please check your WhatsApp connection and try again. If the issue persists, ${supportInfo.message}`;
     }
     
     try {
             const text = `buy *${network} ${args.planType}* (Plan ID ${args.planId}) for *${formatMoney(args.amount)}* to *${phoneLabel}*.${netWarning}\n`
             await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+            // Save confirmation message to session so it can be detected later
+            if (sessionId) {
+              try {
+                await waChatSessions.addMessage(String(sessionId), { 
+                  role: 'assistant', 
+                  content: `You are about to: ${text}\n\nPlease confirm if you'd like to proceed with this action.` 
+                }, userId, contacts?.wa_id || null)
+              } catch (e) {
+                console.error('Failed to save confirmation message to session:', e.message)
+              }
+            }
       console.log('✅ WhatsApp confirmation template sent successfully (data purchase)')
         } catch (e) {
       console.error('❌ CRITICAL: Failed to send WA confirmation template (data):', e?.message, e?.stack)
       // Don't proceed if template fails - return error message
-      return '⚠️ I couldn\'t send the confirmation message. Please try again or contact support.';
+      const supportInfo = getSupportContactInfo();
+      return `I couldn't send the confirmation message. Please try again. If the issue persists, ${supportInfo.message}`;
         }
         return '';
       }
@@ -1085,6 +1115,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
         });
         if (!resp.ok) {
           const rawMsg = extractErrorMessage(data, resp.statusText || '');
+          const supportInfo = getSupportContactInfo();
           let friendly = 'I could not complete the purchase.';
           const msgStr = String(rawMsg || '').toLowerCase();
           if (msgStr.includes('insufficient')) {
@@ -1109,9 +1140,16 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
             } catch (e) {
               console.error('Error sending funding account details:', e.message);
             }
-          } else if (msgStr.includes('network')) friendly = 'I still need your network to proceed (MTN, GLO, Airtel, 9mobile).';
-          else if (resp.status >= 500) friendly = 'The service had an issue processing the request just now.';
-          else if (msgStr.includes('phone')) friendly = 'That phone number looks invalid. Please send an 11-digit number that starts with 0.';
+          } else if (msgStr.includes('network')) {
+            friendly = 'I still need your network to proceed (MTN, GLO, Airtel, 9mobile).';
+          } else if (resp.status >= 500) {
+            friendly = `The service had an issue processing your request. ${supportInfo.message}`;
+          } else if (msgStr.includes('phone')) {
+            friendly = 'That phone number looks invalid. Please send an 11-digit number that starts with 0.';
+          } else {
+            // For any other transaction errors, include support contact
+            friendly = `I encountered an issue with your transaction. ${supportInfo.message}`;
+          }
           return `${friendly}`;
         }
         console.log('Data purchase success', {
@@ -1153,7 +1191,8 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
           userId,
           timestamp: nowIso(),
         });
-        return 'I had trouble completing that. Please confirm your network (MTN, GLO, Airtel, 9mobile) and the 11-digit phone number to receive the data.';
+        const supportInfo = getSupportContactInfo();
+        return `I had trouble completing your transaction. ${supportInfo.message}`;
       }
     }
     case 'buyAirtime': {
@@ -1229,17 +1268,30 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
           const toNumber = contacts?.wa_id
         if (!phoneNumberId || !toNumber) {
           console.error('❌ Missing WhatsApp credentials for confirmation template:', { phoneNumberId: !!phoneNumberId, toNumber: !!toNumber })
-          return '⚠️ Unable to send confirmation. Please check your WhatsApp connection and try again.';
+          const supportInfo = getSupportContactInfo();
+          return `Unable to send confirmation. Please check your WhatsApp connection and try again. If the issue persists, ${supportInfo.message}`;
         }
         
         try {
             const text = `buy airtime of *${formatMoney(args.amount)}* for *${phoneLabel}*.\n`
             await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+            // Save confirmation message to session so it can be detected later
+            if (sessionId) {
+              try {
+                await waChatSessions.addMessage(String(sessionId), { 
+                  role: 'assistant', 
+                  content: `You are about to: ${text}\n\nPlease confirm if you'd like to proceed with this action.` 
+                }, userId, contacts?.wa_id || null)
+              } catch (e) {
+                console.error('Failed to save confirmation message to session:', e.message)
+              }
+            }
           console.log('✅ WhatsApp confirmation template sent successfully (airtime purchase)')
         } catch (e) {
           console.error('❌ CRITICAL: Failed to send WA confirmation template (airtime):', e?.message, e?.stack)
           // Don't proceed if template fails - return error message
-          return '⚠️ I couldn\'t send the confirmation message. Please try again or contact support.';
+          const supportInfo = getSupportContactInfo();
+          return `I couldn't send the confirmation message. Please try again. If the issue persists, ${supportInfo.message}`;
         }
         return ''
       }
@@ -1314,10 +1366,11 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
           const msg = extractErrorMessage(data, resp.statusText || 'Unknown error')
           console.log('Airtime purchase failed', { userId, phone: normalizedPhone, amount: args.amount, error: msg, detectedNetwork })
           
+          const supportInfo = getSupportContactInfo();
           // For airtime, network is auto-detected, so don't show network-related errors
           // Provide more helpful error messages
           const msgStr = String(msg || '').toLowerCase()
-          let friendly = `Airtime purchase failed: ${msg}`
+          let friendly = ''
           
           if (msgStr.includes('insufficient')) {
             friendly = 'You have insufficient wallet balance. Please fund your wallet and try again.';
@@ -1338,16 +1391,19 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
                   });
                 }
               }
-            } catch (e) {
+      } catch (e) {
               console.error('Error sending funding account details:', e.message);
             }
           } else if (msgStr.includes('phone') || msgStr.includes('invalid')) {
-            friendly = `⚠️ Invalid phone number: ${normalizedPhone}. Please provide a valid 11-digit Nigerian phone number (e.g., 08031234567).`
+            friendly = `Invalid phone number: ${normalizedPhone}. Please provide a valid 11-digit Nigerian phone number (e.g., 08031234567).`
           } else if (msgStr.includes('network')) {
             // This shouldn't happen for airtime, but if it does, provide helpful message
-            friendly = `⚠️ Network detection issue. Detected network: ${detectedNetwork || 'Unknown'}. Please try again or contact support.`
+            friendly = `Network detection issue. ${supportInfo.message}`
           } else if (resp.status >= 500) {
-            friendly = '⚠️ Service temporarily unavailable. Please try again in a moment.'
+            friendly = `Service temporarily unavailable. ${supportInfo.message}`
+          } else {
+            // For any other transaction errors, include support contact
+            friendly = `Airtime purchase failed. ${supportInfo.message}`
           }
           
           // Send error message via WhatsApp and save to session
@@ -1395,7 +1451,8 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
         // Return empty since backend will send the receipt template
         return ''
       } catch (e) {
-        return `⚠️ Error buying airtime: ${e.message}`
+        const supportInfo = getSupportContactInfo();
+        return `I encountered an error processing your airtime purchase. ${supportInfo.message}`;
       }
     }
     case 'airtimeInfo': {
@@ -1427,7 +1484,8 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
         })
         
         if (!txResult?.docs || txResult.docs.length === 0) {
-          return '⚠️ No previous transaction found to retry. Please make a purchase first.'
+          const supportInfo = getSupportContactInfo();
+          return `No previous transaction found to retry. Please make a purchase first. If you believe this is an error, ${supportInfo.message}`;
         }
         
         const lastTx = txResult.docs[0]
@@ -1523,21 +1581,172 @@ Example: buyAirtime { amount: 200, phone: '08031234567' }`
         const toNumber = contacts?.wa_id
         if (!phoneNumberId || !toNumber) {
           console.error('❌ Missing WhatsApp credentials for retry confirmation:', { phoneNumberId: !!phoneNumberId, toNumber: !!toNumber })
-          return '⚠️ Unable to send confirmation. Please check your WhatsApp connection and try again.'
+          const supportInfo = getSupportContactInfo();
+          return `Unable to send confirmation. Please check your WhatsApp connection and try again. If the issue persists, ${supportInfo.message}`;
         }
         
         try {
           await sendConfirmationTemplate(phoneNumberId, toNumber, { text: confirmText })
+          // Save confirmation message to session so it can be detected later
+          if (sessionId) {
+            try {
+              await waChatSessions.addMessage(String(sessionId), { 
+                role: 'assistant', 
+                content: `You are about to: ${confirmText}\n\nPlease confirm if you'd like to proceed with this action.` 
+              }, userId, contacts?.wa_id || null)
+            } catch (e) {
+              console.error('Failed to save retry confirmation message to session:', e.message)
+            }
+          }
           console.log('✅ WhatsApp retry confirmation template sent successfully')
         } catch (e) {
           console.error('❌ CRITICAL: Failed to send WA retry confirmation template:', e?.message, e?.stack)
-          return '⚠️ I couldn\'t send the confirmation message. Please try again or contact support.'
+          const supportInfo = getSupportContactInfo();
+          return `I couldn't send the confirmation message. Please try again. If the issue persists, ${supportInfo.message}`;
         }
         
         return '' // Return empty to indicate template was sent
       } catch (e) {
         console.error('Error in retryLastTransaction:', e.message, e.stack)
-        return `⚠️ Error retrieving last transaction: ${e.message}`
+        const supportInfo = getSupportContactInfo();
+        return `I encountered an error retrieving your last transaction. ${supportInfo.message}`;
+      }
+    }
+    case 'getTechnician': {
+      try {
+        const { knowledgeBase } = require('./knowledgeBase')
+        const technicians = knowledgeBase.technicians || []
+        
+        if (technicians.length === 0) {
+          return 'No technicians available at the moment. Please contact our support team for assistance: Phone/WhatsApp: 0705 722 1476, Email: support@360gadgetsafrica.com'
+        }
+        
+        // Check if location was already asked in this session
+        let shouldAskLocation = true
+        if (sessionId) {
+          try {
+            const currentSession = await waChatSessions.getSession(String(sessionId), userId, contacts?.wa_id || null)
+            const messages = Array.isArray(currentSession?.messages) ? currentSession.messages : []
+            // Check if we recently asked for location (in last 3 messages)
+            const recentMessages = messages.slice(-3)
+            const recentlyAskedLocation = recentMessages.some(m => 
+              m.role === 'assistant' && 
+              String(m.content || '').toLowerCase().includes('location') &&
+              String(m.content || '').toLowerCase().includes('city')
+            )
+            if (recentlyAskedLocation) {
+              shouldAskLocation = false
+            }
+          } catch (e) {
+            console.error('Error checking session for location question:', e.message)
+          }
+        }
+        
+        // Ask for location conversationally (not used for anything, just to make it conversational)
+        if (shouldAskLocation) {
+          const askLocationMessage = 'To help you better, could you please share your location? You can tell me your city and state (e.g., "Ikeja, Lagos" or "Ilorin, Kwara").'
+          
+          // Save to session
+          if (sessionId) {
+            try {
+              await waChatSessions.addMessage(String(sessionId), { 
+                role: 'assistant', 
+                content: askLocationMessage 
+              }, userId, contacts?.wa_id || null)
+            } catch (e) {
+              console.error('Failed to save location request to session:', e.message)
+            }
+          }
+          
+          // Send via WhatsApp if possible
+          const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
+          const toNumber = contacts?.wa_id
+          if (phoneNumberId && toNumber) {
+            try {
+              const { sendTextMessage } = require('./whatsappTemplates')
+              await sendTextMessage(phoneNumberId, toNumber, askLocationMessage).catch(e => {
+                console.error('Failed to send location request via WhatsApp:', e.message)
+              })
+            } catch (e) {
+              console.error('Error sending location request:', e.message)
+            }
+          }
+          
+          return askLocationMessage
+        }
+        
+        // Send all technicians individually (like products)
+        const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
+        const toNumber = contacts?.wa_id
+        
+        if (!phoneNumberId || !toNumber) {
+          // Fallback: return text list if WhatsApp not available
+          let techList = `I've found our repair & diagnostics partners who can help you with that. Here they are:\n\n`
+          technicians.forEach((tech, index) => {
+            techList += `${index + 1}. *${tech.title}*\n`
+            techList += `   Location: ${tech.city}, ${tech.state}\n`
+            techList += `   Phone: ${tech.phone}\n`
+            techList += `   ${tech.url}\n\n`
+          })
+          techList += `You can reach out to any of them directly and they'll be happy to assist you.`
+          return techList
+        }
+        
+        // Send each technician individually in product format (like products are sent)
+        const { sendTextMessage } = require('./whatsappTemplates')
+        
+        for (const tech of technicians) {
+          // Format same as products: "*Title*,\n\n*Price:* *₦364,000* *(Price last updated: 2 months ago)*  \n\n{productlink}"
+          // For technicians: "*Title*,\n\n*Location:* *City, State*\n*Phone:* *Phone*\n*Address:* *Address*\n\n{url}"
+          // Ensure URL is always present - use from tech.url or construct from slug
+          const techUrl = tech.url || `https://360gadgetsafrica.com/technicians/${tech.slug}`
+          const messageText = `*${tech.title}*,\n\n*Location:* *${tech.city}, ${tech.state}*\n*Phone:* *${tech.phone}*\n*Address:* *${tech.address}*\n\n${techUrl}`
+          
+          try {
+            await sendTextMessage(phoneNumberId, toNumber, messageText)
+            
+            // Save to session
+            if (sessionId) {
+              try {
+                await waChatSessions.addMessage(String(sessionId), { 
+                  role: 'assistant', 
+                  content: messageText 
+                }, userId, contacts?.wa_id || null)
+              } catch (e) {
+                console.error('Failed to save technician message to session:', e.message)
+              }
+            }
+          } catch (e) {
+            console.error(`Failed to send technician ${tech.title} via WhatsApp:`, e.message)
+          }
+        }
+        
+        // Save technicians to metadata
+        if (sessionId) {
+          try {
+            await waChatSessions.updateSession(String(sessionId), {
+              'metadata.technicians': technicians.map(tech => ({
+                slug: tech.slug,
+                title: tech.title,
+                url: tech.url,
+                city: tech.city,
+                state: tech.state,
+                phone: tech.phone,
+                address: tech.address
+              }))
+            }, userId, contacts?.wa_id || null)
+          } catch (e) {
+            console.error('Error saving technicians to session metadata:', e.message)
+          }
+        }
+        
+        // Return empty string to let AI continue the conversation naturally and personally
+        // The AI will generate a friendly, personalized response based on the user's query
+        return ''
+      } catch (e) {
+        console.error('Error in getTechnician:', e.message, e.stack)
+        const supportInfo = getSupportContactInfo()
+        return `I encountered an error finding technicians. ${supportInfo.message}`
       }
     }
     default:
@@ -1787,7 +1996,8 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                   const toNumber = contacts?.wa_id
                 if (!phoneNumberId || !toNumber) {
                   console.error('❌ Missing WhatsApp credentials for confirmation template:', { phoneNumberId: !!phoneNumberId, toNumber: !!toNumber })
-                  const fallback = '⚠️ Unable to send confirmation. Please check your WhatsApp connection and try again.'
+                  const supportInfo = getSupportContactInfo();
+                  const fallback = `Unable to send confirmation. Please check your WhatsApp connection and try again. If the issue persists, ${supportInfo.message}`;
                   await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, waId)
                   return fallback
                 }
@@ -1795,17 +2005,28 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                 try {
                   const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone || 'your phone'
                   const text = `buy *${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')}* for *${formatMoney(chosen.amount)}* to *${pendingPhone}*.`
-                  await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+                    await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
+                  // Save confirmation message to session so it can be detected later
+                  try {
+                    await waChatSessions.addMessage(String(sessionId), { 
+                      role: 'assistant', 
+                      content: `You are about to: ${text}\n\nPlease confirm if you'd like to proceed with this action.` 
+                    }, userId, waId)
+                  } catch (e) {
+                    console.error('Failed to save confirmation message to session:', e.message)
+                  }
                   console.log('✅ WhatsApp confirmation template sent successfully (data selection)')
                 } catch (e) {
                   console.error('❌ CRITICAL: Failed to send WA confirmation template (data selection):', e?.message, e?.stack)
-                  const fallback = '⚠️ I couldn\'t send the confirmation message. Please try again or contact support.'
+                  const supportInfo = getSupportContactInfo();
+                  const fallback = `I couldn't send the confirmation message. Please try again. If the issue persists, ${supportInfo.message}`;
                   await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, waId)
                   return fallback
                 }
                 return ''
               } catch (e) {
-                const fallback = 'I had trouble proceeding with that selection. Please confirm your network and the 11-digit phone number.'
+                const supportInfo = getSupportContactInfo();
+                const fallback = `I had trouble proceeding with that selection. Please confirm your network and the 11-digit phone number. If you need assistance, ${supportInfo.message}`;
                 await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: fallback }, userId, waId)
                 return fallback
               }
@@ -1843,43 +2064,85 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
         try {
           const currentSession = await waChatSessions.getSession(String(sessionId), userId, waId)
           
-          // FIRST: Check for NEW pending purchases (these take priority over retry)
-          const pendingAirtime = currentSession?.metadata?.get?.('pendingAirtime') || currentSession?.metadata?.pendingAirtime
-          if (pendingAirtime && pendingAirtime.amount) {
-            // Ensure phone number is properly sanitized before confirming
-            const pendingPhone = String(pendingAirtime.phone || '')
-            const sanitizedPhone = isValidNigerianPhone(pendingPhone) ? sanitizePhone(pendingPhone) : pendingPhone
-            
-            if (!sanitizedPhone || !isValidNigerianPhone(sanitizedPhone)) {
-              const errorMsg = '⚠️ Invalid phone number in pending purchase. Please start a new purchase.'
-              await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: errorMsg }, userId, waId)
-              try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingAirtime': null }, userId, waId) } catch { }
-              return errorMsg
-            }
-            
-            const result = await executeTool('buyAirtime', {
-              amount: Number(pendingAirtime.amount),
-              phone: sanitizedPhone, // Use sanitized phone
-              confirm: true
-            }, { userId, contacts, sessionId })
-            await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
-            // Clear pending airtime
-            try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingAirtime': null }, userId, waId) } catch { }
-            return String(result)
-          }
+          // CRITICAL: Check conversation history to see if last message was actually asking for confirmation
+          // Only process confirmations if the last assistant message was a confirmation request
+          const messages = Array.isArray(currentSession?.messages) ? currentSession.messages : []
+          const lastAssistantMessage = messages.filter(m => m.role === 'assistant').pop()
+          const lastMessageContent = String(lastAssistantMessage?.content || '').toLowerCase()
           
-          // SECOND: Check for NEW pending data purchase
+          // Check if last message was asking for confirmation (contains confirmation keywords)
+          // Also check for the template pattern: "You are about to:" which is added when saving confirmation messages
+          const lastMessageIsConfirmation = lastMessageContent.includes('you are about to') ||
+                                           lastMessageContent.includes('confirm') || 
+                                           (lastMessageContent.includes('reply') && lastMessageContent.includes('yes')) ||
+                                           lastMessageContent.includes('proceed') ||
+                                           (lastMessageContent.includes('buy') && (lastMessageContent.includes('reply') || lastMessageContent.includes('confirm'))) ||
+                                           lastMessageContent.includes('retry last') && lastMessageContent.includes('purchase')
+          
+          // If last message wasn't asking for confirmation, don't process as purchase confirmation
+          if (!lastMessageIsConfirmation) {
+            console.log('⚠️ User said "yes" but last message was not a confirmation request. Ignoring confirmation handler.')
+            // Let the AI model handle it naturally instead - don't process as purchase confirmation
+            // Continue to normal AI processing below
+          } else {
+            // Last message WAS asking for confirmation, so process it
+            // FIRST: Check for NEW pending purchases (these take priority over retry)
+            // Also check if pending purchase has expired
+            const pendingAirtime = currentSession?.metadata?.get?.('pendingAirtime') || currentSession?.metadata?.pendingAirtime
+            if (pendingAirtime && pendingAirtime.amount) {
+              // Check if expired
+              if (hasPendingPurchaseExpired(pendingAirtime)) {
+                console.log('⚠️ Pending airtime purchase has expired. Clearing metadata.')
+                try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingAirtime': null }, userId, waId) } catch { }
+              } else {
+                // Ensure phone number is properly sanitized before confirming
+                const pendingPhone = String(pendingAirtime.phone || '')
+                const sanitizedPhone = isValidNigerianPhone(pendingPhone) ? sanitizePhone(pendingPhone) : pendingPhone
+                
+                if (!sanitizedPhone || !isValidNigerianPhone(sanitizedPhone)) {
+                  const supportInfo = getSupportContactInfo();
+                  const errorMsg = `Invalid phone number in pending purchase. Please start a new purchase. If you need assistance, ${supportInfo.message}`;
+                  await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: errorMsg }, userId, waId)
+                  try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingAirtime': null }, userId, waId) } catch { }
+                  return errorMsg
+                }
+                
+                const result = await executeTool('buyAirtime', {
+                  amount: Number(pendingAirtime.amount),
+                  phone: sanitizedPhone, // Use sanitized phone
+                  confirm: true
+                }, { userId, contacts, sessionId })
+                await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
+                // Clear pending airtime
+                try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingAirtime': null }, userId, waId) } catch { }
+                return String(result)
+              }
+            }
+          
+            // SECOND: Check for NEW pending data purchase
+            // Also check if pending purchase has expired
           const pending = currentSession?.metadata?.get?.('pendingPurchase') || currentSession?.metadata?.pendingPurchase
           const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone
           const pendingNetwork = currentSession?.metadata?.get?.('pendingNetwork') || currentSession?.metadata?.pendingNetwork
           if (pending && pending.planId && pending.vendor) {
+              // Check if expired
+              if (hasPendingPurchaseExpired(pending)) {
+                console.log('⚠️ Pending data purchase has expired. Clearing metadata.')
+                try { 
+                  await waChatSessions.updateSession(String(sessionId), { 
+                    'metadata.pendingPurchase': null, 
+                    'metadata.pendingPhone': null, 
+                    'metadata.pendingNetwork': null 
+                  }, userId, waId) 
+                } catch { }
+              } else {
             const result = await executeTool('purchaseData', {
               planId: String(pending.planId),
               vendor: String(pending.vendor),
               network: String(pending.network || pendingNetwork || ''),
               planType: String(pending.planType || ''),
               amount: Number(pending.amount),
-              phone: pending.phone || (pendingPhone ? String(pendingPhone) : undefined),
+                  phone: pending.phone || (pendingPhone ? String(pendingPhone) : undefined),
               confirm: true
             }, { userId, contacts, sessionId })
             await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
@@ -1887,126 +2150,138 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
             try { await waChatSessions.updateSession(String(sessionId), { 'metadata.pendingPurchase': null, 'metadata.pendingPhone': null, 'metadata.pendingNetwork': null }, userId, waId) } catch { }
             return String(result)
           }
+            }
           
-          // LAST: Only check retry transaction if no new purchases are pending
-          // If retryTransaction exists in metadata and user is confirming, proceed with retry
-          const retryTx = currentSession?.metadata?.get?.('retryTransaction') || currentSession?.metadata?.retryTransaction
-          if (retryTx && retryTx.transactionId) {
-            // Check if user's current message is just a confirmation (yes, confirm, etc.)
-            const promptIsJustConfirm = /^(yes|confirm|proceed|go ahead|ok|okay|sure|yeah|yep)$/i.test(String(prompt || '').trim())
-            
-            // Check if prompt contains new purchase keywords (but not retry keywords)
-            const promptHasNewPurchase = /\b(buy|topup|top\s*up|purchase)\b/i.test(String(prompt || '')) && !/\b(retry|again|repeat|redo)\b/i.test(String(prompt || ''))
-            
-            // SIMPLIFIED LOGIC: If retryTransaction metadata exists and user says "yes" (without new purchase keywords),
-            // it's almost certainly a retry confirmation. Proceed with retry.
-            const shouldProceedWithRetry = promptIsJustConfirm && !promptHasNewPurchase
-            
-            console.log('🔍 Retry confirmation check:', {
-              hasRetryTx: !!retryTx,
-              retryTxType: retryTx?.type,
-              promptIsJustConfirm,
-              promptHasNewPurchase,
-              shouldProceedWithRetry,
-              currentPrompt: String(prompt || '').substring(0, 50)
-            })
-            
-            if (shouldProceedWithRetry) {
-              console.log('✅ Processing retry transaction confirmation', {
-                retryTxType: retryTx.type,
-                transactionId: retryTx.transactionId,
-                amount: retryTx.amount,
-                phone: retryTx.phone
-              })
-              if (retryTx.type === 'data') {
-                // For data retry, we need planId. If missing, try to look it up
-                let planId = retryTx.planId
-                if (!planId && retryTx.planName && retryTx.network && retryTx.vendor) {
-                  try {
-                    const plans = require('../dataplan.json')
-                    const matchingPlan = Array.isArray(plans) ? plans.find(p => 
-                      String(p.planName).toLowerCase() === String(retryTx.planName).toLowerCase() &&
-                      String(p.network).toUpperCase() === String(retryTx.network).toUpperCase() &&
-                      String(p.vendor).toLowerCase() === String(retryTx.vendor).toLowerCase() &&
-                      (retryTx.planType ? String(p.planType).toUpperCase() === String(retryTx.planType).toUpperCase() : true)
-                    ) : null
-                    if (matchingPlan) {
-                      planId = String(matchingPlan.planId)
+            // LAST: Only check retry transaction if no new purchases are pending
+            // If retryTransaction exists in metadata and user is confirming, proceed with retry
+            const retryTx = currentSession?.metadata?.get?.('retryTransaction') || currentSession?.metadata?.retryTransaction
+            if (retryTx && retryTx.transactionId) {
+              // Check if retry transaction is stale (older than timeout)
+              if (hasPendingPurchaseExpired(retryTx)) {
+                console.log('⚠️ Retry transaction has expired. Clearing metadata.')
+                try { await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId) } catch { }
+              } else {
+                // Check if user's current message is just a confirmation (yes, confirm, etc.)
+                const promptIsJustConfirm = /^(yes|confirm|proceed|go ahead|ok|okay|sure|yeah|yep)$/i.test(String(prompt || '').trim())
+                
+                // Check if prompt contains new purchase keywords (but not retry keywords)
+                const promptHasNewPurchase = /\b(buy|topup|top\s*up|purchase)\b/i.test(String(prompt || '')) && !/\b(retry|again|repeat|redo)\b/i.test(String(prompt || ''))
+                
+                // SIMPLIFIED LOGIC: If retryTransaction metadata exists and user says "yes" (without new purchase keywords),
+                // it's almost certainly a retry confirmation. Proceed with retry.
+                const shouldProceedWithRetry = promptIsJustConfirm && !promptHasNewPurchase
+                
+                console.log('🔍 Retry confirmation check:', {
+                  hasRetryTx: !!retryTx,
+                  retryTxType: retryTx?.type,
+                  promptIsJustConfirm,
+                  promptHasNewPurchase,
+                  shouldProceedWithRetry,
+                  currentPrompt: String(prompt || '').substring(0, 50)
+                })
+                
+                if (shouldProceedWithRetry) {
+                  console.log('✅ Processing retry transaction confirmation', {
+                    retryTxType: retryTx.type,
+                    transactionId: retryTx.transactionId,
+                    amount: retryTx.amount,
+                    phone: retryTx.phone
+                  })
+                  if (retryTx.type === 'data') {
+                    // For data retry, we need planId. If missing, try to look it up
+                    let planId = retryTx.planId
+                    if (!planId && retryTx.planName && retryTx.network && retryTx.vendor) {
+                      try {
+                        const plans = require('../dataplan.json')
+                        const matchingPlan = Array.isArray(plans) ? plans.find(p => 
+                          String(p.planName).toLowerCase() === String(retryTx.planName).toLowerCase() &&
+                          String(p.network).toUpperCase() === String(retryTx.network).toUpperCase() &&
+                          String(p.vendor).toLowerCase() === String(retryTx.vendor).toLowerCase() &&
+                          (retryTx.planType ? String(p.planType).toUpperCase() === String(retryTx.planType).toUpperCase() : true)
+                        ) : null
+                        if (matchingPlan) {
+                          planId = String(matchingPlan.planId)
+                        }
+                      } catch (e) {
+                        console.error('Error looking up planId for retry:', e.message)
+                      }
                     }
-                  } catch (e) {
-                    console.error('Error looking up planId for retry:', e.message)
+                    
+                    if (!planId) {
+                      const supportInfo = getSupportContactInfo();
+                      const errorMsg = `Cannot retry: Plan ID not found. Please select a new plan. If you need assistance, ${supportInfo.message}`;
+                      await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: errorMsg }, userId, waId)
+                      try { await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId) } catch { }
+                      return errorMsg
+                    }
+                    
+                    // Retry data purchase
+                    // Clear retry transaction BEFORE executing to prevent issues
+                    try { 
+                      await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId)
+                      console.log('🧹 Cleared retryTransaction metadata before executing retry data purchase')
+                    } catch (e) {
+                      console.error('Error clearing retry metadata before purchase:', e.message)
+                    }
+                    
+                    const result = await executeTool('purchaseData', {
+                      planId: String(planId),
+                      vendor: String(retryTx.vendor || 'quickvtu'),
+                      network: String(retryTx.network || ''),
+                      planType: String(retryTx.planType || ''),
+                      amount: Number(retryTx.amount),
+                      phone: String(retryTx.phone || ''),
+                      confirm: true
+                    }, { userId, contacts, sessionId })
+                    
+                    // Save result to session if not empty
+                    if (result) {
+                      await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
+                    }
+                    return String(result || '')
+                  } else if (retryTx.type === 'airtime') {
+                    // Retry airtime purchase
+                    // Clear retry transaction BEFORE executing to prevent issues
+                    try { 
+                      await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId)
+                      console.log('🧹 Cleared retryTransaction metadata before executing retry airtime purchase')
+                    } catch (e) {
+                      console.error('Error clearing retry metadata before purchase:', e.message)
+                    }
+                    
+                    const result = await executeTool('buyAirtime', {
+                      amount: Number(retryTx.amount),
+                      phone: String(retryTx.phone || ''),
+                      confirm: true
+                    }, { userId, contacts, sessionId })
+                    
+                    // Save result to session if not empty
+                    if (result) {
+                      await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
+                    }
+                    return String(result || '')
                   }
+                } else {
+                  // Retry transaction exists but user's message suggests a new purchase
+                  // Don't proceed with retry, but also don't clear metadata yet
+                  console.log('⚠️ Retry transaction found but user message suggests new purchase - not proceeding with retry', {
+                    shouldProceedWithRetry: false,
+                    promptIsJustConfirm,
+                    promptHasNewPurchase,
+                    currentPrompt: String(prompt || '').substring(0, 50)
+                  })
+                  // Don't clear retry metadata here - it will be cleared when new purchase is initiated
                 }
-                
-                if (!planId) {
-                  const errorMsg = '⚠️ Cannot retry: Plan ID not found. Please select a new plan.'
-                  await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: errorMsg }, userId, waId)
-                  try { await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId) } catch { }
-                  return errorMsg
-                }
-                
-                // Retry data purchase
-                // Clear retry transaction BEFORE executing to prevent issues
-                try { 
-                  await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId)
-                  console.log('🧹 Cleared retryTransaction metadata before executing retry data purchase')
-                } catch (e) {
-                  console.error('Error clearing retry metadata before purchase:', e.message)
-                }
-                
-                const result = await executeTool('purchaseData', {
-                  planId: String(planId),
-                  vendor: String(retryTx.vendor || 'quickvtu'),
-                  network: String(retryTx.network || ''),
-                  planType: String(retryTx.planType || ''),
-                  amount: Number(retryTx.amount),
-                  phone: String(retryTx.phone || ''),
-                  confirm: true
-                }, { userId, contacts, sessionId })
-                
-                // Save result to session if not empty
-                if (result) {
-                  await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
-                }
-                return String(result || '')
-              } else if (retryTx.type === 'airtime') {
-                // Retry airtime purchase
-                // Clear retry transaction BEFORE executing to prevent issues
-                try { 
-                  await waChatSessions.updateSession(String(sessionId), { 'metadata.retryTransaction': null }, userId, waId)
-                  console.log('🧹 Cleared retryTransaction metadata before executing retry airtime purchase')
-                } catch (e) {
-                  console.error('Error clearing retry metadata before purchase:', e.message)
-                }
-                
-                const result = await executeTool('buyAirtime', {
-                  amount: Number(retryTx.amount),
-                  phone: String(retryTx.phone || ''),
-                  confirm: true
-                }, { userId, contacts, sessionId })
-                
-                // Save result to session if not empty
-                if (result) {
-                  await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: String(result) }, userId, waId)
-                }
-                return String(result || '')
               }
-            } else {
-              // Retry transaction exists but user's message suggests a new purchase
-              // Don't proceed with retry, but also don't clear metadata yet
-              console.log('⚠️ Retry transaction found but user message suggests new purchase - not proceeding with retry', {
-                shouldProceedWithRetry: false,
-                promptIsJustConfirm,
-                promptHasNewPurchase,
-                currentPrompt: String(prompt || '').substring(0, 50)
-              })
-              // Don't clear retry metadata here - it will be cleared when new purchase is initiated
             }
           }
         } catch (e) {
           console.error('Error in confirmation handler:', e.message, e.stack)
         }
-      } else if (isRetryIntent) {
+      }
+      
+      // Continue with retry intent handling if not a confirmation
+      if (isRetryIntent && !isConfirm) {
         // Handle retry/buy again intent ONLY if it's not a confirmation
         // BUT: Don't call retryLastTransaction if retryTransaction metadata already exists
         // (This prevents re-triggering when user says "yes" after retry confirmation)
@@ -2144,11 +2419,17 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
 
     if (calls.length > 0) {
       const outputs = []
+      let hasGetTechnician = false
       for (const c of calls) {
         const { name, args } = c
         try {
           const out = await executeTool(name, args, { userId, contacts, sessionId })
-          outputs.push(typeof out === 'string' ? out : (out?.error ? `⚠️ ${out.error}` : String(out)))
+          if (name === 'getTechnician' && out === '') {
+            // getTechnician sent technicians via WhatsApp, mark it so we can continue conversation
+            hasGetTechnician = true
+          } else {
+            outputs.push(typeof out === 'string' ? out : (out?.error ? `⚠️ ${out.error}` : String(out)))
+          }
         } catch (e) {
           console.log('❌ TOOL EXECUTION ERROR:', {
             toolName: name,
@@ -2161,7 +2442,20 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
           outputs.push(`⚠️ ${e.message}`)
         }
       }
-      text = outputs.length === 1 ? outputs[0] : outputs.map((o, i) => `(${i + 1}) ${o}`).join('\n')
+      // If getTechnician was called and sent technicians, continue conversation naturally
+      if (hasGetTechnician) {
+        // Continue the conversation using the existing chat instance
+        // The AI will generate a personalized response based on the user's query
+        try {
+          const followUpResult = await chat.sendMessage('The technicians have been sent to the user individually via WhatsApp. Continue the conversation naturally and personally, relating to their specific query about repairs or diagnostics. Be friendly and helpful.')
+          text = String(followUpResult?.response?.text?.() || await followUpResult?.response?.text() || '') || 'I\'ve sent you our repair & diagnostics partners. You can reach out to any of them directly and they\'ll be happy to help you with your needs. Is there anything else I can help you with?'
+        } catch (e) {
+          console.error('Error generating follow-up response for technicians:', e.message)
+          text = 'I\'ve sent you our repair & diagnostics partners. You can reach out to any of them directly and they\'ll be happy to help you with your needs. Is there anything else I can help you with?'
+        }
+      } else {
+        text = outputs.length === 1 ? outputs[0] : outputs.map((o, i) => `(${i + 1}) ${o}`).join('\n')
+      }
     } else {
       text = String(result?.response?.text?.() || await result?.response?.text() || '') || 'I had trouble processing your request.'
     }
