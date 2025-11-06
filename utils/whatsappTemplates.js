@@ -149,8 +149,21 @@ async function sendConfirmationTemplate(phoneNumberId, toNumber, { text } = {}) 
   await sendWhatsAppMessage(phoneNumberId, templateMsg)
 }
 
+function sanitizeTextMessage(input, maxLen = 4000) {
+  try {
+    let s = String(input == null ? '' : input)
+    // Preserve newlines but trim and limit length
+    s = s.trim()
+    // Enforce WA message length limit
+    if (s.length > maxLen) s = s.slice(0, maxLen)
+    return s
+  } catch {
+    return ''
+  }
+}
+
 async function sendTextMessage(phoneNumberId, toNumber, body) {
-  const text = sanitizeParam(body, 4000)
+  const text = sanitizeTextMessage(body, 4000)
   if (!text) return
   const message = {
     messaging_product: 'whatsapp',

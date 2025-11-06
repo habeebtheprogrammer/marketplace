@@ -618,7 +618,7 @@ exports.buyDataPlan = async (req, res, next) => {
                 req.body.wa_id,
                 {
                   ref: transaction.reference,
-                  description: `${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone} for ${finalAmount}.`,
+                  description: `${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone} for ₦${finalAmount}`,
                   balance: balanceAfter,
                 }
               )
@@ -899,7 +899,7 @@ exports.buyAirtime = async (req, res, next) => {
             req.body.wa_id,
             {
               ref: transaction.reference,
-              description: `${net} airtime topup to ${req.body.phone}.`,
+              description: `₦${req.body.amount} ${provider} airtime topup to ${req.body.phone}`,
               balance: balanceAfter,
             } 
           )
