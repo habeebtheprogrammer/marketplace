@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const { processProductMessage } = require('./lib/product-service')
 const { getVendorIdFromPhone, isPhoneAuthorized } = require('./lib/config')
-const { usersService, journeyService } = require('../service')
+const { usersService, journeyService, walletsService } = require('../service')
 const { sendProductTemplate } = require('./whatsappTemplates')
 const { processAIChat } = require('./aiChat')
 const { removeCountryCode, createToken, generateRandomNumber, sendOtpCode } = require('./helpers')
@@ -17,6 +17,34 @@ function normalizeWhatsAppFormatting(text) {
       .replace(/\*\*(.*?)\*\*/g, '*$1*')
   } catch {
     return text
+  }
+}
+
+function toTitleCase(value) {
+  try {
+    return String(value || '')
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ')
+  } catch {
+    return ''
+  }
+}
+
+function formatCurrency(amount, currency = 'NGN') {
+  const numericAmount = Number(amount || 0)
+  try {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(numericAmount)
+  } catch {
+    const symbol = currency === 'NGN' ? '₦' : ''
+    return `${symbol}${numericAmount.toFixed(2)}`
   }
 }
 
@@ -216,17 +244,26 @@ async function handleBotMessage(body){
       to: fromNumber.replace('+', ''),
       type: 'template',
       template: {
-        name: 'onboard',
+        name: 'onboarding1',
         language: { code: 'en' },
         components: [
           {
             type: 'HEADER',
             parameters: [
               {
-                type: 'image',
-                image: {
-                  link: 'https://terra01.s3.amazonaws.com/images/photo-1609081219090-a6d81d3085bf%20%281%29.jpeg',
+                type: 'video',
+                video: {
+                  link: 'https://terra01.s3.amazonaws.com/images/intro.mp4',
                 },
+              },
+            ],
+          },
+          {
+            type: 'body',
+            parameters: [
+              {
+                type: 'text',
+                text: contacts?.profile?.name || 'there',
               },
             ],
           },
@@ -403,37 +440,60 @@ async function handleFlowCompletion(userId, whatsappPhone, action, phoneNumberId
       console.error('User not found:', userId)
       return
     }
-    
-    // Update user's phone number if not already present
-    const currentPhones = Array.isArray(user.phoneNumber) ? user.phoneNumber : []
-    if (!currentPhones.includes(whatsappPhone)) {
-      await usersService.updateUsers(
-        { _id: userId },
-        { phoneNumber: [...currentPhones, whatsappPhone] }
-      )
-      console.log(`Added WhatsApp number ${whatsappPhone} to user ${userId}`)
+ 
+     // Update user's phone number if not already present
+     const currentPhones = Array.isArray(user.phoneNumber) ? user.phoneNumber : []
+     if (!currentPhones.includes(whatsappPhone)) {
+       await usersService.updateUsers(
+         { _id: userId },
+         { phoneNumber: [...currentPhones, whatsappPhone] }
+       )
+       console.log(`Added WhatsApp number ${whatsappPhone} to user ${userId}`)
+     }
+ 
+    // Determine display name
+    const rawName = (user.firstName || user.lastName || '').trim()
+    const displayName = toTitleCase(rawName) || 'there'
+
+    // Fetch wallet balance for the user
+    let walletBalanceValue = 0
+    let walletCurrency = 'NGN'
+    try {
+      const walletResult = await walletsService.getWallets({ userId })
+      const walletDoc = walletResult?.docs?.[0] || (Array.isArray(walletResult) ? walletResult[0] : null)
+      if (walletDoc && typeof walletDoc === 'object') {
+        walletBalanceValue = Number(walletDoc.balance || 0)
+        walletCurrency = walletDoc.currency || walletCurrency
+      }
+    } catch (walletError) {
+      console.error('handleFlowCompletion wallet fetch error:', walletError.message)
     }
-    
+    const formattedWalletBalance = formatCurrency(walletBalanceValue, walletCurrency)
+
     // Send welcome template message
     const welcomeTemplate = {
       messaging_product: 'whatsapp',
       to: whatsappPhone.replace('+', ''),
       type: 'template',
-      template: {
-        name: 'gadget_shop_intro',
-        language: { code: 'en_US' },
-        components: [
+      "template": {
+        "name": "welcome_onboard1",
+        "language": {
+          "code": "en"
+        },
+        "components": [
           {
-            type: 'HEADER',
-            parameters: [
+            "type": "body",
+            "parameters": [
               {
-                type: 'image',
-                image: {
-                  link: 'https://terra01.s3.amazonaws.com/images/photo-1609081219090-a6d81d3085bf%20%281%29.jpeg'
-                }
+                "type": "text",
+                "text": displayName  // This replaces {{1}} (The name)
+              },
+              {
+                "type": "text",
+                "text": formattedWalletBalance // This replaces {{2}} (Wallet Balance)
               }
             ]
-          }
+          } 
         ]
       }
     }
@@ -514,25 +574,58 @@ async function handleSignInInWebhook(formData, whatsappPhone, phoneNumberId) {
 // Send welcome template helper
 async function sendWelcomeTemplate(whatsappPhone, phoneNumberId) {
   try {
+    let user = null
+    try {
+      const lookup = await usersService.getUsers({ phoneNumber: { $in: [whatsappPhone] } })
+      if (lookup?.docs?.length) {
+        user = lookup.docs[0]
+      }
+    } catch (userLookupError) {
+      console.error('sendWelcomeTemplate user lookup error:', userLookupError.message)
+    }
+
+    const rawName = (user?.firstName || user?.lastName || '').trim()
+    const displayName = toTitleCase(rawName) || 'there'
+
+    let walletBalanceValue = 0
+    let walletCurrency = 'NGN'
+    if (user?._id) {
+      try {
+        const walletResult = await walletsService.getWallets({ userId: user._id })
+        const walletDoc = walletResult?.docs?.[0] || (Array.isArray(walletResult) ? walletResult[0] : null)
+        if (walletDoc && typeof walletDoc === 'object') {
+          walletBalanceValue = Number(walletDoc.balance || 0)
+          walletCurrency = walletDoc.currency || walletCurrency
+        }
+      } catch (walletError) {
+        console.error('sendWelcomeTemplate wallet fetch error:', walletError.message)
+      }
+    }
+    const formattedWalletBalance = formatCurrency(walletBalanceValue, walletCurrency)
+
     const welcomeTemplate = {
       messaging_product: 'whatsapp',
       to: whatsappPhone.replace('+', ''),
       type: 'template',
-      template: {
-        name: 'gadget_shop_intro',
-        language: { code: 'en_US' },
-        components: [
+      "template": {
+        "name": "welcome_onboard1",
+        "language": {
+          "code": "en"
+        },
+        "components": [
           {
-            type: 'HEADER',
-            parameters: [
+            "type": "body",
+            "parameters": [
               {
-                type: 'image',
-                image: {
-                  link: 'https://terra01.s3.amazonaws.com/images/photo-1609081219090-a6d81d3085bf%20%281%29.jpeg'
-                }
+                "type": "text",
+                "text": displayName  // This replaces {{1}} (The name)
+              },
+              {
+                "type": "text",
+                "text": formattedWalletBalance // This replaces {{2}} (Wallet Balance)
               }
             ]
-          }
+          } 
         ]
       }
     }
