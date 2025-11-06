@@ -174,6 +174,6 @@ async function sendTextMessage(phoneNumberId, toNumber, body) {
   await sendWhatsAppMessage(phoneNumberId, message)
 }
 
-module.exports = { sendProductTemplate, sendReceiptTemplate, sendConfirmationTemplate, sendTextMessage }
+module.exports = { sendProductTemplate, sendReceiptTemplate, sendConfirmationTemplate, sendTextMessage, sendWhatsAppMessage }
 
 

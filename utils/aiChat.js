@@ -583,35 +583,44 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             }
           }, userId, contacts?.wa_id)
         } catch { }
-        // Send top 4 results as WhatsApp template messages
+        // Send top 4 results as WhatsApp messages
         try {
           const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID2
           const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
           if (phoneNumberId && toNumber) {
-            const { sendProductTemplate } = require('./whatsappTemplates')
+            const { sendTextMessage } = require('./whatsappTemplates')
             const top = resp.docs.slice(0, DEFAULT_PRODUCT_TEMPLATE_LIMIT)
             for (const p of top) {
               const price = p.discounted_price || p.original_price || 0
-              const was = p.discounted_price && p.original_price > p.discounted_price ? p.original_price : null
-              const priceLine = was ? `*${formatMoney(price)}*` : `*${formatMoney(price)}*`
               const updatedAt = p.priceUpdatedAt || p.updatedAt || p.createdAt
-              const updated = updatedAt ? `\n*(Price last updated: ${moment(updatedAt).fromNow()})*` : ''
-              const link = (p?.categoryId?.slug && p.slug) ? `/${p.categoryId.slug}/${encodeURIComponent(p.slug)}` : ''
-              const imageUrl = Array.isArray(p.images) && p.images[0] ? p.images[0] : undefined
-              const descriptionRaw = String(p.description || '').slice(0, 897) + '...'
-              const description = descriptionRaw && descriptionRaw.trim().length > 0 ? descriptionRaw : p.title
-              console.log('Sending product template', { phoneNumberId, toNumber, title: p.title, productUrl: link })
-              await sendProductTemplate(phoneNumberId, toNumber, {
-                title: p.title,
-                description,
-                priceLine: `${priceLine}${updated}`,
-                imageUrl,
-                productUrl: link
-              })
+              const updatedText = updatedAt ? `*(Price last updated: ${moment(updatedAt).fromNow()})*` : ''
+              const productLink = (p?.categoryId?.slug && p.slug) 
+                ? `https://360gadgetsafrica.com/gadgets/${p.categoryId.slug}/${encodeURIComponent(p.slug)}`
+                : ''
+              
+              // Format message as: "*Title*, \n\n*Price:* *₦364,000* *(Price last updated: 2 months ago)*  \n\n{productlink}"
+              const messageText = `*${p.title}*,\n\n*Price:* *${formatMoney(price)}*${updatedText ? ` ${updatedText}` : ''}\n\n${productLink}`
+              
+              console.log('Sending product message', { phoneNumberId, toNumber, title: p.title, productUrl: productLink })
+              
+              // Send as text message
+              await sendTextMessage(phoneNumberId, toNumber, messageText)
+              
+              // Save to session metadata
+              if (sessionId) {
+                try {
+                  await waChatSessions.addMessage(String(sessionId), { 
+                    role: 'assistant', 
+                    content: messageText 
+                  }, userId, contacts?.wa_id || null)
+                } catch (e) {
+                  console.error('Failed to save product message to session:', e.message)
+                }
+              }
             }
           }
         } catch (error) {
-          console.log('Failed to send product templates', { error: error?.message })
+          console.log('Failed to send product messages', { error: error?.message })
         }
         // Only prompt to see more if there are more pages available
         const hasMore = Number(options.page || 1) < Number(resp.totalPages || 1)
@@ -1724,19 +1733,29 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
               try {
                 const phoneNumberId = contacts?.phone_number_id || process.env.WHATSAPP_PHONE_NUMBER_ID2
                 const toNumber = contacts?.wa_id ? `+${contacts.wa_id}` : ''
-                const priceLine = chosen.wasPrice ? `${formatMoney(chosen.price)} ~${formatMoney(chosen.wasPrice)}~` : `${formatMoney(chosen.price)}`
-                const updatedAt = chosen.updatedAt ? ` (updated ${new Date(chosen.updatedAt).toLocaleDateString('en-NG')})` : ''
-                const productUrl = (chosen.categorySlug && chosen.slug) ? `https://360gadgetsafrica.com/gadgets/${chosen.categorySlug}/${encodeURIComponent(chosen.slug)}` : ''
-                const desc = ''
+                const updatedAt = chosen.updatedAt ? `*(Price last updated: ${moment(chosen.updatedAt).fromNow()})*` : ''
+                const productLink = (chosen.categorySlug && chosen.slug) 
+                  ? `https://360gadgetsafrica.com/gadgets/${chosen.categorySlug}/${encodeURIComponent(chosen.slug)}`
+                  : ''
+                
                 if (phoneNumberId && toNumber) {
-                  const { sendProductTemplate } = require('./whatsappTemplates')
-                  await sendProductTemplate(phoneNumberId, toNumber, {
-                    title: chosen.title,
-                    description: desc,
-                    priceLine: `${priceLine}${updatedAt}`,
-                    imageUrl: chosen.image,
-                    productUrl
-                  })
+                  const { sendTextMessage } = require('./whatsappTemplates')
+                  // Format message as: "*Title*, \n\n*Price:* *₦364,000* *(Price last updated: 2 months ago)*  \n\n{productlink}"
+                  const messageText = `*${chosen.title}*,\n\n*Price:* *${formatMoney(chosen.price)}*${updatedAt ? ` ${updatedAt}` : ''}\n\n${productLink}`
+                  
+                  await sendTextMessage(phoneNumberId, toNumber, messageText)
+                  
+                  // Save to session metadata
+                  if (sessionId) {
+                    try {
+                      await waChatSessions.addMessage(String(sessionId), { 
+                        role: 'assistant', 
+                        content: messageText 
+                      }, userId, contacts?.wa_id || null)
+                    } catch (e) {
+                      console.error('Failed to save product message to session:', e.message)
+                    }
+                  }
                 }
               } catch { }
               const details = await executeTool('getProductDetails', { id: chosen.id }, { userId, contacts, sessionId })
