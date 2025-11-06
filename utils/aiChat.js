@@ -16,6 +16,7 @@ const { sendConfirmationTemplate, sendTextMessage } = require('./whatsappTemplat
 const waChatSessions = require('../service/whatsappChatSessions.service')
 const services = require('../service')
 const moment = require('moment')
+const { formatKnowledgeBase } = require('./knowledgeBase')
 const CONFIRM_WORD_SET = new Set(CONFIRM_WORDS.map(w => w.toLowerCase()))
 // Initialize Gemini once
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
@@ -34,10 +35,14 @@ USER CONTEXT:
 IMPORTANT: When the user wants to buy airtime or data for their own phone line, automatically use their phone number (${userPhone}) and network (${userNetwork}). Do NOT ask for phone number or network in such cases.
 `
   }
+  // Load knowledge base
+  const knowledgeBaseText = formatKnowledgeBase()
+  
   return `You are an advanced AI assistant designed to act as a smart customer support & operations chatbot for 360 Gadgets Africa.
 Your purpose is to help users manage their accounts, perform wallet & VTU transactions, and make product inquiries intelligently.
 Company website: https://www.360gadgetsafrica.com. You may learn business information dynamically from this website and its sitemap and use it to improve answers (product types, services, pricing, etc.).
 ${contextInfo}
+${knowledgeBaseText}
 Core Functional Areas
 1) User Profile Management
 - Get user profile details (name, email, wallet balance, activity).
