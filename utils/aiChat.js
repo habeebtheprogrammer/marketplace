@@ -183,7 +183,7 @@ async function getFundingAccountDetails(userId) {
     const accounts = Array.isArray(data?.accounts) ? data.accounts : []
     if (accounts.length === 0) return null
     const lines = accounts.map((a) => `*${a.accountName}*\n*${a.accountNumber}*\n*${a.bankName}*`)
-    return `To fund your wallet, kindly send any amount to your virtual account below:\n\n${lines.join('\n\n')}\n\nPlease pin this chat to easily access your account details.`
+    return `To fund your wallet, kindly send any amount to your virtual account below:\n\n${lines.join('\n\n')}\n\n📌 Please pin this chat to easily access your account details.`
   } catch (e) {
     console.error('Error fetching funding account:', e.message)
     return null
@@ -434,7 +434,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         const accounts = Array.isArray(data?.accounts) ? data.accounts : []
         if (accounts.length === 0) return `Your wallet balance is ${bal}. Funding account is not yet available. Please try again shortly.`
         const lines = accounts.map((a, i) => `*${a.accountName}*\n*${a.accountNumber}*\n*${a.bankName}*`)
-        return `To fund your wallet, kindly send any amount to your virtual account below:\n\n${lines.join('\n\n')}\n\nPlease pin this chat to easily access your account details.`
+        return `To fund your wallet, kindly send any amount to your virtual account below:\n\n${lines.join('\n\n')}\n\n📌 Please pin this chat to easily access your account details.`
       } catch (e) {
         return `⚠️ Error fetching funding account: ${e.message}`
       }

@@ -20,8 +20,90 @@ const AppliedCoupon = require("../model/appliedCoupons.model");
 const Coupon = require("../model/coupons.model");
 const mongoose = require("mongoose");
 const { sendWhatsAppMessage } = require("../utils/whatsapp");
-const { sendReceiptTemplate } = require("../utils/whatsappTemplates");
+const { sendReceiptTemplate, sendTextMessage } = require("../utils/whatsappTemplates");
 // const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
+
+function toTitleCaseName(value) {
+  try {
+    return String(value || "")
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ")
+  } catch {
+    return ""
+  }
+}
+
+function formatCurrency(amount, currency = "NGN") {
+  const numericAmount = Number(amount || 0)
+  if (!Number.isFinite(numericAmount)) {
+    return currency === "NGN" ? "₦0.00" : `${currency} 0.00`
+  }
+  try {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(numericAmount)
+  } catch {
+    const symbol = currency === "NGN" ? "₦" : ""
+    return `${symbol}${numericAmount.toFixed(2)}`
+  }
+}
+
+async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited) {
+  if (!userDoc) return
+
+  const phoneNumberId =
+    process.env.WHATSAPP_PHONE_NUMBER_ID2 || process.env.WHATSAPP_PHONE_NUMBER_ID
+  if (!phoneNumberId) return
+
+  const phoneNumbers = Array.isArray(userDoc.phoneNumber)
+    ? [...new Set(userDoc.phoneNumber.filter(Boolean))]
+    : []
+  if (!phoneNumbers.length) return
+
+  let walletBalanceValue = 0
+  let walletCurrency = "NGN"
+  try {
+    const walletResult = await walletsService.getWallets({ userId: userDoc._id })
+    const walletDoc =
+      walletResult?.docs?.[0] || (Array.isArray(walletResult) ? walletResult[0] : null)
+    if (walletDoc && typeof walletDoc === "object") {
+      walletBalanceValue = Number(walletDoc.balance || 0)
+      walletCurrency = walletDoc.currency || walletCurrency
+    }
+  } catch (walletErr) {
+    console.error("wallet funding WhatsApp balance fetch error:", walletErr.message)
+  }
+
+  const formattedAmount = formatCurrency(amountCredited, walletCurrency)
+  const formattedBalance = formatCurrency(walletBalanceValue, walletCurrency)
+  const displayName =
+    toTitleCaseName(userDoc.firstName || userDoc.lastName || userDoc.name || "") || "there"
+
+  const messageBody =
+    `Hi ${displayName},\n\n` +
+    `Your wallet has been credited with *${formattedAmount}*. ` +
+    `Your available balance is now *${formattedBalance}*.\n\n` +
+    `If you need help, reach our support team on 0705 722 1476 or support@360gadgetsafrica.com.`
+
+  for (const phone of phoneNumbers) {
+    if (!phone) continue
+    const toNumber = phone.startsWith("+") || phone.startsWith("0") ? phone : `+${phone}`
+    try {
+      await sendTextMessage(phoneNumberId, toNumber, messageBody)
+    } catch (sendErr) {
+      console.error(
+        `Failed to send wallet funding WhatsApp message to ${toNumber}:`,
+        sendErr.message
+      )
+    }
+  }
+}
 
 // Helper function to make authenticated requests to Monify API
 async function korraPay(endpoint, method, body = null, apikey) {
@@ -1053,6 +1135,11 @@ exports.webhook = async (req, res, next) => {
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: "gadgetsafrica://transactions",
         });
+
+        await sendWalletFundingWhatsAppNotification(
+          user.docs[0],
+          Math.round(settlementAmount)
+        );
       }
     } else {
       console.log(`Event received but not handled: ${eventType}`);
@@ -1122,6 +1209,8 @@ exports.flwhook = async (req, res, next) => {
           include_subscription_ids: [user.docs[0].oneSignalId],
           url: "gadgetsafrica://transactions",
         });
+
+        await sendWalletFundingWhatsAppNotification(user.docs[0], amount);
       }
       res.status(200);
       // }
