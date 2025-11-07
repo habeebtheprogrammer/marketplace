@@ -80,14 +80,17 @@ async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited, tr
     console.error("wallet funding WhatsApp balance fetch error:", walletErr.message)
   }
 
-  const formattedAmount = formatCurrency(amountCredited, walletCurrency)
-  const formattedBalance = formatCurrency(walletBalanceValue, walletCurrency)
+  const amountValue = Number(amountCredited || 0)
+  const amountTemplateValue = Number.isFinite(amountValue)
+    ? amountValue.toFixed(2)
+    : '0.00'
   const balanceTemplateValue = Number.isFinite(walletBalanceValue)
     ? walletBalanceValue.toFixed(2)
     : '0.00'
+
   const displayName =
     toTitleCaseName(userDoc.firstName || userDoc.lastName || userDoc.name || "") || "there"
- 
+
   for (const phone of phoneNumbers) {
     if (!phone) continue
     const toNumber = phone.startsWith("+") || phone.startsWith("0") ? phone : `+${phone}`
@@ -95,6 +98,7 @@ async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited, tr
       await sendWalletFundingTemplate(phoneNumberId, toNumber, {
         name: displayName,
         reference: transactionReference ? String(transactionReference) : '',
+        amount: amountTemplateValue,
         balance: balanceTemplateValue,
       })
     } catch (sendErr) {

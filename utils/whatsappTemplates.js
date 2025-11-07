@@ -174,9 +174,9 @@ async function sendTextMessage(phoneNumberId, toNumber, body) {
   await sendWhatsAppMessage(phoneNumberId, message)
 }
 
-async function sendWalletFundingTemplate(phoneNumberId, toNumber, { name, reference, balance }) {
+async function sendWalletFundingTemplate(phoneNumberId, toNumber, { name, reference, amount, balance }) {
   const params = [
-    sanitizeTextMessage(name || 'there'),
+    sanitizeTextMessage(amount || ''),
     sanitizeTextMessage(reference || ''),
     sanitizeTextMessage(balance || ''),
   ]
