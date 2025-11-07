@@ -493,11 +493,25 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
       try {
         // getCategories returns paginated { docs: [...], totalDocs, ... }
         const cats = await services.categoriesService.getCategories({ archive: { $ne: true } }, { limit: 100, sort: { title: 1 } })
-
+ 
         if (!cats?.docs || cats.docs.length === 0) return 'No categories available at the moment.'
-
+ 
         const items = cats.docs.map((c, i) => `${i + 1}. ${c.title}`)
-        return `*Product Categories* (${cats.totalDocs} total):\n\n${items.join('\n')}`
+ 
+         // Persist categories for numeric selection
+         if (sessionId) {
+           const compact = cats.docs.map(c => ({
+             id: String(c._id),
+             title: c.title,
+             slug: c.slug || ''
+           }))
+           await updateSessionMetadata(String(sessionId), {
+             'metadata.selectionContext': 'categories',
+             'metadata.lastCategoryList': { items: compact, savedAt: nowIso() }
+           }, userId, contacts?.wa_id)
+         }
+ 
+        return `*Product Categories* (${cats.totalDocs} total):\n\n${items.join('\n')}\n\nReply with the number of the category to browse gadgets from that section.`
       } catch (e) {
         return `⚠️ Error fetching categories: ${e.message}`
       }
@@ -1912,11 +1926,15 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
         const currentSession = await waChatSessions.getSession(String(sessionId), userId, waId)
         const ctx = currentSession?.metadata?.get?.('selectionContext') || currentSession?.metadata?.selectionContext
         const isProductCtx = ctx === 'products'
+        const isCategoryCtx = ctx === 'categories'
         const productList = currentSession?.metadata?.get?.('lastProductList') || currentSession?.metadata?.lastProductList
         const dataList = currentSession?.metadata?.get?.('lastDataList') || currentSession?.metadata?.lastDataList
+        const categoryList = currentSession?.metadata?.get?.('lastCategoryList') || currentSession?.metadata?.lastCategoryList
         const items = isProductCtx
           ? ((productList && Array.isArray(productList.items)) ? productList.items : [])
-          : ((dataList && Array.isArray(dataList.items)) ? dataList.items : [])
+          : (isCategoryCtx
+              ? ((categoryList && Array.isArray(categoryList.items)) ? categoryList.items : [])
+              : ((dataList && Array.isArray(dataList.items)) ? dataList.items : []))
         if (items.length > 0) {
           const raw = String(prompt).trim()
           const lower = raw.toLowerCase()
@@ -1976,7 +1994,33 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
               await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: details }, userId, waId)
               return details
             }
-            if (!isProductCtx && chosen) {
+            if (isCategoryCtx && chosen?.id) {
+              try {
+                if (sessionId) {
+                  await updateSessionMetadata(String(sessionId), {
+                    'metadata.lastSelectedCategory': {
+                      id: String(chosen.id),
+                      title: chosen.title || '',
+                      slug: chosen.slug || '',
+                      selectedAt: nowIso()
+                    }
+                  }, userId, waId)
+                }
+              } catch (e) {
+                console.error('Failed to persist category selection metadata:', e.message)
+              }
+              try {
+                const result = await executeTool('searchProducts', { categoryId: chosen.id }, { userId, contacts, sessionId })
+                if (typeof result === 'string' && result.trim()) {
+                  await waChatSessions.addMessage(String(sessionId), { role: 'assistant', content: result }, userId, waId)
+                }
+                return typeof result === 'string' ? result : ''
+              } catch (e) {
+                console.error('Error handling category selection:', e.message)
+                return `I had trouble loading that category. Please try again or choose a different category.`
+              }
+            }
+            if (!isProductCtx && !isCategoryCtx && chosen) {
               // Immediately proceed to purchase flow using the chosen plan
               try {
                 // Save pending purchase details to session and prompt for explicit confirmation

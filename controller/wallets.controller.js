@@ -81,12 +81,8 @@ async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited, tr
   }
 
   const amountValue = Number(amountCredited || 0)
-  const amountTemplateValue = Number.isFinite(amountValue)
-    ? amountValue.toFixed(2)
-    : '0.00'
-  const balanceTemplateValue = Number.isFinite(walletBalanceValue)
-    ? walletBalanceValue.toFixed(2)
-    : '0.00'
+  const amountTemplateValue = Number.isFinite(amountValue) ? amountValue.toFixed(2) : '0.00'
+  const balanceTemplateValue = Number.isFinite(walletBalanceValue) ? walletBalanceValue.toFixed(2) : '0.00'
 
   const displayName =
     toTitleCaseName(userDoc.firstName || userDoc.lastName || userDoc.name || "") || "there"
