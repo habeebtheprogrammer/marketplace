@@ -86,10 +86,8 @@ async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited) {
     toTitleCaseName(userDoc.firstName || userDoc.lastName || userDoc.name || "") || "there"
 
   const messageBody =
-    `Hi ${displayName},\n\n` +
-    `Your wallet has been credited with *${formattedAmount}*. ` +
-    `Your available balance is now *${formattedBalance}*.\n\n` +
-    `If you need help, reach our support team on 0705 722 1476 or support@360gadgetsafrica.com.`
+    `Hey ${displayName}! 👋🏻\n\n` +
+    `Your wallet has been credited with ${formattedAmount} Your new balance is *${formattedBalance}*.`  
 
   for (const phone of phoneNumbers) {
     if (!phone) continue
