@@ -20,7 +20,7 @@ const AppliedCoupon = require("../model/appliedCoupons.model");
 const Coupon = require("../model/coupons.model");
 const mongoose = require("mongoose");
 const { sendWhatsAppMessage } = require("../utils/whatsapp");
-const { sendReceiptTemplate, sendTextMessage } = require("../utils/whatsappTemplates");
+const { sendReceiptTemplate, sendTextMessage, sendWalletFundingTemplate } = require("../utils/whatsappTemplates");
 // const vendor = "QUICKVTU"  //'QUICKVTU' or 'BILALSDATAHUB'
 
 function toTitleCaseName(value) {
@@ -54,7 +54,7 @@ function formatCurrency(amount, currency = "NGN") {
   }
 }
 
-async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited) {
+async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited, transactionReference) {
   if (!userDoc) return
 
   const phoneNumberId =
@@ -82,18 +82,21 @@ async function sendWalletFundingWhatsAppNotification(userDoc, amountCredited) {
 
   const formattedAmount = formatCurrency(amountCredited, walletCurrency)
   const formattedBalance = formatCurrency(walletBalanceValue, walletCurrency)
+  const balanceTemplateValue = Number.isFinite(walletBalanceValue)
+    ? walletBalanceValue.toFixed(2)
+    : '0.00'
   const displayName =
     toTitleCaseName(userDoc.firstName || userDoc.lastName || userDoc.name || "") || "there"
-
-  const messageBody =
-    `Hey ${displayName}! 👋🏻\n\n` +
-    `Your wallet has been credited with ${formattedAmount} Your new balance is *${formattedBalance}*.`  
-
+ 
   for (const phone of phoneNumbers) {
     if (!phone) continue
     const toNumber = phone.startsWith("+") || phone.startsWith("0") ? phone : `+${phone}`
     try {
-      await sendTextMessage(phoneNumberId, toNumber, messageBody)
+      await sendWalletFundingTemplate(phoneNumberId, toNumber, {
+        name: displayName,
+        reference: transactionReference ? String(transactionReference) : '',
+        balance: balanceTemplateValue,
+      })
     } catch (sendErr) {
       console.error(
         `Failed to send wallet funding WhatsApp message to ${toNumber}:`,
@@ -1136,7 +1139,8 @@ exports.webhook = async (req, res, next) => {
 
         await sendWalletFundingWhatsAppNotification(
           user.docs[0],
-          Math.round(settlementAmount)
+          Math.round(settlementAmount),
+          transactionReference
         );
       }
     } else {
@@ -1208,7 +1212,7 @@ exports.flwhook = async (req, res, next) => {
           url: "gadgetsafrica://transactions",
         });
 
-        await sendWalletFundingWhatsAppNotification(user.docs[0], amount);
+        await sendWalletFundingWhatsAppNotification(user.docs[0], amount, tx_ref);
       }
       res.status(200);
       // }

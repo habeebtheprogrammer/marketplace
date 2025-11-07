@@ -174,6 +174,39 @@ async function sendTextMessage(phoneNumberId, toNumber, body) {
   await sendWhatsAppMessage(phoneNumberId, message)
 }
 
-module.exports = { sendProductTemplate, sendReceiptTemplate, sendConfirmationTemplate, sendTextMessage, sendWhatsAppMessage }
+async function sendWalletFundingTemplate(phoneNumberId, toNumber, { name, reference, balance }) {
+  const params = [
+    sanitizeTextMessage(name || 'there'),
+    sanitizeTextMessage(reference || ''),
+    sanitizeTextMessage(balance || ''),
+  ]
+
+  const message = {
+    messaging_product: 'whatsapp',
+    to: toNumber.replace('+', ''),
+    type: 'template',
+    template: {
+      name: 'receipt2',
+      language: { code: 'en' },
+      components: [
+        {
+          type: 'body',
+          parameters: params.map((text) => ({ type: 'text', text })),
+        },
+      ],
+    },
+  }
+
+  await sendWhatsAppMessage(phoneNumberId, message)
+}
+
+module.exports = {
+  sendProductTemplate,
+  sendReceiptTemplate,
+  sendConfirmationTemplate,
+  sendTextMessage,
+  sendWalletFundingTemplate,
+  sendWhatsAppMessage,
+}
 
 
