@@ -253,7 +253,7 @@ async function handleBotMessage(body){
               {
                 type: 'video',
                 video: {
-                  link: 'https://terra01.s3.amazonaws.com/images/intro.mp4',
+                  link: 'https://terra01.s3.amazonaws.com/images/intro2.mp4',
                 },
               },
             ],
