@@ -621,7 +621,7 @@ exports.buyDataPlan = async (req, res, next) => {
                   to: req.body.wa_id,
                   type: 'text',
                   text: {
-                    body: `Hi ${req.firstName}, we're currently experiencing some network challenges for ${req.body.plan.planName} ${req.body.plan.network} ${req.body.plan.planType} Data. Please try another plan or try again later.`
+                    body: `Hi ${req.firstName}, we're currently experiencing some network challenges for ${plan.planName} ${plan.network} ${plan.planType} Data. Please try another plan or try again later.`
                   }
               })
               } catch (error) {
@@ -641,7 +641,7 @@ exports.buyDataPlan = async (req, res, next) => {
           sendNotification({
             headings: { en: `Payment successful` },
             contents: {
-              en: `Congratulations ${req.firstName}! You have successfully sent ${plan.planName} ${req.body.plan.network} ${req.body.plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25`,
+              en: `Congratulations ${req.firstName}! You have successfully sent ${plan.planName} ${plan.network} ${plan.planType} data to ${req.body.phone}. Refer a friend to try our mobile app and earn ₦25`,
             },
             include_subscription_ids: [req.oneSignalId, ...include_player_ids],
             url: "gadgetsafrica://profile",
