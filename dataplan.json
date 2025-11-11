@@ -658,6 +658,15 @@
   },
   {
     "planName": "750MB",
+    "planId": "79",
+    "amount": "220.00",
+    "planType": "SME",
+    "duration": "1day validty",
+    "network": "GLO",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "750MB",
     "planId": "255",
     "amount": "132.60",
     "planType": "GIFTING",
@@ -721,6 +730,15 @@
   },
   {
     "planName": "1.5GB",
+    "planId": "80",
+    "amount": "335.00",
+    "planType": "SME",
+    "duration": "1day validty",
+    "network": "GLO",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "1.5GB",
     "planId": "11",
     "amount": "490.00",
     "planType": "GIFTING",
@@ -763,6 +781,15 @@
     "duration": "30days",
     "network": "GLO",
     "vendor": "bilal"
+  },
+  {
+    "planName": "2.5GB",
+    "planId": "81",
+    "amount": "546.00",
+    "planType": "SME",
+    "duration": "2days validity",
+    "network": "GLO",
+    "vendor": "quickvtu"
   },
   {
     "planName": "2.5GB",
@@ -932,6 +959,15 @@
     "amount": "4454.00",
     "planType": "COOPERATE GIFTING",
     "duration": "1month",
+    "network": "GLO",
+    "vendor": "quickvtu"
+  },
+  {
+    "planName": "10GB",
+    "planId": "82",
+    "amount": "2184.00",
+    "planType": "SME",
+    "duration": "7days validity",
     "network": "GLO",
     "vendor": "quickvtu"
   },
@@ -1217,7 +1253,7 @@
   {
     "planName": "500MB",
     "planId": "19",
-    "amount": "430.00",
+    "amount": "410.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30 days",
     "network": "MTN",
@@ -1271,7 +1307,7 @@
   {
     "planName": "1GB",
     "planId": "20",
-    "amount": "840.00",
+    "amount": "720.00",
     "planType": "COOPERATE GIFTING",
     "duration": "30days",
     "network": "MTN",
