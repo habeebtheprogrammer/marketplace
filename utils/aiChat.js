@@ -892,8 +892,8 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             'metadata.lastDataList': { items: compact, savedAt: nowIso(), page, limit }
           }, userId, contacts?.wa_id)
         } catch { }
-        const networkLabel = effectiveNetwork ? ` ${effectiveNetwork}` : ''
-        return `Here are some ${networkLabel} data plans${titleHint} that you can choose from (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan or ask me to do something else.`
+        const networkLabel = effectiveNetwork ? `${effectiveNetwork}` : ''
+        return `Here are some ${networkLabel} data plans${titleHint} that you can choose from \n\n${lines.join('\n')}\n\nReply with the number to select a plan or ask me to do something else.`
       } catch (e) {
         return `⚠️ Error loading plans: ${e.message}`
       }
