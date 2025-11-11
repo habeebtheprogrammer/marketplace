@@ -883,7 +883,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             pageItems = alt
           } catch { }
         }
-        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} for (${p.duration}) at ${formatMoney(p.amount)} `)
+        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} for ${p.duration} at ${formatMoney(p.amount)} `)
         // Persist last data list for numeric selection and set context
         try {
           const compact = pageItems.map(p => ({ planId: String(p.planId), vendor: String(p.vendor), network: String(p.network), planType: String(p.planType), amount: Number(p.amount), planName: p.planName }))
@@ -892,8 +892,8 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             'metadata.lastDataList': { items: compact, savedAt: nowIso(), page, limit }
           }, userId, contacts?.wa_id)
         } catch { }
-        const networkLabel = effectiveNetwork ? ` (${effectiveNetwork})` : ''
-        return `*Data Plans${titleHint}${networkLabel}* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan or ask me to do something else.`
+        const networkLabel = effectiveNetwork ? ` ${effectiveNetwork}` : ''
+        return `Here are some ${networkLabel} data plans${titleHint} that you can choose from (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan or ask me to do something else.`
       } catch (e) {
         return `⚠️ Error loading plans: ${e.message}`
       }
