@@ -661,7 +661,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
         // Only prompt to see more if there are more pages available
         const hasMore = Number(options.page || 1) < Number(resp.totalPages || 1)
         if (hasMore) {
-          return `Would you like to see more results?`
+          return `Would you like to see more results or what gadgets do you want to see next?`
         }
         // No extra text if no more pages
         return ''
@@ -883,7 +883,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             pageItems = alt
           } catch { }
         }
-        const lines = pageItems.map((p, i) => `${start + i + 1}. *${p.planName} (${p.planType})* - ${formatMoney(p.amount)} (${p.duration}) `)
+        const lines = pageItems.map((p, i) => `${start + i + 1}. ${p.planName} for (${p.duration}) at ${formatMoney(p.amount)} `)
         // Persist last data list for numeric selection and set context
         try {
           const compact = pageItems.map(p => ({ planId: String(p.planId), vendor: String(p.vendor), network: String(p.network), planType: String(p.planType), amount: Number(p.amount), planName: p.planName }))
@@ -893,7 +893,7 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
           }, userId, contacts?.wa_id)
         } catch { }
         const networkLabel = effectiveNetwork ? ` (${effectiveNetwork})` : ''
-        return `*Data Plans${titleHint}${networkLabel}* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan.`
+        return `*Data Plans${titleHint}${networkLabel}* (Page ${page}/${Math.ceil(list.length / limit)}, ${list.length} total)\n\n${lines.join('\n')}\n\nReply with the number to select a plan or ask me to do something else.`
       } catch (e) {
         return `⚠️ Error loading plans: ${e.message}`
       }
