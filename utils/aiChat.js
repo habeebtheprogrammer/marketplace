@@ -1105,6 +1105,7 @@ Example: purchaseData { planId: '123', vendor: 'quickvtu', network: 'MTN', planT
             network: normalizedNetwork,
             planType: String(args.planType).toUpperCase(),
             amount: Number(args.amount),
+            planName: String(args.planName),
           },
           phone: normalizedPhone,
           source: 'whatsapp',
@@ -2048,7 +2049,7 @@ async function processAIChat(prompt, sessionId, userId = null, contacts) {
                 
                 try {
                   const pendingPhone = currentSession?.metadata?.get?.('pendingPhone') || currentSession?.metadata?.pendingPhone || 'your phone'
-                  const text = `buy *${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')}* for *${formatMoney(chosen.amount)}* to *${pendingPhone}*.`
+                  const text = `buy *${String(chosen.network)} ${String(chosen.planType)} ${String(chosen.planName || '')}* for *${formatMoney(chosen.amount)}* to *${pendingPhone}*`
                     await sendConfirmationTemplate(phoneNumberId, toNumber, { text })
                   // Save confirmation message to session so it can be detected later
                   try {
