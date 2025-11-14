@@ -76,3 +76,50 @@ exports.deleteBlogposts = async (req, res, next) => {
         errorResponse(res, error);
     }
 }
+
+exports.searchBlogposts = async (req, res, next) => {
+    try {
+        const { q, page = 1, limit = 9, sort } = req.query;
+
+        if (!q || q.trim() === '') {
+            return errorResponse(res, { message: 'Search query is required' }, 400);
+        }
+
+        const options = {
+            page: Number(page),
+            limit: Number(limit),
+            sort: sort ? { [sort]: -1 } : undefined,
+        };
+
+        const data = await blogpostsService.searchBlogPosts({ 
+            query: { q: q.trim() },
+            options 
+        });
+        
+        successResponse(res, data);
+    } catch (error) {
+        console.log(error);
+        errorResponse(res, error);
+    }
+}
+
+exports.getBlogPostBySlug = async (req, res, next) => {
+    try {
+        const { slug } = req.params;
+
+        if (!slug) {
+            return errorResponse(res, { message: 'Slug is required' }, 400);
+        }
+
+        const data = await blogpostsService.getBlogPostBySlug(slug);
+
+        if (!data) {
+            return errorResponse(res, { message: 'Blog post not found' }, 404);
+        }
+
+        successResponse(res, data);
+    } catch (error) {
+        console.log(error);
+        errorResponse(res, error);
+    }
+}
