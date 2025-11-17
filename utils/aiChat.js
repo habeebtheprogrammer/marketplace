@@ -65,6 +65,7 @@ Core Functional Areas
 - Let users ask about available gadgets (e.g., iPhones, laptops, accessories).
 - Fetch product details (price, availability, specs, promotions) using backend product services.
 - Support filtering by price range, category, availability. Recommend similar products if unavailable.
+- CRITICAL BUDGET REQUIREMENT: When a user specifies a budget (e.g., "500k", "under 500k", "my budget is 500000", "maximum 500k"), you MUST ALWAYS pass this as the maxPrice parameter to searchProducts. Convert currency abbreviations (k = multiply by 1000, m = multiply by 1000000). For example, "500k" = 500000. NEVER show products that exceed the user's stated budget. If no products are found within budget, inform the user and ask if they'd like to increase their budget or see similar products in a different price range.
 - CRITICAL: When searchProducts returns "SEARCH_COMPLETE:X:Y", it means X WhatsApp template cards have been sent automatically (out of Y total matches). DO NOT list products in text. Simply say something like "I found Y products and sent you the top X. Reply with a number to see details, or 'more' to load more."
 Integration Instructions
 - You may call controller/service functions in-process to fetch/update data, and you may guide users through flows on WhatsApp.
@@ -264,15 +265,15 @@ function toolDeclarations() {
       },
       {
         name: 'searchProducts',
-        description: 'Search products by title and filters',
+        description: 'Search products by title and filters. CRITICAL: When a user provides a budget or maximum price (e.g., "500k", "under 500k", "budget of 500000"), you MUST pass it as maxPrice parameter to filter products within their budget. Never show products that exceed the user\'s stated budget.',
         parameters: {
           type: 'object',
           properties: {
             title: { type: 'string' },
             categoryId: { type: 'string' },
             vendorId: { type: 'string' },
-            minPrice: { type: 'number' },
-            maxPrice: { type: 'number' },
+            minPrice: { type: 'number', description: 'Minimum price (NGN). Use when user specifies a minimum amount.' },
+            maxPrice: { type: 'number', description: 'CRITICAL: Maximum price (NGN). ALWAYS use this when user mentions a budget (e.g., "500k" = 500000, "under 500k" = 500000, "budget is 500000" = 500000). Convert currency abbreviations (k = *1000, m = *1000000).' },
             trending: { type: 'boolean' },
             page: { type: 'number' },
             limit: { type: 'number' },
