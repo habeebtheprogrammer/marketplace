@@ -65,6 +65,7 @@ Core Functional Areas
 - Let users ask about available gadgets (e.g., iPhones, laptops, accessories).
 - Fetch product details (price, availability, specs, promotions) using backend product services.
 - Support filtering by price range, category, availability. Recommend similar products if unavailable.
+- CRITICAL: When a user asks for a product (e.g., "laptop", "iPhone", "Samsung phone"), ALWAYS call searchProducts with the product type as the title parameter (e.g., title: "laptop"). The system will automatically infer the correct category. NEVER call getCategories first unless the user explicitly asks to browse categories. The searchProducts tool automatically matches keywords like "laptop" to categories like "Laptops & Ipads".
 - CRITICAL BUDGET REQUIREMENT: When a user specifies a budget (e.g., "500k", "under 500k", "my budget is 500000", "maximum 500k"), you MUST ALWAYS pass this as the maxPrice parameter to searchProducts. Convert currency abbreviations (k = multiply by 1000, m = multiply by 1000000). For example, "500k" = 500000. NEVER show products that exceed the user's stated budget. If no products are found within budget, inform the user and ask if they'd like to increase their budget or see similar products in a different price range.
 - CRITICAL: When searchProducts returns "SEARCH_COMPLETE:X:Y", it means X WhatsApp template cards have been sent automatically (out of Y total matches). DO NOT list products in text. Simply say something like "I found Y products and sent you the top X. Reply with a number to see details, or 'more' to load more."
 Integration Instructions
@@ -255,7 +256,7 @@ function toolDeclarations() {
       },
       {
         name: 'getCategories',
-        description: 'List non-archived categories',
+        description: 'List non-archived categories. ONLY use this when the user explicitly asks to browse or see categories. For product searches, use searchProducts with the product type as title - it will automatically infer the category.',
         parameters: { type: 'object', properties: {} }
       },
       {
@@ -544,17 +545,36 @@ async function executeTool(name, args, { userId, contacts, sessionId } = {}) {
             const cats = await services.categoriesService.getCategories({ archive: { $ne: true } }, { limit: 200 })
             const list = Array.isArray(cats?.docs) ? cats.docs : []
             let best = { score: 0, id: null }
+            // Extract keyword words for better matching
+            const keywordWords = keyword.split(/[^a-z0-9]+/).filter(w => w.length >= 3)
+            
             for (const c of list) {
               const title = String(c.title || '').toLowerCase()
               const slug = String(c.slug || '').toLowerCase()
               let score = 0
-              if (title && keyword.includes(title)) score += 3
-              if (slug && keyword.includes(slug)) score += 3
-              // token overlap
-              const tTokens = title.split(/[^a-z0-9]+/).filter(Boolean)
-              for (const t of tTokens) {
-                if (t.length >= 3 && keyword.includes(t)) score += 1
+              
+              // Bidirectional matching: check if keyword includes category OR category includes keyword
+              if (title && (keyword.includes(title) || title.includes(keyword))) score += 5
+              if (slug && (keyword.includes(slug) || slug.includes(keyword))) score += 5
+              
+              // Word-based matching: check if any keyword word matches any category word
+              const titleWords = title.split(/[^a-z0-9]+/).filter(Boolean)
+              const slugWords = slug.split(/[^a-z0-9]+/).filter(Boolean)
+              
+              for (const kw of keywordWords) {
+                // Check if keyword word matches any category title word (with pluralization handling)
+                for (const tw of titleWords) {
+                  if (tw.includes(kw) || kw.includes(tw)) score += 2
+                  // Handle common pluralization (e.g., "laptop" matches "laptops")
+                  if (tw === kw + 's' || kw === tw.replace(/s$/, '')) score += 2
+                }
+                // Check if keyword word matches any category slug word
+                for (const sw of slugWords) {
+                  if (sw.includes(kw) || kw.includes(sw)) score += 2
+                  if (sw === kw + 's' || kw === sw.replace(/s$/, '')) score += 2
+                }
               }
+              
               if (score > best.score) best = { score, id: c._id }
             }
             if (best.score >= 2 && best.id) inferredCategoryId = String(best.id)
