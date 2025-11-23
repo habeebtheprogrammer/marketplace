@@ -2,7 +2,7 @@ const { checkDaysMatch } = require("./utils/helpers");
 const fs = require('fs');
 
 const unfilteredplans = {
-    "quickvtu":  [
+    "quickvtu": [
         {
             "plan_name": "500MB",
             "plan_id": "4",
@@ -564,7 +564,7 @@ const unfilteredplans = {
             "network": "AIRTEL"
         }
     ],
-    "bilal": [
+    "bilal":  [
         {
             "plan_name": "500MB",
             "plan_id": "1",
@@ -705,14 +705,6 @@ const unfilteredplans = {
             "plan_name": "2GB",
             "plan_id": "21",
             "amount": "1,660.00",
-            "plan_type": "COOPERATE GIFTING",
-            "plan_day": "30days",
-            "network": "MTN"
-        },
-        {
-            "plan_name": "5GB",
-            "plan_id": "23",
-            "amount": "4,150.00",
             "plan_type": "COOPERATE GIFTING",
             "plan_day": "30days",
             "network": "MTN"
@@ -2300,6 +2292,14 @@ const unfilteredplans = {
             "plan_type": "GIFTING PROMO",
             "plan_day": "3 days",
             "network": "AIRTEL"
+        },
+        {
+            "plan_name": "8GB",
+            "plan_id": "261",
+            "amount": "1,960.00",
+            "plan_type": "GIFTING",
+            "plan_day": "30days",
+            "network": "AIRTEL"
         }
     ],
     // "mobilevtu": [ 
@@ -2410,7 +2410,7 @@ function removePlans(plans, filters) {
 
 const filters = [
     { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING' },
-    // { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
+    { vendor: 'quickvtu', network: 'GLO', planToRemove: 'SME' },
     // { vendor: 'quickvtu', network: 'GLO', planToRemove: 'GIFTING PROMO' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'GIFTING' },
     { vendor: 'quickvtu', network: '9MOBILE', planToRemove: 'SME' },
